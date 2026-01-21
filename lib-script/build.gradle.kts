@@ -38,8 +38,10 @@ android {
 dependencies {
     coreLibraryDesugaring(libs.desugar)
 
-    //noinspection GradleDependency
-    api(libs.mozilla.rhino)
+    // J2V8 JS 引擎（Google V8 引擎，完全支持 ES6+）
+    val j2v8Version = "4.6.0"
+    api("com.eclipsesource.j2v8:j2v8:$j2v8Version@aar")
+    
     implementation(project(":lib-common"))
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.okhttp)

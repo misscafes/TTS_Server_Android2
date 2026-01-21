@@ -1,9 +1,6 @@
 package com.github.jing332.script.simple
 
 import android.content.Context
-import com.github.jing332.script.engine.RhinoScriptEngine
-import com.github.jing332.script.simple.ext.JsExtensions
+import com.github.jing332.script.engine.V8ScriptEngine
 
-class SimpleScriptEngine(context: Context, id: String) :
-    RhinoScriptEngine(CompatScriptRuntime(JsExtensions(context, id))) {
-}
+class SimpleScriptEngine(context: Context, id: String) : V8ScriptEngine(context)
