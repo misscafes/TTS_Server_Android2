@@ -70,24 +70,48 @@ android {
         release {
             // read sign from local.properties
             Properties pro = new Properties()
-            InputStream input = project.rootProject.file("local.properties").newDataInputStream()
-            pro.load(input)
-            storeFile file(pro.getProperty("KEY_PATH"))
-            storePassword pro.getProperty("KEY_PASSWORD")
-            keyAlias pro.getProperty("ALIAS_NAME")
-            keyPassword pro.getProperty("ALIAS_PASSWORD")
+            File propsFile = project.rootProject.file("local.properties")
+            if (propsFile.exists()) {
+                InputStream input = propsFile.newDataInputStream()
+                pro.load(input)
+                def keyPath = pro.getProperty("KEY_PATH")
+                if (keyPath != null && !keyPath.isEmpty()) {
+                    storeFile file(keyPath)
+                    storePassword pro.getProperty("KEY_PASSWORD")
+                    keyAlias pro.getProperty("ALIAS_NAME")
+                    keyPassword pro.getProperty("ALIAS_PASSWORD")
+                }
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
-            minifyEnabled true
-            shrinkResources true
+            def keyPath = new Properties().with {
+                def propsFile = project.rootProject.file("local.properties")
+                if (propsFile.exists()) {
+                    load(propsFile.newDataInputStream())
+                }
+                getProperty("KEY_PATH")
+            }
+            if (keyPath != null && !keyPath.isEmpty()) {
+                signingConfig signingConfigs.release
+            }
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            signingConfig signingConfigs.release
+            def keyPath = new Properties().with {
+                def propsFile = project.rootProject.file("local.properties")
+                if (propsFile.exists()) {
+                    load(propsFile.newDataInputStream())
+                }
+                getProperty("KEY_PATH")
+            }
+            if (keyPath != null && !keyPath.isEmpty()) {
+                signingConfig signingConfigs.release
+            }
             applicationIdSuffix ".debug"
             versionNameSuffix "_debug"
         }
