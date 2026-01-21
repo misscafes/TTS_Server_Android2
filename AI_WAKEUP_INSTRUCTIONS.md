@@ -22,32 +22,26 @@
    - 将 APK 复制到 app/src/apk/ 目录
    - 删除根目录下遗留的旧 APK 文件（如果有）
    - 删除 app/src/apk/ 下旧的 APK 文件（保留最新 2 个）
-   - 提交代码并推送到 GraalJS 分支
+   - 提交代码并推送到 J2V8 分支
 
 不允许停止，直到构建成功并提交！
 ```
 
 ## 项目关键信息
 
-### 问题背景
-- **原始问题**: GraalVM 引擎在 Android 上存在严重兼容性问题
-  - `NoSuchMethodError: ensureClassInitialized`
-  - `ServiceConfigurationError: PolyglotImpl could not be instantiated`
-  - ServiceLoader 机制在 R8 混淆后失效
+### 技术选型
+- **JavaScript 引擎**: J2V8 (Google V8 引擎的 Java 绑定)
+  - 完全支持 ES6+ 语法
+  - 原生 Android 兼容性（通过 AAR 包含原生库）
+  - 稳定可靠，无兼容性问题
 
-### 解决方案（"J2V8 迁移策略"）
-1. **切换到 J2V8 引擎**
-   - Google V8 引擎的 Java 绑定
-   - 完全支持 ES6+ 语法
-   - 原生 Android 兼容性（通过 AAR 包含原生库）
-   - 比 GraalVM 更稳定可靠
-
-2. **保持 R8 混淆关闭**
+### 关键配置
+1. **R8 混淆关闭**
    - `minifyEnabled false` - 关闭代码混淆
    - `shrinkResources false` - 关闭资源压缩
    - 确保稳定性和调试便利性
 
-3. **依赖管理**
+2. **依赖管理**
    - 使用 J2V8 AAR 包，无需手动管理原生库
    - 通过 Maven 仓库直接获取
 
@@ -91,11 +85,10 @@ docker run --rm -v $(pwd):/workspace -w /workspace tts-server-dev \
 
 | 错误类型 | 修复方法 |
 |---------|---------|
-| `NoSuchMethodError: ensureClassInitialized` | 检查 GraalVM 版本是否为 20.3.0，执行 clean 和 refresh-dependencies |
-| `NoSuchMethodError: getModule` | 同上，确保使用 20.3.0 |
-| `ClassNotFoundException: ...ServiceLoader` | 检查 minifyEnabled 是否为 false |
 | 依赖版本冲突 | 执行 `./gradlew clean --refresh-dependencies` |
 | Gradle 缓存问题 | 删除 `~/.gradle/caches` 或使用 `--refresh-dependencies` |
+| J2V8 原生库加载失败 | 检查 minifyEnabled 是否为 false |
+| 构建超时 | 增加 Gradle 内存配置或清理缓存后重试 |
 
 ### 提交规范
 
@@ -125,7 +118,7 @@ feat: Build release APK with J2V8 engine [日期时间]
 ⚠️ **J2V8 使用原生库，首次构建可能需要较长时间下载**
 
 ### 仓库分支
-- 主分支: `GraalJS`
+- 主分支: `J2V8`
 - 默认分支: `Backup`
 
 ---
