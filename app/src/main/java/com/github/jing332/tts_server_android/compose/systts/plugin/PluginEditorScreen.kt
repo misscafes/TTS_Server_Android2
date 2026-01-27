@@ -65,6 +65,14 @@ internal fun PluginEditorScreen(
         vm.init(plugin, context.assets.open("defaultData/plugin-azure.js").readAllText())
     }
 
+    LaunchedEffect(vm) {
+        runCatching {
+            vm.init(plugin, context.assets.open("defaultData/plugin-azure.js").readAllText())
+        }.onFailure {
+            context.displayErrorDialog(it)
+        }
+    }
+
     var showTextParamDialog by remember { mutableStateOf(false) }
     if (showTextParamDialog) {
         var sampleText by remember { mutableStateOf(PluginConfig.textParam.value) }
