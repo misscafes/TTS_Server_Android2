@@ -13,3 +13,6 @@ local.properties
 .kotlin
 .gitignore
 lib-rhino-android
+
+# CNB云原生开发配置备份
+gradle.properties.backup
