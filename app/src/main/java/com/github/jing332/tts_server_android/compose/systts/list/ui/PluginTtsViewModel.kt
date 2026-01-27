@@ -92,6 +92,11 @@ class PluginTtsViewModel(app: Application) : AndroidViewModel(app) {
 
                 updateLocales()
                 updateVoices(source.locale)
+
+                // 修正：初始加载时如果已选择声音，触发 onVoiceChanged 以加载风格选项等自定义UI
+                if (source.voice.isNotBlank() && source.locale.isNotBlank()) {
+                    updateCustomUI(source.locale, source.voice)
+                }
             } catch (t: Throwable) {
                 throw t
             } finally {
