@@ -44,6 +44,12 @@ class PluginEditorViewModel(app: Application) : AndroidViewModel(app) {
 
     fun updateSource(source: PluginTtsSource) {
         engine.source = source
+        // 重新加载数据以获取语言和声音列表
+        try {
+            engine.onLoadData()
+        } catch (e: Exception) {
+            console.error("Failed to reload data: ${e.message}")
+        }
     }
 
     fun updatePlugin(plugin: Plugin) {
@@ -53,7 +59,16 @@ class PluginEditorViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun updateCode(code: String) {
-        updatePlugin(plugin.copy(code = code))
+        // 清除旧引擎缓存
+        com.github.jing332.tts.speech.plugin.TtsPluginEngineManager.remove(plugin.pluginId)
+
+        // 强制重新创建引擎，确保使用最新代码
+        val newPlugin = plugin.copy(code = code)
+        mEngine?.also { runCatching { it.onStop() } }
+        mEngine = TtsPluginUiEngineV2(app as Context, newPlugin).also {
+            it.console = console
+            it.eval()
+        }
     }
 
     private var mDebugJob: Job? = null

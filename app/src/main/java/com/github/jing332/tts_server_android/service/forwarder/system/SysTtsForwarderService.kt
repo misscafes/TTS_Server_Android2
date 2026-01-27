@@ -76,9 +76,11 @@ class SysTtsForwarderService(
                 return withContext(NonCancellable) {
                     withTimeoutOrNull(130000L) {
                         Log.d(TAG, "android tts init: ${params.engine}")
+                        sendLog(com.github.jing332.common.LogLevel.DEBUG, "初始化引擎: ${params.engine}")
                         androidTts.init(params.engine)
 
                         Log.d(TAG, "android tts get file...")
+                        sendLog(com.github.jing332.common.LogLevel.DEBUG, "获取音频文件...")
                         val result = androidTts.getFile(
                             params.text,
                             params.locale,
@@ -96,6 +98,7 @@ class SysTtsForwarderService(
                         result.onFailure {
                             // 🛠️ 修正：直接打印 it，解决 Unresolved reference 'message'
                             Log.e(TAG, "获取音频失败: $it")
+                            sendLog(com.github.jing332.common.LogLevel.ERROR, "获取音频失败: $it")
                             return@withTimeoutOrNull null
                         }.value
                     }

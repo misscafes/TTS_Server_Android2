@@ -46,6 +46,7 @@ class SystemTtsForwardServer(val port: Int, val callback: Callback) : Server {
                 suspend fun RoutingContext.handleTts(params: TtsParams) {
                     try {
                         Log.i("ForwardServer", "接收请求: ${params.text.take(10)}...")
+                        callback.log(com.github.jing332.common.LogLevel.INFO, "接收请求: ${params.text.take(10)}...")
 
                         // 【核心修改】使用 NonCancellable 保护任务
                         // 即使阅读APP在15秒后断开连接，这里也会继续运行直到下载完成
@@ -56,12 +57,14 @@ class SystemTtsForwardServer(val port: Int, val callback: Callback) : Server {
 
                         if (file == null) {
                             Log.e("ForwardServer", "TTS失败: 文件为null")
+                            callback.log(com.github.jing332.common.LogLevel.ERROR, "TTS失败: 文件为null")
                             // 如果连接还活着，返回错误；如果已断开，这里会抛异常但无所谓了
-                            runCatching { 
-                                call.respond(HttpStatusCode.InternalServerError, "TTS Generation Failed") 
+                            runCatching {
+                                call.respond(HttpStatusCode.InternalServerError, "TTS Generation Failed")
                             }
                         } else {
                             Log.i("ForwardServer", "TTS成功, 准备发送: ${file.length()} bytes")
+                            callback.log(com.github.jing332.common.LogLevel.INFO, "TTS成功, 准备发送: ${file.length()} bytes")
                             // 尝试发送音频。如果客户端已经断开，这里会抛出异常，
                             // 但没关系，因为音频已经生成并可能被底层 SystemTtsService 缓存了。
                             call.respondOutputStream(
@@ -80,9 +83,10 @@ class SystemTtsForwardServer(val port: Int, val callback: Callback) : Server {
                         }
                     } catch (e: Exception) {
                         Log.e("ForwardServer", "请求处理异常 (可能是客户端断开): ${e.message}")
+                        callback.log(com.github.jing332.common.LogLevel.ERROR, "请求处理异常 (可能是客户端断开): ${e.message}")
                         // 尝试返回错误，如果客户端已断开则忽略
-                        runCatching { 
-                            call.respond(HttpStatusCode.InternalServerError, "Error: ${e.message}") 
+                        runCatching {
+                            call.respond(HttpStatusCode.InternalServerError, "Error: ${e.message}")
                         }
                     }
                 }
