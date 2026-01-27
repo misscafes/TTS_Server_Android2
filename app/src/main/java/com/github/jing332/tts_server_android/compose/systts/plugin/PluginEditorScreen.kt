@@ -62,7 +62,11 @@ internal fun PluginEditorScreen(
     }
 
     LaunchedEffect(vm) {
-        vm.init(plugin, context.assets.open("defaultData/plugin-azure.js").readAllText())
+        runCatching {
+            vm.init(plugin, context.assets.open("defaultData/plugin-azure.js").readAllText())
+        }.onFailure {
+            context.displayErrorDialog(it)
+        }
     }
 
     LaunchedEffect(vm) {
