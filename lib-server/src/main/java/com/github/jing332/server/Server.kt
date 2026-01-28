@@ -21,6 +21,7 @@ internal val json by lazy {
         prettyPrint = true
         isLenient = true
         ignoreUnknownKeys = true
+        coerceInputValues = true  // 将未知/无效值强制为默认值，避免反序列化失败
     }
 }
 

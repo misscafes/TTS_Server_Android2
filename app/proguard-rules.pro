@@ -66,6 +66,12 @@
 # @Serializable and @Polymorphic are used at runtime for polymorphic serialization.
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault
 
+# ============================================
+# lib-common 混淆规则（关键修复：代码编辑器崩溃）
+# ============================================
+-keep class com.github.jing332.common.** { *; }
+-keepclassmembers class com.github.jing332.common.** { *; }
+
 # Serializer for classes with named companion objects are retrieved using `getDeclaredClasses`.
 # If you have any, uncomment and replace classes with those containing named companion objects.
 #-keepattributes InnerClasses # Needed for `getDeclaredClasses`.
