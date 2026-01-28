@@ -91,6 +91,12 @@
 -dontwarn kotlinx.serialization.**
 
 # ============================================
+# lib-common 混淆规则
+# ============================================
+-keep class com.github.jing332.common.** { *; }
+-keepclassmembers class com.github.jing332.common.** { *; }
+
+# ============================================
 # Sardine WebDAV 库混淆规则 (关键修复)
 # ============================================
 # 保持 Sardine 所有类不被混淆
