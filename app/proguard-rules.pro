@@ -72,6 +72,17 @@
 -keep class com.github.jing332.common.** { *; }
 -keepclassmembers class com.github.jing332.common.** { *; }
 
+# ============================================
+# lib-database 混淆规则（关键修复：Parcelable 反序列化）
+# ============================================
+-keep class com.github.jing332.database.entities.** { *; }
+-keepclassmembers class com.github.jing332.database.entities.** { *; }
+-keep class com.github.jing332.database.entities.MapConverters { *; }
+
+# kotlinx.serialization 混淆规则
+-keep class kotlinx.serialization.json.** { *; }
+-dontwarn kotlinx.serialization.**
+
 # Serializer for classes with named companion objects are retrieved using `getDeclaredClasses`.
 # If you have any, uncomment and replace classes with those containing named companion objects.
 #-keepattributes InnerClasses # Needed for `getDeclaredClasses`.
