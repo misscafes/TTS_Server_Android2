@@ -18,6 +18,9 @@ class GroupEditContentViewModel : ViewModel() {
     private val _availableConfigs = MutableStateFlow<List<SystemTtsV2>>(emptyList())
     val availableConfigs: StateFlow<List<SystemTtsV2>> = _availableConfigs.asStateFlow()
     
+    private val _pluginNameCache = MutableStateFlow<Map<String, String>>(emptyMap())
+    val pluginNameCache: StateFlow<Map<String, String>> = _pluginNameCache.asStateFlow()
+    
     private var currentGroupId: Long = 0
     private var allConfigs: List<SystemTtsV2> = emptyList()
     
@@ -25,9 +28,13 @@ class GroupEditContentViewModel : ViewModel() {
         viewModelScope.launch {
             currentGroupId = groupId
             withContext(Dispatchers.IO) {
+                // 加载配置
                 allConfigs = dbm.systemTtsV2.all
-                // 获取不在当前分组的配置
                 _availableConfigs.value = allConfigs.filter { it.groupId != groupId }
+                
+                // 缓存所有插件名称
+                val plugins = dbm.pluginDao.all
+                _pluginNameCache.value = plugins.associate { it.pluginId to it.name }
             }
         }
     }
@@ -35,7 +42,8 @@ class GroupEditContentViewModel : ViewModel() {
     fun filterConfigs(
         configs: List<SystemTtsV2>,
         query: String,
-        searchType: SearchType
+        searchType: SearchType,
+        pluginCache: Map<String, String> = emptyMap()
     ): List<SystemTtsV2> {
         if (query.isBlank()) return configs
         
@@ -56,9 +64,10 @@ class GroupEditContentViewModel : ViewModel() {
                 SearchType.PLUGIN -> {
                     when (val source = ttsConfig.source) {
                         is PluginTtsSource -> {
-                            // 搜索 pluginId 或插件名称
+                            // 搜索 pluginId 或使用缓存的插件名称
+                            val pluginName = pluginCache[source.pluginId] ?: source.pluginId
                             source.pluginId.contains(query, ignoreCase = true) ||
-                            dbm.pluginDao.getByPluginId(source.pluginId)?.name?.contains(query, ignoreCase = true) == true
+                            pluginName.contains(query, ignoreCase = true)
                         }
                         is LocalTtsSource -> 
                             "本地".contains(query, ignoreCase = true) || 

@@ -17,7 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.systts.SystemTtsGroup
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.database.entities.systts.TtsConfigurationDTO
@@ -38,13 +37,14 @@ fun GroupEditContentDialog(
     var selectedConfigs by remember { mutableStateOf<Set<SystemTtsV2>>(emptySet()) }
     var searchType by remember { mutableStateOf(SearchType.NAME) }
     val availableConfigs by vm.availableConfigs.collectAsStateWithLifecycle()
+    val pluginNameCache by vm.pluginNameCache.collectAsStateWithLifecycle()
     
     LaunchedEffect(group.id) {
         vm.load(group.id)
     }
     
-    val filteredConfigs = remember(searchQuery, searchType, availableConfigs) {
-        vm.filterConfigs(availableConfigs, searchQuery, searchType)
+    val filteredConfigs = remember(searchQuery, searchType, availableConfigs, pluginNameCache) {
+        vm.filterConfigs(availableConfigs, searchQuery, searchType, pluginNameCache)
     }
 
     AlertDialog(
@@ -153,7 +153,8 @@ fun GroupEditContentDialog(
                                         selectedConfigs + config
                                     }
                                 },
-                                searchType = searchType
+                                searchType = searchType,
+                                pluginNameCache = pluginNameCache
                             )
                         }
                     }
@@ -205,7 +206,8 @@ private fun ConfigItem(
     config: SystemTtsV2,
     isSelected: Boolean,
     onToggleSelection: () -> Unit,
-    searchType: SearchType
+    searchType: SearchType,
+    pluginNameCache: Map<String, String> = emptyMap()
 ) {
     // 安全获取 TtsConfigurationDTO
     val ttsConfig = config.config as? TtsConfigurationDTO
@@ -238,11 +240,8 @@ private fun ConfigItem(
                 SearchType.PLUGIN -> {
                     when (val source = ttsConfig?.source) {
                         is PluginTtsSource -> {
-                            // 获取插件名称而不是显示 pluginId
-                            val pluginName = remember(source.pluginId) {
-                                dbm.pluginDao.getByPluginId(source.pluginId)?.name 
-                                    ?: source.pluginId
-                            }
+                            // 使用缓存的插件名称
+                            val pluginName = pluginNameCache[source.pluginId] ?: source.pluginId
                             "插件: $pluginName"
                         }
                         is LocalTtsSource -> "本地TTS"
