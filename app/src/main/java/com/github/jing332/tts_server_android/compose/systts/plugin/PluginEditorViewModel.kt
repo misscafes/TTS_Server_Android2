@@ -25,7 +25,7 @@ class PluginEditorViewModel(app: Application) : AndroidViewModel(app) {
 
     private var mEngine: TtsPluginUiEngineV2? = null
     val engine: TtsPluginUiEngineV2
-        get() = mEngine ?: throw IllegalStateException("Engine is null")
+        get() = mEngine ?: throw IllegalStateException("Engine not initialized")
     val pluginSource: PluginTtsSource
         get() = engine.source
     val plugin: Plugin

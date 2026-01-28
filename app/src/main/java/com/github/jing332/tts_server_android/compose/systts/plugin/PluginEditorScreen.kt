@@ -97,7 +97,7 @@ internal fun PluginEditorScreen(
         }
     }
 
-    var showVarsDialog by rememberSaveable { mutableStateOf(false) }
+    var showVarsDialog by remember { mutableStateOf(false) }
     if (showVarsDialog) {
         var p by remember { mutableStateOf(vm.plugin) }
         PluginVarsBottomSheet(
@@ -129,6 +129,7 @@ internal fun PluginEditorScreen(
             vm.updateCode(codeEditor!!.text.toString())
         } catch (e: Exception) {
             context.displayErrorDialog(e)
+            return
         }
         previewLauncher.launch(Intent(context, PluginPreviewActivity::class.java).apply {
             putExtra(PluginPreviewActivity.KEY_PLUGIN, vm.plugin)

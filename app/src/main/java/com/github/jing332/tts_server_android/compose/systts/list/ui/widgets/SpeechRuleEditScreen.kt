@@ -424,7 +424,9 @@ private fun CustomTagScreen(
                 )
             } else {
                 val itemsMap by rememberUpdatedState(
-                    newValue = AppConst.jsonBuilder.decodeFromString<Map<String, String>>(items)
+                    newValue = runCatching {
+                        AppConst.jsonBuilder.decodeFromString<Map<String, String>>(items)
+                    }.getOrElse { emptyMap() }
                 )
 
                 val defaultValue = remember { defTag.value["default"] ?: "" }

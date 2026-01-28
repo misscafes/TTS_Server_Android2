@@ -35,7 +35,7 @@ class PluginTtsViewModel(app: Application) : AndroidViewModel(app) {
 
     fun loadPluginList() {
         viewModelScope.launch(Dispatchers.IO) {
-            val plugins = dbm.pluginDao.allEnabled
+            val plugins = dbm.pluginDao.all
             withMain {
                 pluginList.clear()
                 pluginList.addAll(plugins)
