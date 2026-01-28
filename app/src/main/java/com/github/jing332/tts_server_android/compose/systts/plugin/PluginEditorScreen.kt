@@ -69,14 +69,6 @@ internal fun PluginEditorScreen(
         }
     }
 
-    LaunchedEffect(vm) {
-        runCatching {
-            vm.init(plugin, context.assets.open("defaultData/plugin-azure.js").readAllText())
-        }.onFailure {
-            context.displayErrorDialog(it)
-        }
-    }
-
     var showTextParamDialog by remember { mutableStateOf(false) }
     if (showTextParamDialog) {
         var sampleText by remember { mutableStateOf(PluginConfig.textParam.value) }
@@ -107,7 +99,7 @@ internal fun PluginEditorScreen(
 
     var showVarsDialog by rememberSaveable { mutableStateOf(false) }
     if (showVarsDialog) {
-        var p by rememberSaveable { mutableStateOf(vm.plugin) }
+        var p by remember { mutableStateOf(vm.plugin) }
         PluginVarsBottomSheet(
             onDismissRequest = {
                 showVarsDialog = false

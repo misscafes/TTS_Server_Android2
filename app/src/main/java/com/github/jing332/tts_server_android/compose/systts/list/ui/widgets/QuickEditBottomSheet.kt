@@ -43,35 +43,35 @@ fun QuickEditBottomSheet(
 
         if (ret) onDismissRequest()
     }) {
-        Column(
-            Modifier
-                .padding(top = 12.dp)
-                .padding(horizontal = 8.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            if (ui.showSpeechEdit)
-                CompositionLocalProvider(LocalSaveCallBack provides callbacks) {
+        CompositionLocalProvider(LocalSaveCallBack provides callbacks) {
+            Column(
+                Modifier
+                    .padding(top = 12.dp)
+                    .padding(horizontal = 8.dp)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                if (ui.showSpeechEdit)
                     SpeechRuleEditScreen(
                         modifier = Modifier.fillMaxWidth(),
                         systts = systts,
                         onSysttsChange = onSysttsChange,
                         showSpeechTarget = true
                     )
-                }
 
-            BasicInfoEditScreen(
-                modifier = Modifier,
-                systemTts = systts,
-                onSystemTtsChange = onSysttsChange
-            )
-            ui.ParamsEditScreen(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 8.dp),
-                systemTts = systts,
-                onSystemTtsChange = onSysttsChange
-            )
-            Spacer(modifier = Modifier.height(48.dp))
+                BasicInfoEditScreen(
+                    modifier = Modifier,
+                    systemTts = systts,
+                    onSystemTtsChange = onSysttsChange
+                )
+                ui.ParamsEditScreen(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    systemTts = systts,
+                    onSystemTtsChange = onSysttsChange
+                )
+                Spacer(modifier = Modifier.height(48.dp))
+            }
         }
     }
 }
