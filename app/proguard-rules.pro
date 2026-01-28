@@ -75,9 +75,76 @@
 # ============================================
 # lib-database 混淆规则（关键修复：Parcelable 反序列化）
 # ============================================
+-keep class com.github.jing332.database.** { *; }
+-keepclassmembers class com.github.jing332.database.** { *; }
 -keep class com.github.jing332.database.entities.** { *; }
 -keepclassmembers class com.github.jing332.database.entities.** { *; }
 -keep class com.github.jing332.database.entities.MapConverters { *; }
+
+# 关键：IConfiguration 密封类及其所有子类不能被混淆
+-keep class com.github.jing332.database.entities.systts.IConfiguration { *; }
+-keep class * extends com.github.jing332.database.entities.systts.IConfiguration { *; }
+-keep class com.github.jing332.database.entities.systts.** { *; }
+
+# Parcelable 保护规则
+-keepclassmembers class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator CREATOR;
+}
+
+# ============================================
+# lib-script 混淆规则（关键修复：Gson 反序列化抽象类）
+# ============================================
+-keep class com.github.jing332.script.** { *; }
+-keepclassmembers class com.github.jing332.script.** { *; }
+# 关键：JavaScriptEngine 及其子类不能被混淆
+-keep class com.github.jing332.script.JavaScriptEngine { *; }
+-keep class * extends com.github.jing332.script.JavaScriptEngine { *; }
+
+# ============================================
+# lib-tts JClass 混淆规则（关键修复：Gson 反序列化抽象类）
+# ============================================
+# 关键：JClass 类名不能被混淆，否则 Gson 无法识别
+-keep class com.github.jing332.tts.speech.plugin.engine.type.JClass {
+    <init>(...);
+    *;
+}
+# 关键：保留所有继承自 JClass 的子类
+-keep class * extends com.github.jing332.tts.speech.plugin.engine.type.JClass {
+    <init>(...);
+    *;
+}
+
+# Gson 混淆规则
+-keep class * implements com.google.gson.InstanceCreator { *; }
+-keep class * extends com.google.gson.TypeAdapter { *; }
+-keep class * extends com.google.gson.reflect.TypeToken { *; }
+-keep class * extends com.google.gson.JsonSerializer { *; }
+-keep class * extends com.google.gson.JsonDeserializer { *; }
+-keep class * extends com.google.gson.Gson { *; }
+
+# 关键修复：Gson 需要保留类的完整层次结构
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
+-keepattributes RuntimeVisibleAnnotations
+
+# 保留所有可能被 Gson 序列化的数据类
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# 防止抽象类和接口被混淆导致 Gson 无法实例化
+-keepnames class * implements java.io.Serializable
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    !static !transient <fields>;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+}
 
 # kotlinx.serialization 混淆规则
 -keep class kotlinx.serialization.json.** { *; }
@@ -396,3 +463,24 @@
 -dontwarn sun.security.x509.X500Name
 -dontwarn sun.security.x509.X509CertImpl
 -dontwarn sun.security.x509.X509CertInfo
+
+# ==========================================================
+# EMERGENCY FIX: Keep all project classes to prevent Gson crash
+# ==========================================================
+-keep class com.github.jing332.tts_server_android.** { *; }
+-keepclassmembers class com.github.jing332.tts_server_android.** { *; }
+-keepattributes Signature, *Annotation*, EnclosingMethod
+-keep class com.google.gson.** { *; }
+-keep interface com.google.gson.** { *; }
+
+# ==========================================================
+# CRITICAL FIX: Rosemoe Sora CodeEditor 代码编辑器保护规则
+# ==========================================================
+-keep class io.github.rosemoe.sora.** { *; }
+-keepclassmembers class io.github.rosemoe.sora.** { *; }
+-keep class io.github.rosemoe.sora.widget.CodeEditor { *; }
+-keep class io.github.rosemoe.sora.text.Content { *; }
+-keep class io.github.rosemoe.sora.text.ContentListener { *; }
+-keep class io.github.rosemoe.sora.lang.** { *; }
+-keep class io.github.rosemoe.sora.event.** { *; }
+-dontwarn io.github.rosemoe.sora.**
