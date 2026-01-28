@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
-import com.github.jing332.text_searcher.ui.plugin.CodeEditorHelper
+import com.github.jing332.tts_server_android.compose.codeeditor.CodeEditorHelper
 import com.github.jing332.tts_server_android.conf.CodeEditorConfig
 import io.github.rosemoe.sora.widget.CodeEditor
 

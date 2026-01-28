@@ -484,3 +484,7 @@
 -keep class io.github.rosemoe.sora.lang.** { *; }
 -keep class io.github.rosemoe.sora.event.** { *; }
 -dontwarn io.github.rosemoe.sora.**
+
+# CodeEditorHelper 和相关类必须保护
+-keep class com.github.jing332.text_searcher.** { *; }
+-keepclassmembers class com.github.jing332.text_searcher.** { *; }

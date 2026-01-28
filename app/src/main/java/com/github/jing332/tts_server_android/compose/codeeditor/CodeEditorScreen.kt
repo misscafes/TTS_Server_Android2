@@ -106,7 +106,6 @@ fun CodeEditorScreen(
         }
 
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
     LaunchedEffect(vm) {
         if (CodeEditorConfig.isRemoteSyncEnabled.value)
             vm.startSyncServer(
@@ -117,21 +116,20 @@ fun CodeEditorScreen(
                 onAction = onRemoteAction
             )
 
-        scope.launch {
-            vm.error.collect {
-                when (it) {
-                    Error.Empty -> {}
-                    is Error.Other -> {
-                        context.displayErrorDialog(t = it.e)
-                    }
+        // 直接在 LaunchedEffect 的协程作用域中收集，避免 LeftCompositionCancellationException
+        vm.error.collect {
+            when (it) {
+                Error.Empty -> {}
+                is Error.Other -> {
+                    context.displayErrorDialog(t = it.e)
+                }
 
-                    Error.PortConflict -> {
-                        context.longToast("RemoteSync: port conflict!")
-                    }
+                Error.PortConflict -> {
+                    context.longToast("RemoteSync: port conflict!")
+                }
 
-                    is Error.Socket -> {
-                        context.longToast("RemoteSync: ${it.message}")
-                    }
+                is Error.Socket -> {
+                    context.longToast("RemoteSync: ${it.message}")
                 }
             }
         }

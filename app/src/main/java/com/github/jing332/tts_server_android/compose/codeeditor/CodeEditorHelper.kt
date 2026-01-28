@@ -1,4 +1,4 @@
-package com.github.jing332.text_searcher.ui.plugin
+package com.github.jing332.tts_server_android.compose.codeeditor
 
 import android.content.Context
 import android.content.res.Configuration
