@@ -98,7 +98,7 @@ internal fun PluginEditorScreen(
     }
 
     var showVarsDialog by remember { mutableStateOf(false) }
-    if (showVarsDialog) {
+    if (showVarsDialog && code.isNotEmpty()) {
         var p by remember { mutableStateOf(vm.plugin) }
         PluginVarsBottomSheet(
             onDismissRequest = {

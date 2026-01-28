@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.systts.SystemTtsV2
+import com.github.jing332.database.entities.systts.TtsConfigurationDTO
 import com.github.jing332.database.entities.systts.source.LocalTtsSource
 import com.github.jing332.database.entities.systts.source.PluginTtsSource
 import kotlinx.coroutines.Dispatchers
@@ -39,21 +40,23 @@ class GroupEditContentViewModel : ViewModel() {
         if (query.isBlank()) return configs
         
         return configs.filter { config ->
+            // 安全获取 TtsConfigurationDTO，如果不是则跳过
+            val ttsConfig = config.config as? TtsConfigurationDTO ?: return@filter false
+            
             when (searchType) {
                 SearchType.NAME -> {
                     config.displayName.contains(query, ignoreCase = true)
                 }
                 SearchType.TAG -> {
-                    val speechRule = config.ttsConfig.speechRule
+                    val speechRule = ttsConfig.speechRule
                     speechRule.tagName.contains(query, ignoreCase = true) ||
                     speechRule.tag.contains(query, ignoreCase = true) ||
                     speechRule.tagData.values.any { it.contains(query, ignoreCase = true) }
                 }
                 SearchType.PLUGIN -> {
-                    when (val source = config.ttsConfig.source) {
+                    when (val source = ttsConfig.source) {
                         is PluginTtsSource -> 
-                            source.pluginId.contains(query, ignoreCase = true) ||
-                            source.plugin?.name?.contains(query, ignoreCase = true) == true
+                            source.pluginId.contains(query, ignoreCase = true)
                         is LocalTtsSource -> 
                             "本地".contains(query, ignoreCase = true) || 
                             "local".contains(query, ignoreCase = true)

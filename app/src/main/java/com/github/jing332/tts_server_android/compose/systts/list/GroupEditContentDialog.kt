@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.systts.SystemTtsGroup
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.database.entities.systts.TtsConfigurationDTO
@@ -206,7 +207,8 @@ private fun ConfigItem(
     onToggleSelection: () -> Unit,
     searchType: SearchType
 ) {
-    val ttsConfig = config.ttsConfig
+    // 安全获取 TtsConfigurationDTO
+    val ttsConfig = config.config as? TtsConfigurationDTO
     
     Row(
         modifier = Modifier
@@ -229,13 +231,20 @@ private fun ConfigItem(
             // 显示额外信息
             val extraInfo = when (searchType) {
                 SearchType.TAG -> {
-                    if (ttsConfig.speechRule.tagName.isNotEmpty()) {
+                    if (ttsConfig != null && ttsConfig.speechRule.tagName.isNotEmpty()) {
                         "标签: ${ttsConfig.speechRule.tagName}"
                     } else null
                 }
                 SearchType.PLUGIN -> {
-                    when (val source = ttsConfig.source) {
-                        is PluginTtsSource -> "插件: ${source.pluginId}"
+                    when (val source = ttsConfig?.source) {
+                        is PluginTtsSource -> {
+                            // 获取插件名称而不是显示 pluginId
+                            val pluginName = remember(source.pluginId) {
+                                dbm.pluginDao.getByPluginId(source.pluginId)?.name 
+                                    ?: source.pluginId
+                            }
+                            "插件: $pluginName"
+                        }
                         is LocalTtsSource -> "本地TTS"
                         else -> "其他"
                     }
