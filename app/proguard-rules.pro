@@ -90,6 +90,42 @@
 -keep class kotlinx.serialization.json.** { *; }
 -dontwarn kotlinx.serialization.**
 
+# ============================================
+# Sardine WebDAV 库混淆规则 (关键修复)
+# ============================================
+# 保持 Sardine 所有类不被混淆
+-keep class com.thegrizzlylabs.sardineandroid.** { *; }
+-keepclassmembers class com.thegrizzlylabs.sardineandroid.** { *; }
+
+# ============================================
+# Gson 混淆规则 (关键修复)
+# ============================================
+# Gson uses generic type information stored in a class file when working with fields.
+# Proguard must preserve the generic type information.
+-keepattributes Signature
+
+# Gson specific classes
+-keep class sun.misc.Unsafe { *; }
+-dontwarn sun.misc.Unsafe
+
+# Application classes that will be serialized/deserialized over Gson
+-keep class * implements java.io.Serializable { *; }
+
+# Prevent proguard from stripping interface information from TypeAdapter, TypeAdapterFactory,
+# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
+-keep class * extends com.google.gson.TypeAdapter { *; }
+-keep class * implements com.google.gson.TypeAdapterFactory { *; }
+-keep class * implements com.google.gson.JsonSerializer { *; }
+-keep class * implements com.google.gson.JsonDeserializer { *; }
+
+# Prevent R8 from leaving dead code
+-dontwarn com.google.gson.**
+
+# R8 缺少类警告修复
+-dontwarn coil3.PlatformContext
+-dontwarn java.lang.reflect.AnnotatedType
+-dontwarn kotlinx.coroutines.slf4j.MDCContext
+
 -dontwarn com.bumptech.glide.Glide
 -dontwarn com.bumptech.glide.RequestBuilder
 -dontwarn com.bumptech.glide.RequestManager
