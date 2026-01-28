@@ -124,6 +124,10 @@ internal fun PluginEditorScreen(
         }
 
     fun previewUi() {
+        if (codeEditor == null || code.isEmpty()) {
+            context.longToast("插件未初始化完成")
+            return
+        }
         AppConst.localBroadcast.sendBroadcastSync(Intent(PluginPreviewActivity.ACTION_FINISH))
         try {
             vm.updateCode(codeEditor!!.text.toString())
@@ -151,7 +155,7 @@ internal fun PluginEditorScreen(
         onDebug = { showDebugLogger = true },
 
         onSave = {
-            if (codeEditor != null) {
+            if (codeEditor != null && code.isNotEmpty()) {
                 runCatching {
                     vm.updateCode(codeEditor!!.string())
                     onSave(vm.plugin)
@@ -162,8 +166,10 @@ internal fun PluginEditorScreen(
             }
         },
         onLongClickSave = { // 仅保存
-            onSave(vm.plugin.copy(code = codeEditor!!.string()))
-            navController.popBackStack()
+            if (codeEditor != null && code.isNotEmpty()) {
+                onSave(vm.plugin.copy(code = codeEditor!!.string()))
+                navController.popBackStack()
+            }
         },
 
         onRemoteAction = { name, _ ->
@@ -175,7 +181,8 @@ internal fun PluginEditorScreen(
         },
         onUpdate = { codeEditor = it },
         onSaveFile = {
-            "ttsrv-plugin-${vm.plugin.name}.js" to codeEditor!!.text.toString().toByteArray()
+            "ttsrv-plugin-${vm.plugin.name}.js" to 
+                (if (codeEditor != null && code.isNotEmpty()) codeEditor!!.text.toString() else "// Empty").toByteArray()
         },
         onLongClickMoreLabel = stringResource(id = R.string.plugin_preview_ui),
         onLongClickMore = { previewUi() }

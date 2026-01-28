@@ -55,8 +55,11 @@ class GroupEditContentViewModel : ViewModel() {
                 }
                 SearchType.PLUGIN -> {
                     when (val source = ttsConfig.source) {
-                        is PluginTtsSource -> 
-                            source.pluginId.contains(query, ignoreCase = true)
+                        is PluginTtsSource -> {
+                            // 搜索 pluginId 或插件名称
+                            source.pluginId.contains(query, ignoreCase = true) ||
+                            dbm.pluginDao.getByPluginId(source.pluginId)?.name?.contains(query, ignoreCase = true) == true
+                        }
                         is LocalTtsSource -> 
                             "本地".contains(query, ignoreCase = true) || 
                             "local".contains(query, ignoreCase = true)
