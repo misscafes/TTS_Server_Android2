@@ -156,6 +156,10 @@
     <string name="belonging_group">所属分组</string>
     <string name="msg_group_is_empty">分组为空，请添加配置</string>
     <string name="group_name">分组名称</string>
+    <string name="edit_group_content">编辑分组内容</string>
+    <string name="available_config_count">可用配置：%d</string>
+    <string name="no_config_to_move">没有可移动的配置</string>
+    <string name="move_to_group_with_count" formatted="false">移动 %d 项到 "%s"</string>
     <string name="default_group">默认分组</string>
     <string name="content">内容</string>
     <string name="name">名称</string>

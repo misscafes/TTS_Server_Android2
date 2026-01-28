@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DriveFileRenameOutline
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -21,6 +22,7 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.state.ToggleableState
 import com.github.jing332.compose.widgets.TextFieldDialog
+import com.github.jing332.database.entities.systts.SystemTtsGroup
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.systts.GroupItem
 
@@ -28,6 +30,7 @@ import com.github.jing332.tts_server_android.compose.systts.GroupItem
 fun Group(
     modifier: Modifier,
     name: String,
+    group: SystemTtsGroup,
     isExpanded: Boolean,
     toggleableState: ToggleableState,
     onToggleableStateChange: (Boolean) -> Unit,
@@ -38,6 +41,7 @@ fun Group(
     onCopy: (newName: String) -> Unit,
     onEditAudioParams: () -> Unit,
     onSort: () -> Unit,
+    onEditContent: () -> Unit,
 ) {
 
     var showRenameDialog by remember { mutableStateOf(false) }
@@ -67,6 +71,15 @@ fun Group(
     }
 
     val context = LocalContext.current
+    var showEditContentDialog by remember { mutableStateOf(false) }
+    
+    if (showEditContentDialog) {
+        GroupEditContentDialog(
+            group = group,
+            onDismissRequest = { showEditContentDialog = false }
+        )
+    }
+    
     GroupItem(
         modifier = modifier.semantics {
             customActions = listOf(
@@ -87,6 +100,9 @@ fun Group(
                 },
                 CustomAccessibilityAction(context.getString(R.string.export_config)) {
                     onExport();true
+                },
+                CustomAccessibilityAction(context.getString(R.string.edit_group_content)) {
+                    showEditContentDialog = true;true
                 }
             )
         },
@@ -135,6 +151,16 @@ fun Group(
                 },
                 leadingIcon = {
                     Icon(Icons.AutoMirrored.Default.Sort, null)
+                }
+            )
+            
+            DropdownMenuItem(text = { Text(stringResource(id = R.string.edit_group_content)) },
+                onClick = {
+                    dismiss()
+                    showEditContentDialog = true
+                },
+                leadingIcon = {
+                    Icon(Icons.Default.Edit, null)
                 }
             )
         }

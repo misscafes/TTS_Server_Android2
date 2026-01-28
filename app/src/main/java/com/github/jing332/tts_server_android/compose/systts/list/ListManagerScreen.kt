@@ -229,6 +229,14 @@ internal fun ListManagerScreen(
             })
     }
 
+    var showGroupEditContentDialog by remember { mutableStateOf<SystemTtsGroup?>(null) }
+    if (showGroupEditContentDialog != null) {
+        GroupEditContentDialog(
+            group = showGroupEditContentDialog!!,
+            onDismissRequest = { showGroupEditContentDialog = null }
+        )
+    }
+
     val listState = rememberLazyListState()
     LazyListIndexStateSaver(models = models, listState = listState)
 
@@ -356,6 +364,7 @@ internal fun ListManagerScreen(
                         ShadowedDraggableItem(reorderableState = reorderState, key = key) {
                             Group(modifier = groupDragModifier,
                                 name = g.name,
+                                group = g,
                                 isExpanded = g.isExpanded,
                                 toggleableState = checkState,
                                 onToggleableStateChange = {
@@ -395,6 +404,9 @@ internal fun ListManagerScreen(
                                 },
                                 onSort = {
                                     showSortDialog = groupWithSystemTts.list
+                                },
+                                onEditContent = {
+                                    showGroupEditContentDialog = g
                                 }
                             )
                         }

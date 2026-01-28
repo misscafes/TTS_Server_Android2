@@ -2,12 +2,14 @@ package com.github.jing332.tts_server_android.compose.systts
 
 import android.util.Log 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.drake.net.utils.withMain
 import com.github.jing332.common.LogEntry
 import com.github.jing332.common.LogLevel
 import com.github.jing332.common.toLogLevel
+import com.github.jing332.common.toLogLevelChar
 import com.github.jing332.common.utils.runOnUI
 import com.github.jing332.tts_server_android.SysttsLogger
 import com.github.jing332.tts_server_android.constant.AppConst
@@ -27,6 +29,21 @@ class TtsLogViewModel : ViewModel() {
     }
 
     val logs = mutableStateListOf<LogEntry>()
+    val searchQuery = mutableStateOf("")
+    
+    val filteredLogs: List<LogEntry>
+        get() {
+            val query = searchQuery.value.trim()
+            return if (query.isEmpty()) {
+                logs
+            } else {
+                logs.filter { log ->
+                    log.message.contains(query, ignoreCase = true) ||
+                    log.time.contains(query, ignoreCase = true) ||
+                    log.level.toLogLevelChar().contains(query, ignoreCase = true)
+                }
+            }
+        }
 
     fun clear() {
         logs.clear()

@@ -72,10 +72,10 @@ android {
             Properties pro = new Properties()
             InputStream input = project.rootProject.file("local.properties").newDataInputStream()
             pro.load(input)
-            storeFile file(pro.getProperty("KEY_PATH"))
-            storePassword pro.getProperty("KEY_PASSWORD")
-            keyAlias pro.getProperty("ALIAS_NAME")
-            keyPassword pro.getProperty("ALIAS_PASSWORD")
+            storeFile file(project.rootProject.file(pro.getProperty("KEYSTORE_FILE")))
+            storePassword pro.getProperty("STORE_PASSWORD")
+            keyAlias pro.getProperty("KEY_ALIAS")
+            keyPassword pro.getProperty("KEY_PASSWORD")
         }
     }
 
