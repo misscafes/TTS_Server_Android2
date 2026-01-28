@@ -26,24 +26,56 @@ class TtsLogViewModel : ViewModel() {
         // 修改点：路径从 files/log 指向 cache/log
         // AppConst.externalFilesDir 指向 .../files，parentFile 指向 .../包名，再 resolve cache 即为 cache 目录
         val file = File(AppConst.externalFilesDir.parentFile, "cache/log/system_tts.log")
+        
+        // 支持的日志级别
+        val LOG_LEVELS = listOf(
+            LogLevel.ERROR,
+            LogLevel.WARN,
+            LogLevel.INFO,
+            LogLevel.DEBUG,
+            LogLevel.TRACE
+        )
     }
 
     val logs = mutableStateListOf<LogEntry>()
     val searchQuery = mutableStateOf("")
     
+    // 日志级别筛选（存储选中的日志级别 Int 值）
+    val selectedLevels = mutableStateListOf<Int>()
+    val showFilterDialog = mutableStateOf(false)
+    
     val filteredLogs: List<LogEntry>
         get() {
+            var filtered = logs.toList()
+            
+            // 按日志级别筛选
+            if (selectedLevels.isNotEmpty()) {
+                filtered = filtered.filter { it.level in selectedLevels }
+            }
+            
+            // 按搜索词筛选
             val query = searchQuery.value.trim()
-            return if (query.isEmpty()) {
-                logs
-            } else {
-                logs.filter { log ->
+            if (query.isNotEmpty()) {
+                filtered = filtered.filter { log ->
                     log.message.contains(query, ignoreCase = true) ||
-                    log.time.contains(query, ignoreCase = true) ||
-                    log.level.toLogLevelChar().contains(query, ignoreCase = true)
+                    log.time.contains(query, ignoreCase = true)
                 }
             }
+            
+            return filtered
         }
+    
+    fun toggleLevel(level: Int) {
+        if (level in selectedLevels) {
+            selectedLevels.remove(level)
+        } else {
+            selectedLevels.add(level)
+        }
+    }
+    
+    fun clearFilter() {
+        selectedLevels.clear()
+    }
 
     fun clear() {
         logs.clear()

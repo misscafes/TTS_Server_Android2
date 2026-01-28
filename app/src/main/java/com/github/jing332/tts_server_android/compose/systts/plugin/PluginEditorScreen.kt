@@ -51,6 +51,7 @@ internal fun PluginEditorScreen(
     val context = LocalContext.current
 
     var codeEditor by remember { mutableStateOf<CodeEditor?>(null) }
+    var isEngineReady by remember { mutableStateOf(false) }
 
 //    @Suppress("NAME_SHADOWING")
 //    var plugin by remember { mutableStateOf(plugin) }
@@ -64,6 +65,7 @@ internal fun PluginEditorScreen(
     LaunchedEffect(vm) {
         runCatching {
             vm.init(plugin, context.assets.open("defaultData/plugin-azure.js").readAllText())
+            isEngineReady = true
         }.onFailure {
             context.displayErrorDialog(it)
         }
@@ -90,7 +92,7 @@ internal fun PluginEditorScreen(
                 vm.stopDebug()
             }) {
             runCatching {
-                vm.debug(codeEditor!!.string())
+                if (isEngineReady) vm.debug(codeEditor!!.string())
             }.onFailure {
                 context.displayErrorDialog(it)
             }
@@ -98,7 +100,7 @@ internal fun PluginEditorScreen(
     }
 
     var showVarsDialog by remember { mutableStateOf(false) }
-    if (showVarsDialog && code.isNotEmpty()) {
+    if (showVarsDialog && code.isNotEmpty() && isEngineReady) {
         var p by remember { mutableStateOf(vm.plugin) }
         PluginVarsBottomSheet(
             onDismissRequest = {
@@ -119,13 +121,18 @@ internal fun PluginEditorScreen(
             Log.d("PluginEditor", "source update: $source")
             if (source == null) {
                 context.longToast("空返回值")
-            } else
+            } else if (isEngineReady) {
                 vm.updateSource(source)
+            }
         }
 
     fun previewUi() {
         if (codeEditor == null || code.isEmpty()) {
             context.longToast("插件未初始化完成")
+            return
+        }
+        if (!isEngineReady) {
+            context.longToast("引擎尚未初始化，请稍候")
             return
         }
         AppConst.localBroadcast.sendBroadcastSync(Intent(PluginPreviewActivity.ACTION_FINISH))
@@ -135,9 +142,16 @@ internal fun PluginEditorScreen(
             context.displayErrorDialog(e)
             return
         }
+        // 安全获取 plugin 和 source
+        val currentPlugin = runCatching { vm.plugin }.getOrNull()
+        val currentSource = runCatching { vm.pluginSource }.getOrNull()
+        if (currentPlugin == null || currentSource == null) {
+            context.longToast("插件数据未就绪")
+            return
+        }
         previewLauncher.launch(Intent(context, PluginPreviewActivity::class.java).apply {
-            putExtra(PluginPreviewActivity.KEY_PLUGIN, vm.plugin)
-            putExtra(PluginPreviewActivity.KEY_SOURCE, vm.pluginSource)
+            putExtra(PluginPreviewActivity.KEY_PLUGIN, currentPlugin)
+            putExtra(PluginPreviewActivity.KEY_SOURCE, currentSource)
         })
     }
 
@@ -152,10 +166,13 @@ internal fun PluginEditorScreen(
             }
         },
         onBack = { navController.popBackStack() },
-        onDebug = { showDebugLogger = true },
+        onDebug = { 
+            if (isEngineReady) showDebugLogger = true
+            else context.longToast("引擎尚未初始化，请稍候")
+        },
 
         onSave = {
-            if (codeEditor != null && code.isNotEmpty()) {
+            if (codeEditor != null && code.isNotEmpty() && isEngineReady) {
                 runCatching {
                     vm.updateCode(codeEditor!!.string())
                     onSave(vm.plugin)
@@ -167,7 +184,7 @@ internal fun PluginEditorScreen(
         },
         onLongClickSave = { // 仅保存
             if (codeEditor != null && code.isNotEmpty()) {
-                onSave(vm.plugin.copy(code = codeEditor!!.string()))
+                onSave(plugin.copy(code = codeEditor!!.string()))
                 navController.popBackStack()
             }
         },
@@ -181,7 +198,7 @@ internal fun PluginEditorScreen(
         },
         onUpdate = { codeEditor = it },
         onSaveFile = {
-            "ttsrv-plugin-${vm.plugin.name}.js" to 
+            "ttsrv-plugin-${plugin.name}.js" to 
                 (if (codeEditor != null && code.isNotEmpty()) codeEditor!!.text.toString() else "// Empty").toByteArray()
         },
         onLongClickMoreLabel = stringResource(id = R.string.plugin_preview_ui),
@@ -212,8 +229,12 @@ internal fun PluginEditorScreen(
         DropdownMenuItem(
             text = { Text(stringResource(R.string.plugin_set_vars)) },
             onClick = {
-                dismiss()
-                showVarsDialog = true
+                if (isEngineReady) {
+                    dismiss()
+                    showVarsDialog = true
+                } else {
+                    context.longToast("引擎尚未初始化，请稍候")
+                }
             },
             leadingIcon = {
                 Icon(Icons.Default.EditNote, null)
