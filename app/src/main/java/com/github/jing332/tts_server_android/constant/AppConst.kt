@@ -32,7 +32,8 @@ object AppConst {
             ignoreUnknownKeys = true
             prettyPrint = true
             isLenient = true
-            explicitNulls = false 
+            explicitNulls = false
+            coerceInputValues = true  // 将未知/无效值强制为默认值，避免反序列化失败
         }
     }
 

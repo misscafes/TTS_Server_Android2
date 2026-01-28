@@ -79,6 +79,17 @@
 #    static <1>$$serializer INSTANCE;
 #}
 
+# 保持数据库实体类和序列化相关类不被混淆
+-keep class com.github.jing332.database.entities.** { *; }
+-keepclassmembers class com.github.jing332.database.entities.** { *; }
+
+# 保持 MapConverters 不被混淆
+-keep class com.github.jing332.database.entities.MapConverters { *; }
+
+# kotlinx.serialization 混淆规则补充
+-keep class kotlinx.serialization.json.** { *; }
+-dontwarn kotlinx.serialization.**
+
 -dontwarn com.bumptech.glide.Glide
 -dontwarn com.bumptech.glide.RequestBuilder
 -dontwarn com.bumptech.glide.RequestManager
