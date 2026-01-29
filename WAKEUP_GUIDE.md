@@ -121,6 +121,84 @@ callback.log(message)
 
 ---
 
+### 问题4: 音频参数试听不生效 (2026-01-29)
+
+**症状：** 在底部调节面板修改语速/音量/音高后，点击试听仍然是默认参数
+
+**根本原因：** `PluginTtsProvider` 使用 `source.speed`（旧字段）而非 `params.speed`（新 audioParams）
+
+**修复文件：**
+- `lib-tts/src/main/java/com/github/jing332/tts/speech/plugin/PluginTtsProvider.kt`
+
+**修复要点：**
+```kotlin
+// 修改前：使用 source.speed（过时）
+val speed = if (source.speed == 0f) params.speed else source.speed
+
+// 修改后：直接使用 params（已包含 audioParams）
+val speed = if (params.speed != 1f) params.speed else if (source.speed == 0f) 1f else source.speed
+```
+
+**相关迁移：** `SystemTtsMigration.kt` - 旧数据自动迁移到 audioParams
+
+---
+
+### 问题5: 日志系统增强 - 插件/朗读规则调试 (2026-01-29)
+
+**需求：** 开发者需要查看插件和朗读规则的调试日志，普通用户不需要
+
+**实现方案：**
+
+1. **LogEntry 扩展** - 添加标记字段
+```kotlin
+data class LogEntry(
+    // ...
+    val isPluginLog: Boolean = false,
+    val isSpeechRuleLog: Boolean = false
+)
+```
+
+2. **Console 日志来源区分**
+```kotlin
+class Console(val source: LogSource = LogSource.PLUGIN) {
+    enum class LogSource { PLUGIN, SPEECH_RULE }
+    
+    companion object {
+        var globalPluginLogListener: ((LogEntry) -> Unit)? = null
+        var globalSpeechRuleLogListener: ((LogEntry) -> Unit)? = null
+    }
+}
+```
+
+3. **UI 添加调试开关** - `LogFilterDialog` 新增两个选项
+   - 显示插件日志
+   - 显示朗读规则日志
+
+**关键技巧：** 使用全局监听器模式解决模块依赖问题（lib-script → app）
+
+---
+
+### 问题6: 日志搜索框样式优化 (2026-01-29)
+
+**需求：** 搜索框字体大小统一 + 美观的圆角透明样式
+
+**修复文件：** `TtsLogScreen.kt`
+
+**实现：**
+```kotlin
+OutlinedTextField(
+    // ...
+    textStyle = MaterialTheme.typography.bodyLarge,  // 统一字体
+    placeholder = { Text("搜索日志", style = MaterialTheme.typography.bodyLarge) },
+    colors = OutlinedTextFieldDefaults.colors(
+        focusedContainerColor = Color.Transparent,    // 透明背景
+        unfocusedContainerColor = Color.Transparent
+    )
+)
+```
+
+---
+
 ## 🔨 构建流程
 
 ### 本地构建
@@ -310,9 +388,69 @@ git add newapk/ && git commit -m "发布新版本" && git push origin master
 
 ---
 
+## 🎯 AI 协作工作模式 (2026-01-29)
+
+### 高效开发流程
+
+以下是在本项目中与 AI 协作的最佳实践，可快速推进功能开发：
+
+#### 1. 并行搜索策略
+```
+同时发起多个搜索请求：
+- 搜索文件路径/类名
+- 搜索关键函数/变量
+- 搜索相关配置
+
+避免串行等待，最大化信息获取效率
+```
+
+#### 2. 问题定位三板斧
+```
+1. 复现问题 → 明确症状
+2. 全局搜索 → 找到相关代码
+3. 并行读取 → 理解调用链
+
+示例：修复音频参数不生效
+- 搜索：PluginTtsProvider、audioParams、speed
+- 读取：Provider 实现、数据迁移、UI 绑定
+- 定位：试听时使用 source.speed 而非 params.speed
+```
+
+#### 3. 模块化解耦技巧
+```
+问题：lib-script 模块无法直接访问 app 模块的日志系统
+
+解决方案：全局监听器模式
+// lib-script 定义全局回调
+object Console {
+    var globalPluginLogListener: ((LogEntry) -> Unit)? = null
+}
+
+// app 模块注册接收
+Console.globalPluginLogListener = { logEntry ->
+    // 处理日志
+}
+```
+
+#### 4. 快速构建命令
+```bash
+# 编译检查（不打包）
+./gradlew :app:compileAppReleaseKotlin --no-daemon
+
+# 完整构建正式版+开发版
+./gradlew :app:assembleRelease --no-daemon
+
+# 清理终端后构建（解决 daemon 崩溃）
+pkill -f gradlew; sleep 2
+./gradlew :app:assembleRelease --no-daemon
+```
+
+---
+
 ## 📝 修改历史
 
 | 日期 | 版本 | 内容 |
 |------|------|------|
+| 2026-01-29 | v1.2 | 添加 AI 协作工作模式，记录音频参数修复和日志系统增强 |
 | 2026-01-29 | v1.1 | 添加 ProGuard 规则警告，记录新功能移植注意事项 |
 | 2026-01-27 | v1.0 | 初始版本，记录插件刷新、转发器日志、云构建流程 |
