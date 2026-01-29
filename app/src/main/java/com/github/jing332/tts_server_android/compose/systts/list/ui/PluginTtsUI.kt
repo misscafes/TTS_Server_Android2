@@ -54,6 +54,7 @@ class PluginTtsUI : IConfigUI() {
         onSystemTtsChange: (SystemTtsV2) -> Unit,
     ) {
         val tts = (systemTts.config as TtsConfigurationDTO).source as PluginTtsSource
+        val config = systemTts.config as TtsConfigurationDTO
         Column(modifier) {
             val rateStr =
                 stringResource(
@@ -64,7 +65,17 @@ class PluginTtsUI : IConfigUI() {
                 text = rateStr,
                 value = tts.speed,
                 onValueChange = {
-                    onSystemTtsChange(systemTts.copySource(tts.copy(speed = it.toScale(2))))
+                    val newValue = it.toScale(2)
+                    // 同步更新 audioParams：1.0 转为 0f（跟随），其他值保持一致
+                    val audioParamValue = if (newValue == 1f) 0f else newValue
+                    onSystemTtsChange(
+                        systemTts.copy(
+                            config = config.copy(
+                                source = tts.copy(speed = newValue),
+                                audioParams = config.audioParams.copy(speed = audioParamValue)
+                            )
+                        )
+                    )
                 },
                 valueRange = 0f..3f
             )
@@ -76,9 +87,15 @@ class PluginTtsUI : IConfigUI() {
                 )
             LabelSlider(
                 text = volumeStr, value = tts.volume, onValueChange = {
+                    val newValue = it.toScale(2)
+                    // 同步更新 audioParams：1.0 转为 0f（跟随），其他值保持一致
+                    val audioParamValue = if (newValue == 1f) 0f else newValue
                     onSystemTtsChange(
-                        systemTts.copySource(
-                            tts.copy(volume = it.toScale(2))
+                        systemTts.copy(
+                            config = config.copy(
+                                source = tts.copy(volume = newValue),
+                                audioParams = config.audioParams.copy(volume = audioParamValue)
+                            )
                         )
                     )
                 }, valueRange = 0f..3f
@@ -90,9 +107,15 @@ class PluginTtsUI : IConfigUI() {
             )
             LabelSlider(
                 text = pitchStr, value = tts.pitch, onValueChange = {
+                    val newValue = it.toScale(2)
+                    // 同步更新 audioParams：1.0 转为 0f（跟随），其他值保持一致
+                    val audioParamValue = if (newValue == 1f) 0f else newValue
                     onSystemTtsChange(
-                        systemTts.copySource(
-                            tts.copy(pitch = it.toScale(2))
+                        systemTts.copy(
+                            config = config.copy(
+                                source = tts.copy(pitch = newValue),
+                                audioParams = config.audioParams.copy(pitch = audioParamValue)
+                            )
                         )
                     )
                 }, valueRange = 0f..3f
