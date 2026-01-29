@@ -26,6 +26,8 @@ import androidx.compose.material.icons.filled.FolderOpen
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.DockedSearchBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.HorizontalDivider
@@ -52,6 +54,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.CompositionLocalProvider
 import com.github.jing332.common.LogLevel
 import com.github.jing332.tts_server_android.R
 import java.io.File
@@ -85,31 +88,33 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                             if (!isSearch) {
                                 Text(text = stringResource(id = R.string.log), textAlign = TextAlign.Center)
                             } else {
-                                // 搜索框 - 使用 OutlinedTextField 圆角样式，透明背景
-                                androidx.compose.material3.OutlinedTextField(
-                                    modifier = Modifier.fillMaxWidth(0.95f),
-                                    value = searchQuery,
-                                    onValueChange = { searchQuery = it },
-                                    placeholder = { 
-                                        Text(
-                                            stringResource(R.string.search_logs),
-                                            style = MaterialTheme.typography.bodyLarge
-                                        ) 
-                                    },
-                                    textStyle = MaterialTheme.typography.bodyLarge,
-                                    singleLine = true,
-                                    trailingIcon = {
-                                        if (searchQuery.isNotEmpty()) {
-                                            IconButton(onClick = { searchQuery = "" }) {
-                                                Icon(Icons.Default.Clear, stringResource(R.string.clear))
-                                            }
-                                        }
-                                    },
-                                    colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
-                                        focusedContainerColor = androidx.compose.ui.graphics.Color.Transparent,
-                                        unfocusedContainerColor = androidx.compose.ui.graphics.Color.Transparent
-                                    )
-                                )
+                                // 搜索框 - 使用 DockedSearchBar，沉浸式样式，bodyLarge 字体
+                                CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+                                    DockedSearchBar(
+                                        inputField = {
+                                            SearchBarDefaults.InputField(
+                                                query = searchQuery,
+                                                onQueryChange = { searchQuery = it },
+                                                onSearch = { },
+                                                expanded = false,
+                                                onExpandedChange = { },
+                                                placeholder = { 
+                                                    Text(stringResource(R.string.search_logs))
+                                                },
+                                                trailingIcon = {
+                                                    if (searchQuery.isNotEmpty()) {
+                                                        IconButton(onClick = { searchQuery = "" }) {
+                                                            Icon(Icons.Default.Clear, stringResource(R.string.clear))
+                                                        }
+                                                    }
+                                                }
+                                            )
+                                        },
+                                        expanded = false,
+                                        onExpandedChange = { },
+                                        modifier = Modifier.fillMaxWidth(0.95f)
+                                    ) {}
+                                }
                             }
                         }
                     },

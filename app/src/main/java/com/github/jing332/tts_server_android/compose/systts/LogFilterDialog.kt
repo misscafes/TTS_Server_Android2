@@ -89,11 +89,11 @@ fun LogFilterDialog(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 
-                // 显示插件日志开关
+                // 插件日志开关
                 FilterChip(
                     selected = showPluginLogs,
                     onClick = { onPluginLogsToggle() },
-                    label = { Text("显示插件日志") },
+                    label = { Text("插件日志") },
                     leadingIcon = {
                         if (showPluginLogs) {
                             Icon(
@@ -108,11 +108,11 @@ fun LogFilterDialog(
                     )
                 )
                 
-                // 显示朗读规则日志开关
+                // 朗读规则日志开关
                 FilterChip(
                     selected = showSpeechRuleLogs,
                     onClick = { onSpeechRuleLogsToggle() },
-                    label = { Text("显示朗读规则日志") },
+                    label = { Text("朗读规则日志") },
                     leadingIcon = {
                         if (showSpeechRuleLogs) {
                             Icon(
