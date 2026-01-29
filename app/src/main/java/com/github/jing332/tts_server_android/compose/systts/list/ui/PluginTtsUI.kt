@@ -53,30 +53,26 @@ class PluginTtsUI : IConfigUI() {
         systemTts: SystemTtsV2,
         onSystemTtsChange: (SystemTtsV2) -> Unit,
     ) {
+        // 恢复 49b4a7c3 样式：只显示 source 的音频参数
+        val tts = (systemTts.config as TtsConfigurationDTO).source as PluginTtsSource
         val config = systemTts.config as TtsConfigurationDTO
-        val source = config.source as PluginTtsSource
-        // 二者合一：优先使用 PluginTtsSource 的音频参数，与 5ad82463 行为一致
-        val speed = source.speed.takeIf { it != 0f } ?: config.audioParams.speed
-        val volume = source.volume.takeIf { it != 0f } ?: config.audioParams.volume
-        val pitch = source.pitch.takeIf { it != 0f } ?: config.audioParams.pitch
         
         Column(modifier) {
             val rateStr =
                 stringResource(
                     id = R.string.label_speech_rate,
-                    if (speed == 0f) stringResource(id = R.string.follow) else speed.toString()
+                    if (tts.speed == 0f) stringResource(id = R.string.follow) else tts.speed.toString()
                 )
             LabelSlider(
                 text = rateStr,
-                value = speed,
+                value = tts.speed,
                 onValueChange = {
                     val newValue = it.toScale(2)
-                    // 二者合一：同时修改 source 和 audioParams
-                    val newSource = source.copy(speed = newValue)
+                    // 同时设置两个参数，但显示样式与 49b4a7c3 一致
                     onSystemTtsChange(
                         systemTts.copy(
                             config = config.copy(
-                                source = newSource,
+                                source = tts.copy(speed = newValue),
                                 audioParams = config.audioParams.copy(speed = newValue)
                             )
                         )
@@ -88,17 +84,16 @@ class PluginTtsUI : IConfigUI() {
             val volumeStr =
                 stringResource(
                     id = R.string.label_speech_volume,
-                    if (volume == 0f) stringResource(id = R.string.follow) else volume.toString()
+                    if (tts.volume == 0f) stringResource(id = R.string.follow) else tts.volume.toString()
                 )
             LabelSlider(
-                text = volumeStr, value = volume, onValueChange = {
+                text = volumeStr, value = tts.volume, onValueChange = {
                     val newValue = it.toScale(2)
-                    // 二者合一：同时修改 source 和 audioParams
-                    val newSource = source.copy(volume = newValue)
+                    // 同时设置两个参数，但显示样式与 49b4a7c3 一致
                     onSystemTtsChange(
                         systemTts.copy(
                             config = config.copy(
-                                source = newSource,
+                                source = tts.copy(volume = newValue),
                                 audioParams = config.audioParams.copy(volume = newValue)
                             )
                         )
@@ -108,17 +103,16 @@ class PluginTtsUI : IConfigUI() {
 
             val pitchStr = stringResource(
                 id = R.string.label_speech_pitch,
-                if (pitch == 0f) stringResource(id = R.string.follow) else pitch.toString()
+                if (tts.pitch == 0f) stringResource(id = R.string.follow) else tts.pitch.toString()
             )
             LabelSlider(
-                text = pitchStr, value = pitch, onValueChange = {
+                text = pitchStr, value = tts.pitch, onValueChange = {
                     val newValue = it.toScale(2)
-                    // 二者合一：同时修改 source 和 audioParams
-                    val newSource = source.copy(pitch = newValue)
+                    // 同时设置两个参数，但显示样式与 49b4a7c3 一致
                     onSystemTtsChange(
                         systemTts.copy(
                             config = config.copy(
-                                source = newSource,
+                                source = tts.copy(pitch = newValue),
                                 audioParams = config.audioParams.copy(pitch = newValue)
                             )
                         )
@@ -214,11 +208,10 @@ class PluginTtsUI : IConfigUI() {
             LoadingDialog(onDismissRequest = { showLoadingDialog = false })
 
         var showAuditionDialog by remember { mutableStateOf(false) }
-        var auditionSystts by remember { mutableStateOf<SystemTtsV2?>(null) }
         @Suppress("UNCHECKED_CAST")
-        if (showAuditionDialog && auditionSystts != null)
+        if (showAuditionDialog)
             AuditionDialog(
-                systts = auditionSystts!!,
+                systts = systts,  // 关键修复：直接使用 systts（rememberUpdatedState 的实时值）
                 engine = if (plugin == null) null else vm.service()
             ) {
                 showAuditionDialog = false
@@ -237,27 +230,12 @@ class PluginTtsUI : IConfigUI() {
                         onSystemTtsChange = onSysttsChange
                     )
 
-                // 使用 rememberUpdatedState 确保获取最新的 systts
-                val currentSystts by rememberUpdatedState(systts)
-                val scope = rememberCoroutineScope()
                 AuditionTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     onAudition = {
-                        // 强制创建新的对象副本，确保 Compose 检测到变化并重新触发试听
-                        // 如果对话框已打开，先关闭再打开以强制重置状态
-                        if (showAuditionDialog) {
-                            showAuditionDialog = false
-                            scope.launch {
-                                kotlinx.coroutines.delay(50)
-                                auditionSystts = currentSystts.copy()
-                                showAuditionDialog = true
-                            }
-                        } else {
-                            auditionSystts = currentSystts.copy()
-                            showAuditionDialog = true
-                        }
+                        showAuditionDialog = true
                     }
                 )
 

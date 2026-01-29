@@ -197,28 +197,15 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
                 textProcess(params, presetConfigId)
                     .onSuccess { list ->
                         for (segment in list) {
-                            // 二者合一：优先从 source 读取音频参数（兼容 5ad82463），其次从 audioParams 读取
-                            val source = segment.tts.source
-                            val (speed, volume, pitch) = if (source is com.github.jing332.database.entities.systts.source.PluginTtsSource) {
-                                Triple(
-                                    source.speed.takeIf { it > 0 } ?: segment.tts.audioParams.speed.takeIf { it > 0 } ?: params.speed,
-                                    source.volume.takeIf { it > 0 } ?: segment.tts.audioParams.volume.takeIf { it > 0 } ?: params.volume,
-                                    source.pitch.takeIf { it > 0 } ?: segment.tts.audioParams.pitch.takeIf { it > 0 } ?: params.pitch
-                                )
-                            } else {
-                                Triple(
-                                    segment.tts.audioParams.speed.takeIf { it > 0 } ?: params.speed,
-                                    segment.tts.audioParams.volume.takeIf { it > 0 } ?: params.volume,
-                                    segment.tts.audioParams.pitch.takeIf { it > 0 } ?: params.pitch
-                                )
-                            }
+                            // 实际输出：只从 audioParams 读取，与试听参数互不影响
+                            val cfgParams = segment.tts.audioParams
                             requestAndProcess(
                                 channel,
                                 params.copy(
                                     text = segment.text,
-                                    speed = speed,
-                                    volume = volume,
-                                    pitch = pitch
+                                    speed = cfgParams.speed.takeIf { it > 0 } ?: params.speed,
+                                    volume = cfgParams.volume.takeIf { it > 0 } ?: params.volume,
+                                    pitch = cfgParams.pitch.takeIf { it > 0 } ?: params.pitch
                                 ),
                                 segment.tts
                             )
