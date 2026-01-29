@@ -14,41 +14,54 @@ object SystemTtsMigration {
             musicList = (v1.tts as BgmTTS).musicList.toList(),
             volume = v1.tts.volume / 1000f
         )
-        else
+        else {
+            val (source, audioParams) = when (v1.tts) {
+                is LocalTTS -> {
+                    val tts = v1.tts as LocalTTS
+                    // LocalTtsSource 不存储 speed/pitch/volume，只存储在 audioParams 中
+                    val src = LocalTtsSource(
+                        engine = tts.engine ?: "",
+                        locale = tts.locale,
+                        voice = tts.voiceName ?: "",
+                        extraParams = tts.extraParams,
+                        isDirectPlayMode = tts.isDirectPlayMode
+                    )
+                    // 将 rate/pitch 转换到 audioParams
+                    val params = AudioParams(
+                        speed = (tts.rate + 50) / 100f,
+                        volume = 0f, // LocalTTS 没有单独的 volume，使用跟随
+                        pitch = tts.pitch / 100f
+                    )
+                    src to params
+                }
+
+                is PluginTTS -> {
+                    val tts = v1.tts as PluginTTS
+                    // PluginTtsSource 不存储 speed/volume/pitch，只存储在 audioParams 中
+                    val src = PluginTtsSource(
+                        pluginId = tts.pluginId,
+                        locale = tts.locale,
+                        voice = tts.voice,
+                        data = tts.data
+                    )
+                    val params = AudioParams(
+                        speed = (tts.rate + 50) / 100f,
+                        volume = (tts.volume + 50) / 100f,
+                        pitch = (tts.pitch + 50) / 100f
+                    )
+                    src to params
+                }
+
+                else -> return null
+            }
+            
             TtsConfigurationDTO(
                 speechRule = v1.speechRule,
-                audioParams = v1.tts.audioParams,
+                audioParams = audioParams,
                 audioFormat = v1.tts.audioFormat,
-                source = when (v1.tts) {
-                    is LocalTTS -> {
-                        val tts = v1.tts as LocalTTS
-                        LocalTtsSource(
-                            engine = tts.engine ?: "",
-                            locale = tts.locale,
-                            voice = tts.voiceName ?: "",
-                            speed = (tts.rate + 50) / 100f,
-                            pitch = tts.pitch / 100f,
-                            extraParams = tts.extraParams,
-                            isDirectPlayMode = tts.isDirectPlayMode
-                        )
-                    }
-
-                    is PluginTTS -> {
-                        val tts = v1.tts as PluginTTS
-                        PluginTtsSource(
-                            pluginId = tts.pluginId,
-                            locale = tts.locale,
-                            voice = tts.voice,
-                            speed = (tts.rate + 50) / 100f,
-                            volume = (tts.volume + 50) / 100f,
-                            pitch = (tts.pitch + 50) / 100f,
-                            data = tts.data
-                        )
-                    }
-
-                    else -> return null
-                }
+                source = source
             )
+        }
 
         return SystemTtsV2(
             id = v1.id,

@@ -104,7 +104,7 @@ class AndroidTtsEngine(
             setSpeechRate(params.speed)
             setPitch(params.pitch)
             return Bundle().apply {
-                if (params.volume != LocalTtsSource.VOLUME_FOLLOW) {
+                if (params.volume > 0f) {
                     putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, params.volume)
                 }
                 extraParams?.forEach { it.putValueFromBundle(this) }

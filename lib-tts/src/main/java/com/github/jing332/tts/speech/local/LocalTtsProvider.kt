@@ -26,13 +26,12 @@ class LocalTtsProvider(
         get() = mTts ?: throw EngineException("Android TTS engine is not initialized")
 
 
-    private fun init(source: LocalTtsSource, params: SystemParams): AudioParams {
-        val speed = if (source.speed == LocalTtsSource.SPEED_FOLLOW) params.speed else source.speed
-        val pitch = if (source.pitch == LocalTtsSource.PITCH_FOLLOW) params.pitch else source.pitch
-        val volume =
-            if (source.volume == LocalTtsSource.VOLUME_FOLLOW) params.volume else source.volume
-
-        return AudioParams(speed = speed, pitch = pitch, volume = volume)
+    private fun init(params: SystemParams): AudioParams {
+        return AudioParams(
+            speed = params.speed.takeIf { it > 0 } ?: 1f,
+            pitch = params.pitch.takeIf { it > 0 } ?: 1f,
+            volume = params.volume.takeIf { it > 0 } ?: 1f
+        )
     }
 
 
@@ -42,7 +41,7 @@ class LocalTtsProvider(
             locale = source.locale,
             voice = source.voice,
             extraParams = source.extraParams ?: emptyList(),
-            init(source, params)
+            init(params)
         ).onFailure {
             onDestroy()
             onInit()
@@ -56,7 +55,7 @@ class LocalTtsProvider(
             locale = source.locale,
             voice = source.voice,
             extraParams = source.extraParams ?: emptyList(),
-            params = init(source, params)
+            params = init(params)
         ).onFailure {
             onDestroy()
             onInit()
