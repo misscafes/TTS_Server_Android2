@@ -520,4 +520,12 @@
     <string name="save_and_test">保存并测试</string>
     <string name="not_configured">未配置</string>
     <string name="restore_from_url_net">从网络直链恢复</string>
+    <string name="edit_group_content">编辑分组</string>
+    <string name="move_to_group">移动 %1$d 项到 %2$s</string>
+    <string name="filter_log_level">筛选日志级别</string>
+    <string name="select_log_level_to_filter">选择要显示的日志级别</string>
+    <string name="filter">筛选</string>
+    <string name="clear">清除</string>
+    <string name="search_logs">搜索日志</string>
+    <string name="open_log_folder">打开日志文件夹</string>
 </resources>

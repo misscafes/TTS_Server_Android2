@@ -356,6 +356,7 @@ internal fun ListManagerScreen(
                         ShadowedDraggableItem(reorderableState = reorderState, key = key) {
                             Group(modifier = groupDragModifier,
                                 name = g.name,
+                                group = g,
                                 isExpanded = g.isExpanded,
                                 toggleableState = checkState,
                                 onToggleableStateChange = {
