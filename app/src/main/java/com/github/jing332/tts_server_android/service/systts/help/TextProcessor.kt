@@ -10,6 +10,7 @@ import com.github.jing332.tts.error.TextProcessorError
 import com.github.jing332.tts.synthesizer.ITextProcessor
 import com.github.jing332.tts.synthesizer.TextSegment
 import com.github.jing332.tts.synthesizer.TtsConfiguration
+import com.github.jing332.script.runtime.console.Console
 import com.github.jing332.tts_server_android.conf.SystemTtsConfig
 import com.github.jing332.tts_server_android.model.rhino.speech_rule.SpeechRuleEngine
 import com.github.michaelbull.result.Err
@@ -48,7 +49,10 @@ class TextProcessor : ITextProcessor {
             val speechRule =
                 dbm.speechRuleDao.getByRuleId(ruleId)
                     ?: return Err(TextProcessorError.MissingRule(ruleId))
-            engine = SpeechRuleEngine(context, speechRule).apply { eval() }
+            engine = SpeechRuleEngine(context, speechRule).apply {
+                console = Console(Console.LogSource.SPEECH_RULE)
+                eval()
+            }
             this.configs =
                 configs.entries.map { it.value.copy(speechInfo = it.value.speechInfo.copy(configId = it.key)) }
             speechRules = this.configs.map { it.speechInfo }

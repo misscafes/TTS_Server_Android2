@@ -47,6 +47,9 @@ class TtsLogViewModel : ViewModel() {
     // 调试模式开关 - 显示/隐藏插件日志
     val showPluginLogs = mutableStateOf(false)
     
+    // 调试模式开关 - 显示/隐藏朗读规则日志
+    val showSpeechRuleLogs = mutableStateOf(false)
+    
     val filteredLogs: List<LogEntry>
         get() {
             var filtered = logs.toList()
@@ -68,6 +71,11 @@ class TtsLogViewModel : ViewModel() {
             // 调试模式：控制是否显示插件日志
             if (!showPluginLogs.value) {
                 filtered = filtered.filter { !it.isPluginLog }
+            }
+            
+            // 调试模式：控制是否显示朗读规则日志
+            if (!showSpeechRuleLogs.value) {
+                filtered = filtered.filter { !it.isSpeechRuleLog }
             }
             
             return filtered
@@ -123,6 +131,15 @@ class TtsLogViewModel : ViewModel() {
                 
                 // 注册插件日志监听器
                 Console.globalPluginLogListener = { logEntry ->
+                    runOnUI {
+                        if (logs.size > MAX_SIZE)
+                            logs.removeRange(0, 10)
+                        logs.add(logEntry)
+                    }
+                }
+                
+                // 注册朗读规则日志监听器
+                Console.globalSpeechRuleLogListener = { logEntry ->
                     runOnUI {
                         if (logs.size > MAX_SIZE)
                             logs.removeRange(0, 10)

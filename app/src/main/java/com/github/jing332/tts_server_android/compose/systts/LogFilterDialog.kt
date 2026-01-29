@@ -34,6 +34,8 @@ fun LogFilterDialog(
     onLevelToggle: (Int) -> Unit,
     showPluginLogs: Boolean,
     onPluginLogsToggle: () -> Unit,
+    showSpeechRuleLogs: Boolean,
+    onSpeechRuleLogsToggle: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val levelOptions = listOf(
@@ -94,6 +96,25 @@ fun LogFilterDialog(
                     label = { Text("显示插件日志") },
                     leadingIcon = {
                         if (showPluginLogs) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    },
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    )
+                )
+                
+                // 显示朗读规则日志开关
+                FilterChip(
+                    selected = showSpeechRuleLogs,
+                    onClick = { onSpeechRuleLogsToggle() },
+                    label = { Text("显示朗读规则日志") },
+                    leadingIcon = {
+                        if (showSpeechRuleLogs) {
                             Icon(
                                 imageVector = Icons.Default.Check,
                                 contentDescription = null,

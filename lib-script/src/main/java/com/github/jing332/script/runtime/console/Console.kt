@@ -4,12 +4,20 @@ import android.util.Log // 👈 使用原生 Log
 import com.github.jing332.common.LogEntry
 import com.github.jing332.common.LogLevel
 
-class Console : LogListenerManager, Writeable {
+class Console(val source: LogSource = LogSource.PLUGIN) : LogListenerManager, Writeable {
+    enum class LogSource {
+        PLUGIN,         // 插件日志
+        SPEECH_RULE     // 朗读规则日志
+    }
+    
     companion object {
         private const val TAG = "JS-Console"
         
         // 全局插件日志监听器，由 app 模块设置
         var globalPluginLogListener: ((LogEntry) -> Unit)? = null
+        
+        // 全局朗读规则日志监听器，由 app 模块设置
+        var globalSpeechRuleLogListener: ((LogEntry) -> Unit)? = null
     }
 
     private val listeners = mutableListOf<LogListener>()
@@ -28,15 +36,24 @@ class Console : LogListenerManager, Writeable {
         // 👈 使用原生 Log.i，绕过损坏的 Logback 框架
         Log.i(TAG, str)
         
-        // 同时输出到应用日志系统，标记为插件日志
+        // 根据来源标记日志类型
+        val isPluginLog = source == LogSource.PLUGIN
+        val isSpeechRuleLog = source == LogSource.SPEECH_RULE
+        val prefix = if (isPluginLog) "[Plugin] " else if (isSpeechRuleLog) "[SpeechRule] " else ""
+        
         val logEntry = LogEntry(
             level = level,
-            message = "[Plugin] $str",
-            isPluginLog = true
+            message = "$prefix$str",
+            isPluginLog = isPluginLog,
+            isSpeechRuleLog = isSpeechRuleLog
         )
         
-        // 通知全局监听器
-        globalPluginLogListener?.invoke(logEntry)
+        // 通知对应的全局监听器
+        if (isPluginLog) {
+            globalPluginLogListener?.invoke(logEntry)
+        } else if (isSpeechRuleLog) {
+            globalSpeechRuleLogListener?.invoke(logEntry)
+        }
         
         listeners.forEach {
             it.onNewLog(logEntry)

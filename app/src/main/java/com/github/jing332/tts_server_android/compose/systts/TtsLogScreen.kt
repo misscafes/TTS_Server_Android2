@@ -85,8 +85,8 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                             if (!isSearch) {
                                 Text(text = stringResource(id = R.string.log), textAlign = TextAlign.Center)
                             } else {
-                                // 搜索框 - 使用 BasicTextField 自定义样式
-                                androidx.compose.material3.TextField(
+                                // 搜索框 - 使用 OutlinedTextField 圆角样式，透明背景
+                                androidx.compose.material3.OutlinedTextField(
                                     modifier = Modifier.fillMaxWidth(0.95f),
                                     value = searchQuery,
                                     onValueChange = { searchQuery = it },
@@ -105,11 +105,9 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                                             }
                                         }
                                     },
-                                    colors = androidx.compose.material3.TextFieldDefaults.colors(
-                                        focusedContainerColor = MaterialTheme.colorScheme.surface,
-                                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-                                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline
+                                    colors = androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                                        focusedContainerColor = androidx.compose.ui.graphics.Color.Transparent,
+                                        unfocusedContainerColor = androidx.compose.ui.graphics.Color.Transparent
                                     )
                                 )
                             }
@@ -239,6 +237,8 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
             onLevelToggle = { vm.toggleLevel(it) },
             showPluginLogs = vm.showPluginLogs.value,
             onPluginLogsToggle = { vm.showPluginLogs.value = !vm.showPluginLogs.value },
+            showSpeechRuleLogs = vm.showSpeechRuleLogs.value,
+            onSpeechRuleLogsToggle = { vm.showSpeechRuleLogs.value = !vm.showSpeechRuleLogs.value },
             onDismiss = { vm.showFilterDialog.value = false }
         )
     }

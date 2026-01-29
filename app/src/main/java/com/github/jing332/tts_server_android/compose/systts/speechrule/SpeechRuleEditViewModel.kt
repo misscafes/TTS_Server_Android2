@@ -21,7 +21,7 @@ class SpeechRuleEditViewModel(val app: Application) : AndroidViewModel(app) {
 
     private lateinit var mSpeechRule: SpeechRule
     private lateinit var mRuleEngine: SpeechRuleEngine
-    private val console = Console()
+    private val console = Console(Console.LogSource.SPEECH_RULE)
 
     val speechRule: SpeechRule
         get() = mSpeechRule
