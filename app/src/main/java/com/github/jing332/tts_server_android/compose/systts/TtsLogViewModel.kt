@@ -43,6 +43,9 @@ class TtsLogViewModel : ViewModel() {
     val selectedLevels = mutableStateListOf<Int>()
     val showFilterDialog = mutableStateOf(false)
     
+    // 调试模式开关 - 显示/隐藏插件日志
+    val showPluginLogs = mutableStateOf(false)
+    
     val filteredLogs: List<LogEntry>
         get() {
             var filtered = logs.toList()
@@ -59,6 +62,11 @@ class TtsLogViewModel : ViewModel() {
                     log.message.contains(query, ignoreCase = true) ||
                     log.time.contains(query, ignoreCase = true)
                 }
+            }
+            
+            // 调试模式：控制是否显示插件日志
+            if (!showPluginLogs.value) {
+                filtered = filtered.filter { !it.isPluginLog }
             }
             
             return filtered

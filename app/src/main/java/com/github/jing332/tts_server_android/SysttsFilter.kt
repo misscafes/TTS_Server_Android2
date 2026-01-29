@@ -17,17 +17,30 @@ class SysttsFilter : Filter<ILoggingEvent>() {
         const val TAG = "SysttsFilter"
         const val ACTION_ON_LOG = "SystemFilter.SYSTTS_ON_LOG"
         private val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+        
+        // 插件相关的 logger 名称列表
+        private val PLUGIN_LOGGER_NAMES = listOf(
+            "TtsPluginUiEngineV2",
+            "TtsPluginEngineV2",
+            "PluginTtsProvider",
+            "PluginPreviewActivity",
+            "PluginEditViewModel",
+            "PluginLoginActivity",
+            "JsBridgeInputStream"
+        )
     }
 
     override fun decide(event: ILoggingEvent): FilterReply {
-
-        return if (event.loggerName == SystemTtsService.TAG) {
+        val isPluginLog = PLUGIN_LOGGER_NAMES.any { event.loggerName.contains(it) }
+        
+        return if (event.loggerName == SystemTtsService.TAG || isPluginLog) {
             SysttsLogger.log(
                 LogEntry(
                     level = event.level.toString().toLogLevel(),
                     time = LocalDateTimeUtil.of(event.timeStamp, TimeZone.getDefault())
                         .format(dateFormatter),
-                    message = event.message
+                    message = event.message,
+                    isPluginLog = isPluginLog
                 )
             )
 

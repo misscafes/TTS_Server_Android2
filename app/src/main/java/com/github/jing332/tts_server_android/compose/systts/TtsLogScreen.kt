@@ -33,7 +33,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -55,7 +54,6 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.github.jing332.common.LogLevel
 import com.github.jing332.tts_server_android.R
-import com.github.jing332.tts_server_android.compose.nav.NavTopAppBar
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,17 +93,19 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                                     onSearch = { },
                                     active = false,
                                     onActiveChange = { },
-                                    placeholder = { Text(stringResource(R.string.search_logs)) },
+                                    placeholder = { 
+                                        Text(
+                                            stringResource(R.string.search_logs),
+                                            style = MaterialTheme.typography.bodyMedium
+                                        ) 
+                                    },
                                     trailingIcon = {
                                         if (searchQuery.isNotEmpty()) {
                                             IconButton(onClick = { searchQuery = "" }) {
                                                 Icon(Icons.Default.Clear, stringResource(R.string.clear))
                                             }
                                         }
-                                    },
-                                    colors = SearchBarDefaults.colors(
-                                        containerColor = MaterialTheme.colorScheme.surface
-                                    )
+                                    }
                                 ) {}
                             }
                         }
@@ -132,7 +132,7 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                             val logFile = File(vm.logDir())
                             
                             kotlin.runCatching {
-                                val uri = androidx.core.content.FileProvider.getUriForFile(
+                                val uri = FileProvider.getUriForFile(
                                     context,
                                     "${context.packageName}.fileprovider",
                                     logFile
@@ -146,7 +146,7 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                             }.onFailure {
                                 // 降级：使用通用类型
                                 kotlin.runCatching {
-                                    val uri = androidx.core.content.FileProvider.getUriForFile(
+                                    val uri = FileProvider.getUriForFile(
                                         context,
                                         "${context.packageName}.fileprovider",
                                         logFile
@@ -232,6 +232,8 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
         LogFilterDialog(
             selectedLevels = vm.selectedLevels,
             onLevelToggle = { vm.toggleLevel(it) },
+            showPluginLogs = vm.showPluginLogs.value,
+            onPluginLogsToggle = { vm.showPluginLogs.value = !vm.showPluginLogs.value },
             onDismiss = { vm.showFilterDialog.value = false }
         )
     }

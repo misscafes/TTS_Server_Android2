@@ -9,9 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,6 +32,8 @@ import com.github.jing332.tts_server_android.R
 fun LogFilterDialog(
     selectedLevels: List<Int>,
     onLevelToggle: (Int) -> Unit,
+    showPluginLogs: Boolean,
+    onPluginLogsToggle: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val levelOptions = listOf(
@@ -67,6 +73,38 @@ fun LogFilterDialog(
                         )
                     }
                 }
+                
+                // 调试选项分割线
+                Spacer(modifier = Modifier.height(16.dp))
+                HorizontalDivider()
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                // 调试选项标题
+                Text(
+                    text = "调试选项",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                
+                // 显示插件日志开关
+                FilterChip(
+                    selected = showPluginLogs,
+                    onClick = { onPluginLogsToggle() },
+                    label = { Text("显示插件日志") },
+                    leadingIcon = {
+                        if (showPluginLogs) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    },
+                    colors = FilterChipDefaults.filterChipColors(
+                        selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    )
+                )
             }
         },
         confirmButton = {

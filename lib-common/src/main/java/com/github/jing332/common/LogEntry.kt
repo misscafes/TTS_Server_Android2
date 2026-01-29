@@ -9,7 +9,8 @@ data class LogEntry(
     val level: Int,
     val message: String,
     val time: String = "",
-    val wrapLine: Boolean = true
+    val wrapLine: Boolean = true,
+    val isPluginLog: Boolean = false
 ) :
     Parcelable {
     fun getLevelChar(): String = level.toLogLevelChar()
