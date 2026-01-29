@@ -14,10 +14,10 @@ data class PluginTtsSource(
     override val locale: String = "",
     override val voice: String = "",
     val pluginId: String = "",
-    // 二者合一：保留插件级音频参数，与 TtsConfigurationDTO.audioParams 同步
-    val speed: Float = 0f,
-    val volume: Float = 0f,
-    val pitch: Float = 0f,
+    // 49b4a7c3 样式：默认值为 1f，0f 表示"跟随"
+    val speed: Float = 1f,
+    val volume: Float = 1f,
+    val pitch: Float = 1f,
     val data: Map<String, String> = mutableMapOf(),
 
     @Transient
