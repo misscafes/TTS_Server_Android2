@@ -272,8 +272,47 @@ git add newapk/ && git commit -m "发布新版本" && git push origin master
 
 ---
 
+## ⚠️ 关键注意事项 (2026-01-29)
+
+### 🚨 ProGuard/R8 混淆规则（重要！）
+
+**警告**：master 分支的 ProGuard 规则存在严重问题，会导致以下功能在 Release 模式下崩溃：
+- 编辑器保存功能
+- 插件加载功能
+
+**解决方案**：
+1. **始终使用 Search 分支的 proguard-rules.pro**（约380行完整规则）
+2. **不要**复制 master 分支的混淆规则到 Search 分支
+3. 如果必须合并分支，**保留 Search 分支的 proguard-rules.pro 作为"安全区"**
+
+**文件位置：** `/workspace/app/proguard-rules.pro`
+
+**关键规则示例：**
+```proguard
+# 插件引擎相关（必须保留）
+-keep class com.github.jing332.tts_server_android.plugin.** { *; }
+-keepclassmembers class com.github.jing332.tts_server_android.plugin.** { *; }
+
+# 编辑器相关（必须保留）
+-keep class io.github.rosemoe.sora.** { *; }
+-keepclassmembers class io.github.rosemoe.sora.** { *; }
+```
+
+### 📦 新功能移植记录
+
+**本次移植功能：**
+1. **分组编辑增强** - 支持按名称/标签/插件搜索并批量移动配置
+2. **日志系统升级** - 支持日志搜索和级别筛选
+
+**移植原则：**
+- 只移植功能代码，不移植 master 的 ProGuard 规则
+- 保持 Search 分支的稳定性
+
+---
+
 ## 📝 修改历史
 
 | 日期 | 版本 | 内容 |
 |------|------|------|
+| 2026-01-29 | v1.1 | 添加 ProGuard 规则警告，记录新功能移植注意事项 |
 | 2026-01-27 | v1.0 | 初始版本，记录插件刷新、转发器日志、云构建流程 |
