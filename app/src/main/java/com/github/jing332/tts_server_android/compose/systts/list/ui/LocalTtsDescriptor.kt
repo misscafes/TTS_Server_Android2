@@ -15,13 +15,15 @@ class LocalTtsDescriptor(val context: Context, val systemTts: SystemTtsV2) :
     override val desc: String
         get() {
             val strFollow by lazy { context.getString(R.string.follow) }
+            val config = systemTts.config as TtsConfigurationDTO
+            val params = config.audioParams
 
             val rateStr =
-                if (source.speed == LocalTtsSource.SPEED_FOLLOW) strFollow else source.speed
+                if (params.speed == 0f) strFollow else params.speed
             val pitchStr =
-                if (source.pitch == LocalTtsSource.PITCH_FOLLOW) strFollow else source.pitch
+                if (params.pitch == 0f) strFollow else params.pitch
             val volumeStr =
-                if (source.volume == LocalTtsSource.VOLUME_FOLLOW) strFollow else source.volume
+                if (params.volume == 0f) strFollow else params.volume
 
             return source.voice + "<br>" + context.getString(
                 R.string.systts_play_params_description,

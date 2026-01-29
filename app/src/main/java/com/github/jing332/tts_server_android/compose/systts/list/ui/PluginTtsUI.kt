@@ -53,18 +53,23 @@ class PluginTtsUI : IConfigUI() {
         systemTts: SystemTtsV2,
         onSystemTtsChange: (SystemTtsV2) -> Unit,
     ) {
-        val tts = (systemTts.config as TtsConfigurationDTO).source as PluginTtsSource
+        val config = systemTts.config as TtsConfigurationDTO
+        val params = config.audioParams
         Column(modifier) {
             val rateStr =
                 stringResource(
                     id = R.string.label_speech_rate,
-                    if (tts.speed == 0f) stringResource(id = R.string.follow) else tts.speed.toString()
+                    if (params.speed == 0f) stringResource(id = R.string.follow) else params.speed.toString()
                 )
             LabelSlider(
                 text = rateStr,
-                value = tts.speed,
+                value = params.speed,
                 onValueChange = {
-                    onSystemTtsChange(systemTts.copySource(tts.copy(speed = it.toScale(2))))
+                    onSystemTtsChange(
+                        systemTts.copy(
+                            config = config.copy(audioParams = params.copy(speed = it.toScale(2)))
+                        )
+                    )
                 },
                 valueRange = 0f..3f
             )
@@ -72,13 +77,13 @@ class PluginTtsUI : IConfigUI() {
             val volumeStr =
                 stringResource(
                     id = R.string.label_speech_volume,
-                    if (tts.volume == 0f) stringResource(id = R.string.follow) else tts.volume.toString()
+                    if (params.volume == 0f) stringResource(id = R.string.follow) else params.volume.toString()
                 )
             LabelSlider(
-                text = volumeStr, value = tts.volume, onValueChange = {
+                text = volumeStr, value = params.volume, onValueChange = {
                     onSystemTtsChange(
-                        systemTts.copySource(
-                            tts.copy(volume = it.toScale(2))
+                        systemTts.copy(
+                            config = config.copy(audioParams = params.copy(volume = it.toScale(2)))
                         )
                     )
                 }, valueRange = 0f..3f
@@ -86,13 +91,13 @@ class PluginTtsUI : IConfigUI() {
 
             val pitchStr = stringResource(
                 id = R.string.label_speech_pitch,
-                if (tts.pitch == 0f) stringResource(id = R.string.follow) else tts.pitch.toString()
+                if (params.pitch == 0f) stringResource(id = R.string.follow) else params.pitch.toString()
             )
             LabelSlider(
-                text = pitchStr, value = tts.pitch, onValueChange = {
+                text = pitchStr, value = params.pitch, onValueChange = {
                     onSystemTtsChange(
-                        systemTts.copySource(
-                            tts.copy(pitch = it.toScale(2))
+                        systemTts.copy(
+                            config = config.copy(audioParams = params.copy(pitch = it.toScale(2)))
                         )
                     )
                 }, valueRange = 0f..3f
@@ -186,10 +191,11 @@ class PluginTtsUI : IConfigUI() {
             LoadingDialog(onDismissRequest = { showLoadingDialog = false })
 
         var showAuditionDialog by remember { mutableStateOf(false) }
+        var auditionSystts by remember { mutableStateOf<SystemTtsV2?>(null) }
         @Suppress("UNCHECKED_CAST")
-        if (showAuditionDialog)
+        if (showAuditionDialog && auditionSystts != null)
             AuditionDialog(
-                systts = systts,
+                systts = auditionSystts!!,
                 engine = if (plugin == null) null else vm.service()
             ) {
                 showAuditionDialog = false
@@ -208,11 +214,14 @@ class PluginTtsUI : IConfigUI() {
                         onSystemTtsChange = onSysttsChange
                     )
 
+                // 使用 rememberUpdatedState 确保获取最新的 systts
+                val currentSystts by rememberUpdatedState(systts)
                 AuditionTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     onAudition = {
+                        auditionSystts = currentSystts
                         showAuditionDialog = true
                     }
                 )

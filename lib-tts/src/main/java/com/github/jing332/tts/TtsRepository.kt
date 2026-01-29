@@ -7,6 +7,17 @@ import com.github.jing332.tts.synthesizer.ITtsRepository
 import com.github.jing332.tts.synthesizer.TtsConfiguration
 import com.github.jing332.tts.synthesizer.TtsConfiguration.Companion.toVO
 
+/**
+ * 计算叠加参数值
+ * 规则：0(跟随)视为1.0，最终值 = 配置值 × 分组值 × 全局值
+ */
+private fun calculateParam(configValue: Float, groupValue: Float, globalValue: Float): Float {
+    val cv = if (configValue == 0f) 1f else configValue
+    val gv = if (groupValue == 0f) 1f else groupValue
+    val tv = if (globalValue == 0f) 1f else globalValue
+    return cv * gv * tv
+}
+
 internal class TtsRepository(
     val context: SynthesizerContext,
 ) : ITtsRepository {
@@ -39,7 +50,7 @@ internal class TtsRepository(
                     config.toVO().copy(tag = it)
                 }
         for (group in groupWithTts) {
-            val gp = group.group.audioParams.copyIfFollow(tp)
+            val gp = group.group.audioParams
             for (tts in group.list.sortedBy { it.order }) {
                 if (!tts.isEnabled) continue
                 val c = tts.config; if (c !is TtsConfigurationDTO) continue
@@ -50,9 +61,19 @@ internal class TtsRepository(
                             it.speechInfo.tagName == c.speechRule.tagName
                 }
 
+                // 叠加计算：配置值 × 分组值 × 全局值
+                val configParams = c.audioParams
+                val finalSpeed = calculateParam(configParams.speed, gp.speed, tp.speed)
+                val finalVolume = calculateParam(configParams.volume, gp.volume, tp.volume)
+                val finalPitch = calculateParam(configParams.pitch, gp.pitch, tp.pitch)
+
                 map[tts.id] = TtsConfiguration(
                     speechInfo = c.speechRule,
-                    audioParams = c.audioParams.copyIfFollow(gp),
+                    audioParams = com.github.jing332.database.entities.systts.AudioParams(
+                        speed = finalSpeed,
+                        volume = finalVolume,
+                        pitch = finalPitch
+                    ),
                     audioFormat = c.audioFormat,
                     source = c.source,
                     standbyConfig = standby,

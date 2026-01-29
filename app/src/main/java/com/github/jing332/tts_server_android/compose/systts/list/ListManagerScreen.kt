@@ -224,7 +224,8 @@ internal fun ListManagerScreen(
                 dbm.systemTtsV2.updateGroup(
                     groupAudioParamsDialog!!.copy(audioParams = it)
                 )
-
+                // 通知服务更新配置
+                SystemTtsService.notifyUpdateConfig()
                 groupAudioParamsDialog = null
             })
     }

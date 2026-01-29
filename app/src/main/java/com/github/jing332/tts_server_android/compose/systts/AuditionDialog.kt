@@ -40,6 +40,7 @@ import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.conf.AppConfig
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okio.IOException
@@ -52,8 +53,6 @@ private val logger = KotlinLogging.logger("AuditionDialog")
 fun AuditionDialog(
     systts: SystemTtsV2,
     text: String = AppConfig.testSampleText.value,
-
-    config: TtsConfiguration = (systts.config as TtsConfigurationDTO).toVO(),
     engine: TextToSpeechProvider<TextToSpeechSource>? = null,
     onDismissRequest: () -> Unit,
 ) {
@@ -61,32 +60,49 @@ fun AuditionDialog(
     var error by remember { mutableStateOf("") }
     var info by remember { mutableStateOf("") }
     val audioPlayer = remember { AudioPlayer(context) }
+    var job by remember { mutableStateOf<kotlinx.coroutines.Job?>(null) }
 
     DisposableEffect(systts) {
         onDispose {
+            job?.cancel()
             audioPlayer.stop()
+            audioPlayer.release()
         }
     }
 
     LaunchedEffect(systts) {
-        launch(Dispatchers.IO) {
+        job = launch(Dispatchers.IO) {
             try {
+                // 每次都重新计算 config，确保使用最新的 audioParams
+                val config = (systts.config as TtsConfigurationDTO).toVO()
                 val e = engine ?: CachedEngineManager.getEngine(appCtx, config.source)
                 ?: throw IllegalStateException("engine is null")
 
                 if (e.state is EngineState.Uninitialized) e.onInit()
+                val params = SystemParams(
+                    text = text,
+                    speed = config.audioParams.speed.takeIf { it > 0 } ?: 1f,
+                    volume = config.audioParams.volume.takeIf { it > 0 } ?: 1f,
+                    pitch = config.audioParams.pitch.takeIf { it > 0 } ?: 1f
+                )
                 if (e.isSyncPlay(config.source)) {
-                    e.syncPlay(SystemParams(text = text), config.source)
+                    e.syncPlay(params, config.source)
                 } else {
-                    val stream = e.getStream(SystemParams(text = text), config.source)
+                    val stream = e.getStream(params, config.source)
                     val audio = stream.readBytes()
                     val rateAndMime =
                         com.github.jing332.common.audio.AudioDecoder.getSampleRateAndMime(audio)
+                    
+                    // 检查协程是否仍然活跃
+                    if (!isActive) return@launch
+                    
                     withMain {
-                        info = context.getString(
-                            R.string.systts_test_success_info, audio.size.toLong().sizeToReadable(),
-                            rateAndMime.first, rateAndMime.second
-                        )
+                        if (isActive) {
+                            info = context.getString(
+                                R.string.systts_test_success_info, audio.size.toLong().sizeToReadable(),
+                                rateAndMime.first, rateAndMime.second
+                            )
+                        }
                     }
 
                     if (config.shouldDecode())
@@ -94,14 +110,22 @@ fun AuditionDialog(
                     else
                         audioPlayer.play(audio, config.audioFormat.sampleRate)
                 }
-                withContext(Dispatchers.Main) {
-                    onDismissRequest()
+                
+                // 检查协程是否仍然活跃再关闭对话框
+                if (isActive) {
+                    withContext(Dispatchers.Main) {
+                        if (isActive) {
+                            onDismissRequest()
+                        }
+                    }
                 }
             } catch (e: IOException) {
-                error = e.cause.toString()
+                if (isActive) error = e.cause.toString()
             } catch (e: Exception) {
-                error = e.messageChain
-                logger.warn { e.stackTraceToString() }
+                if (isActive) {
+                    error = e.messageChain
+                    logger.warn { e.stackTraceToString() }
+                }
             }
         }
     }

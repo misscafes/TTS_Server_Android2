@@ -60,6 +60,7 @@ class LocalTtsUI() : IConfigUI() {
     ) {
         val config = systemTts.config as TtsConfigurationDTO
         val source = config.source as LocalTtsSource
+        val params = config.audioParams
 
         var showDirectPlayHelpDialog by remember { mutableStateOf(false) }
         if (showDirectPlayHelpDialog)
@@ -77,32 +78,36 @@ class LocalTtsUI() : IConfigUI() {
         Column(modifier) {
             val rateStr = stringResource(
                 id = R.string.label_speech_rate,
-                if (source.speed == LocalTtsSource.SPEED_FOLLOW) stringResource(id = R.string.follow_system) else source.speed.toString()
+                if (params.speed == 0f) stringResource(id = R.string.follow) else params.speed.toString()
             )
-            LabelSlider(text = rateStr, value = source.speed, onValueChange = {
-                onSystemTtsChange(systemTts.copySource(source.copy(speed = it.toScale(2))))
+            LabelSlider(text = rateStr, value = params.speed, onValueChange = {
+                onSystemTtsChange(
+                    systemTts.copy(
+                        config = config.copy(audioParams = params.copy(speed = it.toScale(2)))
+                    )
+                )
             }, valueRange = 0f..3f)
 
             val pitchStr = stringResource(
                 id = R.string.label_speech_pitch,
-                if (source.pitch == LocalTtsSource.PITCH_FOLLOW) stringResource(id = R.string.follow_system) else source.pitch.toString()
+                if (params.pitch == 0f) stringResource(id = R.string.follow) else params.pitch.toString()
             )
-            LabelSlider(value = source.pitch, onValueChange = {
+            LabelSlider(value = params.pitch, onValueChange = {
                 onSystemTtsChange(
                     systemTts.copy(
-                        config = config.copy(source = source.copy(pitch = it.toScale(2)))
+                        config = config.copy(audioParams = params.copy(pitch = it.toScale(2)))
                     )
                 )
             }, valueRange = 0f..3f, text = pitchStr)
 
             val volumeStr = stringResource(
                 id = R.string.label_speech_volume,
-                if (source.volume == LocalTtsSource.VOLUME_FOLLOW) stringResource(id = R.string.follow_system) else source.volume.toString()
+                if (params.volume == 0f) stringResource(id = R.string.follow) else params.volume.toString()
             )
-            LabelSlider(value = source.volume, onValueChange = {
+            LabelSlider(value = params.volume, onValueChange = {
                 onSystemTtsChange(
                     systemTts.copy(
-                        config = config.copy(source = source.copy(volume = it.toScale(2)))
+                        config = config.copy(audioParams = params.copy(volume = it.toScale(2)))
                     )
                 )
             }, valueRange = 0f..3f, text = volumeStr)
@@ -197,8 +202,9 @@ class LocalTtsUI() : IConfigUI() {
         }
 
         var showAuditionDialog by remember { mutableStateOf(false) }
-        if (showAuditionDialog)
-            AuditionDialog(systts = systts) {
+        var auditionSystts by remember { mutableStateOf<SystemTtsV2?>(null) }
+        if (showAuditionDialog && auditionSystts != null)
+            AuditionDialog(systts = auditionSystts!!) {
                 showAuditionDialog = false
             }
 
@@ -209,9 +215,12 @@ class LocalTtsUI() : IConfigUI() {
                     systemTts = systts,
                     onSystemTtsChange = onSysttsChange,
                 )
+                // 使用 rememberUpdatedState 确保获取最新的 systts
+                val currentSystts by rememberUpdatedState(systts)
                 AuditionTextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 4.dp), onAudition = {
+                    auditionSystts = currentSystts
                     showAuditionDialog = true
                 })
 

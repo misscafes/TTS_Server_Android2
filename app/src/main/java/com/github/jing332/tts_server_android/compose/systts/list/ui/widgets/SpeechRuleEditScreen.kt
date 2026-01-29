@@ -116,34 +116,6 @@ fun SpeechRuleEditScreen(
             onDismissRequest = { showStandbyHelpDialog = false }
         )
 
-    var showParamsDialog by remember { mutableStateOf(false) }
-    if (showParamsDialog) {
-        val params = config.audioParams
-        fun changeParams(
-            speed: Float = params.speed,
-            volume: Float = params.volume,
-            pitch: Float = params.pitch,
-        ) {
-            onSysttsChange(
-                systts.copy(
-                    config = config.copy(audioParams = AudioParams(speed, volume, pitch))
-                )
-            )
-        }
-        BasicAudioParamsDialog(
-            onDismissRequest = { showParamsDialog = false },
-            speed = params.speed,
-            volume = params.volume,
-            pitch = params.pitch,
-
-            onSpeedChange = { changeParams(speed = it) },
-            onVolumeChange = { changeParams(volume = it) },
-            onPitchChange = { changeParams(pitch = it) },
-
-            onReset = { changeParams(0f, 0f, 0f) }
-        )
-    }
-
     if (showSpeechTarget)
         Column(modifier.fillMaxWidth()) {
             Row(
@@ -151,13 +123,6 @@ fun SpeechRuleEditScreen(
                     .align(Alignment.CenterHorizontally)
                     .horizontalScroll(rememberScrollState())
             ) {
-                TextButton(onClick = { showParamsDialog = true }) {
-                    Row {
-                        Icon(Icons.Default.Speed, null)
-                        Text(stringResource(id = R.string.audio_params))
-                    }
-                }
-
                 Row(
                     Modifier
                         .minimumInteractiveComponentSize()
