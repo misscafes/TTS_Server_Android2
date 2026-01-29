@@ -113,7 +113,7 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
                 engine.invokeMethod(pluginJsObj, FUNC_GET_AUDIO, text, locale, voice, r, v, p)
             }
         } catch (_: NoSuchMethodException) {
-            return getAudioV2(mapOf("text" to text, "locale" to locale, "voice" to voice, "rate" to r, "speed" to r, "volume" to v, "pitch" to p))
+            return getAudioV2(mapOf("text" to text, "locale" to locale, "voice" to voice, "rate" to r, "volume" to v, "pitch" to p))
         }
         return handleAudioResult(result) ?: throw RuntimeException("Synthesis Result is Empty")
     }
