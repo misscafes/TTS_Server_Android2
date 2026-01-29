@@ -22,15 +22,6 @@ import kotlin.random.Random
 class TextProcessor : ITextProcessor {
     companion object {
         private val logger = KotlinLogging.logger { this::class.java.name }
-        private const val TAG = "TextProcessor"
-    }
-    
-    // 朗读规则日志辅助函数
-    private fun logSpeechRule(message: String) {
-        // 使用 Console 输出，标记为朗读规则日志
-        if (::engine.isInitialized) {
-            engine.console.info("[SpeechRule] $message")
-        }
     }
 
     private var isMultiVoice: Boolean = false
@@ -62,6 +53,9 @@ class TextProcessor : ITextProcessor {
             // 必须在 eval() 之前设置 console，否则 JavaScript 绑定的是默认 Console
             engine.console = Console(Console.LogSource.SPEECH_RULE)
             engine.eval()
+            
+            // 测试朗读规则日志是否工作
+            engine.console.info("[测试] 朗读规则引擎初始化完成: ruleId=${speechRule.ruleId}")
             this.configs =
                 configs.entries.map { it.value.copy(speechInfo = it.value.speechInfo.copy(configId = it.key)) }
             speechRules = this.configs.map { it.speechInfo }
@@ -125,9 +119,7 @@ class TextProcessor : ITextProcessor {
             if (presetConfig != null) {
                 splitAndAdd(text, presetConfig)
             } else if (isMultiVoice) {
-                engine.console.info("朗读规则处理: 输入文本='$replacedText'")
                 val fragments = engine.handleText(replacedText, speechRules)
-                engine.console.info("朗读规则处理: 输出片段=${fragments.size}个")
 
                 fragments.forEach { txtWithTag ->
                     if (txtWithTag.text.isNotBlank()) {
