@@ -239,14 +239,25 @@ class PluginTtsUI : IConfigUI() {
 
                 // 使用 rememberUpdatedState 确保获取最新的 systts
                 val currentSystts by rememberUpdatedState(systts)
+                val scope = rememberCoroutineScope()
                 AuditionTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     onAudition = {
                         // 强制创建新的对象副本，确保 Compose 检测到变化并重新触发试听
-                        auditionSystts = currentSystts.copy()
-                        showAuditionDialog = true
+                        // 如果对话框已打开，先关闭再打开以强制重置状态
+                        if (showAuditionDialog) {
+                            showAuditionDialog = false
+                            scope.launch {
+                                kotlinx.coroutines.delay(50)
+                                auditionSystts = currentSystts.copy()
+                                showAuditionDialog = true
+                            }
+                        } else {
+                            auditionSystts = currentSystts.copy()
+                            showAuditionDialog = true
+                        }
                     }
                 )
 
