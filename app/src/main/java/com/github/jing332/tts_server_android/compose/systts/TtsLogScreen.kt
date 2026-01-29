@@ -127,30 +127,35 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                             Icon(Icons.Default.FilterList, stringResource(R.string.filter))
                         }
                         
-                        // 文件夹按钮 - 打开日志目录
+                        // 文件夹按钮 - 用文件管理器打开日志文件
                         IconButton(onClick = {
                             val logFile = File(vm.logDir())
-                            val logDir = logFile.parentFile ?: logFile
-                            val uri = FileProvider.getUriForFile(
-                                context,
-                                "${context.packageName}.fileprovider",
-                                logDir
-                            )
-                            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
-                                setDataAndType(uri, "resource/folder")
-                                flags = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or
-                                        android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-                            }
+                            
                             kotlin.runCatching {
+                                val uri = androidx.core.content.FileProvider.getUriForFile(
+                                    context,
+                                    "${context.packageName}.fileprovider",
+                                    logFile
+                                )
+                                val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                                    setDataAndType(uri, "text/plain")
+                                    flags = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                                            android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+                                }
                                 context.startActivity(intent)
                             }.onFailure {
-                                // 如果无法直接打开文件夹，尝试使用文件管理器
-                                val openIntent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
-                                    setDataAndType(uri, "*/*")
-                                    flags = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                }
+                                // 降级：使用通用类型
                                 kotlin.runCatching {
-                                    context.startActivity(openIntent)
+                                    val uri = androidx.core.content.FileProvider.getUriForFile(
+                                        context,
+                                        "${context.packageName}.fileprovider",
+                                        logFile
+                                    )
+                                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW).apply {
+                                        setDataAndType(uri, "*/*")
+                                        flags = android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+                                    }
+                                    context.startActivity(intent)
                                 }
                             }
                         }) {

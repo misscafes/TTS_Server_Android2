@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -54,7 +55,7 @@ fun GroupEditContentDialog(
         shape = RoundedCornerShape(16.dp),
         title = {
             Text(
-                text = stringResource(R.string.edit_group_content, group.name),
+                text = "${stringResource(R.string.edit_group_content)} - ${group.name}",
                 style = MaterialTheme.typography.headlineSmall
             )
         },
@@ -64,10 +65,11 @@ fun GroupEditContentDialog(
                     .fillMaxWidth()
                     .heightIn(max = 500.dp)
             ) {
-                // 搜索类型选择
+                // 搜索类型选择 + 全选按钮
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     SearchTypeChip(
                         text = stringResource(R.string.name),
@@ -84,6 +86,28 @@ fun GroupEditContentDialog(
                         selected = searchType == SearchType.PLUGIN,
                         onClick = { searchType = SearchType.PLUGIN }
                     )
+                    
+                    Spacer(modifier = Modifier.weight(1f))
+                    
+                    // 全选/取消全选按钮
+                    val allSelected = filteredConfigs.isNotEmpty() && filteredConfigs.all { it in selectedConfigs }
+                    IconButton(
+                        onClick = {
+                            selectedConfigs = if (allSelected) {
+                                // 取消全选：移除当前过滤列表中的所有项目
+                                selectedConfigs - filteredConfigs.toSet()
+                            } else {
+                                // 全选：添加当前过滤列表中的所有项目
+                                selectedConfigs + filteredConfigs
+                            }
+                        },
+                        enabled = filteredConfigs.isNotEmpty()
+                    ) {
+                        Icon(
+                            imageVector = if (allSelected) Icons.Default.Clear else Icons.Default.DoneAll,
+                            contentDescription = null
+                        )
+                    }
                 }
                 
                 Spacer(modifier = Modifier.height(8.dp))
