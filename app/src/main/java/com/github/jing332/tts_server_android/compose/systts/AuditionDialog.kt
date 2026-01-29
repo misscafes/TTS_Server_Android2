@@ -52,11 +52,11 @@ private val logger = KotlinLogging.logger("AuditionDialog")
 fun AuditionDialog(
     systts: SystemTtsV2,
     text: String = AppConfig.testSampleText.value,
+
+    config: TtsConfiguration = (systts.config as TtsConfigurationDTO).toVO(),
     engine: TextToSpeechProvider<TextToSpeechSource>? = null,
     onDismissRequest: () -> Unit,
 ) {
-    // 关键：在函数内部计算 config，确保每次重组都获取最新值（兼容 49b4a7c3）
-    val config = remember(systts) { (systts.config as TtsConfigurationDTO).toVO() }
     val context = LocalContext.current
     var error by remember { mutableStateOf("") }
     var info by remember { mutableStateOf("") }
@@ -75,7 +75,6 @@ fun AuditionDialog(
                 ?: throw IllegalStateException("engine is null")
 
                 if (e.state is EngineState.Uninitialized) e.onInit()
-                // 原汁原味：只传 text，音频参数完全由插件自己决定（从 source 读取）
                 if (e.isSyncPlay(config.source)) {
                     e.syncPlay(SystemParams(text = text), config.source)
                 } else {
@@ -137,4 +136,5 @@ fun AuditionDialog(
             TextButton(onClick = onDismissRequest) { Text(stringResource(id = R.string.cancel)) }
         }
     )
+
 }

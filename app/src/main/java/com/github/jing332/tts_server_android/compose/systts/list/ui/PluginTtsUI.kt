@@ -53,7 +53,6 @@ class PluginTtsUI : IConfigUI() {
         systemTts: SystemTtsV2,
         onSystemTtsChange: (SystemTtsV2) -> Unit,
     ) {
-        // 49b4a7c3 样式：只设置 source 的音频参数
         val tts = (systemTts.config as TtsConfigurationDTO).source as PluginTtsSource
         Column(modifier) {
             val rateStr =
@@ -190,7 +189,7 @@ class PluginTtsUI : IConfigUI() {
         @Suppress("UNCHECKED_CAST")
         if (showAuditionDialog)
             AuditionDialog(
-                systts = systts,  // 关键修复：直接使用 systts（rememberUpdatedState 的实时值）
+                systts = systts,
                 engine = if (plugin == null) null else vm.service()
             ) {
                 showAuditionDialog = false

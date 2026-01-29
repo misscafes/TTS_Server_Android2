@@ -197,7 +197,6 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
                 textProcess(params, presetConfigId)
                     .onSuccess { list ->
                         for (segment in list) {
-                            // 49b4a7c3 样式：只传 text，音频参数由引擎自己从 source 读取
                             requestAndProcess(
                                 channel,
                                 params.copy(text = segment.text),

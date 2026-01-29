@@ -15,13 +15,13 @@ class PluginDescriptor(val context: Context, val systemTts: SystemTtsV2) : ItemD
     override val desc: String
         get() {
             val strFollow by lazy { context.getString(R.string.follow) }
-            // 恢复 49b4a7c3 样式：显示 source 的音频参数
+
             val rateStr =
-                if (source.speed == 0f) strFollow else source.speed
+                if (source.speed == PluginTtsSource.SPEED_FOLLOW) strFollow else source.speed
             val pitchStr =
-                if (source.pitch == 0f) strFollow else source.pitch
+                if (source.pitch == PluginTtsSource.PITCH_FOLLOW) strFollow else source.pitch
             val volumeStr =
-                if (source.volume == 0f) strFollow else source.volume
+                if (source.volume == PluginTtsSource.VOLUME_FOLLOW) strFollow else source.volume
 
             return source.voice + "<br>" + context.getString(
                 R.string.systts_play_params_description,
