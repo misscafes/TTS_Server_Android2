@@ -25,12 +25,12 @@ open class PluginTtsProvider(
     override var state: EngineState = EngineState.Uninitialized()
 
     override suspend fun getStream(params: SystemParams, source: PluginTtsSource): InputStream {
-        // 使用 params 中的值（已包含 audioParams）
-        val speed = params.speed.takeIf { it > 0 } ?: 1f
-        val volume = params.volume.takeIf { it > 0 } ?: 1f
-        val pitch = params.pitch.takeIf { it > 0 } ?: 1f
+        // 恢复 49b4a7c3 逻辑：优先使用 source 的值（用户设置），其次使用 params（跟随系统）
+        val speed = if (source.speed == 0f) params.speed else source.speed
+        val volume = if (source.volume == 0f) params.volume else source.volume
+        val pitch = if (source.pitch == 0f) params.pitch else source.pitch
         
-        android.util.Log.d("PluginTtsProvider", "getStream: params.volume=${params.volume}, converted volume=$volume")
+        android.util.Log.d("PluginTtsProvider", "getStream: source.volume=${source.volume}, params.volume=${params.volume}, final volume=$volume")
 
         // source.data mapping to ttsrv.tts.data for javascript
         mEngine?.source = source
