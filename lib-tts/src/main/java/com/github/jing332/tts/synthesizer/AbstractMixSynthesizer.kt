@@ -197,30 +197,10 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
                 textProcess(params, presetConfigId)
                     .onSuccess { list ->
                         for (segment in list) {
-                            // 49b4a7c3 样式：优先从 source 读取参数（插件TTS）
-                            val source = segment.tts.source
-                            val (speed, volume, pitch) = if (source is com.github.jing332.database.entities.systts.source.PluginTtsSource) {
-                                Triple(
-                                    if (source.speed == 0f) params.speed else source.speed,
-                                    if (source.volume == 0f) params.volume else source.volume,
-                                    if (source.pitch == 0f) params.pitch else source.pitch
-                                )
-                            } else {
-                                val cfgParams = segment.tts.audioParams
-                                Triple(
-                                    cfgParams.speed.takeIf { it > 0 } ?: params.speed,
-                                    cfgParams.volume.takeIf { it > 0 } ?: params.volume,
-                                    cfgParams.pitch.takeIf { it > 0 } ?: params.pitch
-                                )
-                            }
+                            // 49b4a7c3 样式：只传 text，音频参数由引擎自己从 source 读取
                             requestAndProcess(
                                 channel,
-                                params.copy(
-                                    text = segment.text,
-                                    speed = speed,
-                                    volume = volume,
-                                    pitch = pitch
-                                ),
+                                params.copy(text = segment.text),
                                 segment.tts
                             )
                         }

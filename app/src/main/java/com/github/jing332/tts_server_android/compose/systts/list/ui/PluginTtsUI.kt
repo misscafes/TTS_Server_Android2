@@ -53,10 +53,8 @@ class PluginTtsUI : IConfigUI() {
         systemTts: SystemTtsV2,
         onSystemTtsChange: (SystemTtsV2) -> Unit,
     ) {
-        // 恢复 49b4a7c3 样式：只显示 source 的音频参数
+        // 49b4a7c3 样式：只设置 source 的音频参数
         val tts = (systemTts.config as TtsConfigurationDTO).source as PluginTtsSource
-        val config = systemTts.config as TtsConfigurationDTO
-        
         Column(modifier) {
             val rateStr =
                 stringResource(
@@ -67,16 +65,7 @@ class PluginTtsUI : IConfigUI() {
                 text = rateStr,
                 value = tts.speed,
                 onValueChange = {
-                    val newValue = it.toScale(2)
-                    // 同时设置两个参数，但显示样式与 49b4a7c3 一致
-                    onSystemTtsChange(
-                        systemTts.copy(
-                            config = config.copy(
-                                source = tts.copy(speed = newValue),
-                                audioParams = config.audioParams.copy(speed = newValue)
-                            )
-                        )
-                    )
+                    onSystemTtsChange(systemTts.copySource(tts.copy(speed = it.toScale(2))))
                 },
                 valueRange = 0f..3f
             )
@@ -88,14 +77,9 @@ class PluginTtsUI : IConfigUI() {
                 )
             LabelSlider(
                 text = volumeStr, value = tts.volume, onValueChange = {
-                    val newValue = it.toScale(2)
-                    // 同时设置两个参数，但显示样式与 49b4a7c3 一致
                     onSystemTtsChange(
-                        systemTts.copy(
-                            config = config.copy(
-                                source = tts.copy(volume = newValue),
-                                audioParams = config.audioParams.copy(volume = newValue)
-                            )
+                        systemTts.copySource(
+                            tts.copy(volume = it.toScale(2))
                         )
                     )
                 }, valueRange = 0f..3f
@@ -107,14 +91,9 @@ class PluginTtsUI : IConfigUI() {
             )
             LabelSlider(
                 text = pitchStr, value = tts.pitch, onValueChange = {
-                    val newValue = it.toScale(2)
-                    // 同时设置两个参数，但显示样式与 49b4a7c3 一致
                     onSystemTtsChange(
-                        systemTts.copy(
-                            config = config.copy(
-                                source = tts.copy(pitch = newValue),
-                                audioParams = config.audioParams.copy(pitch = newValue)
-                            )
+                        systemTts.copySource(
+                            tts.copy(pitch = it.toScale(2))
                         )
                     )
                 }, valueRange = 0f..3f
