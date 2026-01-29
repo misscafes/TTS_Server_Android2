@@ -52,11 +52,11 @@ private val logger = KotlinLogging.logger("AuditionDialog")
 fun AuditionDialog(
     systts: SystemTtsV2,
     text: String = AppConfig.testSampleText.value,
-    // 关键：config 作为函数默认参数，每次调用重新计算，获取最新值（兼容 49b4a7c3）
-    config: TtsConfiguration = (systts.config as TtsConfigurationDTO).toVO(),
     engine: TextToSpeechProvider<TextToSpeechSource>? = null,
     onDismissRequest: () -> Unit,
 ) {
+    // 关键：在函数内部计算 config，确保每次重组都获取最新值（兼容 49b4a7c3）
+    val config = remember(systts) { (systts.config as TtsConfigurationDTO).toVO() }
     val context = LocalContext.current
     var error by remember { mutableStateOf("") }
     var info by remember { mutableStateOf("") }

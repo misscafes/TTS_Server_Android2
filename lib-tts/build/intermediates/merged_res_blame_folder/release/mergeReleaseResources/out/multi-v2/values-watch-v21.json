@@ -1,0 +1,36 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.github.jing332.tts.lib-tts-release-77:/values-watch-v21/values-watch-v21.xml",
+            "map": [
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/6ece604a3cb751ec00396d7ffd79bff9/transformed/appcompat-1.7.0/res/values-watch-v21/values-watch-v21.xml",
+                    "from": {
+                        "startLines": "2,6,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,271,499",
+                        "endLines": "5,9,13",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "266,494,724"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "com.github.jing332.tts.lib-tts-mergeReleaseResources-75:/values-watch-v21/values-watch-v21.xml",
+            "map": [
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/6ece604a3cb751ec00396d7ffd79bff9/transformed/appcompat-1.7.0/res/values-watch-v21/values-watch-v21.xml",
+                    "from": {
+                        "startLines": "2,6,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,271,499",
+                        "endLines": "5,9,13",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "266,494,724"
+                    }
+                }
+            ]
+        }
+    ]
+}

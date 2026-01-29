@@ -1,0 +1,6 @@
+[
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/xml/network_security_config.xml",
+        "source": "com.github.jing332.tts.lib-tts-jetified-Net-3.7.0-62:/xml/network_security_config.xml"
+    }
+]

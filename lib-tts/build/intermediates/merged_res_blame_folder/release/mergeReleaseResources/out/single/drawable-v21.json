@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/drawable-v21/abc_dialog_material_background.xml",
+        "source": "com.github.jing332.tts.lib-tts-appcompat-1.7.0-25:/drawable-v21/abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/drawable-v21/notification_action_background.xml",
+        "source": "com.github.jing332.tts.lib-tts-core-1.15.0-2:/drawable-v21/notification_action_background.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "com.github.jing332.tts.lib-tts-appcompat-1.7.0-25:/drawable-v21/abc_action_bar_item_background_material.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/drawable-v21/abc_edit_text_material.xml",
+        "source": "com.github.jing332.tts.lib-tts-appcompat-1.7.0-25:/drawable-v21/abc_edit_text_material.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/drawable-v21/abc_btn_colored_material.xml",
+        "source": "com.github.jing332.tts.lib-tts-appcompat-1.7.0-25:/drawable-v21/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/drawable-v21/abc_list_divider_material.xml",
+        "source": "com.github.jing332.tts.lib-tts-appcompat-1.7.0-25:/drawable-v21/abc_list_divider_material.xml"
+    }
+]

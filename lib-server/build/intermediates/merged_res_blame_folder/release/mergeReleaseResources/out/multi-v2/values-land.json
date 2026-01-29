@@ -1,0 +1,34 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.github.jing332.server.lib-server-release-31:/values-land/values-land.xml",
+            "map": [
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/6ece604a3cb751ec00396d7ffd79bff9/transformed/appcompat-1.7.0/res/values-land/values-land.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,125,196",
+                        "endColumns": "69,70,67",
+                        "endOffsets": "120,191,259"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "com.github.jing332.server.lib-server-mergeReleaseResources-29:/values-land/values-land.xml",
+            "map": [
+                {
+                    "source": "/root/.gradle/caches/8.10.2/transforms/6ece604a3cb751ec00396d7ffd79bff9/transformed/appcompat-1.7.0/res/values-land/values-land.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,125,196",
+                        "endColumns": "69,70,67",
+                        "endOffsets": "120,191,259"
+                    }
+                }
+            ]
+        }
+    ]
+}
