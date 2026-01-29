@@ -85,28 +85,33 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                             if (!isSearch) {
                                 Text(text = stringResource(id = R.string.log), textAlign = TextAlign.Center)
                             } else {
-                                // 搜索框
-                                DockedSearchBar(
+                                // 搜索框 - 使用 BasicTextField 自定义样式
+                                androidx.compose.material3.TextField(
                                     modifier = Modifier.fillMaxWidth(0.95f),
-                                    query = searchQuery,
-                                    onQueryChange = { searchQuery = it },
-                                    onSearch = { },
-                                    active = false,
-                                    onActiveChange = { },
+                                    value = searchQuery,
+                                    onValueChange = { searchQuery = it },
                                     placeholder = { 
                                         Text(
                                             stringResource(R.string.search_logs),
-                                            style = MaterialTheme.typography.bodyMedium
+                                            style = MaterialTheme.typography.bodyLarge
                                         ) 
                                     },
+                                    textStyle = MaterialTheme.typography.bodyLarge,
+                                    singleLine = true,
                                     trailingIcon = {
                                         if (searchQuery.isNotEmpty()) {
                                             IconButton(onClick = { searchQuery = "" }) {
                                                 Icon(Icons.Default.Clear, stringResource(R.string.clear))
                                             }
                                         }
-                                    }
-                                ) {}
+                                    },
+                                    colors = androidx.compose.material3.TextFieldDefaults.colors(
+                                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                                        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+                                        unfocusedIndicatorColor = MaterialTheme.colorScheme.outline
+                                    )
+                                )
                             }
                         }
                     },

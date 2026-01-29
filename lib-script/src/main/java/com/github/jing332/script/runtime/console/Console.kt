@@ -7,6 +7,9 @@ import com.github.jing332.common.LogLevel
 class Console : LogListenerManager, Writeable {
     companion object {
         private const val TAG = "JS-Console"
+        
+        // 全局插件日志监听器，由 app 模块设置
+        var globalPluginLogListener: ((LogEntry) -> Unit)? = null
     }
 
     private val listeners = mutableListOf<LogListener>()
@@ -23,9 +26,20 @@ class Console : LogListenerManager, Writeable {
 
     override fun write(@LogLevel level: Int, str: String) {
         // 👈 使用原生 Log.i，绕过损坏的 Logback 框架
-        Log.i(TAG, str) 
+        Log.i(TAG, str)
+        
+        // 同时输出到应用日志系统，标记为插件日志
+        val logEntry = LogEntry(
+            level = level,
+            message = "[Plugin] $str",
+            isPluginLog = true
+        )
+        
+        // 通知全局监听器
+        globalPluginLogListener?.invoke(logEntry)
+        
         listeners.forEach {
-            it.onNewLog(LogEntry(level, str))
+            it.onNewLog(logEntry)
         }
     }
 

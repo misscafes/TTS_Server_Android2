@@ -1,6 +1,6 @@
 package com.github.jing332.tts_server_android.compose.systts
 
-import android.util.Log 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -10,6 +10,7 @@ import com.github.jing332.common.LogEntry
 import com.github.jing332.common.LogLevel
 import com.github.jing332.common.toLogLevel
 import com.github.jing332.common.utils.runOnUI
+import com.github.jing332.script.runtime.console.Console
 import com.github.jing332.tts_server_android.SysttsLogger
 import com.github.jing332.tts_server_android.constant.AppConst
 import kotlinx.coroutines.Dispatchers
@@ -119,9 +120,18 @@ class TtsLogViewModel : ViewModel() {
                         logs.add(log)
                     }
                 })
+                
+                // 注册插件日志监听器
+                Console.globalPluginLogListener = { logEntry ->
+                    runOnUI {
+                        if (logs.size > MAX_SIZE)
+                            logs.removeRange(0, 10)
+                        logs.add(logEntry)
+                    }
+                }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "init: ", e) 
+            Log.e(TAG, "init: ", e)
         }
     }
 
