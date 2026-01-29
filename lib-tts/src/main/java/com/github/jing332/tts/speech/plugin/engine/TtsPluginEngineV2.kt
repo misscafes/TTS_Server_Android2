@@ -1,6 +1,7 @@
 package com.github.jing332.tts.speech.plugin.engine
 
 import android.content.Context
+import android.util.Log
 import com.drake.net.Net
 import com.github.jing332.database.entities.plugin.Plugin
 import com.github.jing332.database.entities.systts.source.PluginTtsSource
@@ -105,6 +106,7 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
 
     suspend fun getAudio(text: String, locale: String, voice: String, rate: Float = 1f, volume: Float = 1f, pitch: Float = 1f): InputStream {
         val r = (rate * 50f).toInt(); val v = (volume * 50f).toInt(); val p = (pitch * 50f).toInt()
+        Log.d("TtsPluginEngineV2", "getAudio: rate=$rate->$r, volume=$volume->$v, pitch=$pitch->$p")
         
         // 🛠️ 关键：去掉了 try-catch 兜底，不再返回 EmptyInputStream
         // 一旦出错（暗号拦截或超时），抛出异常让 Service 处理，彻底根治 Bad audio format 0

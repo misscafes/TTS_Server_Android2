@@ -220,7 +220,8 @@ class LocalTtsUI() : IConfigUI() {
                 AuditionTextField(modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 4.dp), onAudition = {
-                    auditionSystts = currentSystts
+                    // 强制创建新的对象副本，确保 Compose 检测到变化并重新触发试听
+                    auditionSystts = currentSystts.copy()
                     showAuditionDialog = true
                 })
 

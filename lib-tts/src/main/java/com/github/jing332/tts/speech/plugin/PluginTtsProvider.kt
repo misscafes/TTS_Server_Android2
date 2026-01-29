@@ -29,12 +29,11 @@ open class PluginTtsProvider(
         val speed = params.speed.takeIf { it > 0 } ?: 1f
         val volume = params.volume.takeIf { it > 0 } ?: 1f
         val pitch = params.pitch.takeIf { it > 0 } ?: 1f
+        
+        android.util.Log.d("PluginTtsProvider", "getStream: params.volume=${params.volume}, converted volume=$volume")
 
         // source.data mapping to ttsrv.tts.data for javascript
         mEngine?.source = source
-
-        // 调试日志：确认参数值
-        android.util.Log.d("PluginTtsProvider", "getAudio: volume=$volume, pitch=$pitch, speed=$speed, text=${params.text.take(20)}")
 
         // 修正：增加异常捕获与状态重置，确保在断网后能自动触发重连自愈
         return try {

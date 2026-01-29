@@ -89,43 +89,50 @@ fun LogFilterDialog(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 
-                // 插件日志开关
-                FilterChip(
-                    selected = showPluginLogs,
-                    onClick = { onPluginLogsToggle() },
-                    label = { Text("插件日志") },
-                    leadingIcon = {
-                        if (showPluginLogs) {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+                // 调试选项（同一行）
+                FlowRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // 插件日志开关
+                    FilterChip(
+                        selected = showPluginLogs,
+                        onClick = { onPluginLogsToggle() },
+                        label = { Text("插件日志") },
+                        leadingIcon = {
+                            if (showPluginLogs) {
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                        },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+                        )
                     )
-                )
-                
-                // 朗读规则日志开关
-                FilterChip(
-                    selected = showSpeechRuleLogs,
-                    onClick = { onSpeechRuleLogsToggle() },
-                    label = { Text("朗读规则日志") },
-                    leadingIcon = {
-                        if (showSpeechRuleLogs) {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                        }
-                    },
-                    colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+                    
+                    // 朗读规则日志开关
+                    FilterChip(
+                        selected = showSpeechRuleLogs,
+                        onClick = { onSpeechRuleLogsToggle() },
+                        label = { Text("朗读规则日志") },
+                        leadingIcon = {
+                            if (showSpeechRuleLogs) {
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                        },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+                        )
                     )
-                )
+                }
             }
         },
         confirmButton = {

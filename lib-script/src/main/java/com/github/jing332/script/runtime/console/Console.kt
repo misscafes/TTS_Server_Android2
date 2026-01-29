@@ -34,7 +34,7 @@ class Console(val source: LogSource = LogSource.PLUGIN) : LogListenerManager, Wr
 
     override fun write(@LogLevel level: Int, str: String) {
         // 👈 使用原生 Log.i，绕过损坏的 Logback 框架
-        Log.i(TAG, str)
+        Log.i(TAG, "[$source] $str")
         
         // 根据来源标记日志类型
         val isPluginLog = source == LogSource.PLUGIN

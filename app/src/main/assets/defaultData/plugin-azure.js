@@ -26,6 +26,8 @@ let PluginJS = {
     "getAudio": function (text, locale, voice, rate, volume, pitch) {
         rate = (rate * 2) - 100
         pitch = pitch - 50
+        volume = volume * 2
+        console.log("volume:", volume)
 
         let styleDegree = ttsrv.tts.data['styleDegree']
         if (!styleDegree || Number(styleDegree) < 0.01) {

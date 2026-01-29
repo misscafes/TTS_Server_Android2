@@ -44,6 +44,7 @@ open class RhinoScriptRuntime(
                 thisObj: Scriptable,
                 args: Array<out Any?>,
             ): Any {
+                android.util.Log.d("RhinoScriptRuntime", "logger.$name called, console.source=${console.source}")
                 console.writeFormat(cx, scope, args, level, null)
                 return Undefined.instance
             }
@@ -74,6 +75,7 @@ open class RhinoScriptRuntime(
                 args: Array<out Any?>,
                 stack: Array<out ScriptStackElement?>?,
             ) {
+                android.util.Log.d("RhinoScriptRuntime", "NativeConsole.print called, console.source=${console.source}")
                 console.writeFormat(cx, scope, args, level, stack)
             }
         })

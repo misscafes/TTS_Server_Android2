@@ -140,6 +140,7 @@ class TtsLogViewModel : ViewModel() {
                 
                 // 注册朗读规则日志监听器
                 Console.globalSpeechRuleLogListener = { logEntry ->
+                    Log.d(TAG, "globalSpeechRuleLogListener: ${logEntry.message}")
                     runOnUI {
                         if (logs.size > MAX_SIZE)
                             logs.removeRange(0, 10)

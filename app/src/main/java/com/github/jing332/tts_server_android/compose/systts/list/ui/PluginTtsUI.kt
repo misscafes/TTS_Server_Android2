@@ -54,20 +54,31 @@ class PluginTtsUI : IConfigUI() {
         onSystemTtsChange: (SystemTtsV2) -> Unit,
     ) {
         val config = systemTts.config as TtsConfigurationDTO
-        val params = config.audioParams
+        val source = config.source as PluginTtsSource
+        // 二者合一：优先使用 PluginTtsSource 的音频参数，与 5ad82463 行为一致
+        val speed = source.speed.takeIf { it != 0f } ?: config.audioParams.speed
+        val volume = source.volume.takeIf { it != 0f } ?: config.audioParams.volume
+        val pitch = source.pitch.takeIf { it != 0f } ?: config.audioParams.pitch
+        
         Column(modifier) {
             val rateStr =
                 stringResource(
                     id = R.string.label_speech_rate,
-                    if (params.speed == 0f) stringResource(id = R.string.follow) else params.speed.toString()
+                    if (speed == 0f) stringResource(id = R.string.follow) else speed.toString()
                 )
             LabelSlider(
                 text = rateStr,
-                value = params.speed,
+                value = speed,
                 onValueChange = {
+                    val newValue = it.toScale(2)
+                    // 二者合一：同时修改 source 和 audioParams
+                    val newSource = source.copy(speed = newValue)
                     onSystemTtsChange(
                         systemTts.copy(
-                            config = config.copy(audioParams = params.copy(speed = it.toScale(2)))
+                            config = config.copy(
+                                source = newSource,
+                                audioParams = config.audioParams.copy(speed = newValue)
+                            )
                         )
                     )
                 },
@@ -77,13 +88,19 @@ class PluginTtsUI : IConfigUI() {
             val volumeStr =
                 stringResource(
                     id = R.string.label_speech_volume,
-                    if (params.volume == 0f) stringResource(id = R.string.follow) else params.volume.toString()
+                    if (volume == 0f) stringResource(id = R.string.follow) else volume.toString()
                 )
             LabelSlider(
-                text = volumeStr, value = params.volume, onValueChange = {
+                text = volumeStr, value = volume, onValueChange = {
+                    val newValue = it.toScale(2)
+                    // 二者合一：同时修改 source 和 audioParams
+                    val newSource = source.copy(volume = newValue)
                     onSystemTtsChange(
                         systemTts.copy(
-                            config = config.copy(audioParams = params.copy(volume = it.toScale(2)))
+                            config = config.copy(
+                                source = newSource,
+                                audioParams = config.audioParams.copy(volume = newValue)
+                            )
                         )
                     )
                 }, valueRange = 0f..3f
@@ -91,13 +108,19 @@ class PluginTtsUI : IConfigUI() {
 
             val pitchStr = stringResource(
                 id = R.string.label_speech_pitch,
-                if (params.pitch == 0f) stringResource(id = R.string.follow) else params.pitch.toString()
+                if (pitch == 0f) stringResource(id = R.string.follow) else pitch.toString()
             )
             LabelSlider(
-                text = pitchStr, value = params.pitch, onValueChange = {
+                text = pitchStr, value = pitch, onValueChange = {
+                    val newValue = it.toScale(2)
+                    // 二者合一：同时修改 source 和 audioParams
+                    val newSource = source.copy(pitch = newValue)
                     onSystemTtsChange(
                         systemTts.copy(
-                            config = config.copy(audioParams = params.copy(pitch = it.toScale(2)))
+                            config = config.copy(
+                                source = newSource,
+                                audioParams = config.audioParams.copy(pitch = newValue)
+                            )
                         )
                     )
                 }, valueRange = 0f..3f
@@ -221,7 +244,8 @@ class PluginTtsUI : IConfigUI() {
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     onAudition = {
-                        auditionSystts = currentSystts
+                        // 强制创建新的对象副本，确保 Compose 检测到变化并重新触发试听
+                        auditionSystts = currentSystts.copy()
                         showAuditionDialog = true
                     }
                 )

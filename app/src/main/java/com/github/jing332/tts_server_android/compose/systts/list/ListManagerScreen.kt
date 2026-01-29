@@ -439,7 +439,8 @@ internal fun ListManagerScreen(
                                     onEdit = { navigateToEdit(item) },
                                     onAudition = {
                                         if (item.config is TtsConfigurationDTO) {
-                                            showAuditionDialog = item
+                                            // 强制创建新的对象副本，确保 Compose 检测到变化并重新触发试听
+                                            showAuditionDialog = item.copy()
                                         } else
                                             context.toast(R.string.not_support_audition)
                                     },
