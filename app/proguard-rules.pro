@@ -2,26 +2,18 @@
 -keepattributes Exceptions,InnerClasses,Signature
 
 # ============================================
-# 核心数据模型保护 - 兼容 Release 和 Dev 双版本（优化版）
+# 核心数据模型保护 - 超精简版（保持 17MB）
 # ============================================
 
-# 只保护数据库实体类（Room/Gson 必需）
+# 只保留 database entities（Gson 反序列化必需）
 -keep class com.github.jing332.database.entities.** { *; }
--keep class com.github.jing332.database.entities.plugin.** { *; }
--keep class com.github.jing332.database.entities.systts.** { *; }
 
-# 保留 Parcelable 实现类（跨进程通信）
+# 保留 Parcelable 实现类
 -keep class * implements android.os.Parcelable { *; }
 
-# 保留泛型签名（Gson/序列化必需）
+# 保留泛型签名（Gson 必需）
 -keepattributes Signature
 -keepattributes *Annotation*
-
-# Gson 序列化支持
--keepclassmembers class com.github.jing332.database.entities.** {
-    <init>(...);
-    @com.google.gson.annotations.SerializedName <fields>;
-}
 
 # Logger
 -keepclassmembers class ch.qos.logback.classic.pattern.* { <init>(); }
