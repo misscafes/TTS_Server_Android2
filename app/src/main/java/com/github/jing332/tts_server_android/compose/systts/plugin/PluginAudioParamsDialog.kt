@@ -29,9 +29,10 @@ fun PluginAudioParamsDialog(
     onDismissRequest: () -> Unit,
     onConfirm: (AudioParams) -> Unit
 ) {
-    var speed by remember { mutableFloatStateOf(initialParams.speed) }
-    var volume by remember { mutableFloatStateOf(initialParams.volume) }
-    var pitch by remember { mutableFloatStateOf(initialParams.pitch) }
+    // 0 表示跟随，显示时转为 1.0，保存时再转回
+    var speed by remember { mutableFloatStateOf(if (initialParams.speed == 0f) 1f else initialParams.speed) }
+    var volume by remember { mutableFloatStateOf(if (initialParams.volume == 0f) 1f else initialParams.volume) }
+    var pitch by remember { mutableFloatStateOf(if (initialParams.pitch == 0f) 1f else initialParams.pitch) }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
