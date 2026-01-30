@@ -1,0 +1,37 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.github.jing332.tts_server_android.dev",
+  "variantName": "devRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 1414,
+      "versionName": "1.26.013100",
+      "outputFile": "TTS-Server-v1.26.013100.apk"
+    }
+  ],
+  "elementType": "File",
+  "baselineProfiles": [
+    {
+      "minApi": 28,
+      "maxApi": 30,
+      "baselineProfiles": [
+        "baselineProfiles/1/TTS-Server-v1.26.013100.dm"
+      ]
+    },
+    {
+      "minApi": 31,
+      "maxApi": 2147483647,
+      "baselineProfiles": [
+        "baselineProfiles/0/TTS-Server-v1.26.013100.dm"
+      ]
+    }
+  ],
+  "minSdkVersionForDexing": 21
+}

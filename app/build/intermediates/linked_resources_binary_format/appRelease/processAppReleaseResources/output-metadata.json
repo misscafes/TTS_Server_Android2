@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "LINKED_RESOURCES_BINARY_FORMAT",
+    "kind": "Directory"
+  },
+  "applicationId": "com.github.jing332.tts_server_android",
+  "variantName": "appRelease",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 1414,
+      "versionName": "1.26.013100",
+      "outputFile": "linked-resources-binary-format-appRelease.ap_"
+    }
+  ],
+  "elementType": "File"
+}
