@@ -1,6 +1,7 @@
 package com.github.jing332.database.entities
 
 import androidx.room.TypeConverter
+import com.github.jing332.database.entities.systts.AudioParams
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -43,5 +44,15 @@ object MapConverters {
     @TypeConverter
     fun fromMapList(tags: Map<String, List<Map<String, String>>>): String {
         return json.encodeToString(tags) ?: ""
+    }
+
+    @TypeConverter
+    fun toAudioParams(s: String): AudioParams {
+        return json.decodeFromString(s) ?: AudioParams()
+    }
+
+    @TypeConverter
+    fun fromAudioParams(params: AudioParams): String {
+        return json.encodeToString(params) ?: "{}"
     }
 }

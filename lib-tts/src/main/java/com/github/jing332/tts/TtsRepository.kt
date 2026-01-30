@@ -9,13 +9,19 @@ import com.github.jing332.tts.synthesizer.TtsConfiguration.Companion.toVO
 
 /**
  * 计算叠加参数值
- * 规则：0(跟随)视为1.0，最终值 = 配置值 × 分组值 × 全局值
+ * 规则：0(跟随)视为1.0，最终值 = 插件总参数 × 配置值 × 分组值 × 全局值
  */
-private fun calculateParam(configValue: Float, groupValue: Float, globalValue: Float): Float {
+private fun calculateParam(
+    pluginValue: Float,
+    configValue: Float,
+    groupValue: Float,
+    globalValue: Float
+): Float {
+    val pv = if (pluginValue == 0f) 1f else pluginValue
     val cv = if (configValue == 0f) 1f else configValue
     val gv = if (groupValue == 0f) 1f else groupValue
     val tv = if (globalValue == 0f) 1f else globalValue
-    return cv * gv * tv
+    return pv * cv * gv * tv
 }
 
 internal class TtsRepository(
@@ -61,11 +67,17 @@ internal class TtsRepository(
                             it.speechInfo.tagName == c.speechRule.tagName
                 }
 
-                // 叠加计算：配置值 × 分组值 × 全局值
+                // 获取插件级音频参数（新增）
+                val pluginParams = (c.source as? com.github.jing332.database.entities.systts.source.PluginTtsSource)?.let {
+                    dbm.pluginDao.getByPluginId(it.pluginId)?.audioParams
+                        ?: com.github.jing332.database.entities.systts.AudioParams()
+                } ?: com.github.jing332.database.entities.systts.AudioParams()
+
+                // 叠加计算：插件总参数 × 配置值 × 分组值 × 全局值
                 val configParams = c.audioParams
-                val finalSpeed = calculateParam(configParams.speed, gp.speed, tp.speed)
-                val finalVolume = calculateParam(configParams.volume, gp.volume, tp.volume)
-                val finalPitch = calculateParam(configParams.pitch, gp.pitch, tp.pitch)
+                val finalSpeed = calculateParam(pluginParams.speed, configParams.speed, gp.speed, tp.speed)
+                val finalVolume = calculateParam(pluginParams.volume, configParams.volume, gp.volume, tp.volume)
+                val finalPitch = calculateParam(pluginParams.pitch, configParams.pitch, gp.pitch, tp.pitch)
 
                 map[tts.id] = TtsConfiguration(
                     speechInfo = c.speechRule,

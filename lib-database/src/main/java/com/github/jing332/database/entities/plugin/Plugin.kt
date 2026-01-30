@@ -6,6 +6,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
 import com.github.jing332.database.entities.MapConverters
+import com.github.jing332.database.entities.systts.AudioParams
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -44,6 +45,10 @@ data class Plugin(
     // 索引 排序用
     @ColumnInfo(name = "order", defaultValue = "0")
     var order: Int = 0,
+
+    // 插件级音频参数（全局调节该插件下所有发音人）
+    @ColumnInfo(defaultValue = "{}")
+    var audioParams: AudioParams = AudioParams(),
 ) : Parcelable {
     val mutableUserVars: MutableMap<String, String>
         get() = userVars as MutableMap<String, String>

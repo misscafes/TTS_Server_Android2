@@ -2,6 +2,37 @@
 
 本文档记录项目核心配置、常见问题修复和构建流程，用于快速唤醒开发环境并修复问题。
 
+---
+
+## 🔴🔴🔴 致命配置警告（最高优先级）🔴🔴🔴
+
+### ❌ 绝对禁止删除的配置项
+
+**`gradle.properties` 中的以下配置是应用正常运行的生命线，删除会导致Release版本功能崩溃：**
+
+```properties
+# ========== 混淆安全区 - 严禁删除或修改 ==========
+android.enableR8.fullMode=false
+android.nonTransitiveRClass=true
+android.nonFinalResIds=false
+kotlin.incremental=true
+kotlin.caching.enabled=true
+# ================================================
+```
+
+**⚠️ 后果：**
+- `android.enableR8.fullMode=false` 被删除 → **R8全模式启用** → 混淆过度激进 → **代码编辑器无法打开/无响应**
+- `android.nonFinalResIds=false` 被删除 → 资源ID可能被错误优化
+- `kotlin.incremental/caching` 被删除 → 编译速度下降
+
+**✅ 安全做法：**
+- 保持 `gradle.properties` 中的上述配置完整
+- 如需国内镜像，在 `settings.gradle` 中配置，**不要**在 `gradle.properties` 中添加无效的仓库配置
+
+**📋 基准文件：** `Search` 分支20小时前的版本是已验证的安全配置
+
+---
+
 ## 📋 项目关键配置
 
 ### 签名配置
@@ -350,31 +381,50 @@ git add newapk/ && git commit -m "发布新版本" && git push origin master
 
 ---
 
-## ⚠️ 关键注意事项 (2026-01-29)
+## ⚠️ 关键注意事项 (2026-01-30 更新)
 
-### 🚨 ProGuard/R8 混淆规则（重要！）
+### 🚨🚨🚨 ProGuard/R8 混淆规则 - 生死线配置 🚨🚨🚨
 
-**警告**：master 分支的 ProGuard 规则存在严重问题，会导致以下功能在 Release 模式下崩溃：
-- 编辑器保存功能
-- 插件加载功能
+> **警告级别：致命**
+> 
+> **错误配置后果：Release构建的应用会在运行时崩溃，编辑器无法打开，用户数据可能丢失**
 
-**解决方案**：
-1. **始终使用 Search 分支的 proguard-rules.pro**（约380行完整规则）
-2. **不要**复制 master 分支的混淆规则到 Search 分支
-3. 如果必须合并分支，**保留 Search 分支的 proguard-rules.pro 作为"安全区"**
+#### 双保险配置（缺一不可）
 
-**文件位置：** `/workspace/app/proguard-rules.pro`
+**第1层保险 - `gradle.properties`（R8开关）：**
+```properties
+# 这行配置必须存在！删除会导致R8全模式启用，混淆过度激进
+android.enableR8.fullMode=false
+```
 
-**关键规则示例：**
+**第2层保险 - `app/proguard-rules.pro`（保留规则）：**
 ```proguard
-# 插件引擎相关（必须保留）
--keep class com.github.jing332.tts_server_android.plugin.** { *; }
--keepclassmembers class com.github.jing332.tts_server_android.plugin.** { *; }
-
-# 编辑器相关（必须保留）
+# 代码编辑器必须保留（R8会误删这些类）
 -keep class io.github.rosemoe.sora.** { *; }
 -keepclassmembers class io.github.rosemoe.sora.** { *; }
+
+# 插件引擎必须保留
+-keep class com.github.jing332.tts_server_android.plugin.** { *; }
+-keepclassmembers class com.github.jing332.tts_server_android.plugin.** { *; }
 ```
+
+#### ❌ 绝对禁止的操作
+
+| 禁止操作 | 后果 |
+|---------|------|
+| 删除 `android.enableR8.fullMode=false` | 编辑器崩溃、无法保存 |
+| 使用master分支的精简版proguard-rules.pro | 插件系统失效 |
+| 在gradle.properties添加`pluginManagement` | 配置无效，且可能覆盖关键配置 |
+| 合并分支时覆盖Search分支的proguard-rules.pro | 功能崩溃 |
+
+#### ✅ 安全操作流程
+
+1. **构建前检查** `gradle.properties` 必须包含 `android.enableR8.fullMode=false`
+2. **构建前检查** `app/proguard-rules.pro` 文件大小应约16KB（380+行）
+3. **Git合并时** 始终保留Search分支的proguard-rules.pro（选择"ours"策略）
+4. **验证构建** Release APK安装后必须测试编辑器能否正常打开和保存
+
+**基准安全版本：** `Search` 分支2026-01-29 20:00前的配置
 
 ### 📦 新功能移植记录
 
@@ -451,6 +501,7 @@ pkill -f gradlew; sleep 2
 
 | 日期 | 版本 | 内容 |
 |------|------|------|
+| 2026-01-30 | v1.3 | **添加致命配置警告** - 强调gradle.properties中R8配置的重要性，避免编辑器崩溃 |
 | 2026-01-29 | v1.2 | 添加 AI 协作工作模式，记录音频参数修复和日志系统增强 |
 | 2026-01-29 | v1.1 | 添加 ProGuard 规则警告，记录新功能移植注意事项 |
 | 2026-01-27 | v1.0 | 初始版本，记录插件刷新、转发器日志、云构建流程 |

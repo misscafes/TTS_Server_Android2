@@ -365,6 +365,9 @@
     <string name="unknown">未知</string>
     <string name="plugin_vars">插件变量</string>
     <string name="plugin_set_vars">设置变量</string>
+    <string name="plugin_audio_params">音频参数</string>
+    <string name="plugin_audio_params_desc">统一调节该插件下所有发音人的语速、音量、音调。最终参数 = 插件参数 × 单独参数 × 分组参数 × 全局参数</string>
+    <string name="plugin_audio_params_saved">音频参数已保存</string>
     <string name="config_list">配置列表</string>
     <string name="plugin">插件</string>
     <string name="replace_rule">替换规则</string>
@@ -425,6 +428,7 @@
     <string name="desc_expand_group">展开分组：%1$s</string>
     <string name="desc_collapse_group">折叠分组：%1$s</string>
     <string name="label_speech_rate">语速：%1$s</string>
+    <string name="label_speech_speed">语速：%1$s</string>
     <string name="label_speech_volume">音量：%1$s</string>
     <string name="label_speech_pitch">音高：%1$s</string>
     <string name="systts_api_edge_okhttp">微软Edge  - Java (音频流)</string>

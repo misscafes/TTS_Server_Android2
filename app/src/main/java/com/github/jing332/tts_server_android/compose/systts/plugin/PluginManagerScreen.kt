@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Output
+import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -120,8 +121,24 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
             plugin = it
         }
     }
+
     val navController = LocalNavController.current
     val context = LocalContext.current
+
+    // 插件音频参数对话框
+    var showAudioParamsDialog by remember { mutableStateOf<Plugin?>(null) }
+    if (showAudioParamsDialog != null) {
+        val plugin = showAudioParamsDialog!!
+        PluginAudioParamsDialog(
+            initialParams = plugin.audioParams,
+            onDismissRequest = { showAudioParamsDialog = null },
+            onConfirm = { newParams ->
+                dbm.pluginDao.update(plugin.copy(audioParams = newParams))
+                showAudioParamsDialog = null
+                context.longToast(R.string.plugin_audio_params_saved)
+            }
+        )
+    }
 
     fun onEdit(plugin: Plugin = Plugin()) {
         sharedVM.put(NavRoutes.PluginEdit.KEY_DATA, plugin)
@@ -245,6 +262,7 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
                         },
                         onEdit = { onEdit(item) },
                         onSetVars = { showVarsSettings = item },
+                        onAudioParams = { showAudioParamsDialog = item },
                         onDelete = { showDeleteDialog = item },
                         onClear = {
                             PluginManager(item).clearCache()
@@ -275,6 +293,7 @@ private fun Item(
     onClear: () -> Unit,
     onEdit: () -> Unit,
     onSetVars: () -> Unit,
+    onAudioParams: () -> Unit,
     onExport: () -> Unit,
     onDelete: () -> Unit,
 ) {
@@ -379,6 +398,18 @@ private fun Item(
                                 },
                                 leadingIcon = {
                                     Icon(Icons.Default.Output, null)
+                                }
+                            )
+
+                            // 音频参数菜单项（位于导出下方）
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.plugin_audio_params)) },
+                                onClick = {
+                                    showOptions = false
+                                    onAudioParams()
+                                },
+                                leadingIcon = {
+                                    Icon(Icons.Default.VolumeUp, null)
                                 }
                             )
 
