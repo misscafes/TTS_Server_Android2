@@ -23,7 +23,7 @@ class TtsLogViewModel : ViewModel() {
         const val TAG = "TtsLogViewModel"
 
         // 日志总上限，达到后自动清空
-        const val MAX_LOGS_BEFORE_CLEAR = 5000
+        const val MAX_LOGS_BEFORE_CLEAR = 500000
 
         // 支持的日志级别
         val LOG_LEVELS = listOf(
@@ -134,7 +134,7 @@ class TtsLogViewModel : ViewModel() {
                             logs.clear()
                             logs.add(LogEntry(
                                 level = LogLevel.WARN,
-                                message = "日志达到${MAX_LOGS_BEFORE_CLEAR}条上限，已自动清空"
+                                message = "日志达到上限，已自动清空"
                             ))
                         }
                         logs.add(entry)
