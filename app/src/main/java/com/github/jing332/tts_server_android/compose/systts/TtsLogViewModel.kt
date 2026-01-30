@@ -21,8 +21,12 @@ import java.io.FileWriter
 class TtsLogViewModel : ViewModel() {
     companion object {
         const val TAG = "TtsLogViewModel"
-        const val MAX_SIZE = 150
-        
+
+        // 每种日志类型独立限制 500 条
+        const val MAX_NORMAL_LOGS = 500      // 普通日志
+        const val MAX_PLUGIN_LOGS = 500      // 插件日志
+        const val MAX_SPEECH_RULE_LOGS = 500 // 朗读规则日志
+
         // 支持的日志级别
         val LOG_LEVELS = listOf(
             LogLevel.ERROR,
@@ -31,7 +35,7 @@ class TtsLogViewModel : ViewModel() {
             LogLevel.DEBUG,
             LogLevel.TRACE
         )
-        
+
         // 修改点：路径从 files/log 指向 cache/log
         // AppConst.externalFilesDir 指向 .../files，parentFile 指向 .../包名，再 resolve cache 即为 cache 目录
         val file = File(AppConst.externalFilesDir.parentFile, "cache/log/system_tts.log")
@@ -44,11 +48,11 @@ class TtsLogViewModel : ViewModel() {
     val selectedLevels = mutableStateListOf<Int>()
     val showFilterDialog = mutableStateOf(false)
     
-    // 调试模式开关 - 显示/隐藏插件日志（默认显示）
-    val showPluginLogs = mutableStateOf(true)
-    
-    // 调试模式开关 - 显示/隐藏朗读规则日志（默认显示）
-    val showSpeechRuleLogs = mutableStateOf(true)
+    // 调试模式开关 - 显示/隐藏插件日志（默认隐藏，用户手动开启）
+    val showPluginLogs = mutableStateOf(false)
+
+    // 调试模式开关 - 显示/隐藏朗读规则日志（默认隐藏，用户手动开启）
+    val showSpeechRuleLogs = mutableStateOf(false)
     
     val filteredLogs: List<LogEntry>
         get() {
@@ -123,29 +127,69 @@ class TtsLogViewModel : ViewModel() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 pull()
-                SysttsLogger.register({ log ->
+                // 维护各类型日志数量
+                var normalLogCount = 0
+                var pluginLogCount = 0
+                var speechRuleLogCount = 0
+
+                // 统一的日志添加函数，每种类型独立限制 500 条
+                fun addLog(entry: LogEntry) {
                     runOnUI {
-                        logs.add(log)
-                    }
-                })
-                
-                // 注册插件日志监听器
-                Console.globalPluginLogListener = { logEntry ->
-                    runOnUI {
-                        if (logs.size > MAX_SIZE)
-                            logs.removeRange(0, 10)
-                        logs.add(logEntry)
+                        when {
+                            entry.isPluginLog -> {
+                                if (pluginLogCount >= MAX_PLUGIN_LOGS) {
+                                    // 移除最旧的一条插件日志
+                                    val index = logs.indexOfFirst { it.isPluginLog }
+                                    if (index >= 0) {
+                                        logs.removeAt(index)
+                                        pluginLogCount--
+                                    }
+                                }
+                                logs.add(entry)
+                                pluginLogCount++
+                            }
+                            entry.isSpeechRuleLog -> {
+                                if (speechRuleLogCount >= MAX_SPEECH_RULE_LOGS) {
+                                    // 移除最旧的一条朗读规则日志
+                                    val index = logs.indexOfFirst { it.isSpeechRuleLog }
+                                    if (index >= 0) {
+                                        logs.removeAt(index)
+                                        speechRuleLogCount--
+                                    }
+                                }
+                                logs.add(entry)
+                                speechRuleLogCount++
+                            }
+                            else -> {
+                                // 普通日志
+                                if (normalLogCount >= MAX_NORMAL_LOGS) {
+                                    // 移除最旧的一条普通日志
+                                    val index = logs.indexOfFirst { !it.isPluginLog && !it.isSpeechRuleLog }
+                                    if (index >= 0) {
+                                        logs.removeAt(index)
+                                        normalLogCount--
+                                    }
+                                }
+                                logs.add(entry)
+                                normalLogCount++
+                            }
+                        }
                     }
                 }
-                
+
+                SysttsLogger.register({ log ->
+                    addLog(log)
+                })
+
+                // 注册插件日志监听器
+                Console.globalPluginLogListener = { logEntry ->
+                    addLog(logEntry)
+                }
+
                 // 注册朗读规则日志监听器
                 Console.globalSpeechRuleLogListener = { logEntry ->
                     Log.d(TAG, "globalSpeechRuleLogListener: ${logEntry.message}")
-                    runOnUI {
-                        if (logs.size > MAX_SIZE)
-                            logs.removeRange(0, 10)
-                        logs.add(logEntry)
-                    }
+                    addLog(logEntry)
                 }
             }
         } catch (e: Exception) {
@@ -156,12 +200,13 @@ class TtsLogViewModel : ViewModel() {
     fun add(line: String) {
         try {
             val logEntry = toLogEntry(line)
-            if (logs.size > MAX_SIZE)
-                logs.removeRange(0, 10)
+            // 从历史文件加载的日志，总数量限制 1500 条（3种各500）
+            if (logs.size >= 1500) {
+                logs.removeAt(0)
+            }
             logs.add(logEntry)
-
         } catch (e: Exception) {
-            Log.e(TAG, "add: ", e) 
+            Log.e(TAG, "add: ", e)
         }
     }
 
@@ -169,7 +214,8 @@ class TtsLogViewModel : ViewModel() {
     suspend fun pull() {
         runCatching {
             if (file.exists()) {
-                file.readLines().takeLast(MAX_SIZE).apply {
+                // 最多读取最近 1500 行
+                file.readLines().takeLast(1500).apply {
                     withMain {
                         forEach { add(it) }
                     }
