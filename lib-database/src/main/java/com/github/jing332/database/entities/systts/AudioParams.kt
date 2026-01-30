@@ -7,11 +7,11 @@ import kotlinx.serialization.Serializable
 @Parcelize
 @Serializable
 data class AudioParams(
-    var speed: Float = FOLLOW,
+    var speed: Float = 1f,
 
-    var volume: Float = FOLLOW,
+    var volume: Float = 1f,
 
-    var pitch: Float = FOLLOW,
+    var pitch: Float = 1f,
 ) : Parcelable {
     companion object {
         const val FOLLOW = 0f
