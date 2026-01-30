@@ -44,11 +44,11 @@ class TtsLogViewModel : ViewModel() {
     val selectedLevels = mutableStateListOf<Int>()
     val showFilterDialog = mutableStateOf(false)
     
-    // 调试模式开关 - 显示/隐藏插件日志
-    val showPluginLogs = mutableStateOf(false)
+    // 调试模式开关 - 显示/隐藏插件日志（默认显示）
+    val showPluginLogs = mutableStateOf(true)
     
-    // 调试模式开关 - 显示/隐藏朗读规则日志
-    val showSpeechRuleLogs = mutableStateOf(false)
+    // 调试模式开关 - 显示/隐藏朗读规则日志（默认显示）
+    val showSpeechRuleLogs = mutableStateOf(true)
     
     val filteredLogs: List<LogEntry>
         get() {
