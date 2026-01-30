@@ -2,43 +2,23 @@
 -keepattributes Exceptions,InnerClasses,Signature
 
 # ============================================
-# 核心数据模型保护 - 兼容 Release 和 Dev 双版本
+# 核心数据模型保护 - 兼容 Release 和 Dev 双版本（优化版）
 # ============================================
 
-# 保留所有 com.github.jing332 包下的类（覆盖 Release 和 Dev 变体）
--keep class com.github.jing332.** { *; }
+# 只保护数据库实体类（Room/Gson 必需）
+-keep class com.github.jing332.database.entities.** { *; }
+-keep class com.github.jing332.database.entities.plugin.** { *; }
+-keep class com.github.jing332.database.entities.systts.** { *; }
 
-# 专门保护数据/实体类
--keep class com.github.jing332.**.data.** { *; }
--keep class com.github.jing332.**.model.** { *; }
--keep class com.github.jing332.**.bean.** { *; }
--keep class com.github.jing332.**.entity.** { *; }
--keep class com.github.jing332.**.dto.** { *; }
--keep class com.github.jing332.**.vo.** { *; }
-
-# 保留 Config/Plugin 相关类（反射调用）
--keep class **Config { *; }
--keep class **Plugin { *; }
--keep class *Config$$serializer { *; }
--keep class *Plugin$$serializer { *; }
-
-# 保留 Serializable 实现类
--keep class * implements java.io.Serializable { *; }
-
-# 保留 Parcelable 实现类
+# 保留 Parcelable 实现类（跨进程通信）
 -keep class * implements android.os.Parcelable { *; }
 
-# 保留枚举类
--keepclassmembers enum com.github.jing332.** { *; }
-
-# 保留泛型签名（Gson 必需）
+# 保留泛型签名（Gson/序列化必需）
 -keepattributes Signature
 -keepattributes *Annotation*
--keepattributes RuntimeVisibleAnnotations
--keepattributes RuntimeInvisibleAnnotations
 
 # Gson 序列化支持
--keepclassmembers class com.github.jing332.** {
+-keepclassmembers class com.github.jing332.database.entities.** {
     <init>(...);
     @com.google.gson.annotations.SerializedName <fields>;
 }
