@@ -1,6 +1,48 @@
 -keepattributes SourceFile,LineNumberTable
 -keepattributes Exceptions,InnerClasses,Signature
 
+# ============================================
+# 核心数据模型保护 - 兼容 Release 和 Dev 双版本
+# ============================================
+
+# 保留所有 com.github.jing332 包下的类（覆盖 Release 和 Dev 变体）
+-keep class com.github.jing332.** { *; }
+
+# 专门保护数据/实体类
+-keep class com.github.jing332.**.data.** { *; }
+-keep class com.github.jing332.**.model.** { *; }
+-keep class com.github.jing332.**.bean.** { *; }
+-keep class com.github.jing332.**.entity.** { *; }
+-keep class com.github.jing332.**.dto.** { *; }
+-keep class com.github.jing332.**.vo.** { *; }
+
+# 保留 Config/Plugin 相关类（反射调用）
+-keep class **Config { *; }
+-keep class **Plugin { *; }
+-keep class *Config$$serializer { *; }
+-keep class *Plugin$$serializer { *; }
+
+# 保留 Serializable 实现类
+-keep class * implements java.io.Serializable { *; }
+
+# 保留 Parcelable 实现类
+-keep class * implements android.os.Parcelable { *; }
+
+# 保留枚举类
+-keepclassmembers enum com.github.jing332.** { *; }
+
+# 保留泛型签名（Gson 必需）
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes RuntimeVisibleAnnotations
+-keepattributes RuntimeInvisibleAnnotations
+
+# Gson 序列化支持
+-keepclassmembers class com.github.jing332.** {
+    <init>(...);
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
 # Logger
 -keepclassmembers class ch.qos.logback.classic.pattern.* { <init>(); }
 -keep class ch.qos.logback.** { *; }
@@ -304,6 +346,11 @@
 -dontwarn org.eclipse.jetty.npn.NextProtoNego$ServerProvider
 -dontwarn org.eclipse.jetty.npn.NextProtoNego
 -dontwarn reactor.blockhound.integration.BlockHoundIntegration
+
+# Missing classes from R8
+-dontwarn coil3.PlatformContext
+-dontwarn java.lang.reflect.AnnotatedType
+-dontwarn kotlinx.coroutines.slf4j.MDCContext
 
 -dontwarn com.aayushatharva.brotli4j.Brotli4jLoader
 -dontwarn com.aayushatharva.brotli4j.decoder.DecoderJNI$Status
