@@ -41,7 +41,7 @@ fun PluginAudioParamsDialog(
             Column(modifier = Modifier.fillMaxWidth()) {
                 // 语速
                 FloatSlider(
-                    label = stringResource(id = R.string.label_speech_speed),
+                    label = "语速",
                     value = speed,
                     onValueChange = { speed = it },
                     valueRange = 0f..3f,
@@ -53,7 +53,7 @@ fun PluginAudioParamsDialog(
 
                 // 音量
                 FloatSlider(
-                    label = stringResource(id = R.string.label_speech_volume),
+                    label = "音量",
                     value = volume,
                     onValueChange = { volume = it },
                     valueRange = 0f..3f,
@@ -65,7 +65,7 @@ fun PluginAudioParamsDialog(
 
                 // 音调
                 FloatSlider(
-                    label = stringResource(id = R.string.label_speech_pitch),
+                    label = "音高",
                     value = pitch,
                     onValueChange = { pitch = it },
                     valueRange = 0f..3f,
