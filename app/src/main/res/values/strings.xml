@@ -428,9 +428,9 @@
     <string name="desc_expand_group">展开分组：%1$s</string>
     <string name="desc_collapse_group">折叠分组：%1$s</string>
     <string name="label_speech_rate">语速：%1$s</string>
-    <string name="label_speech_speed">语速：%1$s</string>
-    <string name="label_speech_volume">音量：%1$s</string>
-    <string name="label_speech_pitch">音高：%1$s</string>
+    <string name="label_speech_speed">语速</string>
+    <string name="label_speech_volume">音量</string>
+    <string name="label_speech_pitch">音高</string>
     <string name="systts_api_edge_okhttp">微软Edge  - Java (音频流)</string>
     <string name="confirm">确定</string>
     <string name="dynamic_color_not_support">动态主题需要 安卓12及以上版本</string>

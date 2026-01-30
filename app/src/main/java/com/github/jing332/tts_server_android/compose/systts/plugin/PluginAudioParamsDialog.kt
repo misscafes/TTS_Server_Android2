@@ -38,13 +38,6 @@ fun PluginAudioParamsDialog(
         title = { Text(stringResource(id = R.string.plugin_audio_params)) },
         text = {
             Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = stringResource(id = R.string.plugin_audio_params_desc),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-
                 // 语速
                 FloatSlider(
                     label = stringResource(id = R.string.label_speech_speed),
