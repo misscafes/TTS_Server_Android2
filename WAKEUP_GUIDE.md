@@ -230,6 +230,41 @@ OutlinedTextField(
 
 ---
 
+### 问题7: 日志上限自动清空 (2026-01-31)
+
+**需求：** 日志无单条限制，但满50万条自动清空防止内存溢出
+
+**修复文件：** `TtsLogViewModel.kt`
+
+**实现：**
+```kotlin
+companion object {
+    // 日志总上限，达到后自动清空
+    const val MAX_LOGS_BEFORE_CLEAR = 500000
+}
+
+fun addLog(entry: LogEntry) {
+    runOnUI {
+        // 达到上限时自动清空日志
+        if (logs.size >= MAX_LOGS_BEFORE_CLEAR) {
+            logs.clear()
+            logs.add(LogEntry(
+                level = LogLevel.WARN,
+                message = "日志达到上限，已自动清空"
+            ))
+        }
+        logs.add(entry)
+    }
+}
+```
+
+**特点：**
+- 日志持续追加，无单条类型限制
+- 达到50万条时自动清空并提示
+- 用户仍可手动清空
+
+---
+
 ## 🔨 构建流程
 
 ### 本地构建
@@ -244,7 +279,51 @@ OutlinedTextField(
 ./gradlew assembleAppRelease assembleDevRelease --build-cache --parallel
 ```
 
-### 云环境构建
+### 从零配置构建环境（Linux）
+
+#### 1. 安装 JDK 17
+```bash
+apt-get update && apt-get install -y openjdk-17-jdk wget unzip
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+```
+
+#### 2. 安装 Android SDK
+```bash
+mkdir -p /opt/android-sdk && cd /opt/android-sdk
+wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+unzip commandlinetools-linux-11076708_latest.zip
+mkdir -p cmdline-tools/latest
+mv cmdline-tools/* cmdline-tools/latest/ 2>/dev/null || true
+rm commandlinetools-linux-11076708_latest.zip
+
+export ANDROID_SDK_ROOT=/opt/android-sdk
+export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools
+```
+
+#### 3. 接受许可并安装组件
+```bash
+yes | sdkmanager --licenses
+sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+```
+
+#### 4. 配置签名（local.properties）
+```bash
+cat > /workspace/local.properties << 'EOF'
+KEY_PATH=/workspace/release.jks
+KEY_PASSWORD=Ktouls123456
+ALIAS_NAME=TTSServer
+ALIAS_PASSWORD=Ktouls123456
+EOF
+```
+
+#### 5. 执行构建
+```bash
+cd /workspace
+./gradlew clean app:assembleAppRelease app:assembleDevRelease --no-daemon
+```
+
+### 云环境构建（CNB）
 
 #### 1. 环境准备
 ```bash
@@ -263,8 +342,8 @@ yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 # 安装平台工具、平台、构建工具
 $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
   "platform-tools" \
-  "platforms;android-34" \
-  "build-tools;34.0.0"
+  "platforms;android-35" \
+  "build-tools;35.0.0"
 ```
 
 #### 3. 配置国内镜像（云环境）
@@ -278,7 +357,7 @@ cp gradle.properties.cnb gradle.properties
 #### 4. 执行构建
 ```bash
 # 清理并构建两个版本
-./gradlew clean assembleAppRelease assembleDevRelease --build-cache --parallel --daemon
+./gradlew clean app:assembleAppRelease app:assembleDevRelease --no-daemon
 ```
 
 ---
@@ -324,10 +403,13 @@ git push origin master
 ## ⚙️ 关键依赖版本
 
 - **Gradle:** 8.10.2
-- **Kotlin:** 1.9.24 / 2.1.10
-- **Android SDK:** API 34
-- **Build Tools:** 34.0.0
+- **Kotlin:** 2.1.10
+- **Android SDK:** API 35
+- **Build Tools:** 35.0.0
 - **Java:** OpenJDK 17
+- **Compile SDK:** 35
+- **Min SDK:** 21
+- **Target SDK:** 35
 
 ---
 
@@ -501,6 +583,7 @@ pkill -f gradlew; sleep 2
 
 | 日期 | 版本 | 内容 |
 |------|------|------|
+| 2026-01-31 | v1.4 | **更新构建环境** - 添加从零配置构建环境步骤，更新SDK版本为API 35，添加日志上限50万条自动清空功能 |
 | 2026-01-30 | v1.3 | **添加致命配置警告** - 强调gradle.properties中R8配置的重要性，避免编辑器崩溃 |
 | 2026-01-29 | v1.2 | 添加 AI 协作工作模式，记录音频参数修复和日志系统增强 |
 | 2026-01-29 | v1.1 | 添加 ProGuard 规则警告，记录新功能移植注意事项 |
