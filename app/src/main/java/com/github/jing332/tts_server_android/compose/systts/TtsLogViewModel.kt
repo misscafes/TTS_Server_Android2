@@ -22,10 +22,8 @@ class TtsLogViewModel : ViewModel() {
     companion object {
         const val TAG = "TtsLogViewModel"
 
-        // 每种日志类型独立限制 500 条
-        const val MAX_NORMAL_LOGS = 500      // 普通日志
-        const val MAX_PLUGIN_LOGS = 500      // 插件日志
-        const val MAX_SPEECH_RULE_LOGS = 500 // 朗读规则日志
+        // 日志总上限，达到后自动清空
+        const val MAX_LOGS_BEFORE_CLEAR = 5000
 
         // 支持的日志级别
         val LOG_LEVELS = listOf(
@@ -128,9 +126,17 @@ class TtsLogViewModel : ViewModel() {
             viewModelScope.launch(Dispatchers.IO) {
                 pull()
 
-                // 统一的日志添加函数，不限制日志条数
+                // 统一的日志添加函数，满5000条自动清空
                 fun addLog(entry: LogEntry) {
                     runOnUI {
+                        // 达到上限时自动清空日志
+                        if (logs.size >= MAX_LOGS_BEFORE_CLEAR) {
+                            logs.clear()
+                            logs.add(LogEntry(
+                                level = LogLevel.WARN,
+                                message = "日志达到${MAX_LOGS_BEFORE_CLEAR}条上限，已自动清空"
+                            ))
+                        }
                         logs.add(entry)
                     }
                 }
