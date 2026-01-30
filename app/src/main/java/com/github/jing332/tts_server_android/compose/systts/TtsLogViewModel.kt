@@ -127,53 +127,11 @@ class TtsLogViewModel : ViewModel() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
                 pull()
-                // 维护各类型日志数量
-                var normalLogCount = 0
-                var pluginLogCount = 0
-                var speechRuleLogCount = 0
 
-                // 统一的日志添加函数，每种类型独立限制 500 条
+                // 统一的日志添加函数，不限制日志条数
                 fun addLog(entry: LogEntry) {
                     runOnUI {
-                        when {
-                            entry.isPluginLog -> {
-                                if (pluginLogCount >= MAX_PLUGIN_LOGS) {
-                                    // 移除最旧的一条插件日志
-                                    val index = logs.indexOfFirst { it.isPluginLog }
-                                    if (index >= 0) {
-                                        logs.removeAt(index)
-                                        pluginLogCount--
-                                    }
-                                }
-                                logs.add(entry)
-                                pluginLogCount++
-                            }
-                            entry.isSpeechRuleLog -> {
-                                if (speechRuleLogCount >= MAX_SPEECH_RULE_LOGS) {
-                                    // 移除最旧的一条朗读规则日志
-                                    val index = logs.indexOfFirst { it.isSpeechRuleLog }
-                                    if (index >= 0) {
-                                        logs.removeAt(index)
-                                        speechRuleLogCount--
-                                    }
-                                }
-                                logs.add(entry)
-                                speechRuleLogCount++
-                            }
-                            else -> {
-                                // 普通日志
-                                if (normalLogCount >= MAX_NORMAL_LOGS) {
-                                    // 移除最旧的一条普通日志
-                                    val index = logs.indexOfFirst { !it.isPluginLog && !it.isSpeechRuleLog }
-                                    if (index >= 0) {
-                                        logs.removeAt(index)
-                                        normalLogCount--
-                                    }
-                                }
-                                logs.add(entry)
-                                normalLogCount++
-                            }
-                        }
+                        logs.add(entry)
                     }
                 }
 
@@ -200,10 +158,6 @@ class TtsLogViewModel : ViewModel() {
     fun add(line: String) {
         try {
             val logEntry = toLogEntry(line)
-            // 从历史文件加载的日志，总数量限制 1500 条（3种各500）
-            if (logs.size >= 1500) {
-                logs.removeAt(0)
-            }
             logs.add(logEntry)
         } catch (e: Exception) {
             Log.e(TAG, "add: ", e)
