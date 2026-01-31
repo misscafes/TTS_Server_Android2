@@ -322,15 +322,10 @@ internal fun ListManagerScreen(
                         }
                     } else {
                         IconButton(onClick = {
-                            // 显示重启提示
+                            // 停止并重启TTS服务，重新初始化配置
+                            SystemTtsService.restartService(context)
+                            // 显示服务已重启提示
                             context.toast(R.string.restarted)
-                            // 首页单独实现重启，确保能自动跳转
-                            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-                            intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                            context.startActivity(intent)
-                            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
-                                android.os.Process.killProcess(android.os.Process.myPid())
-                            }, 100)
                         }) {
                             Icon(Icons.Default.Refresh, stringResource(id = R.string.restart))
                         }
