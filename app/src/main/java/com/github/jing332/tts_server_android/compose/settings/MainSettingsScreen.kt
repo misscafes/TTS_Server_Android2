@@ -2,6 +2,12 @@ package com.github.jing332.tts_server_android.compose.settings
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -63,10 +69,14 @@ fun SettingsScreen() {
 
     // 后台保活设置页面
     var showKeepAliveSettings by remember { mutableStateOf(false) }
-    if (showKeepAliveSettings) {
+    AnimatedVisibility(
+        visible = showKeepAliveSettings,
+        enter = fadeIn(animationSpec = tween(300)) + slideInHorizontally(animationSpec = tween(300)) { it },
+        exit = fadeOut(animationSpec = tween(300)) + slideOutHorizontally(animationSpec = tween(300)) { it }
+    ) {
         KeepAliveSettingsScreen(onNavigateBack = { showKeepAliveSettings = false })
-        return
     }
+    if (showKeepAliveSettings) return
 
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
