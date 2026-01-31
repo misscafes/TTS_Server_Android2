@@ -69,6 +69,7 @@ import com.github.jing332.tts_server_android.compose.LocalNavController
 import com.github.jing332.tts_server_android.compose.SharedViewModel
 import com.github.jing332.tts_server_android.compose.systts.ConfigDeleteDialog
 import com.github.jing332.tts_server_android.constant.AppConst
+import com.github.jing332.tts_server_android.service.systts.SystemTtsService
 import com.github.jing332.tts_server_android.utils.MyTools
 import kotlinx.coroutines.flow.conflate
 import kotlinx.serialization.encodeToString
@@ -134,6 +135,8 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
             onDismissRequest = { showAudioParamsDialog = null },
             onConfirm = { newParams ->
                 dbm.pluginDao.update(plugin.copy(audioParams = newParams))
+                // 通知服务更新配置，使插件音频参数立即生效
+                SystemTtsService.notifyUpdateConfig()
                 showAudioParamsDialog = null
                 context.longToast(R.string.plugin_audio_params_saved)
             }
