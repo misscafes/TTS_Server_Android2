@@ -81,6 +81,7 @@ import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.SpeechTarget
 import com.github.jing332.tts_server_android.model.rhino.speech_rule.SpeechRuleEngine
 import com.github.jing332.tts_server_android.service.systts.SystemTtsService
+import android.content.Intent
 import com.github.jing332.tts_server_android.toCode
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
 import kotlinx.coroutines.launch
@@ -323,8 +324,13 @@ internal fun ListManagerScreen(
                         IconButton(onClick = {
                             // 显示重启提示
                             context.toast(R.string.restarted)
-                            // 使用与导入备份后相同的重启方式
-                            com.github.jing332.tts_server_android.app.restart()
+                            // 首页单独实现重启，确保能自动跳转
+                            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+                            intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(intent)
+                            android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+                                android.os.Process.killProcess(android.os.Process.myPid())
+                            }, 100)
                         }) {
                             Icon(Icons.Default.Refresh, stringResource(id = R.string.restart))
                         }
