@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -319,6 +320,13 @@ internal fun ListManagerScreen(
                             Icon(Icons.Default.Close, stringResource(id = R.string.close))
                         }
                     } else {
+                        IconButton(onClick = {
+                            // 强制重启 TTS 服务
+                            SystemTtsService.restartService(context)
+                            context.toast(R.string.restarted)
+                        }) {
+                            Icon(Icons.Default.Refresh, stringResource(id = R.string.restart))
+                        }
                         IconButton(onClick = { isSearchMode = true }) {
                             Icon(Icons.Default.Search, stringResource(id = R.string.search))
                         }

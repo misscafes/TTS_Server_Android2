@@ -30,11 +30,19 @@ class DefaultTtsRequester(
             }
         }
 
+        // 合并 TtsConfiguration.audioParams 到 SystemParams
+        // 确保 TtsRepository 中计算的最终音频参数被使用
+        val mergedParams = params.copy(
+            speed = tts.audioParams.speed,
+            volume = tts.audioParams.volume,
+            pitch = tts.audioParams.pitch
+        )
+
         return if (engine.isSyncPlay(tts.source)) {
             Ok(
                 ITtsRequester.Response(
                     callback = ITtsRequester.ISyncPlayCallback {
-                        engine.syncPlay(params, tts.source)
+                        engine.syncPlay(mergedParams, tts.source)
                     }
                 )
             )
@@ -45,7 +53,7 @@ class DefaultTtsRequester(
                 val timeout = (context.cfg.requestTimeout() ?: 300000).toLong()
                 withTimeout(timeout) {
                     Ok(
-                        ITtsRequester.Response(stream = engine.getStream(params, tts.source))
+                        ITtsRequester.Response(stream = engine.getStream(mergedParams, tts.source))
                     )
                 }
             } catch (e: CancellationException) {

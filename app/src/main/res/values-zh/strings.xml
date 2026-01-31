@@ -358,6 +358,7 @@
     <string name="backup">备份</string>
     <string name="preference_settings">偏好设置</string>
     <string name="restart">重启</string>
+    <string name="restarted">服务已重启</string>
     <string name="restore_finished">恢复已完成</string>
     <string name="restore_restart_msg">偏好设置需要重启程序才可生效</string>
     <string name="restore">恢复</string>

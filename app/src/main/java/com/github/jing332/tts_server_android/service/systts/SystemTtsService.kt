@@ -104,6 +104,14 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
             else
                 AppConst.localBroadcast.sendBroadcast(Intent(ACTION_UPDATE_CONFIG))
         }
+
+        /**
+         * 强制重启服务
+         */
+        fun restartService(context: Context) {
+            // 发送广播通知服务重新初始化
+            AppConst.localBroadcast.sendBroadcast(Intent(ACTION_UPDATE_CONFIG))
+        }
     }
 
     private val mCurrentLanguage: MutableList<String> = mutableListOf("zho", "CHN", "")
