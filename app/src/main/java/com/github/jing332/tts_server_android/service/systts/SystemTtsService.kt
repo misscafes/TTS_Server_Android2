@@ -106,11 +106,15 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
         }
 
         /**
-         * 强制重启服务
+         * 强制重启服务：停止所有服务并重新启动
          */
         fun restartService(context: Context) {
-            // 发送广播通知服务重新初始化
-            AppConst.localBroadcast.sendBroadcast(Intent(ACTION_UPDATE_CONFIG))
+            // 停止转发器服务
+            context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
+            // 停止TTS服务
+            context.stopService(Intent(context, SystemTtsService::class.java))
+            // 重新启动TTS服务
+            context.startService(Intent(context, SystemTtsService::class.java))
         }
     }
 
