@@ -496,6 +496,7 @@
     <string name="keep_alive_settings_summary">配置多种机制防止应用被系统杀死</string>
     <string name="enable_keep_alive">启用后台保活</string>
     <string name="enable_keep_alive_summary">开启独立保活服务，增强后台稳定性（会增加少量电量消耗）</string>
+    <string name="keep_alive_merged_with_forwarder">转发器运行中，保活已合并到转发器通知</string>
 
     <string name="keep_alive_audio_focus">音频焦点保活</string>
     <string name="keep_alive_audio_focus_summary">息屏时请求音频焦点保持活跃（推荐）</string>

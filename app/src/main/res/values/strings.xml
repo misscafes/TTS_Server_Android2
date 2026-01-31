@@ -545,6 +545,7 @@
     <string name="keep_alive_settings_summary">Configure multiple mechanisms to prevent app from being killed</string>
     <string name="enable_keep_alive">Enable Keep Alive</string>
     <string name="enable_keep_alive_summary">Enable independent keep alive service to enhance background stability (will increase battery consumption)</string>
+    <string name="keep_alive_merged_with_forwarder">Forwarder is running, keep alive merged into forwarder notification</string>
     <string name="keep_alive_audio_focus">Audio Focus Keep Alive</string>
     <string name="keep_alive_audio_focus_summary">Request audio focus when screen off to keep active (recommended)</string>
     <string name="keep_alive_silent_audio">Silent Audio Keep Alive</string>

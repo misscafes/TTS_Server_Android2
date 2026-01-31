@@ -1,6 +1,7 @@
 package com.github.jing332.tts_server_android.compose.settings
 
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -37,6 +38,7 @@ import com.github.jing332.common.utils.longToast
 import com.github.jing332.common.utils.toast
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.conf.SystemTtsConfig
+import com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService
 import com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService
 import com.github.jing332.tts_server_android.service.keepalive.KeepAliveService
 import com.github.jing332.tts_server_android.utils.BackgroundWhitelistUtils
@@ -57,6 +59,11 @@ fun KeepAliveSettingsScreen(
 
     // 厂商白名单引导对话框状态
     var showManufacturerWhitelistDialog by remember { mutableStateOf(false) }
+
+    // 处理系统返回键
+    BackHandler(enabled = true) {
+        onNavigateBack()
+    }
 
     // 保活配置状态
     var isKeepAliveEnabled by remember { SystemTtsConfig.isKeepAliveEnabled }
@@ -117,14 +124,25 @@ fun KeepAliveSettingsScreen(
             DividerPreference { Text(stringResource(R.string.keep_alive_settings)) }
 
             // 启用后台保活
+            val isForwarderRunning = SysTtsForwarderService.isRunning
             SwitchPreference(
                 title = { Text(stringResource(R.string.enable_keep_alive)) },
-                subTitle = { Text(stringResource(R.string.enable_keep_alive_summary)) },
+                subTitle = {
+                    Text(
+                        if (isForwarderRunning)
+                            stringResource(R.string.keep_alive_merged_with_forwarder)
+                        else
+                            stringResource(R.string.enable_keep_alive_summary)
+                    )
+                },
                 checked = isKeepAliveEnabled,
                 onCheckedChange = { enabled ->
                     isKeepAliveEnabled = enabled
                     if (enabled) {
-                        KeepAliveService.start(context)
+                        // 如果转发器未运行，启动独立保活服务
+                        if (!isForwarderRunning) {
+                            KeepAliveService.start(context)
+                        }
                         KeepAliveJobService.schedule(context)
                         context.longToast(R.string.keep_alive_service_title)
                     } else {
