@@ -328,16 +328,28 @@ class KeepAliveSettingsActivity : ComposeActivity() {
 
         // 像素保活
         var isPixelEnabled by remember { SystemTtsConfig.isPixelKeepAliveEnabled }
+        val canDrawOverlays = remember { PixelKeepAliveService.canDrawOverlays(context) }
         SwitchPreference(
             title = { Text(stringResource(R.string.pixel_keep_alive)) },
-            subTitle = { Text(stringResource(R.string.pixel_keep_alive_summary)) },
-            checked = isPixelEnabled,
+            subTitle = {
+                Text(
+                    if (canDrawOverlays)
+                        stringResource(R.string.pixel_keep_alive_summary)
+                    else
+                        "需要悬浮窗权限，点击前往开启"
+                )
+            },
+            checked = isPixelEnabled && canDrawOverlays,
             onCheckedChange = { enabled ->
-                isPixelEnabled = enabled
-                if (enabled) {
+                if (enabled && !canDrawOverlays) {
                     PixelKeepAliveService.start(context)
                 } else {
-                    PixelKeepAliveService.stop(context)
+                    isPixelEnabled = enabled
+                    if (enabled) {
+                        PixelKeepAliveService.start(context)
+                    } else {
+                        PixelKeepAliveService.stop(context)
+                    }
                 }
             },
             icon = { Icon(Icons.Default.PowerSettingsNew, null) }

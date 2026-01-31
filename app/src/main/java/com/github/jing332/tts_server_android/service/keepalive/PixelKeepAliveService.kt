@@ -24,7 +24,26 @@ class PixelKeepAliveService : Service() {
             return instance != null
         }
 
+        fun canDrawOverlays(context: Context): Boolean {
+            return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                android.provider.Settings.canDrawOverlays(context)
+            } else {
+                true
+            }
+        }
+
         fun start(context: Context) {
+            if (!canDrawOverlays(context)) {
+                context.toast("请先授予悬浮窗权限")
+                // 跳转到权限设置
+                val intent = Intent(
+                    android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    android.net.Uri.parse("package:${context.packageName}")
+                )
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+                return
+            }
             val intent = Intent(context, PixelKeepAliveService::class.java)
             context.startService(intent)
         }

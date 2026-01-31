@@ -113435,8 +113435,6 @@ com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$Keep
 com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-35$1:
     public final void invoke(androidx.compose.runtime.Composer,int)
 com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-36$1:
-    public final void invoke(androidx.compose.runtime.Composer,int)
-com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-37$1:
     public final void invoke$123()
 com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-4$1:
     public final void invoke(androidx.compose.runtime.Composer,int)
@@ -113481,8 +113479,7 @@ com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$Keep
     public static kotlin.jvm.functions.Function2 getLambda-33$app_devRelease()
     public static kotlin.jvm.functions.Function2 getLambda-34$app_devRelease()
     public static kotlin.jvm.functions.Function2 getLambda-35$app_devRelease()
-    public static kotlin.jvm.functions.Function2 getLambda-36$app_devRelease()
-    public static kotlin.jvm.functions.Function3 getLambda-37$app_devRelease()
+    public static kotlin.jvm.functions.Function3 getLambda-36$app_devRelease()
     public static kotlin.jvm.functions.Function2 getLambda-4$app_devRelease()
     public static kotlin.jvm.functions.Function2 getLambda-5$app_devRelease()
     public static kotlin.jvm.functions.Function2 getLambda-6$app_devRelease()
@@ -113771,6 +113768,8 @@ com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity
 com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$AdvancedKeepAliveOptions$2:
     public final void invoke(androidx.compose.runtime.Composer,int)
 com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$AdvancedKeepAliveOptions$4:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$AdvancedKeepAliveOptions$7:
     public final void invoke(androidx.compose.runtime.Composer,int)
 com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveHelpContent$2$1:
     public final void invoke(androidx.compose.runtime.Composer,int)
@@ -116677,7 +116676,6 @@ com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService:
     public static final com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService$Companion Companion
     public static com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService instance
     static void <clinit>()
-    public final void requestNetwork()
     public static void startNetworkKeepAlive()
     public static void stopNetworkKeepAlive()
 com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService$Companion
@@ -116685,7 +116683,9 @@ com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveSer
     public static final com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService$Companion Companion
     public static boolean isRunning
     static void <clinit>()
-com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService$Companion
+com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService$Companion:
+    public static boolean canDrawOverlays(android.content.Context)
+    public static void stop()
 com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService:
     public static final int $stable
     public static final com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService$Companion Companion

@@ -72,7 +72,7 @@ class NetworkKeepAliveService : Service() {
             acquire(30 * 60 * 1000L) // 30分钟
         }
 
-        // 注册网络回调以保持网络连接活跃
+        // 注册网络回调以保持网络连接活跃（不需要特殊权限）
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
@@ -82,28 +82,22 @@ class NetworkKeepAliveService : Service() {
         networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-                // 网络可用时绑定到该网络
-                connectivityManager?.bindProcessToNetwork(network)
+                // 只监听网络状态，不绑定进程（需要CHANGE_NETWORK_STATE权限）
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
-                // 网络丢失时重新请求网络
-                requestNetwork()
+                // 网络丢失时只记录，不主动请求（避免权限问题）
             }
         }
 
-        connectivityManager?.registerNetworkCallback(networkRequest, networkCallback!!)
-        requestNetwork()
-
-        toast(R.string.network_keep_alive_started)
-    }
-
-    private fun requestNetwork() {
-        val networkRequest = NetworkRequest.Builder()
-            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .build()
-        connectivityManager?.requestNetwork(networkRequest, networkCallback!!)
+        try {
+            connectivityManager?.registerNetworkCallback(networkRequest, networkCallback!!)
+            toast(R.string.network_keep_alive_started)
+        } catch (e: Exception) {
+            toast("网络保活启动失败: ${e.message}")
+            stopSelf()
+        }
     }
 
     private fun stopNetworkKeepAlive() {
