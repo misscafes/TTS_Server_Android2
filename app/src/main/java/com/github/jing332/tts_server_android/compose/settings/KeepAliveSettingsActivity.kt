@@ -1,5 +1,6 @@
 package com.github.jing332.tts_server_android.compose.settings
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -14,13 +15,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import android.provider.Settings
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Help
+import androidx.compose.material.icons.filled.Accessibility
+import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.BatteryChargingFull
 import androidx.compose.material.icons.filled.MobileFriendly
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.SurroundSound
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,8 +51,13 @@ import com.github.jing332.tts_server_android.compose.ComposeActivity
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
 import com.github.jing332.tts_server_android.conf.SystemTtsConfig
 import com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService
+import com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService
+import com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver
 import com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService
 import com.github.jing332.tts_server_android.service.keepalive.KeepAliveService
+import com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService
+import com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService
+import com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService
 import com.github.jing332.tts_server_android.utils.BackgroundWhitelistUtils
 import com.github.jing332.tts_server_android.utils.MyTools.isIgnoringBatteryOptimizations
 import com.github.jing332.tts_server_android.utils.MyTools.killBattery
@@ -84,8 +93,6 @@ class KeepAliveSettingsActivity : ComposeActivity() {
 
         // 保活配置状态
         var isKeepAliveEnabled by remember { SystemTtsConfig.isKeepAliveEnabled }
-        var isAudioFocusEnabled by remember { SystemTtsConfig.isKeepAliveAudioFocusEnabled }
-        var isSilentAudioEnabled by remember { SystemTtsConfig.isKeepAliveSilentAudioEnabled }
         var isAutoStartEnabled by remember { SystemTtsConfig.isAutoStartEnabled }
 
         // 显示帮助详情页面
@@ -177,24 +184,6 @@ class KeepAliveSettingsActivity : ComposeActivity() {
                     icon = { Icon(Icons.Default.PowerSettingsNew, null) }
                 )
 
-                // 音频焦点保活
-                SwitchPreference(
-                    title = { Text(stringResource(R.string.keep_alive_audio_focus)) },
-                    subTitle = { Text(stringResource(R.string.keep_alive_audio_focus_summary)) },
-                    checked = isAudioFocusEnabled,
-                    onCheckedChange = { isAudioFocusEnabled = it },
-                    icon = { Icon(Icons.Default.SurroundSound, null) }
-                )
-
-                // 静音音频保活
-                SwitchPreference(
-                    title = { Text(stringResource(R.string.keep_alive_silent_audio)) },
-                    subTitle = { Text(stringResource(R.string.keep_alive_silent_audio_summary)) },
-                    checked = isSilentAudioEnabled,
-                    onCheckedChange = { isSilentAudioEnabled = it },
-                    icon = { Icon(Icons.Default.SurroundSound, null) }
-                )
-
                 // 开机自启动
                 SwitchPreference(
                     title = { Text(stringResource(R.string.enable_auto_start)) },
@@ -203,6 +192,11 @@ class KeepAliveSettingsActivity : ComposeActivity() {
                     onCheckedChange = { isAutoStartEnabled = it },
                     icon = { Icon(Icons.Default.Refresh, null) }
                 )
+
+                DividerPreference { Text(stringResource(R.string.advanced_keep_alive)) }
+
+                // 高级保活选项
+                AdvancedKeepAliveOptions()
 
                 DividerPreference { Text(stringResource(R.string.help)) }
 
@@ -246,6 +240,108 @@ class KeepAliveSettingsActivity : ComposeActivity() {
                 }
             )
         }
+    }
+
+    @Composable
+    private fun AdvancedKeepAliveOptions() {
+        val context = LocalContext.current
+
+        var isAccessibilityEnabled by remember { SystemTtsConfig.isAccessibilityKeepAliveEnabled }
+        var isNotificationEnabled by remember { SystemTtsConfig.isNotificationKeepAliveEnabled }
+        var isAlarmEnabled by remember { SystemTtsConfig.isAlarmKeepAliveEnabled }
+
+        // 检查实际运行状态
+        val isAccessibilityRunning = remember { AccessibilityKeepAliveService.isEnabled(context) }
+        val isNotificationRunning = remember { NotificationKeepAliveService.isEnabled(context) }
+
+        // 无障碍保活
+        BasePreferenceWidget(
+            onClick = {
+                if (!isAccessibilityRunning) {
+                    val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+                    context.startActivity(intent)
+                }
+            },
+            title = { Text(stringResource(R.string.accessibility_keep_alive)) },
+            subTitle = {
+                Text(
+                    if (isAccessibilityRunning)
+                        stringResource(R.string.already_enabled)
+                    else
+                        stringResource(R.string.click_to_enable)
+                )
+            },
+            icon = { Icon(Icons.Default.Accessibility, null) }
+        )
+
+        // 通知监听保活
+        BasePreferenceWidget(
+            onClick = {
+                if (!isNotificationRunning) {
+                    NotificationKeepAliveService.openSettings(context)
+                }
+            },
+            title = { Text(stringResource(R.string.notification_keep_alive)) },
+            subTitle = {
+                Text(
+                    if (isNotificationRunning)
+                        stringResource(R.string.already_enabled)
+                    else
+                        stringResource(R.string.click_to_enable)
+                )
+            },
+            icon = { Icon(Icons.Default.Notifications, null) }
+        )
+
+        // 定时唤醒保活
+        SwitchPreference(
+            title = { Text(stringResource(R.string.alarm_keep_alive)) },
+            subTitle = { Text(stringResource(R.string.alarm_keep_alive_summary)) },
+            checked = isAlarmEnabled,
+            onCheckedChange = { enabled ->
+                isAlarmEnabled = enabled
+                if (enabled) {
+                    AlarmKeepAliveReceiver.schedule(context)
+                } else {
+                    AlarmKeepAliveReceiver.cancel(context)
+                }
+            },
+            icon = { Icon(Icons.Default.Alarm, null) }
+        )
+
+        // 网络连接保活
+        var isNetworkEnabled by remember { SystemTtsConfig.isNetworkKeepAliveEnabled }
+        SwitchPreference(
+            title = { Text(stringResource(R.string.network_keep_alive)) },
+            subTitle = { Text(stringResource(R.string.network_keep_alive_summary)) },
+            checked = isNetworkEnabled,
+            onCheckedChange = { enabled ->
+                isNetworkEnabled = enabled
+                if (enabled) {
+                    NetworkKeepAliveService.start(context)
+                } else {
+                    NetworkKeepAliveService.stop(context)
+                }
+            },
+            icon = { Icon(Icons.Default.MobileFriendly, null) }
+        )
+
+        // 像素保活
+        var isPixelEnabled by remember { SystemTtsConfig.isPixelKeepAliveEnabled }
+        SwitchPreference(
+            title = { Text(stringResource(R.string.pixel_keep_alive)) },
+            subTitle = { Text(stringResource(R.string.pixel_keep_alive_summary)) },
+            checked = isPixelEnabled,
+            onCheckedChange = { enabled ->
+                isPixelEnabled = enabled
+                if (enabled) {
+                    PixelKeepAliveService.start(context)
+                } else {
+                    PixelKeepAliveService.stop(context)
+                }
+            },
+            icon = { Icon(Icons.Default.PowerSettingsNew, null) }
+        )
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

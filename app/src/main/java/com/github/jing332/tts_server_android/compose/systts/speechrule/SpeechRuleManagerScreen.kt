@@ -287,7 +287,7 @@ internal fun Item(
                                     onExport()
                                 },
                                 leadingIcon = {
-                                    Icon(Icons.Default.Output, null)
+                                    Icon(Icons.Default.Output, stringResource(R.string.export_config))
                                 }
                             )
 
@@ -307,7 +307,7 @@ internal fun Item(
                                 leadingIcon = {
                                     Icon(
                                         Icons.Default.DeleteForever,
-                                        null,
+                                        stringResource(R.string.delete),
                                         tint = MaterialTheme.colorScheme.error
                                     )
                                 }

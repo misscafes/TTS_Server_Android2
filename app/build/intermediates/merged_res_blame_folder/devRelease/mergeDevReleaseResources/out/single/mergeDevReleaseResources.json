@@ -2280,6 +2280,10 @@
         "source": "com.github.jing332.tts_server_android.app-appcompat-1.7.0-27:/drawable-xhdpi-v4/abc_textfield_activated_mtrl_alpha.9.png"
     },
     {
+        "merged": "com.github.jing332.tts_server_android.app-devRelease-82:/xml_accessibility_service_config.xml.flat",
+        "source": "com.github.jing332.tts_server_android.app-main-85:/xml/accessibility_service_config.xml"
+    },
+    {
         "merged": "com.github.jing332.tts_server_android.app-devRelease-82:/drawable-hdpi-v4_abc_textfield_activated_mtrl_alpha.9.png.flat",
         "source": "com.github.jing332.tts_server_android.app-appcompat-1.7.0-27:/drawable-hdpi-v4/abc_textfield_activated_mtrl_alpha.9.png"
     },

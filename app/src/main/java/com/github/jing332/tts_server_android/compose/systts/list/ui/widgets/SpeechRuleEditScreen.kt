@@ -150,7 +150,7 @@ fun SpeechRuleEditScreen(
             ) {
                 TextButton(onClick = { showParamsDialog = true }) {
                     Row {
-                        Icon(Icons.Default.Speed, null)
+                        Icon(Icons.Default.Speed, stringResource(R.string.audio_params))
                         Text(stringResource(id = R.string.audio_params))
                     }
                 }
@@ -225,7 +225,7 @@ fun SpeechRuleEditScreen(
                             showTagClearDialog = true
                     },
                     shape = SegmentedButtonDefaults.itemShape(0, 2),
-                    icon = { Icon(Icons.Default.SelectAll, null) },
+                    icon = { Icon(Icons.Default.SelectAll, stringResource(R.string.ra_all)) },
                 ) {
                     Text(stringResource(id = R.string.ra_all), maxLines = 1)
                 }
@@ -248,7 +248,7 @@ fun SpeechRuleEditScreen(
                     icon = {
                         Icon(
                             Icons.Default.Tag,
-                            null,
+                            stringResource(R.string.tag),
                             modifier = Modifier.padding(start = 10.dp)
                         )
                     },

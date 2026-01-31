@@ -167,7 +167,7 @@ internal fun ReplaceRuleManagerScreen(
                                         navigateToEdit()
                                     },
                                     leadingIcon = {
-                                        Icon(Icons.AutoMirrored.Filled.PlaylistAdd, null)
+                                        Icon(Icons.AutoMirrored.Filled.PlaylistAdd, stringResource(R.string.add_config))
                                     }
                                 )
                                 DropdownMenuItem(
@@ -177,7 +177,7 @@ internal fun ReplaceRuleManagerScreen(
                                         showAddGroupDialog = true
                                     },
                                     leadingIcon = {
-                                        Icon(Icons.Default.AddCard, null)
+                                        Icon(Icons.Default.AddCard, stringResource(R.string.add_group))
                                     }
                                 )
                             }

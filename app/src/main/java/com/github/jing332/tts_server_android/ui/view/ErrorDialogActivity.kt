@@ -123,7 +123,7 @@ class ErrorDialogActivity : ComposeActivity() {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 Icons.Default.Error,
-                                contentDescription = null,
+                                contentDescription = stringResource(R.string.error),
                                 tint = MaterialTheme.colorScheme.error
                             )
                             Spacer(modifier = Modifier.width(8.dp))

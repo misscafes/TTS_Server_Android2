@@ -259,7 +259,7 @@ internal fun Item(
                                 onCopy()
                             },
                             leadingIcon = {
-                                Icon(Icons.Default.CopyAll, null)
+                                Icon(Icons.Default.CopyAll, stringResource(R.string.copy))
                             }
                         )
                         DropdownMenuItem(
@@ -269,7 +269,7 @@ internal fun Item(
                                 onExport()
                             },
                             leadingIcon = {
-                                Icon(Icons.Default.Output, null)
+                                Icon(Icons.Default.Output, stringResource(R.string.export_config))
                             }
                         )
                         HorizontalDivider()

@@ -204,7 +204,7 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                                     trailingIcon = {
                                         Icon(
                                             Icons.Default.Clear,
-                                            contentDescription = null,
+                                            contentDescription = stringResource(R.string.clear),
                                             modifier = Modifier.height(16.dp).width(16.dp)
                                         )
                                     },

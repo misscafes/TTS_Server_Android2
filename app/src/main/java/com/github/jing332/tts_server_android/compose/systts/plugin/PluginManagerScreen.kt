@@ -189,7 +189,7 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
                                     showImportConfig = true
                                 },
                                 leadingIcon = {
-                                    Icon(Icons.AutoMirrored.Filled.Input, null)
+                                    Icon(Icons.AutoMirrored.Filled.Input, stringResource(R.string.import_config))
                                 }
                             )
                             DropdownMenuItem(
@@ -199,7 +199,7 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
                                     showExportConfig = dbm.pluginDao.allEnabled
                                 },
                                 leadingIcon = {
-                                    Icon(Icons.Default.Output, null)
+                                    Icon(Icons.Default.Output, stringResource(R.string.export_config))
                                 }
                             )
                             DropdownMenuItem(
@@ -387,7 +387,7 @@ private fun Item(
                                         onSetVars()
                                     },
                                     leadingIcon = {
-                                        Icon(Icons.Default.EditNote, null)
+                                        Icon(Icons.Default.EditNote, stringResource(R.string.plugin_set_vars))
                                     }
                                 )
 
@@ -400,7 +400,7 @@ private fun Item(
                                     onExport()
                                 },
                                 leadingIcon = {
-                                    Icon(Icons.Default.Output, null)
+                                    Icon(Icons.Default.Output, stringResource(R.string.export_config))
                                 }
                             )
 
@@ -412,7 +412,7 @@ private fun Item(
                                     onAudioParams()
                                 },
                                 leadingIcon = {
-                                    Icon(Icons.Default.VolumeUp, null)
+                                    Icon(Icons.Default.VolumeUp, stringResource(R.string.plugin_audio_params))
                                 }
                             )
 
@@ -425,7 +425,7 @@ private fun Item(
                                     onClear()
                                 },
                                 leadingIcon = {
-                                    Icon(Icons.Default.CleaningServices, null)
+                                    Icon(Icons.Default.CleaningServices, stringResource(R.string.clear_cache))
                                 }
                             )
 
@@ -443,7 +443,7 @@ private fun Item(
                                 leadingIcon = {
                                     Icon(
                                         Icons.Default.DeleteForever,
-                                        null,
+                                        stringResource(R.string.delete),
                                         tint = MaterialTheme.colorScheme.error
                                     )
                                 }

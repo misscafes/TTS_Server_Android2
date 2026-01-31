@@ -70,6 +70,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="white">#FFFFFFFF</color>
     <string name="about">关于</string>
+    <string name="accessibility_keep_alive">Accessibility Keep Alive</string>
+    <string name="accessibility_keep_alive_summary">Use accessibility service for high priority keep alive (manual enable required)</string>
     <string name="account">账号</string>
     <string name="add_bgm_tip">请添加文件/文件夹以作为BGM使用</string>
     <string name="add_bgm_tts">添加背景音乐</string>
@@ -81,7 +83,11 @@
     <string name="add_local_tts">添加本地TTS</string>
     <string name="add_shortcut_if_fail_tips">如果失败，请授予【添加快捷方式权限】</string>
     <string name="added_battery_optimization_whitelist">已加入后台白名单</string>
+    <string name="advanced_keep_alive">Advanced Keep Alive</string>
+    <string name="alarm_keep_alive">Alarm Keep Alive</string>
+    <string name="alarm_keep_alive_summary">Wake up every minute (higher battery consumption)</string>
     <string name="all">全部</string>
+    <string name="already_enabled">Already enabled</string>
     <string name="app_down_again_to_exit">再按一次退出程序</string>
     <string name="app_help_document">帮助文档</string>
     <string name="app_language_desc">一语言：%1$s</string>
@@ -99,6 +105,7 @@
     <string name="audition">试听</string>
     <string name="audition_text">试听文本</string>
     <string name="auto_check_update">自动检查更新</string>
+    <string name="auto_start_settings">Auto Start Settings</string>
     <string name="backup">备份</string>
     <string name="backup_folder">备份文件夹</string>
     <string name="backup_restore">备份与恢复</string>
@@ -114,7 +121,7 @@
     <string name="brown">棕色</string>
     <string name="built_in_player_not_enabled">⚠️内置播放器未启用，请前往右上角菜单手动启用。</string>
     <string name="builtin_player_settings_tip_msg">启用内置播放器时，使用此处设置覆盖全局。</string>
-    <string name="cancel">取消</string>
+    <string name="cancel">Cancel</string>
     <string name="cannot_empty">不可为空！</string>
     <string name="check_update">检查更新</string>
     <string name="check_update_failed">检查更新失败</string>
@@ -130,6 +137,7 @@
     <string name="clear_web_data">清空网页数据</string>
     <string name="cleared">已清空</string>
     <string name="click_play">点击播放</string>
+    <string name="click_to_enable">Click to enable</string>
     <string name="clipboard">剪贴板</string>
     <string name="close">关闭</string>
     <string name="code_editor">代码编辑器</string>
@@ -166,6 +174,7 @@
     <string name="desc_delete_item">删除本条目</string>
     <string name="desc_edit_item">编辑条目</string>
     <string name="desc_expand_group">展开分组：%1$s</string>
+    <string name="desc_fab_add_config">Add Config</string>
     <string name="desc_seekbar_add">滑动条 +1</string>
     <string name="desc_seekbar_remove">滑动条 -1</string>
     <string name="desc_switch_item">启用或关闭本条目</string>
@@ -192,6 +201,10 @@
     <string name="edit_read_rule">编辑朗读规则</string>
     <string name="empty_folder">空文件夹</string>
     <string name="empty_list">列表为空</string>
+    <string name="enable_auto_start">Boot Auto Start</string>
+    <string name="enable_auto_start_summary">Automatically start service after device reboot</string>
+    <string name="enable_keep_alive">Enable Keep Alive</string>
+    <string name="enable_keep_alive_summary">Enable independent keep alive service to enhance background stability (will increase battery consumption)</string>
     <string name="enabled">已启用</string>
     <string name="error">错误</string>
     <string name="exclude_from_recent">后台隐藏</string>
@@ -262,6 +275,20 @@
     <string name="invalid_url_msg">无效的URL：%1$s</string>
     <string name="is_confirm_delete">确认删除？</string>
     <string name="js_file_type_not_recognized">无法识别JS文件类型</string>
+    <string name="keep_alive_accessibility_desc">Help TTS Server run in background, prevent being killed by system</string>
+    <string name="keep_alive_accessibility_label">TTS Server Keep Alive</string>
+    <string name="keep_alive_help_message"><![CDATA[<b>Why Keep Alive?</b><br/><br/>Android automatically cleans up background apps to save battery. Manufacturers (Xiaomi, Huawei, OPPO, vivo, etc.) have additional restrictions that may kill TTS Server.<br/><br/><b>Recommended Setup</b><br/><br/>Basic users: Enable "Battery Whitelist" only<br/>Need stability: Whitelist + Keep Alive Service<br/>Maximum keep-alive: Enable multiple advanced options<br/><br/><b>Keep-Alive Options</b><br/><br/><b>Battery Whitelist</b><br/>System feature to bypass battery optimization. Essential.<br/><br/><b>Keep Alive Service</b><br/>Foreground service + wake lock. Recommended baseline.<br/><br/><b>Boot Auto Start</b><br/>Automatically start service after device reboot.<br/><br/><b>Accessibility Keep Alive</b><br/>Highest system priority, most stable. Requires manual permission.<br/><br/><b>Notification Keep Alive</b><br/>Use notification listener service. Requires manual permission.<br/><br/><b>Alarm Keep Alive</b><br/>Wake up every minute. Higher battery usage.<br/><br/><b>Network Keep Alive</b><br/>Keep network connection active. Useful for forwarder.<br/><br/><b>Pixel Keep Alive</b><br/>1-pixel window when screen off, auto-hides when on. Zero disturbance.<br/><br/><b>Notes</b><br/><br/>1. Keep-alive merges with forwarder notification when running<br/>2. Some manufacturers need extra "Manufacturer Settings"<br/>3. Multiple options increase battery usage<br/>4. TTS engine mode does not occupy audio focus]]></string>
+    <string name="keep_alive_help_summary">View usage instructions and notes for keep-alive features</string>
+    <string name="keep_alive_help_title">Help</string>
+    <string name="keep_alive_merged_with_forwarder">Forwarder detected running, keep-alive notification merged into forwarder notification</string>
+    <string name="keep_alive_notification_desc">Keep TTS Server running by monitoring notifications</string>
+    <string name="keep_alive_notification_label">TTS Server Notification Keep Alive</string>
+    <string name="keep_alive_service">Keep Alive Service</string>
+    <string name="keep_alive_service_content">Keeping background running...</string>
+    <string name="keep_alive_service_desc">Prevent app from being killed by system (freeze)</string>
+    <string name="keep_alive_service_title">TTS Server Keep Alive</string>
+    <string name="keep_alive_settings">Keep Alive Settings</string>
+    <string name="keep_alive_settings_summary">Configure multiple mechanisms to prevent app from being killed</string>
     <string name="keyboard_toolbar_settings">输入法工具栏设置</string>
     <string name="keyboard_toolbar_settings_tips">插入值 = 显示名称 \n⚠️注意等号两侧要空格</string>
     <string name="kill_process">结束进程</string>
@@ -303,6 +330,10 @@
     <string name="log">日志</string>
     <string name="login">登录</string>
     <string name="male">男</string>
+    <string name="manufacturer_whitelist">Manufacturer Settings</string>
+    <string name="manufacturer_whitelist_message">Different manufacturers have different restrictions on background apps. To ensure TTS Server can run continuously in the background, please add this app to the following whitelists:\n\n1. Battery optimization whitelist\n2. Background running whitelist\n3. Auto start management\n\nClick OK to jump to system settings.</string>
+    <string name="manufacturer_whitelist_summary">%s Click to jump to system settings to add this app to background whitelist</string>
+    <string name="manufacturer_whitelist_title">Manufacturer Background Optimization</string>
     <string name="master_switch">总开关</string>
     <string name="max_retry_count">最大重试次数</string>
     <string name="max_retry_count_summary">请求失败后的重试次数</string>
@@ -321,6 +352,11 @@
     <string name="name">名称</string>
     <string name="nav_app_bar_open_drawer_description" ns1:ignore="PrivateResource">打开抽屉式导航栏</string>
     <string name="nav_back">返回</string>
+    <string name="navigate_back">Back</string>
+    <string name="network_keep_alive">Network Keep Alive</string>
+    <string name="network_keep_alive_started">Network keep alive started</string>
+    <string name="network_keep_alive_stopped">Network keep alive stopped</string>
+    <string name="network_keep_alive_summary">Keep network connection active (useful for forwarder)</string>
     <string name="new_version_available">有新版本：%1$s</string>
     <string name="no_audio_data_head_warn">⚠️ 该音频没有数据头，故无法获取信息。</string>
     <string name="no_files_in_dir">此目录下无文件</string>
@@ -331,7 +367,10 @@
     <string name="not_configured">未配置</string>
     <string name="not_found_plugin">⚠️未找到插件: %1$s</string>
     <string name="not_support_audition">⚠️ 不支持试听！</string>
+    <string name="notification_keep_alive">Notification Keep Alive</string>
+    <string name="notification_keep_alive_summary">Use notification listener service for keep alive (manual enable required)</string>
     <string name="off_multi_voice_use_global">请关闭多语音选项以使用单语音模式</string>
+    <string name="ok">OK</string>
     <string name="ok_reset">已重置</string>
     <string name="open_log_folder">打开日志文件夹</string>
     <string name="open_ra_tag_options">打开标签数据选项</string>
@@ -343,6 +382,10 @@
     <string name="paste">粘贴</string>
     <string name="path_is_empty">路径为空</string>
     <string name="pink">粉色</string>
+    <string name="pixel_keep_alive">Pixel Keep Alive</string>
+    <string name="pixel_keep_alive_started">Pixel keep alive started</string>
+    <string name="pixel_keep_alive_stopped">Pixel keep alive stopped</string>
+    <string name="pixel_keep_alive_summary">1-pixel floating window, invisible to user</string>
     <string name="playing">播放中</string>
     <string name="please_choose">请选择</string>
     <string name="please_turn_off_direct_play">请关闭【直接播放】选项</string>
@@ -443,6 +486,7 @@
     <string name="spinner_drop_down_max_count_summary">当下拉框内容数超过设置值时将以弹出对话框形式显示。</string>
     <string name="start">启动</string>
     <string name="still_to_import">仍要导入</string>
+    <string name="stop_keep_alive">Stop Keep Alive</string>
     <string name="str_import">导入</string>
     <string name="str_key">键</string>
     <string name="str_value">值</string>
@@ -451,7 +495,7 @@
     <string name="stream_handle_error">流错误：%1$s</string>
     <string name="switch_tag">切换标签</string>
     <string name="sys_doc_picker_error">打开系统文件选择器失败，自动使用内置选择器。</string>
-    <string name="system_not_support_please_manual_set">系统不支持，请手动操作</string>
+    <string name="system_not_support_please_manual_set">System not supported, please set manually</string>
     <string name="system_tts">系统TTS</string>
     <string name="systts_add_custom_tts">添加自定义TTS</string>
     <string name="systts_add_ms_tts">添加内置TTS</string>

@@ -129,16 +129,22 @@ object SysTtsConfig {
             SystemTtsConfig.isKeepAliveEnabled.value = value
         }
 
-    var isKeepAliveAudioFocusEnabled: Boolean
-        get() = SystemTtsConfig.isKeepAliveAudioFocusEnabled.value
+    var isAccessibilityKeepAliveEnabled: Boolean
+        get() = SystemTtsConfig.isAccessibilityKeepAliveEnabled.value
         set(value) {
-            SystemTtsConfig.isKeepAliveAudioFocusEnabled.value = value
+            SystemTtsConfig.isAccessibilityKeepAliveEnabled.value = value
         }
 
-    var isKeepAliveSilentAudioEnabled: Boolean
-        get() = SystemTtsConfig.isKeepAliveSilentAudioEnabled.value
+    var isNotificationKeepAliveEnabled: Boolean
+        get() = SystemTtsConfig.isNotificationKeepAliveEnabled.value
         set(value) {
-            SystemTtsConfig.isKeepAliveSilentAudioEnabled.value = value
+            SystemTtsConfig.isNotificationKeepAliveEnabled.value = value
+        }
+
+    var isAlarmKeepAliveEnabled: Boolean
+        get() = SystemTtsConfig.isAlarmKeepAliveEnabled.value
+        set(value) {
+            SystemTtsConfig.isAlarmKeepAliveEnabled.value = value
         }
 
     var isAutoStartEnabled: Boolean

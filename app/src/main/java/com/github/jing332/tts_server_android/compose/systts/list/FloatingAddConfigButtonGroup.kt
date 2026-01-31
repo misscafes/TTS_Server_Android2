@@ -85,7 +85,7 @@ fun FloatingAddConfigButtonGroup(
                 }
                 Icon(
                     painter = rememberVectorPainter(imageVector),
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.desc_fab_add_config),
                     modifier = Modifier.animateIcon({ checkedProgress })
                 )
             }

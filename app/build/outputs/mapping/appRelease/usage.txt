@@ -8879,7 +8879,6 @@ androidx.compose.material.icons.automirrored.filled.ForwardKt
 androidx.compose.material.icons.automirrored.filled.ForwardToInboxKt
 androidx.compose.material.icons.automirrored.filled.GradingKt
 androidx.compose.material.icons.automirrored.filled.HelpCenterKt
-androidx.compose.material.icons.automirrored.filled.HelpKt
 androidx.compose.material.icons.automirrored.filled.InsertCommentKt
 androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeftKt
 androidx.compose.material.icons.automirrored.filled.KeyboardArrowRightKt
@@ -9539,7 +9538,6 @@ androidx.compose.material.icons.filled.AcUnitKt
 androidx.compose.material.icons.filled.AccessAlarmKt
 androidx.compose.material.icons.filled.AccessAlarmsKt
 androidx.compose.material.icons.filled.AccessTimeFilledKt
-androidx.compose.material.icons.filled.AccessibilityKt
 androidx.compose.material.icons.filled.AccessibilityNewKt
 androidx.compose.material.icons.filled.AccessibleForwardKt
 androidx.compose.material.icons.filled.AccessibleKt
@@ -9596,7 +9594,6 @@ androidx.compose.material.icons.filled.AirplanemodeInactiveKt
 androidx.compose.material.icons.filled.AirplayKt
 androidx.compose.material.icons.filled.AirportShuttleKt
 androidx.compose.material.icons.filled.AlarmAddKt
-androidx.compose.material.icons.filled.AlarmKt
 androidx.compose.material.icons.filled.AlarmOffKt
 androidx.compose.material.icons.filled.AlarmOnKt
 androidx.compose.material.icons.filled.AlbumKt
@@ -9704,7 +9701,7 @@ androidx.compose.material.icons.filled.Battery4BarKt
 androidx.compose.material.icons.filled.Battery5BarKt
 androidx.compose.material.icons.filled.Battery6BarKt
 androidx.compose.material.icons.filled.BatteryAlertKt
-androidx.compose.material.icons.filled.BatteryChargingFullKt
+androidx.compose.material.icons.filled.BatteryFullKt
 androidx.compose.material.icons.filled.BatterySaverKt
 androidx.compose.material.icons.filled.BatteryStdKt
 androidx.compose.material.icons.filled.BatteryUnknownKt
@@ -10617,7 +10614,6 @@ androidx.compose.material.icons.filled.MinorCrashKt
 androidx.compose.material.icons.filled.MiscellaneousServicesKt
 androidx.compose.material.icons.filled.MissedVideoCallKt
 androidx.compose.material.icons.filled.MmsKt
-androidx.compose.material.icons.filled.MobileFriendlyKt
 androidx.compose.material.icons.filled.MobileOffKt
 androidx.compose.material.icons.filled.MobileScreenShareKt
 androidx.compose.material.icons.filled.MobiledataOffKt
@@ -10730,7 +10726,6 @@ androidx.compose.material.icons.filled.NotesKt
 androidx.compose.material.icons.filled.NotificationAddKt
 androidx.compose.material.icons.filled.NotificationImportantKt
 androidx.compose.material.icons.filled.NotificationsActiveKt
-androidx.compose.material.icons.filled.NotificationsKt
 androidx.compose.material.icons.filled.NotificationsOffKt
 androidx.compose.material.icons.filled.NotificationsPausedKt
 androidx.compose.material.icons.filled.NumbersKt
@@ -10890,7 +10885,6 @@ androidx.compose.material.icons.filled.PostAddKt
 androidx.compose.material.icons.filled.PowerInputKt
 androidx.compose.material.icons.filled.PowerKt
 androidx.compose.material.icons.filled.PowerOffKt
-androidx.compose.material.icons.filled.PowerSettingsNewKt
 androidx.compose.material.icons.filled.PrecisionManufacturingKt
 androidx.compose.material.icons.filled.PregnantWomanKt
 androidx.compose.material.icons.filled.PresentToAllKt
@@ -36560,7 +36554,6 @@ androidx.core.content.ContextCompat$Api23Impl:
 androidx.core.content.ContextCompat$Api24Impl
 androidx.core.content.ContextCompat$Api26Impl:
     private void <init>()
-    static android.content.ComponentName startForegroundService(android.content.Context,android.content.Intent)
 androidx.core.content.ContextCompat$Api28Impl
 androidx.core.content.ContextCompat$Api30Impl
 androidx.core.content.ContextCompat$Api33Impl:
@@ -36589,7 +36582,6 @@ androidx.core.content.ContextCompat:
     public static java.lang.String getString(android.content.Context,int)
     public static boolean isDeviceProtectedStorage(android.content.Context)
     public static boolean startActivities(android.content.Context,android.content.Intent[])
-    public static void startForegroundService(android.content.Context,android.content.Intent)
 androidx.core.content.ContextKt
 androidx.core.content.FileProvider$Api21Impl:
     private void <init>()
@@ -55239,7 +55231,8 @@ com.github.jing332.tts_server_android.compose.PagerDestination$SystemTtsLog:
     public static final int $stable
 com.github.jing332.tts_server_android.compose.PagerDestination:
     public static final int $stable
-    public synthetic void <init>(int,int,kotlin.jvm.functions.Function2,int,kotlin.jvm.internal.DefaultConstructorMarker)
+    public synthetic void <init>(int,int,int,kotlin.jvm.functions.Function2,int,kotlin.jvm.internal.DefaultConstructorMarker)
+    public final int getContentDescId()
 com.github.jing332.tts_server_android.compose.SharedViewModel:
     public final synthetic java.lang.Object getOnce(java.lang.String)
 com.github.jing332.tts_server_android.compose.backup.BackupDialogKt$BackupDialog$1$invoke$lambda$3$lambda$2$$inlined$items$default$2
@@ -55305,6 +55298,12 @@ com.github.jing332.tts_server_android.compose.nav.NavRoutes:
 com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$SettingsWidgetsKt:
     public final kotlin.jvm.functions.Function3 getLambda-7$app_appRelease()
     public final kotlin.jvm.functions.Function3 getLambda-8$app_appRelease()
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity:
+    public static final int $stable
+    private static final boolean AdvancedKeepAliveOptions$lambda$20(com.funny.data_saver.core.DataSaverMutableState)
+    private static final void AdvancedKeepAliveOptions$lambda$21(com.funny.data_saver.core.DataSaverMutableState,boolean)
+    private static final boolean AdvancedKeepAliveOptions$lambda$23(com.funny.data_saver.core.DataSaverMutableState)
+    private static final void AdvancedKeepAliveOptions$lambda$24(com.funny.data_saver.core.DataSaverMutableState,boolean)
 com.github.jing332.tts_server_android.compose.settings.SettingsWidgetsKt$PreferenceDialog$2
 com.github.jing332.tts_server_android.compose.settings.SettingsWidgetsKt$PreferenceDialog$3
 com.github.jing332.tts_server_android.compose.settings.SettingsWidgetsKt$PreferenceDialog$5
@@ -55526,13 +55525,18 @@ com.github.jing332.tts_server_android.conf.SysTtsConfig:
     public final float getInAppPlayVolume()
     public final int getMaxEmptyAudioRetryCount()
     public final int getStandbyTriggeredRetryIndex()
+    public final boolean isAccessibilityKeepAliveEnabled()
     public final boolean isInAppPlayAudio()
     public final boolean isMultiVoiceEnabled()
+    public final boolean isNotificationKeepAliveEnabled()
     public final boolean isReplaceEnabled()
     public final boolean isSplitEnabled()
+    public final void setAccessibilityKeepAliveEnabled(boolean)
+    public final void setAlarmKeepAliveEnabled(boolean)
     public final void setAudioParamsPitch(float)
     public final void setAudioParamsSpeed(float)
     public final void setAudioParamsVolume(float)
+    public final void setAutoStartEnabled(boolean)
     public final void setBgmShuffleEnabled(boolean)
     public final void setBgmVolume(float)
     public final void setForegroundServiceEnabled(boolean)
@@ -55540,9 +55544,11 @@ com.github.jing332.tts_server_android.conf.SysTtsConfig:
     public final void setInAppPlayPitch(float)
     public final void setInAppPlaySpeed(float)
     public final void setInAppPlayVolume(float)
+    public final void setKeepAliveEnabled(boolean)
     public final void setMaxEmptyAudioRetryCount(int)
     public final void setMaxRetryCount(int)
     public final void setMultiVoiceEnabled(boolean)
+    public final void setNotificationKeepAliveEnabled(boolean)
     public final void setReplaceEnabled(boolean)
     public final void setRequestTimeout(long)
     public final void setSkipSilentAudio(boolean)
@@ -55783,8 +55789,54 @@ com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderSe
     public static final java.lang.String ACTION_ON_CLOSED
     public static final java.lang.String ACTION_ON_LOG
     public static final java.lang.String ACTION_ON_STARTED
+    public static final long CHECK_INTERVAL_MS
     public static final java.lang.String TAG
     public static final synthetic void access$setInstance$cp(com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService)
+com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService$Companion:
+    public final boolean isRunning()
+com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService:
+    public static final int $stable
+    public static final java.lang.String TAG
+    public static final synthetic boolean access$isRunning$cp()
+com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver:
+    public static final int $stable
+    private static final java.lang.String ACTION_KEEP_ALIVE
+    private static final long INTERVAL_MS
+    private static final int REQUEST_CODE
+    public static final java.lang.String TAG
+com.github.jing332.tts_server_android.service.keepalive.BootCompleteReceiver:
+    public static final int $stable
+    public static final java.lang.String TAG
+com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService:
+    public static final int $stable
+    private static final int JOB_ID
+    private static final long MIN_INTERVAL_MS
+    private static final java.lang.String TAG
+com.github.jing332.tts_server_android.service.keepalive.KeepAliveService$Companion:
+    public final void setRunning(boolean)
+com.github.jing332.tts_server_android.service.keepalive.KeepAliveService:
+    public static final java.lang.String ACTION_KEEP_ALIVE
+    public static final java.lang.String ACTION_STOP_KEEP_ALIVE
+    public static final long CHECK_INTERVAL_MS
+    public static final java.lang.String NOTIFICATION_CHANNEL_ID
+    public static final int NOTIFICATION_ID
+    public static final java.lang.String TAG
+    public static final long WAKE_LOCK_TIMEOUT_MS
+    public static final synthetic void access$setRunning$cp(boolean)
+com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService$Companion:
+    public final boolean isRunning()
+com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService:
+    public static final synthetic com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService access$getInstance$cp()
+com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService$Companion:
+    public final boolean isRunning()
+com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService:
+    public static final int $stable
+    public static final java.lang.String TAG
+    public static final synthetic boolean access$isRunning$cp()
+com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService$Companion:
+    public final boolean isRunning()
+com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService:
+    public static final synthetic com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService access$getInstance$cp()
 com.github.jing332.tts_server_android.service.systts.CheckVoiceData:
     public static final int $stable
 com.github.jing332.tts_server_android.service.systts.SystemTtsService:
@@ -55833,6 +55885,12 @@ com.github.jing332.tts_server_android.ui.view.ErrorDialogActivity:
     private static final java.lang.String KEY_ID
     public static final java.lang.String KEY_TITLE
     public static final java.lang.String KEY_T_DATA
+com.github.jing332.tts_server_android.utils.BackgroundWhitelistUtils:
+    public static final int $stable
+    public final void checkAndPromptAutoStart(android.content.Context,kotlin.jvm.functions.Function0)
+    public static synthetic void checkAndPromptAutoStart$default(com.github.jing332.tts_server_android.utils.BackgroundWhitelistUtils,android.content.Context,kotlin.jvm.functions.Function0,int,java.lang.Object)
+    public final boolean isIgnoringBatteryOptimizations(android.content.Context)
+    public final void requestBatteryOptimizationWhitelist(android.content.Context)
 com.github.jing332.tts_server_android.utils.ConfigurationExtensionsKt:
     public static final boolean isNightMode(android.content.res.Configuration)
 com.github.jing332.tts_server_android.utils.MyTools:
@@ -84538,8 +84596,8 @@ androidx.compose.foundation.selection.SelectableKt$selectable-O2vRcR0$$inlined$c
     public final androidx.compose.ui.Modifier invoke()
 androidx.compose.foundation.selection.SelectableNode:
     public static void update-QzZPfjk$1()
-androidx.compose.foundation.selection.ToggleableElement$$InternalSyntheticBackport$9$ba4e17ad55b9d4e45f266d42664e76b96a133076f602fb07e900b124f8f89456$0
-androidx.compose.foundation.selection.ToggleableElement$$InternalSyntheticBackport$9$ba4e17ad55b9d4e45f266d42664e76b96a133076f602fb07e900b124f8f89456$1
+androidx.compose.foundation.selection.ToggleableElement$$InternalSyntheticBackport$4$ba4e17ad55b9d4e45f266d42664e76b96a133076f602fb07e900b124f8f89456$0
+androidx.compose.foundation.selection.ToggleableElement$$InternalSyntheticBackport$4$ba4e17ad55b9d4e45f266d42664e76b96a133076f602fb07e900b124f8f89456$1
 androidx.compose.foundation.selection.ToggleableElement:
     public static androidx.compose.foundation.selection.ToggleableNode create()
     public static void update$34()
@@ -86251,6 +86309,8 @@ androidx.compose.material.icons.Icons$Filled
 androidx.compose.material.icons.Icons
 androidx.compose.material.icons.automirrored.filled.ArrowBackKt:
     static void <clinit>()
+androidx.compose.material.icons.automirrored.filled.HelpKt:
+    static void <clinit>()
 androidx.compose.material.icons.automirrored.filled.HelpOutlineKt:
     static void <clinit>()
 androidx.compose.material.icons.automirrored.filled.InputKt:
@@ -86281,6 +86341,8 @@ androidx.compose.material.icons.filled.AbcKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.AccessTimeKt:
     static void <clinit>()
+androidx.compose.material.icons.filled.AccessibilityKt:
+    static void <clinit>()
 androidx.compose.material.icons.filled.AccountTreeKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.AddBusinessKt:
@@ -86288,6 +86350,8 @@ androidx.compose.material.icons.filled.AddBusinessKt:
 androidx.compose.material.icons.filled.AddCardKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.AddKt:
+    static void <clinit>()
+androidx.compose.material.icons.filled.AlarmKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.AppShortcutKt:
     static void <clinit>()
@@ -86297,7 +86361,7 @@ androidx.compose.material.icons.filled.AudioFileKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.AudiotrackKt:
     static void <clinit>()
-androidx.compose.material.icons.filled.BatteryFullKt:
+androidx.compose.material.icons.filled.BatteryChargingFullKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.CheckKt:
     static void <clinit>()
@@ -86371,9 +86435,13 @@ androidx.compose.material.icons.filled.LinkKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.LockKt:
     static void <clinit>()
+androidx.compose.material.icons.filled.MobileFriendlyKt:
+    static void <clinit>()
 androidx.compose.material.icons.filled.MoreVertKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.MusicNoteKt:
+    static void <clinit>()
+androidx.compose.material.icons.filled.NotificationsKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.NotificationsNoneKt:
     static void <clinit>()
@@ -86384,6 +86452,8 @@ androidx.compose.material.icons.filled.OutputKt:
 androidx.compose.material.icons.filled.PhoneAndroidKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.PlayArrowKt:
+    static void <clinit>()
+androidx.compose.material.icons.filled.PowerSettingsNewKt:
     static void <clinit>()
 androidx.compose.material.icons.filled.RefreshKt:
     static void <clinit>()
@@ -88764,7 +88834,7 @@ androidx.compose.material3.TextKt$Text$5:
     public final void invoke(androidx.compose.runtime.Composer,int)
 androidx.compose.material3.TextKt:
     public static final androidx.compose.runtime.ProvidableCompositionLocal getLocalTextStyle()
-androidx.compose.material3.ThumbElement$$InternalSyntheticBackport$9$c2601ce4b29e63cc56dbedd9f76b283dee818804bb3e5e76ef14fac9e6de64da$0
+androidx.compose.material3.ThumbElement$$InternalSyntheticBackport$4$c2601ce4b29e63cc56dbedd9f76b283dee818804bb3e5e76ef14fac9e6de64da$0
 androidx.compose.material3.ThumbElement:
     public static androidx.compose.material3.ThumbNode create()
     public static void update$48()
@@ -111748,8 +111818,6 @@ com.github.jing332.compose.widgets.AppWebViewKt$AppWebView$8:
 com.github.jing332.compose.widgets.AppWebViewKt:
     public static final kotlin.Triple AppWebView$lambda$7()
     public static final void AppWebView$lambda$8()
-com.github.jing332.compose.widgets.AsyncCircleImageKt$$InternalSyntheticLambda$2$7874ed14cd29a40b6d88ec702158062f8bb0ccd6ca2458a7b079791508c3f958$0:
-    public final synthetic java.lang.String f$1
 com.github.jing332.compose.widgets.AsyncCircleImageSettings:
     public static final int $stable
     public static final com.github.jing332.compose.widgets.AsyncCircleImageSettings INSTANCE
@@ -112733,6 +112801,7 @@ com.github.jing332.tts_server_android.compose.OverlayController:
 com.github.jing332.tts_server_android.compose.PagerDestination$Companion
 com.github.jing332.tts_server_android.compose.PagerDestination:
     public static final com.github.jing332.tts_server_android.compose.PagerDestination$Companion Companion
+    public final int contentDescId
     public abstract kotlin.jvm.functions.Function2 getIcon()
     public abstract int getIndex()
     public abstract int getStrId()
@@ -113280,10 +113349,12 @@ com.github.jing332.tts_server_android.compose.forwarder.systts.SystemTtsForwarde
     public static void invoke$128()
     public static final boolean invoke$lambda$1$1()
     public static final void invoke$lambda$2$1()
+com.github.jing332.tts_server_android.compose.forwarder.systts.SystemTtsForwarderScreenKt$SystemTtsForwarderScreen$2$1$1:
+    public final java.lang.Object invoke(kotlinx.coroutines.CoroutineScope,kotlin.coroutines.Continuation)
 com.github.jing332.tts_server_android.compose.forwarder.systts.SystemTtsForwarderScreenKt$SystemTtsForwarderScreen$2:
     public final void invoke(androidx.compose.runtime.Composer,int)
-    public static final boolean invoke$lambda$1()
-    public static final void invoke$lambda$2$2()
+    public static final boolean invoke$lambda$1(androidx.compose.runtime.MutableState)
+    public static final void invoke$lambda$2(androidx.compose.runtime.MutableState,boolean)
 com.github.jing332.tts_server_android.compose.forwarder.systts.SystemTtsForwarderScreenKt:
     public static final int SystemTtsForwarderScreen$lambda$1(com.funny.data_saver.core.DataSaverMutableState)
     public static final void SystemTtsForwarderScreen$lambda$2()
@@ -113305,6 +113376,119 @@ com.github.jing332.tts_server_android.compose.nav.NavRoutes:
     static void <clinit>()
     public void <init>()
     public abstract java.lang.String getId()
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-1$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-10$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-11$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-12$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-13$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-14$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-15$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-16$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-17$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-18$1:
+    public final void invoke$44()
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-19$1:
+    public final void invoke$44()
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-2$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-20$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-21$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-22$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-23$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-24$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-25$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-26$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-27$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-28$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-29$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-3$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-30$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-31$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-32$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-33$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-34$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-35$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-36$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-37$1:
+    public final void invoke$123()
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-4$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-5$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-6$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-7$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-8$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt$lambda-9$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt:
+    public static final com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$KeepAliveSettingsActivityKt INSTANCE
+    public static kotlin.jvm.functions.Function2 getLambda-1$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-10$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-11$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-12$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-13$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-14$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-15$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-16$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-17$app_appRelease()
+    public static kotlin.jvm.functions.Function3 getLambda-18$app_appRelease()
+    public static kotlin.jvm.functions.Function3 getLambda-19$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-2$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-20$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-21$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-22$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-23$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-24$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-25$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-26$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-27$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-28$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-29$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-3$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-30$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-31$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-32$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-33$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-34$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-35$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-36$app_appRelease()
+    public static kotlin.jvm.functions.Function3 getLambda-37$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-4$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-5$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-6$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-7$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-8$app_appRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-9$app_appRelease()
 com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$MainSettingsScreenKt$lambda-1$1:
     public final void invoke(androidx.compose.runtime.Composer,int)
 com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$MainSettingsScreenKt$lambda-10$1:
@@ -113575,6 +113759,58 @@ com.github.jing332.tts_server_android.compose.settings.ComposableSingletons$Them
     public static kotlin.jvm.functions.Function3 getLambda-1$app_appRelease()
     public static kotlin.jvm.functions.Function2 getLambda-2$app_appRelease()
     public static kotlin.jvm.functions.Function2 getLambda-3$app_appRelease()
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$$InternalSyntheticLambda$1$3635691950e4ef33ab31301e159388d78be11b10100d651cddf1f3a36342b301$1:
+    public final synthetic int f$1
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$$InternalSyntheticLambda$1$3635691950e4ef33ab31301e159388d78be11b10100d651cddf1f3a36342b301$3:
+    public final synthetic int f$1
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$$InternalSyntheticLambda$2$dfe702aab96ef4d0645475e07cab4f259170f2da5f5ab4acfb0dbdef3feb7e1b$0
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$$InternalSyntheticLambda$2$dfe702aab96ef4d0645475e07cab4f259170f2da5f5ab4acfb0dbdef3feb7e1b$1:
+    public final synthetic int f$3
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$$InternalSyntheticLambda$3$cd29d631c944bc8b699a5e19886e47cfc0384d486b72c6cd196c88fd094a17fd$5:
+    public final synthetic int f$1
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$AdvancedKeepAliveOptions$2:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$AdvancedKeepAliveOptions$4:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveHelpContent$2$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveHelpContent$2:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveSettingsContent$3$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveSettingsContent$3:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveSettingsContent$4$1$2:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveSettingsContent$4$1$4:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveSettingsContent$4$1$5:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveSettingsContent$4:
+    public final void invoke$123()
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveSettingsContent$6:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$KeepAliveSettingsContent$7:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$onCreate$1$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity$onCreate$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity:
+    public static final boolean AdvancedKeepAliveOptions$lambda$26()
+    public static final void AdvancedKeepAliveOptions$lambda$27()
+    public static final boolean AdvancedKeepAliveOptions$lambda$37()
+    public static final void AdvancedKeepAliveOptions$lambda$38()
+    public static final boolean AdvancedKeepAliveOptions$lambda$42()
+    public static final void AdvancedKeepAliveOptions$lambda$43()
+    public static final boolean KeepAliveSettingsContent$lambda$11()
+    public static final void KeepAliveSettingsContent$lambda$12()
+    public static final boolean KeepAliveSettingsContent$lambda$2()
+    public static final void KeepAliveSettingsContent$lambda$3(androidx.compose.runtime.MutableState,boolean)
+    public static final boolean KeepAliveSettingsContent$lambda$5()
+    public static final void KeepAliveSettingsContent$lambda$6(androidx.compose.runtime.MutableState,boolean)
+    public static final boolean KeepAliveSettingsContent$lambda$8()
+    public static final void KeepAliveSettingsContent$lambda$9()
 com.github.jing332.tts_server_android.compose.settings.MainSettingsScreenKt$$InternalSyntheticLambda$6$9dd96e4ea606d1f08fe78cf9aedfd3feab8e77342ff9b292f2bafbfeed4eafce$2:
     public final synthetic int f$0
 com.github.jing332.tts_server_android.compose.settings.MainSettingsScreenKt$SettingsScreen$3:
@@ -113613,12 +113849,11 @@ com.github.jing332.tts_server_android.compose.settings.OtherSettingsScreenKt$$In
 com.github.jing332.tts_server_android.compose.settings.OtherSettingsScreenKt:
     public static final boolean OtherSettingsScreen$lambda$2()
     public static final void OtherSettingsScreen$lambda$3(androidx.compose.runtime.MutableState,boolean)
+com.github.jing332.tts_server_android.compose.settings.SettingsWidgetsKt$$InternalSyntheticLambda$3$0eea0d8bb7c4411814b529f7730337d25f6d17ceb960b34c13e8de049f81dfdf$0:
+    public final synthetic int f$1
 com.github.jing332.tts_server_android.compose.settings.SettingsWidgetsKt$$InternalSyntheticLambda$3$301bff7d24cf671b5c2b02662680b9f737f36da6e7b22ae9241ffdc5a0f7fa0f$1:
     public final synthetic androidx.compose.ui.semantics.Role f$1
-com.github.jing332.tts_server_android.compose.settings.SettingsWidgetsKt$$InternalSyntheticLambda$8$0eea0d8bb7c4411814b529f7730337d25f6d17ceb960b34c13e8de049f81dfdf$0:
-    public final synthetic int f$1
-com.github.jing332.tts_server_android.compose.settings.SettingsWidgetsKt$$InternalSyntheticLambda$8$4ddc0b37bd51cae91899105c16075b85eb79a8295f0ea28c51f21250a34d165e$1:
-    public final synthetic int f$6
+com.github.jing332.tts_server_android.compose.settings.SettingsWidgetsKt$$InternalSyntheticLambda$3$4ddc0b37bd51cae91899105c16075b85eb79a8295f0ea28c51f21250a34d165e$1:
     public final synthetic int f$7
 com.github.jing332.tts_server_android.compose.settings.SettingsWidgetsKt$BasePreferenceWidget$2$2$1:
     public final void invoke(androidx.compose.runtime.Composer,int)
@@ -116164,6 +116399,7 @@ com.github.jing332.tts_server_android.conf.SystemTtsConfig:
     public static final com.funny.data_saver.core.DataSaverMutableState isInternalPlayerEnabled
     public static final com.funny.data_saver.core.DataSaverMutableState isSkipSilentText
     public static final com.funny.data_saver.core.DataSaverMutableState maxEmptyAudioRetryCount
+    public void <init>()
     public static com.funny.data_saver.core.DataSaverMutableState getAudioParamsPitch()
     public static com.funny.data_saver.core.DataSaverMutableState getAudioParamsSpeed()
     public static com.funny.data_saver.core.DataSaverMutableState getAudioParamsVolume()
@@ -116171,10 +116407,17 @@ com.github.jing332.tts_server_android.conf.SystemTtsConfig:
     public static com.funny.data_saver.core.DataSaverMutableState getMaxRetryCount()
     public static com.funny.data_saver.core.DataSaverMutableState getRequestTimeout()
     public static com.funny.data_saver.core.DataSaverMutableState getStandbyTriggeredRetryIndex()
+    public static com.funny.data_saver.core.DataSaverMutableState isAccessibilityKeepAliveEnabled()
+    public static com.funny.data_saver.core.DataSaverMutableState isAlarmKeepAliveEnabled()
+    public static com.funny.data_saver.core.DataSaverMutableState isAutoStartEnabled()
     public static com.funny.data_saver.core.DataSaverMutableState isBgmShuffleEnabled()
     public static com.funny.data_saver.core.DataSaverMutableState isForegroundServiceEnabled()
     public static com.funny.data_saver.core.DataSaverMutableState isGroupMultipleEnabled()
+    public static com.funny.data_saver.core.DataSaverMutableState isKeepAliveEnabled()
     public static com.funny.data_saver.core.DataSaverMutableState isMultiVoiceEnabled()
+    public static com.funny.data_saver.core.DataSaverMutableState isNetworkKeepAliveEnabled()
+    public static com.funny.data_saver.core.DataSaverMutableState isNotificationKeepAliveEnabled()
+    public static com.funny.data_saver.core.DataSaverMutableState isPixelKeepAliveEnabled()
     public static com.funny.data_saver.core.DataSaverMutableState isReplaceEnabled()
     public static com.funny.data_saver.core.DataSaverMutableState isSilenceSkipAudio()
     public static com.funny.data_saver.core.DataSaverMutableState isSplitEnabled()
@@ -116368,6 +116611,8 @@ com.github.jing332.tts_server_android.service.forwarder.system.QSTileService:
     static void <clinit>()
 com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService$Companion:
     public static com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService getInstance()
+com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService$startKeepAlive$1:
+    public final java.lang.Object invoke(kotlinx.coroutines.CoroutineScope,kotlin.coroutines.Continuation)
 com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService$startServer$1$tts$2$1:
     public final java.lang.Object invoke(kotlinx.coroutines.CoroutineScope,kotlin.coroutines.Continuation)
 com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService$startServer$1$tts$2:
@@ -116377,6 +116622,7 @@ com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderSe
 com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService:
     public static final int $stable
     public static final com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService$Companion Companion
+    public final android.os.Handler handler
     public com.github.jing332.tts.speech.local.LocalTtsProvider mLocalTTS
     static void <clinit>()
     public static final com.github.jing332.tts.speech.local.AndroidTtsEngine access$getAndroidTts(com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService)
@@ -116388,9 +116634,71 @@ com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderSe
     public static java.util.List getSysTtsEngines()
     public final void initServer()
     public final boolean isWakeLockEnabled()
+    public static void performKeepAliveActions()
+    public static void startKeepAlive()
     public final void startServer()
+    public static void stopKeepAlive()
+com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService:
+    public static final com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService$Companion Companion
+    public static boolean isRunning
+    static void <clinit>()
+com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver$Companion:
+    public static void cancel()
+com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver:
+    public static final com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver$Companion Companion
+    static void <clinit>()
+com.github.jing332.tts_server_android.service.keepalive.BootCompleteReceiver$Companion
+com.github.jing332.tts_server_android.service.keepalive.BootCompleteReceiver:
+    public static final com.github.jing332.tts_server_android.service.keepalive.BootCompleteReceiver$Companion Companion
+    static void <clinit>()
+com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService$Companion:
+    public static void cancel(android.content.Context)
+com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService:
+    public static final com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService$Companion Companion
+    static void <clinit>()
+com.github.jing332.tts_server_android.service.keepalive.KeepAliveService$Companion:
+    public static boolean isRunning()
+    public static void stop()
+com.github.jing332.tts_server_android.service.keepalive.KeepAliveService$startKeepAliveMechanism$1:
+    public final java.lang.Object invoke(kotlinx.coroutines.CoroutineScope,kotlin.coroutines.Continuation)
+com.github.jing332.tts_server_android.service.keepalive.KeepAliveService:
+    public static final int $stable
+    public static final com.github.jing332.tts_server_android.service.keepalive.KeepAliveService$Companion Companion
+    static void <clinit>()
+    public static void createNotificationChannel()
+    public static void performKeepAliveActions()
+    public static void registerScreenStateReceiver()
+    public final void releaseWakeLock()
+    public static void startKeepAliveMechanism()
+    public static void updateNotification()
+com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService$Companion
+com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService:
+    public static final int $stable
+    public static final com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService$Companion Companion
+    public static com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService instance
+    static void <clinit>()
+    public final void requestNetwork()
+    public static void startNetworkKeepAlive()
+    public static void stopNetworkKeepAlive()
+com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService$Companion
+com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService:
+    public static final com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService$Companion Companion
+    public static boolean isRunning
+    static void <clinit>()
+com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService$Companion
+com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService:
+    public static final int $stable
+    public static final com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService$Companion Companion
+    public static com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService instance
+    public android.os.PowerManager$WakeLock wakeLock
+    static void <clinit>()
+    public final void hidePixelView()
+    public static void startPixelKeepAlive()
+    public static void stopPixelKeepAlive()
 com.github.jing332.tts_server_android.service.systts.CheckVoiceData:
     static void <clinit>()
+com.github.jing332.tts_server_android.service.systts.SystemTtsService$Companion$restartService$1:
+    public final java.lang.Object invoke(kotlinx.coroutines.CoroutineScope,kotlin.coroutines.Continuation)
 com.github.jing332.tts_server_android.service.systts.SystemTtsService$Companion:
     public static synthetic void notifyUpdateConfig$default()
     public static void restartService()
@@ -116635,6 +116943,18 @@ com.github.jing332.tts_server_android.ui.view.ErrorDialogViewModel:
     public static final int $stable
     static void <clinit>()
     public static java.util.Map getThrowableList$app_appRelease()
+com.github.jing332.tts_server_android.utils.BackgroundWhitelistUtils:
+    public static final com.github.jing332.tts_server_android.utils.BackgroundWhitelistUtils INSTANCE
+    static void <clinit>()
+    public static java.lang.String getDeviceManufacturer()
+    public static boolean openHuaweiSettings()
+    public static boolean openManufacturerBatterySettings()
+    public static boolean openMeizuSettings()
+    public static boolean openOnePlusSettings()
+    public static boolean openOppoSettings()
+    public static boolean openSamsungSettings()
+    public static boolean openVivoSettings()
+    public static boolean openXiaomiSettings()
 com.github.jing332.tts_server_android.utils.MyTools:
     public static final com.github.jing332.tts_server_android.utils.MyTools INSTANCE
     static void <clinit>()

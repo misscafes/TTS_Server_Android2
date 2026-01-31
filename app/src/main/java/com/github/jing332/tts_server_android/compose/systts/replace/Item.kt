@@ -141,7 +141,7 @@ internal fun Item(
                             leadingIcon = {
                                 Icon(
                                     Icons.Filled.DeleteForever,
-                                    stringResource(R.string.delete),
+                                    null,
                                     tint = MaterialTheme.colorScheme.error
                                 )
                             },

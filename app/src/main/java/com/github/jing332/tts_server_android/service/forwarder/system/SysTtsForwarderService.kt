@@ -76,28 +76,10 @@ class SysTtsForwarderService(
     private val mLocalTtsHelper by lazy { LocalTtsEngineHelper(this) }
     private val androidTts by lazy { AndroidTtsEngine(this) }
 
-    // 保活相关
+    // 保活相关 - 不抢占音频焦点，避免影响其他TTS/音乐应用
     private val keepAliveScope = CoroutineScope(Dispatchers.Default + Job())
     private var keepAliveJob: Job? = null
-    private var audioManager: AudioManager? = null
-    private var audioFocusRequest: AudioFocusRequest? = null
     private val handler = Handler(Looper.getMainLooper())
-
-    // 屏幕状态监听
-    private val screenStateReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            when (intent?.action) {
-                Intent.ACTION_SCREEN_OFF -> {
-                    if (SystemTtsConfig.isKeepAliveSilentAudioEnabled.value) {
-                        playSilentAudio()
-                    }
-                }
-                Intent.ACTION_SCREEN_ON -> {
-                    stopSilentAudio()
-                }
-            }
-        }
-    }
 
     override fun onCreate() {
         super.onCreate()
@@ -117,15 +99,9 @@ class SysTtsForwarderService(
 
     /**
      * 启动保活机制
+     * 注意：不抢占音频焦点，避免影响其他TTS/音乐应用
      */
     private fun startKeepAlive() {
-        // 注册屏幕状态监听
-        val filter = IntentFilter().apply {
-            addAction(Intent.ACTION_SCREEN_ON)
-            addAction(Intent.ACTION_SCREEN_OFF)
-        }
-        registerReceiver(screenStateReceiver, filter)
-
         // 启动保活任务
         keepAliveJob = keepAliveScope.launch {
             while (isActive) {
@@ -143,78 +119,15 @@ class SysTtsForwarderService(
      */
     private fun stopKeepAlive() {
         keepAliveJob?.cancel()
-        stopSilentAudio()
-        try {
-            unregisterReceiver(screenStateReceiver)
-        } catch (_: Exception) {}
     }
 
     /**
      * 执行保活操作
+     * 注意：不抢占音频焦点，避免影响其他TTS/音乐应用
      */
     private fun performKeepAliveActions() {
-        // 1. 调用系统闹钟API保持CPU活跃
+        // 调用系统闹钟API保持CPU活跃
         SystemClock.sleep(1)
-
-        // 2. 定期请求音频焦点（保持音频服务活跃）
-        if (SystemTtsConfig.isKeepAliveAudioFocusEnabled.value) {
-            requestAudioFocus()
-        }
-    }
-
-    /**
-     * 播放静音音频（防止CPU休眠）
-     */
-    private fun playSilentAudio() {
-        requestAudioFocus()
-    }
-
-    /**
-     * 停止静音音频
-     */
-    private fun stopSilentAudio() {
-        abandonAudioFocus()
-    }
-
-    /**
-     * 请求音频焦点
-     */
-    private fun requestAudioFocus() {
-        audioManager = audioManager ?: getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT).apply {
-                setAudioAttributes(AudioAttributes.Builder().apply {
-                    setUsage(AudioAttributes.USAGE_MEDIA)
-                    setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
-                }.build())
-                setAcceptsDelayedFocusGain(true)
-                setOnAudioFocusChangeListener { }
-            }.build()
-            audioManager?.requestAudioFocus(audioFocusRequest!!)
-        } else {
-            @Suppress("DEPRECATION")
-            audioManager?.requestAudioFocus(
-                { },
-                AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT
-            )
-        }
-    }
-
-    /**
-     * 放弃音频焦点
-     */
-    private fun abandonAudioFocus() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            audioFocusRequest?.let {
-                audioManager?.abandonAudioFocusRequest(it)
-            }
-        } else {
-            @Suppress("DEPRECATION")
-            audioManager?.abandonAudioFocus { }
-        }
-        audioFocusRequest = null
     }
 
     override fun initServer() {

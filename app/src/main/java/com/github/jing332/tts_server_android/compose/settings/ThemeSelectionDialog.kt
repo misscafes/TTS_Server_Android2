@@ -74,7 +74,7 @@ fun ThemeSelectionDialog(
                 FlowRow {
                     AppTheme.values().forEach {
                         val leadingIcon: @Composable () -> Unit =
-                            { Icon(Icons.Default.Check, null) }
+                            { Icon(Icons.Default.Check, stringResource(R.string.theme)) }
 //                var selected by remember { mutableStateOf(it == AppTheme.DEFAULT) }
                         val selected = currentTheme.id == it.id
                         FilterChip(

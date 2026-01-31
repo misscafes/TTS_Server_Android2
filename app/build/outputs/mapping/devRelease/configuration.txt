@@ -10,6 +10,7 @@
 -keep class com.github.jing332.tts_server_android.compose.LibrariesActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.MainActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.backup.BackupRestoreActivity { <init>(); }
+-keep class com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.systts.directlink.LinkUploadRuleActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.systts.plugin.PluginManagerActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.systts.plugin.PluginPreviewActivity { <init>(); }
@@ -18,6 +19,14 @@
 -keep class com.github.jing332.tts_server_android.compose.systts.speechrule.SpeechRuleManagerActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.service.forwarder.system.QSTileService { <init>(); }
 -keep class com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService { <init>(); }
+-keep class com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService { <init>(); }
+-keep class com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver { <init>(); }
+-keep class com.github.jing332.tts_server_android.service.keepalive.BootCompleteReceiver { <init>(); }
+-keep class com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService { <init>(); }
+-keep class com.github.jing332.tts_server_android.service.keepalive.KeepAliveService { <init>(); }
+-keep class com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService { <init>(); }
+-keep class com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService { <init>(); }
+-keep class com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService { <init>(); }
 -keep class com.github.jing332.tts_server_android.service.systts.CheckVoiceData { <init>(); }
 -keep class com.github.jing332.tts_server_android.service.systts.SystemTtsService { <init>(); }
 -keep class com.github.jing332.tts_server_android.ui.AppHelpDocumentActivity { <init>(); }

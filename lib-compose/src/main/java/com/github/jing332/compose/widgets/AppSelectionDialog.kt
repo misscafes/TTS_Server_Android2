@@ -69,7 +69,7 @@ fun AppSelectionDialog(
             AsyncCircleImage(
                 modifier = Modifier.size(32.dp),
                 model = icon,
-                contentDescription = null
+                contentDescription = entry
             )
         Text(
             entry,

@@ -162,17 +162,24 @@ object SystemTtsConfig {
         initialValue = false
     )
 
-    /** 启用音频焦点保活（息屏时请求音频焦点保持活跃） */
-    val isKeepAliveAudioFocusEnabled = mutableDataSaverStateOf(
+    /** 启用无障碍保活 */
+    val isAccessibilityKeepAliveEnabled = mutableDataSaverStateOf(
         dataSaverInterface = dataSaverPref,
-        key = "isKeepAliveAudioFocusEnabled",
-        initialValue = true
+        key = "isAccessibilityKeepAliveEnabled",
+        initialValue = false
     )
 
-    /** 启用静音音频保活（播放静音音频防止CPU休眠） */
-    val isKeepAliveSilentAudioEnabled = mutableDataSaverStateOf(
+    /** 启用通知监听保活 */
+    val isNotificationKeepAliveEnabled = mutableDataSaverStateOf(
         dataSaverInterface = dataSaverPref,
-        key = "isKeepAliveSilentAudioEnabled",
+        key = "isNotificationKeepAliveEnabled",
+        initialValue = false
+    )
+
+    /** 启用定时唤醒保活 */
+    val isAlarmKeepAliveEnabled = mutableDataSaverStateOf(
+        dataSaverInterface = dataSaverPref,
+        key = "isAlarmKeepAliveEnabled",
         initialValue = false
     )
 
@@ -180,6 +187,20 @@ object SystemTtsConfig {
     val isAutoStartEnabled = mutableDataSaverStateOf(
         dataSaverInterface = dataSaverPref,
         key = "isAutoStartEnabled",
+        initialValue = false
+    )
+
+    /** 启用网络连接保活（对转发器有用） */
+    val isNetworkKeepAliveEnabled = mutableDataSaverStateOf(
+        dataSaverInterface = dataSaverPref,
+        key = "isNetworkKeepAliveEnabled",
+        initialValue = false
+    )
+
+    /** 启用像素保活（1像素悬浮窗） */
+    val isPixelKeepAliveEnabled = mutableDataSaverStateOf(
+        dataSaverInterface = dataSaverPref,
+        key = "isPixelKeepAliveEnabled",
         initialValue = false
     )
 }

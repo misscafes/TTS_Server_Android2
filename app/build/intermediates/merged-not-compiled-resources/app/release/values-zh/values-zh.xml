@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:ns1="http://schemas.android.com/tools">
     <string name="about">关于</string>
+    <string name="accessibility_keep_alive">无障碍保活</string>
+    <string name="accessibility_keep_alive_summary">利用无障碍服务高优先级保活（需手动开启）</string>
     <string name="add_bgm_tip">请添加文件/文件夹以作为BGM使用</string>
     <string name="add_bgm_tts">添加背景音乐</string>
     <string name="add_config">添加配置</string>
@@ -11,7 +13,11 @@
     <string name="add_local_tts">添加本地TTS</string>
     <string name="add_shortcut_if_fail_tips">如果失败，请授予【添加快捷方式权限】</string>
     <string name="added_battery_optimization_whitelist">已加入后台白名单</string>
+    <string name="advanced_keep_alive">高级保活</string>
+    <string name="alarm_keep_alive">定时唤醒保活</string>
+    <string name="alarm_keep_alive_summary">每分钟唤醒一次（耗电稍高）</string>
     <string name="all">全部</string>
+    <string name="already_enabled">已开启</string>
     <string name="app_down_again_to_exit">再按一次退出程序</string>
     <string name="app_help_document">帮助文档</string>
     <string name="app_language_desc">一语言：%1$s</string>
@@ -27,6 +33,7 @@
     <string name="audition">试听</string>
     <string name="audition_text">试听文本</string>
     <string name="auto_check_update">自动检查更新</string>
+    <string name="auto_start_settings">自启动设置</string>
     <string name="backup">备份</string>
     <string name="backup_restore">备份与恢复</string>
     <string name="battery_optimization_whitelist">电池优化白名单</string>
@@ -55,6 +62,7 @@
     <string name="clear_web_data">清空网页数据</string>
     <string name="cleared">已清空</string>
     <string name="click_play">点击播放</string>
+    <string name="click_to_enable">点击前往开启</string>
     <string name="clipboard">剪贴板</string>
     <string name="close">关闭</string>
     <string name="code_editor">代码编辑器</string>
@@ -90,6 +98,7 @@
     <string name="desc_delete_item">删除本条目</string>
     <string name="desc_edit_item">编辑条目</string>
     <string name="desc_expand_group">展开分组：%1$s</string>
+    <string name="desc_fab_add_config">添加配置</string>
     <string name="desc_seekbar_add">滑动条 +1</string>
     <string name="desc_seekbar_remove">滑动条 -1</string>
     <string name="desc_switch_item">启用或关闭本条目</string>
@@ -116,6 +125,10 @@
     <string name="edit_read_rule">编辑朗读规则</string>
     <string name="empty_list">列表为空</string>
     <string name="empty_list_tips_file_picker">空空如也~</string>
+    <string name="enable_auto_start">开机自启动</string>
+    <string name="enable_auto_start_summary">设备重启后自动启动服务</string>
+    <string name="enable_keep_alive">启用后台保活</string>
+    <string name="enable_keep_alive_summary">开启独立保活服务，增强后台稳定性（会增加少量电量消耗）</string>
     <string name="enabled">已启用</string>
     <string name="error">错误</string>
     <string name="exclude_from_recent">后台隐藏</string>
@@ -193,6 +206,20 @@
     <string name="invalid_url_msg">无效的URL：%1$s</string>
     <string name="is_confirm_delete">确认删除？</string>
     <string name="js_file_type_not_recognized">无法识别JS文件类型</string>
+    <string name="keep_alive_accessibility_desc">辅助 TTS Server 保持后台运行，防止被系统清理</string>
+    <string name="keep_alive_accessibility_label">TTS Server 后台保活</string>
+    <string name="keep_alive_help_message"><![CDATA[<b>为什么需要保活？</b><br/><br/>Android 系统会自动清理后台应用节省电量，各厂商（小米、华为、OPPO、vivo 等）还有额外限制，可能导致 TTS Server 被关闭。<br/><br/><b>推荐配置</b><br/><br/>一般用户：开启「电池优化白名单」即可<br/>需要稳定运行：白名单 + 后台保活服务<br/>极致保活：同时开启多种高级方案<br/><br/><b>保活方案说明</b><br/><br/><b>电池优化白名单</b><br/>系统功能，允许应用绕过电池优化限制，必开。<br/><br/><b>后台保活服务</b><br/>前台服务 + 唤醒锁，基础保活，推荐开启。<br/><br/><b>开机自启动</b><br/>设备重启后自动启动服务。<br/><br/><b>无障碍保活</b><br/>系统优先级最高，最稳定。需手动开启无障碍权限。<br/><br/><b>通知监听保活</b><br/>利用通知监听服务保活。需手动开启权限。<br/><br/><b>定时唤醒保活</b><br/>每分钟唤醒一次，耗电较高。<br/><br/><b>网络连接保活</b><br/>保持网络连接活跃，对转发器功能特别有用。<br/><br/><b>像素保活</b><br/>熄屏时显示1像素悬浮窗，亮屏自动隐藏，零打扰。<br/><br/><b>注意事项</b><br/><br/>1. 转发器运行时，保活通知会自动合并<br/>2. 部分厂商需额外设置「厂商后台设置」<br/>3. 同时开启多种方案效果更好，但耗电增加<br/>4. 本软件作为 TTS 引擎被调用，保活不抢占音频焦点]]></string>
+    <string name="keep_alive_help_summary">查看保活功能的使用说明和注意事项</string>
+    <string name="keep_alive_help_title">使用帮助</string>
+    <string name="keep_alive_merged_with_forwarder">检测到转发器正在运行，保活通知已合并至转发器通知中</string>
+    <string name="keep_alive_notification_desc">通过监听通知来保持 TTS Server 后台运行</string>
+    <string name="keep_alive_notification_label">TTS Server 通知保活</string>
+    <string name="keep_alive_service">后台保活服务</string>
+    <string name="keep_alive_service_content">正在保持后台运行...</string>
+    <string name="keep_alive_service_desc">防止应用被系统杀死（墓碑冻结）</string>
+    <string name="keep_alive_service_title">TTS Server 后台保活</string>
+    <string name="keep_alive_settings">后台保活设置</string>
+    <string name="keep_alive_settings_summary">配置多种机制防止应用被系统杀死</string>
     <string name="keyboard_toolbar_settings">输入法工具栏设置</string>
     <string name="keyboard_toolbar_settings_tips">插入值 = 显示名称 \n⚠️注意等号两侧要空格</string>
     <string name="kill_process">结束进程</string>
@@ -234,6 +261,10 @@
     <string name="log">日志</string>
     <string name="login">登录</string>
     <string name="male">男</string>
+    <string name="manufacturer_whitelist">厂商后台设置</string>
+    <string name="manufacturer_whitelist_message">不同厂商的系统对后台应用有不同的限制策略。为确保 TTS Server 能在后台持续运行，请将本应用加入以下白名单：\n\n1. 电池优化白名单\n2. 后台运行白名单\n3. 自启动管理\n\n点击确定将跳转到系统设置页面。</string>
+    <string name="manufacturer_whitelist_summary">%s 点击跳转到系统设置将本应用加入后台白名单</string>
+    <string name="manufacturer_whitelist_title">厂商后台优化</string>
     <string name="master_switch">总开关</string>
     <string name="max_retry_count">最大重试次数</string>
     <string name="max_retry_count_summary">请求失败后的重试次数</string>
@@ -253,6 +284,10 @@
     <string name="name">名称</string>
     <string name="nav_app_bar_open_drawer_description" ns1:ignore="PrivateResource">打开抽屉式导航栏</string>
     <string name="nav_back">返回</string>
+    <string name="network_keep_alive">网络连接保活</string>
+    <string name="network_keep_alive_started">网络连接保活已启动</string>
+    <string name="network_keep_alive_stopped">网络连接保活已停止</string>
+    <string name="network_keep_alive_summary">保持网络连接活跃（对转发器有用）</string>
     <string name="new_version_available">有新版本：%1$s</string>
     <string name="no_audio_data_head_warn">⚠️ 该音频没有数据头，故无法获取信息。</string>
     <string name="no_files_in_dir">此目录下无文件</string>
@@ -262,6 +297,8 @@
     <string name="none">无</string>
     <string name="not_found_plugin">⚠️未找到插件: %1$s</string>
     <string name="not_support_audition">⚠️ 不支持试听！</string>
+    <string name="notification_keep_alive">通知监听保活</string>
+    <string name="notification_keep_alive_summary">利用通知监听服务保活（需手动开启）</string>
     <string name="off_multi_voice_use_global">请关闭多语音选项以使用单语音模式</string>
     <string name="ok_reset">已重置</string>
     <string name="open_log_folder">打开日志文件夹</string>
@@ -273,6 +310,10 @@
     <string name="paste">粘贴</string>
     <string name="path_is_empty">路径为空</string>
     <string name="pink">粉色</string>
+    <string name="pixel_keep_alive">像素保活</string>
+    <string name="pixel_keep_alive_started">像素保活已启动</string>
+    <string name="pixel_keep_alive_stopped">像素保活已停止</string>
+    <string name="pixel_keep_alive_summary">1像素悬浮窗，对用户不可见</string>
     <string name="playing">播放中</string>
     <string name="please_choose">请选择</string>
     <string name="please_turn_off_direct_play">请关闭【直接播放】选项</string>
@@ -381,6 +422,7 @@
     <string name="spinner_drop_down_max_count_summary">当下拉框内容数超过设置值时将以弹出对话框形式显示。</string>
     <string name="start">启动</string>
     <string name="still_to_import">仍要导入</string>
+    <string name="stop_keep_alive">停止保活</string>
     <string name="str_import">导入</string>
     <string name="str_key">键</string>
     <string name="str_value">值</string>

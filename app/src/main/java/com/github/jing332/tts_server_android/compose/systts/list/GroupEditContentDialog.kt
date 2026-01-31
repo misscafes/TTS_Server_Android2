@@ -105,7 +105,7 @@ fun GroupEditContentDialog(
                     ) {
                         Icon(
                             imageVector = if (allSelected) Icons.Default.Clear else Icons.Default.DoneAll,
-                            contentDescription = null
+                            contentDescription = if (allSelected) stringResource(R.string.clear) else stringResource(R.string.select_all)
                         )
                     }
                 }
@@ -122,7 +122,7 @@ fun GroupEditContentDialog(
                     trailingIcon = {
                         if (searchQuery.isNotEmpty()) {
                             IconButton(onClick = { searchQuery = "" }) {
-                                Icon(Icons.Default.Clear, null)
+                                Icon(Icons.Default.Clear, stringResource(R.string.clear))
                             }
                         }
                     },

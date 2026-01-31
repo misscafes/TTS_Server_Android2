@@ -1921,6 +1921,8 @@ string abc_shareactionprovider_share_with
 string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
 string about
+string accessibility_keep_alive
+string accessibility_keep_alive_summary
 string account
 string add_bgm_tip
 string add_bgm_tts
@@ -1932,7 +1934,11 @@ string add_group
 string add_local_tts
 string add_shortcut_if_fail_tips
 string added_battery_optimization_whitelist
+string advanced_keep_alive
+string alarm_keep_alive
+string alarm_keep_alive_summary
 string all
+string already_enabled
 string androidx_startup
 string app_down_again_to_exit
 string app_help_document
@@ -1951,6 +1957,7 @@ string audio_source_error
 string audition
 string audition_text
 string auto_check_update
+string auto_start_settings
 string backup
 string backup_folder
 string backup_restore
@@ -1989,6 +1996,7 @@ string clear_text_content
 string clear_web_data
 string cleared
 string click_play
+string click_to_enable
 string clipboard
 string close
 string close_drawer
@@ -2030,6 +2038,7 @@ string desc_collapse_group
 string desc_delete_item
 string desc_edit_item
 string desc_expand_group
+string desc_fab_add_config
 string desc_seekbar_add
 string desc_seekbar_remove
 string desc_switch_item
@@ -2058,6 +2067,10 @@ string edit_read_rule
 string empty_folder
 string empty_list
 string empty_list_tips_file_picker
+string enable_auto_start
+string enable_auto_start_summary
+string enable_keep_alive
+string enable_keep_alive_summary
 string enabled
 string error
 string exclude_from_recent
@@ -2189,6 +2202,20 @@ string invalid_scheme_msg
 string invalid_url_msg
 string is_confirm_delete
 string js_file_type_not_recognized
+string keep_alive_accessibility_desc
+string keep_alive_accessibility_label
+string keep_alive_help_message
+string keep_alive_help_summary
+string keep_alive_help_title
+string keep_alive_merged_with_forwarder
+string keep_alive_notification_desc
+string keep_alive_notification_label
+string keep_alive_service
+string keep_alive_service_content
+string keep_alive_service_desc
+string keep_alive_service_title
+string keep_alive_settings
+string keep_alive_settings_summary
 string keyboard_toolbar_settings
 string keyboard_toolbar_settings_tips
 string kill_process
@@ -2296,6 +2323,10 @@ string m3c_tooltip_pane_description
 string m3c_wide_navigation_rail_close_rail
 string m3c_wide_navigation_rail_pane_title
 string male
+string manufacturer_whitelist
+string manufacturer_whitelist_message
+string manufacturer_whitelist_summary
+string manufacturer_whitelist_title
 string master_switch
 string max_retry_count
 string max_retry_count_summary
@@ -2315,6 +2346,7 @@ string msg_group_is_empty
 string name
 string nav_app_bar_open_drawer_description
 string nav_back
+string navigate_back
 string navigation_menu
 string net_connect_error
 string net_connect_timeout_error
@@ -2329,6 +2361,10 @@ string net_parse_error
 string net_request_error
 string net_server_error
 string net_url_error
+string network_keep_alive
+string network_keep_alive_started
+string network_keep_alive_stopped
+string network_keep_alive_summary
 string new_version_available
 string no_audio_data_head_warn
 string no_error_message
@@ -2341,7 +2377,10 @@ string not_configured
 string not_found_plugin
 string not_selected
 string not_support_audition
+string notification_keep_alive
+string notification_keep_alive_summary
 string off_multi_voice_use_global
+string ok
 string ok_reset
 string open_log_folder
 string open_ra_tag_options
@@ -2353,6 +2392,10 @@ string password
 string paste
 string path_is_empty
 string pink
+string pixel_keep_alive
+string pixel_keep_alive_started
+string pixel_keep_alive_stopped
+string pixel_keep_alive_summary
 string playing
 string please_choose
 string please_turn_off_direct_play
@@ -2474,6 +2517,7 @@ string state_off
 string state_on
 string status_bar_notification_info_overflow
 string still_to_import
+string stop_keep_alive
 string str_import
 string str_key
 string str_value
@@ -3111,6 +3155,7 @@ styleable ViewBackgroundHelper android_background backgroundTint backgroundTintM
 styleable ViewStubCompat android_id android_layout android_inflatedId
 styleable ViewTransition android_id SharedValue SharedValueId clearsTag duration ifTagNotSet ifTagSet motionInterpolator motionTarget onStateTransition pathMotionArc setsTag transitionDisable upDuration viewTransitionMode
 styleable include constraintSet
+xml accessibility_service_config
 xml file_paths
 xml network_security_config
 xml tts_engine

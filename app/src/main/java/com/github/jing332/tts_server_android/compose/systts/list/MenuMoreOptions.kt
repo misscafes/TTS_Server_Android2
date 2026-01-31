@@ -68,7 +68,7 @@ internal fun MenuMoreOptions(
                 isSplit = it
             },
             leadingIcon = {
-                Icon(Icons.Default.ContentCut, null)
+                Icon(Icons.Default.ContentCut, stringResource(R.string.systts_split_long_sentences))
             }
         )
 
@@ -81,7 +81,7 @@ internal fun MenuMoreOptions(
                 SystemTtsService.notifyUpdateConfig()
             },
             leadingIcon = {
-                Icon(Icons.Default.Group, null)
+                Icon(Icons.Default.Group, stringResource(R.string.systts_multi_voice_option))
             },
         )
         HorizontalDivider()
@@ -90,7 +90,7 @@ internal fun MenuMoreOptions(
             text = { Text(stringResource(id = R.string.audio_params)) },
             onClick = { showAudioParamsDialog = true },
             leadingIcon = {
-                Icon(Icons.Default.Speed, null)
+                Icon(Icons.Default.Speed, stringResource(R.string.audio_params))
             }
         )
 
@@ -98,7 +98,7 @@ internal fun MenuMoreOptions(
             text = { Text(stringResource(id = R.string.bgm_settings)) },
             onClick = { showBgmSettingsDialog = true },
             leadingIcon = {
-                Icon(Icons.Default.Audiotrack, null)
+                Icon(Icons.Default.Audiotrack, stringResource(R.string.bgm_settings))
             }
         )
 
@@ -110,7 +110,7 @@ internal fun MenuMoreOptions(
                 context.startActivity(SpeechRuleManagerActivity::class.java)
             },
             leadingIcon = {
-                Icon(Icons.AutoMirrored.Default.MenuBook, null)
+                Icon(Icons.AutoMirrored.Default.MenuBook, stringResource(R.string.speech_rule_manager))
             }
         )
 
@@ -121,7 +121,7 @@ internal fun MenuMoreOptions(
                 context.startActivity(PluginManagerActivity::class.java)
             },
             leadingIcon = {
-                Icon(painterResource(id = R.drawable.ic_shortcut_plugin), null)
+                Icon(painterResource(id = R.drawable.ic_shortcut_plugin), stringResource(R.string.plugin_manager))
             }
         )
 
@@ -136,7 +136,7 @@ internal fun MenuMoreOptions(
                 SystemTtsConfig.isReplaceEnabled.value = it
             },
             leadingIcon = {
-                Icon(Icons.AutoMirrored.Default.ManageSearch, null)
+                Icon(Icons.AutoMirrored.Default.ManageSearch, stringResource(R.string.replace_rule_manager))
             }
         )
 
@@ -147,7 +147,7 @@ internal fun MenuMoreOptions(
             onDismissRequest()
             showImportSheet = true },
             leadingIcon = {
-                Icon(Icons.AutoMirrored.Default.Input, null)
+                Icon(Icons.AutoMirrored.Default.Input, stringResource(R.string.import_config))
             }
         )
 
@@ -157,7 +157,7 @@ internal fun MenuMoreOptions(
             onDismissRequest()
             onExportAll()
         }, leadingIcon = {
-            Icon(Icons.Default.Output, null)
+            Icon(Icons.Default.Output, stringResource(R.string.export_config))
         })
     }
 }

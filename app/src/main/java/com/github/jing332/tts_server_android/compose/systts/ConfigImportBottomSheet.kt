@@ -167,7 +167,7 @@ fun ConfigImportBottomSheet(
                                     index = index,
                                     items.size
                                 ),
-                                icon = { Icon(item.second, null) }
+                                icon = { Icon(item.second, stringResource(item.first)) }
                             ) {
                                 Text(stringResource(item.first), maxLines = 1)
                             }
@@ -252,7 +252,7 @@ fun ConfigImportBottomSheet(
                         }
                     }) {
                     Row {
-                        Icon(Icons.AutoMirrored.Default.Input, null)
+                        Icon(Icons.AutoMirrored.Default.Input, stringResource(R.string.import_config))
                         Text(stringResource(id = R.string.import_config))
                     }
                 }

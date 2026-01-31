@@ -114,7 +114,7 @@ fun GroupItem(
         )
         Icon(
             Icons.Default.ExpandCircleDown,
-            contentDescription = null,
+            contentDescription = stringResource(if (isExpanded) R.string.desc_collapse_group else R.string.desc_expand_group, name),
             modifier = Modifier
                 .rotate(rotationAngle)
                 .graphicsLayer { rotationZ = rotationAngle }
@@ -161,7 +161,7 @@ fun GroupItem(
                             onExport()
                         },
                         leadingIcon = {
-                            Icon(Icons.Default.Output, null)
+                            Icon(Icons.Default.Output, stringResource(R.string.export_config))
                         }
                     )
 
@@ -176,7 +176,7 @@ fun GroupItem(
                         leadingIcon = {
                             Icon(
                                 Icons.Default.DeleteForever,
-                                contentDescription = null,
+                                stringResource(R.string.delete),
                                 tint = MaterialTheme.colorScheme.error
                             )
                         },

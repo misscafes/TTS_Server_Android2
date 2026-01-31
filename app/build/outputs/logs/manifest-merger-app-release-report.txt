@@ -1,20 +1,20 @@
 -- Merging decision tree log ---
 provider#androidx.core.content.FileProvider
-INJECTED from /workspace/app/src/main/AndroidManifest.xml:234:9-242:20
+INJECTED from /workspace/app/src/main/AndroidManifest.xml:316:9-324:20
 	android:grantUriPermissions
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:238:13-47
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:320:13-47
 	android:authorities
 		INJECTED from /workspace/app/src/main/AndroidManifest.xml
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:236:13-64
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:318:13-64
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:237:13-37
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:319:13-37
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:235:13-62
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:317:13-62
 manifest
-ADDED from /workspace/app/src/main/AndroidManifest.xml:2:1-245:12
-INJECTED from /workspace/app/src/main/AndroidManifest.xml:2:1-245:12
-INJECTED from /workspace/app/src/main/AndroidManifest.xml:2:1-245:12
-INJECTED from /workspace/app/src/main/AndroidManifest.xml:2:1-245:12
+ADDED from /workspace/app/src/main/AndroidManifest.xml:2:1-327:12
+INJECTED from /workspace/app/src/main/AndroidManifest.xml:2:1-327:12
+INJECTED from /workspace/app/src/main/AndroidManifest.xml:2:1-327:12
+INJECTED from /workspace/app/src/main/AndroidManifest.xml:2:1-327:12
 MERGED from [:lib-tts] /workspace/lib-tts/build/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:lib-compose] /workspace/lib-compose/build/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml:2:1-7:12
 MERGED from [:lib-script] /workspace/lib-script/build/intermediates/merged_manifest/release/processReleaseManifest/AndroidManifest.xml:2:1-9:12
@@ -222,9 +222,41 @@ uses-permission#android.permission.POST_NOTIFICATIONS
 ADDED from /workspace/app/src/main/AndroidManifest.xml:26:5-77
 	android:name
 		ADDED from /workspace/app/src/main/AndroidManifest.xml:26:22-74
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from /workspace/app/src/main/AndroidManifest.xml:27:5-81
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:27:22-78
+uses-permission#android.permission.FOREGROUND_SERVICE_SPECIAL_USE
+ADDED from /workspace/app/src/main/AndroidManifest.xml:28:5-89
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:28:22-86
+uses-permission#android.permission.BIND_JOB_SERVICE
+ADDED from /workspace/app/src/main/AndroidManifest.xml:29:5-75
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:29:22-72
+uses-permission#android.permission.BIND_ACCESSIBILITY_SERVICE
+ADDED from /workspace/app/src/main/AndroidManifest.xml:30:5-85
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:30:22-82
+uses-permission#android.permission.BIND_NOTIFICATION_LISTENER_SERVICE
+ADDED from /workspace/app/src/main/AndroidManifest.xml:31:5-93
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:31:22-90
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from /workspace/app/src/main/AndroidManifest.xml:32:5-79
+MERGED from [androidx.media3:media3-common:1.5.1] /root/.gradle/caches/8.10.2/transforms/06db166dea0ff52fe0115b07c9898207/transformed/jetified-media3-common-1.5.1/AndroidManifest.xml:22:5-79
+MERGED from [androidx.media3:media3-common:1.5.1] /root/.gradle/caches/8.10.2/transforms/06db166dea0ff52fe0115b07c9898207/transformed/jetified-media3-common-1.5.1/AndroidManifest.xml:22:5-79
+MERGED from [androidx.media3:media3-exoplayer:1.5.1] /root/.gradle/caches/8.10.2/transforms/c27ab6f942ae31e9d8ef9f3956cc6048/transformed/jetified-media3-exoplayer-1.5.1/AndroidManifest.xml:22:5-79
+MERGED from [androidx.media3:media3-exoplayer:1.5.1] /root/.gradle/caches/8.10.2/transforms/c27ab6f942ae31e9d8ef9f3956cc6048/transformed/jetified-media3-exoplayer-1.5.1/AndroidManifest.xml:22:5-79
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:32:22-76
+uses-permission#android.permission.SYSTEM_ALERT_WINDOW
+ADDED from /workspace/app/src/main/AndroidManifest.xml:33:5-78
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:33:22-75
 application
-ADDED from /workspace/app/src/main/AndroidManifest.xml:28:5-243:19
-INJECTED from /workspace/app/src/main/AndroidManifest.xml:28:5-243:19
+ADDED from /workspace/app/src/main/AndroidManifest.xml:35:5-325:19
+INJECTED from /workspace/app/src/main/AndroidManifest.xml:35:5-325:19
 MERGED from [com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:35:5-47:19
 MERGED from [com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:35:5-47:19
 MERGED from [me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:9:5-15:19
@@ -254,287 +286,399 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] /root/.gradle/caches/8.10.2
 	android:extractNativeLibs
 		INJECTED from /workspace/app/src/main/AndroidManifest.xml
 	android:requestLegacyExternalStorage
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:33:9-52
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:40:9-52
 	tools:ignore
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:38:9-39
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:45:9-39
 	android:roundIcon
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:34:9-58
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:41:9-58
 	android:icon
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:31:9-47
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:38:9-47
 	android:networkSecurityConfig
 		ADDED from [com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:36:9-69
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.15.0] /root/.gradle/caches/8.10.2/transforms/0bf2e7bec03b77d20b66869045dc58bd/transformed/core-1.15.0/AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:35:9-35
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:42:9-35
 	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:32:9-41
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:39:9-41
 	tools:targetApi
 		ADDED from [com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:37:9-28
 	android:allowBackup
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:30:9-35
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:37:9-35
 	android:theme
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:36:9-47
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:43:9-47
 	android:usesCleartextTraffic
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:37:9-44
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:44:9-44
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:29:9-28
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:36:9-28
 activity#com.github.jing332.tts_server_android.ui.view.ErrorDialogActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:39:9-42:55
+ADDED from /workspace/app/src/main/AndroidManifest.xml:46:9-49:55
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:41:13-37
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:48:13-37
 	android:theme
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:42:13-52
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:49:13-52
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:40:13-56
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:47:13-56
 activity#com.github.jing332.tts_server_android.compose.systts.plugin.PluginPreviewActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:43:9-45:40
+ADDED from /workspace/app/src/main/AndroidManifest.xml:50:9-52:40
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:45:13-37
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:52:13-37
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:44:13-72
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:51:13-72
 activity#com.github.jing332.tts_server_android.compose.systts.replace.ReplaceManagerActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:46:9-49:60
+ADDED from /workspace/app/src/main/AndroidManifest.xml:53:9-56:60
 	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:49:13-57
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:56:13-57
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:48:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:55:13-36
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:47:13-74
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:54:13-74
 activity#com.github.jing332.tts_server_android.compose.systts.directlink.LinkUploadRuleActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:50:9-53:60
+ADDED from /workspace/app/src/main/AndroidManifest.xml:57:9-60:60
 	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:53:13-57
-	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:52:13-36
-	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:51:13-77
-activity#com.github.jing332.tts_server_android.ui.AppHelpDocumentActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:54:9-56:39
-	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:56:13-36
-	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:55:13-55
-activity#com.github.jing332.tts_server_android.compose.backup.BackupRestoreActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:57:9-87:20
-	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:60:13-51
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:60:13-57
 	android:exported
 		ADDED from /workspace/app/src/main/AndroidManifest.xml:59:13-36
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:58:13-65
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:58:13-77
+activity#com.github.jing332.tts_server_android.ui.AppHelpDocumentActivity
+ADDED from /workspace/app/src/main/AndroidManifest.xml:61:9-63:39
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:63:13-36
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:62:13-55
+activity#com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity
+ADDED from /workspace/app/src/main/AndroidManifest.xml:64:9-67:59
+	android:label
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:67:13-56
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:66:13-36
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:65:13-71
+activity#com.github.jing332.tts_server_android.compose.backup.BackupRestoreActivity
+ADDED from /workspace/app/src/main/AndroidManifest.xml:68:9-98:20
+	android:label
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:71:13-51
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:70:13-36
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:69:13-65
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:mimeType:application/zip+data:scheme:app+data:scheme:content+data:scheme:file
-ADDED from /workspace/app/src/main/AndroidManifest.xml:61:13-71:29
+ADDED from /workspace/app/src/main/AndroidManifest.xml:72:13-82:29
 action#android.intent.action.VIEW
-ADDED from /workspace/app/src/main/AndroidManifest.xml:62:17-69
+ADDED from /workspace/app/src/main/AndroidManifest.xml:73:17-69
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:62:25-66
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:73:25-66
 category#android.intent.category.DEFAULT
-ADDED from /workspace/app/src/main/AndroidManifest.xml:64:17-76
+ADDED from /workspace/app/src/main/AndroidManifest.xml:75:17-76
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:64:27-73
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:75:27-73
 category#android.intent.category.BROWSABLE
-ADDED from /workspace/app/src/main/AndroidManifest.xml:65:17-78
+ADDED from /workspace/app/src/main/AndroidManifest.xml:76:17-78
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:65:27-75
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:76:27-75
 data
-ADDED from /workspace/app/src/main/AndroidManifest.xml:67:17-46
+ADDED from /workspace/app/src/main/AndroidManifest.xml:78:17-46
 	android:pathAdvancedPattern
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:83:23-70
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:94:23-70
 	android:host
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:78:23-39
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:89:23-39
 	android:scheme
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:67:23-43
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:78:23-43
 	android:pathPattern
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:84:23-53
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:95:23-53
 	android:mimeType
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:70:23-57
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:81:23-57
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:*+data:mimeType:*/*+data:pathPattern:.*\\.ZIP+data:pathPattern:.*\\.zip+data:scheme:app+data:scheme:content+data:scheme:file
-ADDED from /workspace/app/src/main/AndroidManifest.xml:72:13-86:29
+ADDED from /workspace/app/src/main/AndroidManifest.xml:83:13-97:29
 activity#com.github.jing332.tts_server_android.ui.FilePickerActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:88:9-90:55
+ADDED from /workspace/app/src/main/AndroidManifest.xml:99:9-101:55
 	android:theme
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:90:13-52
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:101:13-52
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:89:13-50
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:100:13-50
 activity#com.github.jing332.tts_server_android.compose.systts.speechrule.SpeechRuleManagerActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:91:9-95:87
+ADDED from /workspace/app/src/main/AndroidManifest.xml:102:9-106:87
 	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:94:13-56
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:105:13-56
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:93:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:104:13-36
 	android:taskAffinity
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:95:13-84
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:106:13-84
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:92:13-80
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:103:13-80
 activity#com.github.jing332.tts_server_android.ui.ExoPlayerActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:96:9-99:56
+ADDED from /workspace/app/src/main/AndroidManifest.xml:107:9-110:56
 	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:99:13-53
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:110:13-53
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:98:13-37
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:109:13-37
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:97:13-49
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:108:13-49
 activity#com.github.jing332.tts_server_android.compose.systts.plugin.PluginManagerActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:100:9-103:54
+ADDED from /workspace/app/src/main/AndroidManifest.xml:111:9-114:54
 	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:103:13-51
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:114:13-51
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:102:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:113:13-36
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:101:13-72
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:112:13-72
 activity#com.github.jing332.tts_server_android.ui.ImportConfigActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:104:9-152:20
+ADDED from /workspace/app/src/main/AndroidManifest.xml:115:9-163:20
 	android:launchMode
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:107:13-44
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:118:13-44
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:106:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:117:13-36
 	android:taskAffinity
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:108:13-80
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:119:13-80
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:105:13-52
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:116:13-52
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:scheme:ttsrv
-ADDED from /workspace/app/src/main/AndroidManifest.xml:109:13-116:29
+ADDED from /workspace/app/src/main/AndroidManifest.xml:120:13-127:29
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:mimeType:application/json+data:mimeType:text/plain+data:scheme:app+data:scheme:content+data:scheme:file
-ADDED from /workspace/app/src/main/AndroidManifest.xml:117:13-128:29
+ADDED from /workspace/app/src/main/AndroidManifest.xml:128:13-139:29
 intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:*+data:mimeType:*/*+data:pathPattern:.*\\.JS+data:pathPattern:.*\\.JSON+data:pathPattern:.*\\.TXT+data:pathPattern:.*\\.js+data:pathPattern:.*\\.json+data:pathPattern:.*\\.txt+data:scheme:app+data:scheme:content+data:scheme:file
-ADDED from /workspace/app/src/main/AndroidManifest.xml:129:13-151:29
+ADDED from /workspace/app/src/main/AndroidManifest.xml:140:13-162:29
 activity#com.github.jing332.tts_server_android.compose.LibrariesActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:153:9-63
+ADDED from /workspace/app/src/main/AndroidManifest.xml:164:9-63
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:153:19-60
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:164:19-60
 activity#com.github.jing332.tts_server_android.compose.MainActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:154:9-165:20
+ADDED from /workspace/app/src/main/AndroidManifest.xml:165:9-176:20
 	android:launchMode
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:157:13-44
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:168:13-44
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:156:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:167:13-36
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:155:13-49
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:166:13-49
 intent-filter#action:name:android.intent.action.MAIN+action:name:android.service.quicksettings.action.QS_TILE_PREFERENCES+category:name:android.intent.category.LAUNCHER
-ADDED from /workspace/app/src/main/AndroidManifest.xml:158:13-164:29
+ADDED from /workspace/app/src/main/AndroidManifest.xml:169:13-175:29
 action#android.intent.action.MAIN
-ADDED from /workspace/app/src/main/AndroidManifest.xml:159:17-69
+ADDED from /workspace/app/src/main/AndroidManifest.xml:170:17-69
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:159:25-66
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:170:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /workspace/app/src/main/AndroidManifest.xml:161:17-77
+ADDED from /workspace/app/src/main/AndroidManifest.xml:172:17-77
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:161:27-74
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:172:27-74
 action#android.service.quicksettings.action.QS_TILE_PREFERENCES
-ADDED from /workspace/app/src/main/AndroidManifest.xml:163:17-99
+ADDED from /workspace/app/src/main/AndroidManifest.xml:174:17-99
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:163:25-96
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:174:25-96
 activity#com.github.jing332.tts_server_android.compose.systts.plugin.login.PluginLoginActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:167:9-85
+ADDED from /workspace/app/src/main/AndroidManifest.xml:178:9-85
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:167:19-82
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:178:19-82
 activity#com.github.jing332.tts_server_android.ui.forwarder.SystemForwarderSwitchActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:169:9-173:62
+ADDED from /workspace/app/src/main/AndroidManifest.xml:180:9-184:62
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:171:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:182:13-36
 	android:theme
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:173:13-59
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:184:13-59
 	android:taskAffinity
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:172:13-45
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:183:13-45
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:170:13-71
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:181:13-71
 activity#com.github.jing332.tts_server_android.service.systts.CheckVoiceData
-ADDED from /workspace/app/src/main/AndroidManifest.xml:174:9-183:20
+ADDED from /workspace/app/src/main/AndroidManifest.xml:185:9-194:20
 	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:177:13-43
-	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:176:13-36
-	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:175:13-58
-intent-filter#action:name:android.speech.tts.engine.CHECK_TTS_DATA+category:name:android.intent.category.DEFAULT
-ADDED from /workspace/app/src/main/AndroidManifest.xml:178:13-182:29
-action#android.speech.tts.engine.CHECK_TTS_DATA
-ADDED from /workspace/app/src/main/AndroidManifest.xml:179:17-83
-	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:179:25-80
-activity#com.github.jing332.tts_server_android.compose.DebugSystemTtsActivity
-ADDED from /workspace/app/src/main/AndroidManifest.xml:185:9-189:48
-	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:188:13-42
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:188:13-43
 	android:exported
 		ADDED from /workspace/app/src/main/AndroidManifest.xml:187:13-36
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:186:13-58
+intent-filter#action:name:android.speech.tts.engine.CHECK_TTS_DATA+category:name:android.intent.category.DEFAULT
+ADDED from /workspace/app/src/main/AndroidManifest.xml:189:13-193:29
+action#android.speech.tts.engine.CHECK_TTS_DATA
+ADDED from /workspace/app/src/main/AndroidManifest.xml:190:17-83
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:190:25-80
+activity#com.github.jing332.tts_server_android.compose.DebugSystemTtsActivity
+ADDED from /workspace/app/src/main/AndroidManifest.xml:196:9-200:48
+	android:label
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:199:13-42
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:198:13-36
 	android:taskAffinity
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:189:13-45
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:200:13-45
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:186:13-59
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:197:13-59
 service#androidx.appcompat.app.AppLocalesMetadataHolderService
-ADDED from /workspace/app/src/main/AndroidManifest.xml:191:9-198:19
+ADDED from /workspace/app/src/main/AndroidManifest.xml:202:9-209:19
 	android:enabled
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:193:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:204:13-36
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:194:13-37
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:205:13-37
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:192:13-82
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:203:13-82
 meta-data#autoStoreLocales
-ADDED from /workspace/app/src/main/AndroidManifest.xml:195:13-197:41
+ADDED from /workspace/app/src/main/AndroidManifest.xml:206:13-208:41
 	android:value
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:197:17-38
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:208:17-38
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:196:17-48
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:207:17-48
 service#com.github.jing332.tts_server_android.service.systts.SystemTtsService
-ADDED from /workspace/app/src/main/AndroidManifest.xml:199:9-214:19
+ADDED from /workspace/app/src/main/AndroidManifest.xml:210:9-225:19
 	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:203:13-45
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:214:13-45
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:201:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:212:13-36
 	tools:ignore
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:204:13-43
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:215:13-43
 	android:foregroundServiceType
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:202:13-58
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:213:13-58
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:200:13-60
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:211:13-60
 intent-filter#action:name:android.intent.action.TTS_SERVICE+category:name:android.intent.category.DEFAULT
-ADDED from /workspace/app/src/main/AndroidManifest.xml:205:13-209:29
+ADDED from /workspace/app/src/main/AndroidManifest.xml:216:13-220:29
 meta-data#android.speech.tts
-ADDED from /workspace/app/src/main/AndroidManifest.xml:211:13-213:54
+ADDED from /workspace/app/src/main/AndroidManifest.xml:222:13-224:54
 	android:resource
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:213:17-51
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:224:17-51
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:212:17-50
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:223:17-50
 service#com.github.jing332.tts_server_android.service.forwarder.system.QSTileService
-ADDED from /workspace/app/src/main/AndroidManifest.xml:216:9-226:19
+ADDED from /workspace/app/src/main/AndroidManifest.xml:227:9-237:19
 	android:label
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:220:13-53
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:231:13-53
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:218:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:229:13-36
 	android:permission
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:221:13-77
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:232:13-77
 	tools:targetApi
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:222:13-32
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:233:13-32
 	android:icon
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:219:13-57
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:230:13-57
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:217:13-67
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:228:13-67
 intent-filter#action:name:android.service.quicksettings.action.QS_TILE
-ADDED from /workspace/app/src/main/AndroidManifest.xml:223:13-225:29
+ADDED from /workspace/app/src/main/AndroidManifest.xml:234:13-236:29
 action#android.service.quicksettings.action.QS_TILE
-ADDED from /workspace/app/src/main/AndroidManifest.xml:224:17-87
+ADDED from /workspace/app/src/main/AndroidManifest.xml:235:17-87
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:224:25-84
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:235:25-84
 service#com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService
-ADDED from /workspace/app/src/main/AndroidManifest.xml:227:9-232:61
+ADDED from /workspace/app/src/main/AndroidManifest.xml:238:9-243:61
 	android:enabled
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:229:13-35
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:240:13-35
 	android:exported
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:230:13-36
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:241:13-36
 	tools:ignore
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:232:13-58
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:243:13-58
 	android:foregroundServiceType
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:231:13-58
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:242:13-58
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:228:13-76
-meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from /workspace/app/src/main/AndroidManifest.xml:239:13-241:54
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:239:13-76
+service#com.github.jing332.tts_server_android.service.keepalive.KeepAliveService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:246:9-250:58
+	android:enabled
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:248:13-35
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:249:13-37
+	android:foregroundServiceType
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:250:13-55
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:247:13-63
+service#com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:253:9-257:72
+	android:enabled
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:255:13-35
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:256:13-37
+	android:permission
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:257:13-69
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:254:13-66
+service#com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:260:9-272:19
+	android:enabled
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:262:13-35
+	android:label
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:265:13-67
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:263:13-36
+	android:permission
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:264:13-79
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:261:13-76
+intent-filter#action:name:android.accessibilityservice.AccessibilityService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:266:13-268:29
+action#android.accessibilityservice.AccessibilityService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:267:17-92
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:267:25-89
+meta-data#android.accessibilityservice
+ADDED from /workspace/app/src/main/AndroidManifest.xml:269:13-271:72
 	android:resource
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:241:17-51
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:271:17-69
 	android:name
-		ADDED from /workspace/app/src/main/AndroidManifest.xml:240:17-67
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:270:17-60
+service#com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:275:9-284:19
+	android:enabled
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:277:13-35
+	android:label
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:280:13-66
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:278:13-36
+	android:permission
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:279:13-87
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:276:13-75
+intent-filter#action:name:android.service.notification.NotificationListenerService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:281:13-283:29
+action#android.service.notification.NotificationListenerService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:282:17-99
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:282:25-96
+receiver#com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver
+ADDED from /workspace/app/src/main/AndroidManifest.xml:287:9-290:40
+	android:enabled
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:289:13-35
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:290:13-37
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:288:13-69
+service#com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:293:9-297:56
+	android:enabled
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:295:13-35
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:296:13-37
+	android:foregroundServiceType
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:297:13-53
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:294:13-70
+service#com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService
+ADDED from /workspace/app/src/main/AndroidManifest.xml:300:9-303:40
+	android:enabled
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:302:13-35
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:303:13-37
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:301:13-68
+receiver#com.github.jing332.tts_server_android.service.keepalive.BootCompleteReceiver
+ADDED from /workspace/app/src/main/AndroidManifest.xml:306:9-314:20
+	android:enabled
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:308:13-35
+	android:exported
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:309:13-36
+	android:permission
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:310:13-75
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:307:13-67
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED
+ADDED from /workspace/app/src/main/AndroidManifest.xml:311:13-313:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from /workspace/app/src/main/AndroidManifest.xml:312:17-79
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:312:25-76
+meta-data#android.support.FILE_PROVIDER_PATHS
+ADDED from /workspace/app/src/main/AndroidManifest.xml:321:13-323:54
+	android:resource
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:323:17-51
+	android:name
+		ADDED from /workspace/app/src/main/AndroidManifest.xml:322:17-67
 uses-sdk
 INJECTED from /workspace/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /workspace/app/src/main/AndroidManifest.xml
@@ -861,12 +1005,6 @@ ADDED from [androidx.emoji2:emoji2:1.3.0] /root/.gradle/caches/8.10.2/transforms
 		ADDED from [androidx.emoji2:emoji2:1.3.0] /root/.gradle/caches/8.10.2/transforms/edb4e3a6b230fb1eeaaad42e6f525157/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:31:17-49
 	android:name
 		ADDED from [androidx.emoji2:emoji2:1.3.0] /root/.gradle/caches/8.10.2/transforms/edb4e3a6b230fb1eeaaad42e6f525157/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:30:17-75
-uses-permission#android.permission.ACCESS_NETWORK_STATE
-ADDED from [androidx.media3:media3-common:1.5.1] /root/.gradle/caches/8.10.2/transforms/06db166dea0ff52fe0115b07c9898207/transformed/jetified-media3-common-1.5.1/AndroidManifest.xml:22:5-79
-MERGED from [androidx.media3:media3-exoplayer:1.5.1] /root/.gradle/caches/8.10.2/transforms/c27ab6f942ae31e9d8ef9f3956cc6048/transformed/jetified-media3-exoplayer-1.5.1/AndroidManifest.xml:22:5-79
-MERGED from [androidx.media3:media3-exoplayer:1.5.1] /root/.gradle/caches/8.10.2/transforms/c27ab6f942ae31e9d8ef9f3956cc6048/transformed/jetified-media3-exoplayer-1.5.1/AndroidManifest.xml:22:5-79
-	android:name
-		ADDED from [androidx.media3:media3-common:1.5.1] /root/.gradle/caches/8.10.2/transforms/06db166dea0ff52fe0115b07c9898207/transformed/jetified-media3-common-1.5.1/AndroidManifest.xml:22:22-76
 uses-library#androidx.window.extensions
 ADDED from [androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:25:9-27:40
 	android:required

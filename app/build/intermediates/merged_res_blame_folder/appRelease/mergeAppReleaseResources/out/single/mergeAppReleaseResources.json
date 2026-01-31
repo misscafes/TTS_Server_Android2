@@ -1264,6 +1264,10 @@
         "source": "com.github.jing332.tts_server_android.app-appcompat-1.7.0-27:/layout/abc_search_dropdown_item_icons_2line.xml"
     },
     {
+        "merged": "com.github.jing332.tts_server_android.app-appRelease-82:/xml_accessibility_service_config.xml.flat",
+        "source": "com.github.jing332.tts_server_android.app-main-85:/xml/accessibility_service_config.xml"
+    },
+    {
         "merged": "com.github.jing332.tts_server_android.app-appRelease-82:/drawable-hdpi-v4_ic_unknown_file_picker.png.flat",
         "source": "com.github.jing332.tts_server_android.app-jetified-AndroidFilePicker-1.0.1-39:/drawable-hdpi-v4/ic_unknown_file_picker.png"
     },

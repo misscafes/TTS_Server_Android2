@@ -244,6 +244,7 @@ private fun RowScope.ButtonContent(
             iconTintColor = iconTintColor,
             buttonIcons = buttonIcons,
             index = index,
+            buttonTexts = buttonTexts,
         )
     }
 }
@@ -263,7 +264,8 @@ private fun RowScope.ButtonWithIconAndText(
                 Modifier.align(Alignment.CenterVertically),
                 iconTintColor,
                 buttonIcons,
-                index
+                index,
+                buttonTexts,
             )
             TextContent(
                 Modifier.align(Alignment.CenterVertically),
@@ -278,7 +280,8 @@ private fun RowScope.ButtonWithIconAndText(
                 Modifier.align(Alignment.CenterHorizontally),
                 iconTintColor,
                 buttonIcons,
-                index
+                index,
+                buttonTexts,
             )
             TextContent(
                 Modifier.align(Alignment.CenterHorizontally),
@@ -299,7 +302,8 @@ private fun RowScope.ButtonWithIconAndText(
                 Modifier.align(Alignment.CenterVertically),
                 iconTintColor,
                 buttonIcons,
-                index
+                index,
+                buttonTexts,
             )
         }
 
@@ -314,7 +318,8 @@ private fun RowScope.ButtonWithIconAndText(
                 Modifier.align(Alignment.CenterHorizontally),
                 iconTintColor,
                 buttonIcons,
-                index
+                index,
+                buttonTexts,
             )
         }
     }
@@ -325,15 +330,17 @@ private fun IconContent(
     modifier: Modifier,
     iconTintColor: Color,
     buttonIcons: Array<Painter>,
-    index: Int
+    index: Int,
+    buttonTexts: Array<String> = emptyArray(),
 ) {
+    val description = buttonTexts.getOrNull(index)?.takeIf { it.isNotBlank() }
     if (iconTintColor == Color.Transparent || iconTintColor == Color.Unspecified) {
         Image(
             modifier = modifier
                 .size(24.dp)
                 .padding(start = 4.dp),
             painter = buttonIcons[index],
-            contentDescription = null,
+            contentDescription = description,
         )
     } else {
         Image(
@@ -341,7 +348,7 @@ private fun IconContent(
                 .size(24.dp)
                 .padding(start = 4.dp),
             painter = buttonIcons[index],
-            contentDescription = null,
+            contentDescription = description,
             colorFilter = ColorFilter.tint(iconTintColor),
         )
     }

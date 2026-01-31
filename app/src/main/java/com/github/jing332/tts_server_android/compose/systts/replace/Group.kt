@@ -64,7 +64,7 @@ internal fun Group(
             DropdownMenuItem(
                 leadingIcon = {
                     Icon(
-                        Icons.Filled.Edit, "",
+                        Icons.Filled.Edit, stringResource(R.string.edit),
                         tint = MaterialTheme.colorScheme.onBackground
                     )
                 },
@@ -77,7 +77,7 @@ internal fun Group(
 
             DropdownMenuItem(
                 leadingIcon = {
-                    Icon(Icons.AutoMirrored.Default.Sort, null)
+                    Icon(Icons.AutoMirrored.Default.Sort, stringResource(R.string.sort))
                 },
                 text = { Text(stringResource(R.string.sort)) },
                 onClick = {

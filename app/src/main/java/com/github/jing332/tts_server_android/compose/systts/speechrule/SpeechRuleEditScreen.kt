@@ -102,7 +102,7 @@ internal fun SpeechRuleEditScreen(
                 showTextParamDialog = true
             },
             leadingIcon = {
-                Icon(Icons.Default.TextFields, null)
+                Icon(Icons.Default.TextFields, stringResource(R.string.set_sample_text_param))
             }
         )
     }

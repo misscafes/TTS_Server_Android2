@@ -194,7 +194,7 @@ internal fun PluginEditorScreen(
                 previewUi()
             },
             leadingIcon = {
-                Icon(Icons.Default.Settings, null)
+                Icon(Icons.Default.Settings, stringResource(R.string.plugin_preview_ui))
             }
         )
 
@@ -205,7 +205,7 @@ internal fun PluginEditorScreen(
                 showTextParamDialog = true
             },
             leadingIcon = {
-                Icon(Icons.Default.TextFields, null)
+                Icon(Icons.Default.TextFields, stringResource(R.string.set_sample_text_param))
             }
         )
 
@@ -216,7 +216,7 @@ internal fun PluginEditorScreen(
                 showVarsDialog = true
             },
             leadingIcon = {
-                Icon(Icons.Default.EditNote, null)
+                Icon(Icons.Default.EditNote, stringResource(R.string.plugin_set_vars))
             }
         )
     }

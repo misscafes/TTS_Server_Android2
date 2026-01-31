@@ -107,6 +107,7 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
 
         /**
          * 强制重启服务：停止所有服务并重新启动
+         * 修复：增加等待时间确保端口完全释放，避免 "Address already in use" 错误
          */
         fun restartService(context: Context) {
             // 异步执行重启，避免阻塞UI
@@ -118,13 +119,23 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
                 context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
                 // 停止TTS服务
                 context.stopService(Intent(context, SystemTtsService::class.java))
-                // 延迟100ms确保服务已停止
-                kotlinx.coroutines.delay(100)
+                
+                // 等待服务完全停止（最多3秒，每100ms检查一次）
+                var waitCount = 0
+                while (com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService.isRunning && waitCount < 30) {
+                    kotlinx.coroutines.delay(100)
+                    waitCount++
+                }
+                
+                // 额外等待500ms确保端口完全释放
+                kotlinx.coroutines.delay(500)
+                
                 // 重新启动TTS服务
                 context.startService(Intent(context, SystemTtsService::class.java))
-                // 如果转发器之前在运行，也重新启动它（使用保存的状态判断）
+                
+                // 如果转发器之前在运行，也重新启动它
                 if (forwarderWasRunning) {
-                    kotlinx.coroutines.delay(100)
+                    kotlinx.coroutines.delay(200)
                     com.github.jing332.tts_server_android.service.forwarder.ForwarderServiceManager.run {
                         context.startSysTtsForwarder()
                     }

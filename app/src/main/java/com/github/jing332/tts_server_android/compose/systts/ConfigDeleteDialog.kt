@@ -48,7 +48,7 @@ fun ConfigDeleteDialog(
         icon = {
             Icon(
                 Icons.Default.DeleteForever,
-                contentDescription = null,
+                contentDescription = stringResource(R.string.delete),
                 tint = MaterialTheme.colorScheme.error
             )
         }

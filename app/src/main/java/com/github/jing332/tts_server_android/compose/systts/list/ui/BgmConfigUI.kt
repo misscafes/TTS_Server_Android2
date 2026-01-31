@@ -171,7 +171,7 @@ class BgmConfigUI : IConfigUI() {
                             )
                         )
                     }) {
-                        Icon(Icons.Default.AudioFile, null)
+                        Icon(Icons.Default.AudioFile, stringResource(R.string.add_file))
                         Text(stringResource(id = R.string.add_file))
                     }
                     VerticalDivider(Modifier.height(16.dp))
@@ -180,7 +180,7 @@ class BgmConfigUI : IConfigUI() {
                             FilePickerActivity.RequestSelectDir()
                         )
                     }) {
-                        Icon(Icons.Default.CreateNewFolder, null)
+                        Icon(Icons.Default.CreateNewFolder, stringResource(R.string.add_folder))
                         Text(stringResource(id = R.string.add_folder))
                     }
                 }
