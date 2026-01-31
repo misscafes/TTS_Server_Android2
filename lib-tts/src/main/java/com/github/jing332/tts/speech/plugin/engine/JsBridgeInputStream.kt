@@ -104,7 +104,8 @@ class JsBridgeInputStream : InputStream() {
             private var length = 0
             private fun writeBytes(data: ByteArray) {
                 length += data.size
-                logger.debug { "write(${data.size}) byteWritten: $length" }
+                // 屏蔽音频数据写入的调试日志，避免日志过多
+                // logger.debug { "write(${data.size}) byteWritten: $length" }
 
                 if (isClosed || hasError) return
 
