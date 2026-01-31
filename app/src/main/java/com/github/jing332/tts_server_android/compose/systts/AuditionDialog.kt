@@ -76,9 +76,25 @@ fun AuditionDialog(
 
                 if (e.state is EngineState.Uninitialized) e.onInit()
                 if (e.isSyncPlay(config.source)) {
-                    e.syncPlay(SystemParams(text = text), config.source)
+                    e.syncPlay(
+                        SystemParams(
+                            text = text,
+                            speed = config.audioParams.speed,
+                            volume = config.audioParams.volume,
+                            pitch = config.audioParams.pitch
+                        ),
+                        config.source
+                    )
                 } else {
-                    val stream = e.getStream(SystemParams(text = text), config.source)
+                    val stream = e.getStream(
+                        SystemParams(
+                            text = text,
+                            speed = config.audioParams.speed,
+                            volume = config.audioParams.volume,
+                            pitch = config.audioParams.pitch
+                        ),
+                        config.source
+                    )
                     val audio = stream.readBytes()
                     val rateAndMime =
                         com.github.jing332.common.audio.AudioDecoder.getSampleRateAndMime(audio)

@@ -109,12 +109,27 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
          * 强制重启服务：停止所有服务并重新启动
          */
         fun restartService(context: Context) {
-            // 停止转发器服务
-            context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
-            // 停止TTS服务
-            context.stopService(Intent(context, SystemTtsService::class.java))
-            // 重新启动TTS服务
-            context.startService(Intent(context, SystemTtsService::class.java))
+            // 异步执行重启，避免阻塞UI
+            kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                // 先保存转发器状态（必须在停止服务前保存！）
+                val forwarderWasRunning = com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService.isRunning
+                
+                // 停止转发器服务
+                context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
+                // 停止TTS服务
+                context.stopService(Intent(context, SystemTtsService::class.java))
+                // 延迟100ms确保服务已停止
+                kotlinx.coroutines.delay(100)
+                // 重新启动TTS服务
+                context.startService(Intent(context, SystemTtsService::class.java))
+                // 如果转发器之前在运行，也重新启动它（使用保存的状态判断）
+                if (forwarderWasRunning) {
+                    kotlinx.coroutines.delay(100)
+                    com.github.jing332.tts_server_android.service.forwarder.ForwarderServiceManager.run {
+                        context.startSysTtsForwarder()
+                    }
+                }
+            }
         }
     }
 

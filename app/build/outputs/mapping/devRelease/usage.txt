@@ -114287,12 +114287,15 @@ com.github.jing332.tts_server_android.compose.systts.list.ComposableSingletons$L
 com.github.jing332.tts_server_android.compose.systts.list.ComposableSingletons$ListManagerScreenKt$lambda-2$1:
     public final void invoke(androidx.compose.runtime.Composer,int)
 com.github.jing332.tts_server_android.compose.systts.list.ComposableSingletons$ListManagerScreenKt$lambda-3$1:
+    public final void invoke(androidx.compose.runtime.Composer,int)
+com.github.jing332.tts_server_android.compose.systts.list.ComposableSingletons$ListManagerScreenKt$lambda-4$1:
     public final void invoke$125()
 com.github.jing332.tts_server_android.compose.systts.list.ComposableSingletons$ListManagerScreenKt:
     public static final com.github.jing332.tts_server_android.compose.systts.list.ComposableSingletons$ListManagerScreenKt INSTANCE
     public static kotlin.jvm.functions.Function2 getLambda-1$app_devRelease()
     public static kotlin.jvm.functions.Function2 getLambda-2$app_devRelease()
-    public static kotlin.jvm.functions.Function3 getLambda-3$app_devRelease()
+    public static kotlin.jvm.functions.Function2 getLambda-3$app_devRelease()
+    public static kotlin.jvm.functions.Function3 getLambda-4$app_devRelease()
 com.github.jing332.tts_server_android.compose.systts.list.ComposableSingletons$MenuMoreOptionsKt$lambda-1$1:
     public final void invoke(androidx.compose.runtime.Composer,int)
 com.github.jing332.tts_server_android.compose.systts.list.ComposableSingletons$MenuMoreOptionsKt$lambda-10$1:
@@ -114538,7 +114541,7 @@ com.github.jing332.tts_server_android.compose.systts.list.ListManagerScreenKt$Li
     public final void invoke(androidx.compose.runtime.Composer,int)
 com.github.jing332.tts_server_android.compose.systts.list.ListManagerScreenKt$ListManagerScreen$19$1:
     public final void invoke(androidx.compose.runtime.Composer,int)
-com.github.jing332.tts_server_android.compose.systts.list.ListManagerScreenKt$ListManagerScreen$19$2$4:
+com.github.jing332.tts_server_android.compose.systts.list.ListManagerScreenKt$ListManagerScreen$19$2$5:
     public final void invoke(androidx.compose.runtime.Composer,int)
 com.github.jing332.tts_server_android.compose.systts.list.ListManagerScreenKt$ListManagerScreen$19$2:
     public final void invoke$44()
@@ -116388,8 +116391,11 @@ com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderSe
     public final void startServer()
 com.github.jing332.tts_server_android.service.systts.CheckVoiceData:
     static void <clinit>()
+com.github.jing332.tts_server_android.service.systts.SystemTtsService$Companion$restartService$1:
+    public final java.lang.Object invoke(kotlinx.coroutines.CoroutineScope,kotlin.coroutines.Continuation)
 com.github.jing332.tts_server_android.service.systts.SystemTtsService$Companion:
     public static synthetic void notifyUpdateConfig$default()
+    public static void restartService()
 com.github.jing332.tts_server_android.service.systts.SystemTtsService$initManager$2:
     public final java.lang.Object invoke(kotlinx.coroutines.CoroutineScope,kotlin.coroutines.Continuation)
 com.github.jing332.tts_server_android.service.systts.SystemTtsService$onDestroy$2:
