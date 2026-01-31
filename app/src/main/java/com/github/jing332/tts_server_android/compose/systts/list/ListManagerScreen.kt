@@ -321,9 +321,10 @@ internal fun ListManagerScreen(
                         }
                     } else {
                         IconButton(onClick = {
-                            // 强制重启 TTS 服务
-                            SystemTtsService.restartService(context)
+                            // 显示重启提示
                             context.toast(R.string.restarted)
+                            // 使用与导入备份后相同的重启方式
+                            com.github.jing332.tts_server_android.app.restart()
                         }) {
                             Icon(Icons.Default.Refresh, stringResource(id = R.string.restart))
                         }
