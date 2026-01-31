@@ -24,6 +24,9 @@
         android:name="android.permission.INSTALL_SHORTCUT"
         tools:ignore="SystemPermissionTypo" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.BIND_JOB_SERVICE" />
 
     <application
         android:name=".App"
@@ -230,6 +233,31 @@
             android:exported="true"
             android:foregroundServiceType="mediaPlayback"
             tools:ignore="ExportedService,Instantiatable" />
+
+        <!-- 后台保活服务 -->
+        <service
+            android:name=".service.keepalive.KeepAliveService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
+
+        <!-- JobScheduler 保活服务 -->
+        <service
+            android:name=".service.keepalive.KeepAliveJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <!-- 开机自启动接收器 -->
+        <receiver
+            android:name=".service.keepalive.BootCompleteReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"

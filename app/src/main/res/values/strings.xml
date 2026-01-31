@@ -31,7 +31,7 @@
     <string name="added_battery_optimization_whitelist">已加入后台白名单</string>
 
     <string name="kill_process">结束进程</string>
-    <string name="cancel">取消</string>
+
 
     <string name="label_read_aloud_target">朗读目标：</string>
     <string name="label_api">接口：</string>
@@ -56,7 +56,7 @@
     <string name="systts_service">系统TTS服务</string>
 
     <string name="systts_split_long_sentences">分割长句</string>
-    <string name="system_not_support_please_manual_set">系统不支持，请手动操作</string>
+
 
     <string name="service_started">服务已启动</string>
     <string name="service_closed">服务已关闭</string>
@@ -535,4 +535,29 @@
     <string name="open_log_folder">打开日志文件夹</string>
     <string name="select_all">全选</string>
     <string name="deselect_all">取消全选</string>
+    <!-- Background Keep Alive -->
+    <string name="keep_alive_service">Keep Alive Service</string>
+    <string name="keep_alive_service_desc">Prevent app from being killed by system (freeze)</string>
+    <string name="keep_alive_service_title">TTS Server Keep Alive</string>
+    <string name="keep_alive_service_content">Keeping background running...</string>
+    <string name="stop_keep_alive">Stop Keep Alive</string>
+    <string name="keep_alive_settings">Keep Alive Settings</string>
+    <string name="keep_alive_settings_summary">Configure multiple mechanisms to prevent app from being killed</string>
+    <string name="enable_keep_alive">Enable Keep Alive</string>
+    <string name="enable_keep_alive_summary">Enable independent keep alive service to enhance background stability (will increase battery consumption)</string>
+    <string name="keep_alive_audio_focus">Audio Focus Keep Alive</string>
+    <string name="keep_alive_audio_focus_summary">Request audio focus when screen off to keep active (recommended)</string>
+    <string name="keep_alive_silent_audio">Silent Audio Keep Alive</string>
+    <string name="keep_alive_silent_audio_summary">Play silent audio to prevent CPU sleep (high battery consumption, use with caution)</string>
+    <string name="auto_start_settings">Auto Start Settings</string>
+    <string name="enable_auto_start">Boot Auto Start</string>
+    <string name="enable_auto_start_summary">Automatically start service after device reboot</string>
+    <string name="manufacturer_whitelist">Manufacturer Settings</string>
+    <string name="manufacturer_whitelist_summary">%s Click to jump to system settings to add this app to background whitelist</string>
+    <string name="manufacturer_whitelist_title">Manufacturer Background Optimization</string>
+    <string name="manufacturer_whitelist_message">Different manufacturers have different restrictions on background apps. To ensure TTS Server can run continuously in the background, please add this app to the following whitelists:\n\n1. Battery optimization whitelist\n2. Background running whitelist\n3. Auto start management\n\nClick OK to jump to system settings.</string>
+    <string name="system_not_support_please_manual_set">System not supported, please set manually</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="navigate_back">Back</string>
 </resources>

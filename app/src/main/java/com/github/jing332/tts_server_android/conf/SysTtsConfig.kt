@@ -120,4 +120,30 @@ object SysTtsConfig {
         set(value) {
             SystemTtsConfig.isStreamPlayModeEnabled.value = value
         }
+
+    // ========== 后台保活配置 ==========
+
+    var isKeepAliveEnabled: Boolean
+        get() = SystemTtsConfig.isKeepAliveEnabled.value
+        set(value) {
+            SystemTtsConfig.isKeepAliveEnabled.value = value
+        }
+
+    var isKeepAliveAudioFocusEnabled: Boolean
+        get() = SystemTtsConfig.isKeepAliveAudioFocusEnabled.value
+        set(value) {
+            SystemTtsConfig.isKeepAliveAudioFocusEnabled.value = value
+        }
+
+    var isKeepAliveSilentAudioEnabled: Boolean
+        get() = SystemTtsConfig.isKeepAliveSilentAudioEnabled.value
+        set(value) {
+            SystemTtsConfig.isKeepAliveSilentAudioEnabled.value = value
+        }
+
+    var isAutoStartEnabled: Boolean
+        get() = SystemTtsConfig.isAutoStartEnabled.value
+        set(value) {
+            SystemTtsConfig.isAutoStartEnabled.value = value
+        }
 }

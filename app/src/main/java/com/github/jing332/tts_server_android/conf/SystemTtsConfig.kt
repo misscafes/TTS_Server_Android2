@@ -152,4 +152,34 @@ object SystemTtsConfig {
         key = "isSilenceSkipAudio",
         initialValue = false
     )
+
+    // ========== 后台保活配置 ==========
+
+    /** 启用进程保活服务 */
+    val isKeepAliveEnabled = mutableDataSaverStateOf(
+        dataSaverInterface = dataSaverPref,
+        key = "isKeepAliveEnabled",
+        initialValue = false
+    )
+
+    /** 启用音频焦点保活（息屏时请求音频焦点保持活跃） */
+    val isKeepAliveAudioFocusEnabled = mutableDataSaverStateOf(
+        dataSaverInterface = dataSaverPref,
+        key = "isKeepAliveAudioFocusEnabled",
+        initialValue = true
+    )
+
+    /** 启用静音音频保活（播放静音音频防止CPU休眠） */
+    val isKeepAliveSilentAudioEnabled = mutableDataSaverStateOf(
+        dataSaverInterface = dataSaverPref,
+        key = "isKeepAliveSilentAudioEnabled",
+        initialValue = false
+    )
+
+    /** 启用自启动 */
+    val isAutoStartEnabled = mutableDataSaverStateOf(
+        dataSaverInterface = dataSaverPref,
+        key = "isAutoStartEnabled",
+        initialValue = false
+    )
 }

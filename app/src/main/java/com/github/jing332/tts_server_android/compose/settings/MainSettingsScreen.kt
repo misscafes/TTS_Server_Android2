@@ -12,12 +12,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuOpen
 import androidx.compose.material.icons.filled.ArrowCircleUp
-import androidx.compose.material.icons.filled.BatteryFull
+
 import androidx.compose.material.icons.filled.ColorLens
 import androidx.compose.material.icons.filled.FileOpen
 import androidx.compose.material.icons.filled.HideSource
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Link
+import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.SettingsBackupRestore
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,7 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
+
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -46,8 +47,6 @@ import com.github.jing332.tts_server_android.compose.theme.getAppTheme
 import com.github.jing332.tts_server_android.compose.theme.setAppTheme
 import com.github.jing332.tts_server_android.conf.AppConfig
 import com.github.jing332.tts_server_android.constant.FilePickerMode
-import com.github.jing332.tts_server_android.utils.MyTools.isIgnoringBatteryOptimizations
-import com.github.jing332.tts_server_android.utils.MyTools.killBattery
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +60,13 @@ fun SettingsScreen() {
                 setAppTheme(it)
             }
         )
+
+    // 后台保活设置页面
+    var showKeepAliveSettings by remember { mutableStateOf(false) }
+    if (showKeepAliveSettings) {
+        KeepAliveSettingsScreen(onNavigateBack = { showKeepAliveSettings = false })
+        return
+    }
 
     val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -81,16 +87,13 @@ fun SettingsScreen() {
         ) {
             DividerPreference { Text(stringResource(id = R.string.app_name)) }
 
-            val showBatteryOptimization =
-                rememberUpdatedState(!context.isIgnoringBatteryOptimizations())
-
-            if (showBatteryOptimization.value)
-                BasePreferenceWidget(
-                    onClick = { context.killBattery() },
-                    title = { Text(stringResource(id = R.string.battery_optimization_whitelist)) },
-                    subTitle = { Text(stringResource(R.string.battery_optimization_whitelist_desc)) },
-                    icon = { Icon(Icons.Default.BatteryFull, null) }
-                )
+            // 后台保活设置入口（包含电池优化、厂商设置、保活服务、开机自启动）
+            BasePreferenceWidget(
+                onClick = { showKeepAliveSettings = true },
+                title = { Text(stringResource(id = R.string.keep_alive_settings)) },
+                subTitle = { Text(stringResource(R.string.keep_alive_settings_summary)) },
+                icon = { Icon(Icons.Default.PowerSettingsNew, null) }
+            )
 
             BasePreferenceWidget(
                 icon = {
