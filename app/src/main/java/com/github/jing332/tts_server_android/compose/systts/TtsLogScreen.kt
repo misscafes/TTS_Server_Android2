@@ -204,7 +204,7 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                                     trailingIcon = {
                                         Icon(
                                             Icons.Default.Clear,
-                                            contentDescription = stringResource(R.string.clear),
+                                            contentDescription = null,
                                             modifier = Modifier.height(16.dp).width(16.dp)
                                         )
                                     },
@@ -217,7 +217,7 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
                             if (vm.selectedLevels.isNotEmpty()) {
                                 Spacer(modifier = Modifier.weight(1f))
                                 IconButton(onClick = { vm.clearFilter() }) {
-                                    Icon(Icons.Default.Clear, stringResource(R.string.clear))
+                                    Icon(Icons.Default.Clear, null)
                                 }
                             }
                         }

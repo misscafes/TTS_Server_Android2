@@ -354,16 +354,17 @@ internal fun ListManagerScreen(
             ) {
                 models.forEachIndexed { _, groupWithSystemTts ->
                     val g = groupWithSystemTts.group
-                    val checkState =
-                        groupWithSystemTts.list.filter { it.isEnabled }.size.sizeToToggleableState(
-                            groupWithSystemTts.list.size
-                        )
                     val key = "g_${g.id}"
                     
                     val groupDragModifier = if (searchKeyword.isNotEmpty()) Modifier 
                                             else Modifier.detectReorderAfterLongPress(reorderState)
 
                     stickyHeader(key = key) {
+                        val checkState =
+                            groupWithSystemTts.list.filter { it.isEnabled }.size.sizeToToggleableState(
+                                groupWithSystemTts.list.size
+                            )
+                        
                         ShadowedDraggableItem(reorderableState = reorderState, key = key) {
                             Group(modifier = groupDragModifier,
                                 name = g.name,

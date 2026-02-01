@@ -34,14 +34,14 @@ sealed class PagerDestination(
         Icon(
             modifier = Modifier.size(24.dp),
             painter = painterResource(id = R.drawable.ic_config),
-            contentDescription = stringResource(R.string.system_tts)
+            contentDescription = null
         )
     })
 
     object SystemTtsLog : PagerDestination(1, R.string.log, R.string.log, {
         Icon(
             Icons.AutoMirrored.Default.TextSnippet,
-            contentDescription = stringResource(R.string.log)
+            contentDescription = null
         )
     })
 
@@ -49,11 +49,11 @@ sealed class PagerDestination(
         Icon(
             modifier = Modifier.size(24.dp),
             painter = painterResource(R.drawable.ic_app_notification),
-            contentDescription = stringResource(R.string.forwarder)
+            contentDescription = null
         )
     })
 
     object Settings : PagerDestination(3, R.string.settings, R.string.settings, {
-        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings))
+        Icon(Icons.Default.Settings, contentDescription = null)
     })
 }
