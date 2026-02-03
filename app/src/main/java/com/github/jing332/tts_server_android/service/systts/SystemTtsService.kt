@@ -158,24 +158,16 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
                 context.stopService(Intent(context, SystemTtsService::class.java))
                 
                 // 等待服务停止
-                kotlinx.coroutines.delay(300)
+                kotlinx.coroutines.delay(500)
                 
-                // 使用 AlarmManager 延迟启动应用
+                // 直接启动 MainActivity，然后退出当前进程
                 val intent = Intent(context, com.github.jing332.tts_server_android.compose.MainActivity::class.java).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                 }
-                val pendingIntent = PendingIntent.getActivity(
-                    context, 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                )
-                
-                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                // 100ms 后启动应用
-                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, 
-                    android.os.SystemClock.elapsedRealtime() + 100, pendingIntent)
+                context.startActivity(intent)
                 
                 // 结束当前进程
-                kotlinx.coroutines.delay(100)
+                kotlinx.coroutines.delay(200)
                 Process.killProcess(Process.myPid())
             }
         }
