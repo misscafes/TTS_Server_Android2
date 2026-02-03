@@ -150,26 +150,30 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
          * 比 restartService 更彻底，会重新创建整个应用进程
          */
         fun restartApp(context: Context) {
-            // 异步执行，避免阻塞UI
-            kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                // 停止转发器服务
-                context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
-                // 停止TTS服务
-                context.stopService(Intent(context, SystemTtsService::class.java))
-                
-                // 等待服务停止
-                kotlinx.coroutines.delay(500)
-                
-                // 直接启动 MainActivity，然后退出当前进程
-                val intent = Intent(context, com.github.jing332.tts_server_android.compose.MainActivity::class.java).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                }
-                context.startActivity(intent)
-                
-                // 结束当前进程
-                kotlinx.coroutines.delay(200)
-                Process.killProcess(Process.myPid())
+            // 停止转发器服务
+            context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
+            // 停止TTS服务
+            context.stopService(Intent(context, SystemTtsService::class.java))
+            
+            // 使用 AlarmManager 延迟重启，确保当前 Activity 完全结束
+            val intent = Intent(context, com.github.jing332.tts_server_android.compose.MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             }
+            val pendingIntent = PendingIntent.getActivity(
+                context, 0, intent,
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            )
+            
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            // 使用 RTC_WAKEUP，在当前时间之后 500ms 启动
+            alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + 500,
+                pendingIntent
+            )
+            
+            // 立即结束当前进程
+            Process.killProcess(Process.myPid())
         }
     }
 
