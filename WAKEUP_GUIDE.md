@@ -209,7 +209,33 @@ class Console(val source: LogSource = LogSource.PLUGIN) {
 
 ---
 
-### 问题6: 首页搜索功能增强 (2026-02-04)
+### 问题6: 首页重启键改进 - 完全重启应用 (2026-02-04)
+
+**问题：**
+1. 原重启键只重启 TTS 服务，不重启转发器服务
+2. 重启后转发器状态显示不正确（图标显示关闭但实际运行中）
+3. 日志出现 "Array has more than one element" 错误
+
+**解决方案：**
+- 新增 `restartApp()` 方法，完全重启应用进程
+- 使用 `AlarmManager` 延迟启动 MainActivity
+- 调用 `Process.killProcess()` 结束当前进程
+
+**与 `restartService()` 的区别：**
+| 特性 | restartService | restartApp |
+|------|----------------|------------|
+| TTS服务 | 重启 | 重启 |
+| 转发器服务 | 保持原状态 | 重启 |
+| 应用进程 | 保持 | 重新创建 |
+| 内存状态 | 保留 | 清空 |
+
+**相关文件：**
+- `app/src/main/java/com/github/jing332/tts_server_android/service/systts/SystemTtsService.kt`
+- `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerScreen.kt`
+
+---
+
+### 问题7: 首页搜索功能增强 (2026-02-04)
 
 **问题：** 首页搜索键的选项无效，只能按名称搜索
 
@@ -606,6 +632,7 @@ pkill -f gradlew; sleep 2
 
 | 日期 | 版本 | 内容 |
 |------|------|------|
+| 2026-02-04 | v1.6 | **应用重启功能** - 首页重启键改为完全重启应用，解决转发器状态不同步问题 |
 | 2026-02-04 | v1.5 | **搜索功能增强** - 首页搜索支持名称/标签/插件/分组四种类型，编辑分组支持名称/标签/插件三种类型 |
 | 2026-01-31 | v1.4 | **更新构建环境** - 添加从零配置构建环境步骤，更新SDK版本为API 35，添加日志上限50万条自动清空功能 |
 | 2026-01-30 | v1.3 | **添加致命配置警告** - 强调gradle.properties中R8配置的重要性，避免编辑器崩溃 |

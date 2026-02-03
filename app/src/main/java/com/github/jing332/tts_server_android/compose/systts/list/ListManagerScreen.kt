@@ -74,8 +74,8 @@ import com.github.jing332.tts_server_android.compose.systts.list.ui.ItemDescript
 import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.QuickEditBottomSheet
 import com.github.jing332.tts_server_android.compose.systts.list.ui.widgets.TagDataClearConfirmDialog
 import com.github.jing332.tts_server_android.compose.systts.plugin.PluginSelectionDialog
-import com.github.jing332.tts_server_android.compose.systts.replace.SearchTextField
-import com.github.jing332.tts_server_android.compose.systts.replace.SearchType
+import com.github.jing332.tts_server_android.compose.systts.list.SearchTextField
+import com.github.jing332.tts_server_android.compose.systts.list.SearchType
 import com.github.jing332.tts_server_android.compose.systts.sizeToToggleableState
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.tts_server_android.constant.SpeechTarget
@@ -103,9 +103,9 @@ internal fun ListManagerScreen(
 
     val models by vm.list.collectAsStateWithLifecycle()
     val searchKeyword by vm.keyword.collectAsStateWithLifecycle()
+    val searchType by vm.searchType.collectAsStateWithLifecycle()
     
     var isSearchMode by rememberSaveable { mutableStateOf(false) }
-    var searchType by rememberSaveable { mutableStateOf(SearchType.NAME) }
 
     BackHandler(enabled = isSearchMode) {
         isSearchMode = false
@@ -306,7 +306,7 @@ internal fun ListManagerScreen(
                                 value = searchKeyword,
                                 onValueChange = { vm.setSearchKeyword(it) },
                                 searchType = searchType,
-                                onSearchTypeChange = { searchType = it }
+                                onSearchTypeChange = { vm.setSearchType(it) }
                             )
                         }
                     } else {
@@ -322,10 +322,8 @@ internal fun ListManagerScreen(
                         }
                     } else {
                         IconButton(onClick = {
-                            // 停止并重启TTS服务，重新初始化配置
-                            SystemTtsService.restartService(context)
-                            // 显示服务已重启提示
-                            context.toast(R.string.restarted)
+                            // 完全重启应用，停止所有服务并重新启动
+                            SystemTtsService.restartApp(context)
                         }) {
                             Icon(Icons.Default.Refresh, stringResource(id = R.string.restart))
                         }

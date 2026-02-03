@@ -2,6 +2,7 @@
 
 package com.github.jing332.tts_server_android.service.systts
 
+import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -16,6 +17,7 @@ import android.media.AudioFormat
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.PowerManager
+import android.os.Process
 import android.speech.tts.SynthesisRequest
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeechService
@@ -140,6 +142,41 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
                         context.startSysTtsForwarder()
                     }
                 }
+            }
+        }
+
+        /**
+         * 完全重启应用：停止所有服务，然后重新启动应用
+         * 比 restartService 更彻底，会重新创建整个应用进程
+         */
+        fun restartApp(context: Context) {
+            // 异步执行，避免阻塞UI
+            kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                // 停止转发器服务
+                context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
+                // 停止TTS服务
+                context.stopService(Intent(context, SystemTtsService::class.java))
+                
+                // 等待服务停止
+                kotlinx.coroutines.delay(300)
+                
+                // 使用 AlarmManager 延迟启动应用
+                val intent = Intent(context, com.github.jing332.tts_server_android.compose.MainActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                }
+                val pendingIntent = PendingIntent.getActivity(
+                    context, 0, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+                
+                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                // 100ms 后启动应用
+                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, 
+                    android.os.SystemClock.elapsedRealtime() + 100, pendingIntent)
+                
+                // 结束当前进程
+                kotlinx.coroutines.delay(100)
+                Process.killProcess(Process.myPid())
             }
         }
     }
