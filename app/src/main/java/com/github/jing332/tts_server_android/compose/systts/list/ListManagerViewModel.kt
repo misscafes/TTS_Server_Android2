@@ -9,6 +9,8 @@ import com.github.jing332.database.entities.AbstractListGroup.Companion.DEFAULT_
 import com.github.jing332.database.entities.systts.GroupWithSystemTts
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.database.entities.systts.TtsConfigurationDTO
+import com.github.jing332.database.entities.systts.source.LocalTtsSource
+import com.github.jing332.database.entities.systts.source.PluginTtsSource
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.conf.SystemTtsConfig
 import kotlinx.coroutines.Dispatchers
@@ -28,42 +30,118 @@ class ListManagerViewModel : ViewModel() {
     private val _keyword = MutableStateFlow("")
     val keyword: StateFlow<String> get() = _keyword
 
+    private val _searchType = MutableStateFlow(SearchType.NAME)
+    val searchType: StateFlow<SearchType> get() = _searchType
+
     private val _list = MutableStateFlow<List<GroupWithSystemTts>>(emptyList())
     val list: StateFlow<List<GroupWithSystemTts>> get() = _list
 
+    // 缓存插件名称
+    private val pluginNameCache = MutableStateFlow<Map<String, String>>(emptyMap())
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
+            // 加载插件名称缓存
+            val plugins = dbm.pluginDao.all
+            pluginNameCache.value = plugins.associate { it.pluginId to it.name }
+            
             dbm.systemTtsV2.updateAllOrder()
             
             dbm.systemTtsV2.flowAllGroupWithTts().conflate()
-                .combine(_keyword) { list, key ->
-                    if (key.isBlank()) {
+                .combine(_keyword) { list, key -> Pair(list, key) }
+                .combine(_searchType) { pair, type -> Triple(pair.first, pair.second, type) }
+                .collect { (list, key, searchType) ->
+                    val result = if (key.isBlank()) {
                         list
                     } else {
-                        list.mapNotNull { groupWithTts ->
-                            val filteredItems = groupWithTts.list.filter { 
-                                it.displayName.contains(key, ignoreCase = true) 
-                            }
-                            if (filteredItems.isNotEmpty()) {
-                                groupWithTts.copy(
-                                    list = filteredItems, 
-                                    group = groupWithTts.group.copy(isExpanded = true)
-                                )
-                            } else {
-                                null
-                            }
-                        }
+                        filterList(list, key, searchType)
                     }
+                    Log.d(TAG, "update list: ${result.size}")
+                    _list.value = result
                 }
-                .collect {
-                    Log.d(TAG, "update list: ${it.size}")
-                    _list.value = it
+        }
+    }
+
+    private fun filterList(
+        list: List<GroupWithSystemTts>,
+        key: String,
+        searchType: SearchType
+    ): List<GroupWithSystemTts> {
+        return when (searchType) {
+            SearchType.NAME -> {
+                list.mapNotNull { groupWithTts ->
+                    val filteredItems = groupWithTts.list.filter {
+                        it.displayName.contains(key, ignoreCase = true)
+                    }
+                    if (filteredItems.isNotEmpty()) {
+                        groupWithTts.copy(
+                            list = filteredItems,
+                            group = groupWithTts.group.copy(isExpanded = true)
+                        )
+                    } else null
                 }
+            }
+            SearchType.TAG -> {
+                list.mapNotNull { groupWithTts ->
+                    val filteredItems = groupWithTts.list.filter { item ->
+                        val ttsConfig = item.config as? TtsConfigurationDTO
+                        if (ttsConfig != null) {
+                            val speechRule = ttsConfig.speechRule
+                            speechRule.tagName.contains(key, ignoreCase = true) ||
+                            speechRule.tag.contains(key, ignoreCase = true) ||
+                            speechRule.tagData.values.any { it.contains(key, ignoreCase = true) }
+                        } else false
+                    }
+                    if (filteredItems.isNotEmpty()) {
+                        groupWithTts.copy(
+                            list = filteredItems,
+                            group = groupWithTts.group.copy(isExpanded = true)
+                        )
+                    } else null
+                }
+            }
+            SearchType.PLUGIN -> {
+                list.mapNotNull { groupWithTts ->
+                    val filteredItems = groupWithTts.list.filter { item ->
+                        val ttsConfig = item.config as? TtsConfigurationDTO
+                        if (ttsConfig != null) {
+                            when (val source = ttsConfig.source) {
+                                is PluginTtsSource -> {
+                                    val pluginName = pluginNameCache.value[source.pluginId] ?: source.pluginId
+                                    source.pluginId.contains(key, ignoreCase = true) ||
+                                    pluginName.contains(key, ignoreCase = true)
+                                }
+                                is LocalTtsSource ->
+                                    "本地".contains(key, ignoreCase = true) ||
+                                    "local".contains(key, ignoreCase = true)
+                                else -> false
+                            }
+                        } else false
+                    }
+                    if (filteredItems.isNotEmpty()) {
+                        groupWithTts.copy(
+                            list = filteredItems,
+                            group = groupWithTts.group.copy(isExpanded = true)
+                        )
+                    } else null
+                }
+            }
+            SearchType.GROUP -> {
+                list.filter {
+                    it.group.name.contains(key, ignoreCase = true)
+                }.map {
+                    it.copy(group = it.group.copy(isExpanded = true))
+                }
+            }
         }
     }
 
     fun setSearchKeyword(key: String) {
         _keyword.value = key
+    }
+
+    fun setSearchType(type: SearchType) {
+        _searchType.value = type
     }
 
     fun updateTtsEnabled(

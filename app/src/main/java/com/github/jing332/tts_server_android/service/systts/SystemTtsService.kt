@@ -150,6 +150,10 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
          * 先跳转到 RestartActivity 显示加载动画，再执行真正重启
          */
         fun restartApp(context: Context) {
+            // 保存转发器状态（必须在停止服务前保存！）
+            val forwarderWasRunning = com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService.isRunning
+            com.github.jing332.tts_server_android.compose.RestartActivity.saveState(context, forwarderWasRunning)
+            
             // 跳转到重启过渡界面
             val intent = Intent(context, com.github.jing332.tts_server_android.compose.RestartActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)

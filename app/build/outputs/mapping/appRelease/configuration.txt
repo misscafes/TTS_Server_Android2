@@ -9,6 +9,7 @@
 -keep class com.github.jing332.tts_server_android.compose.DebugSystemTtsActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.LibrariesActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.MainActivity { <init>(); }
+-keep class com.github.jing332.tts_server_android.compose.RestartActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.backup.BackupRestoreActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity { <init>(); }
 -keep class com.github.jing332.tts_server_android.compose.systts.directlink.LinkUploadRuleActivity { <init>(); }

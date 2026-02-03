@@ -36,7 +36,7 @@ fun GroupEditContentDialog(
     val scope = rememberCoroutineScope()
     var searchQuery by remember { mutableStateOf("") }
     var selectedConfigs by remember { mutableStateOf<Set<SystemTtsV2>>(emptySet()) }
-    var searchType by remember { mutableStateOf(SearchType.NAME) }
+    var searchType by remember { mutableStateOf(GroupSearchType.NAME) }
     val availableConfigs by vm.availableConfigs.collectAsStateWithLifecycle()
     val pluginNameCache by vm.pluginNameCache.collectAsStateWithLifecycle()
     
@@ -71,21 +71,21 @@ fun GroupEditContentDialog(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    SearchTypeChip(
-                        text = stringResource(R.string.name),
-                        selected = searchType == SearchType.NAME,
-                        onClick = { searchType = SearchType.NAME }
-                    )
-                    SearchTypeChip(
-                        text = stringResource(R.string.tag),
-                        selected = searchType == SearchType.TAG,
-                        onClick = { searchType = SearchType.TAG }
-                    )
-                    SearchTypeChip(
-                        text = stringResource(R.string.plugin),
-                        selected = searchType == SearchType.PLUGIN,
-                        onClick = { searchType = SearchType.PLUGIN }
-                    )
+                SearchTypeChip(
+                    text = stringResource(R.string.name),
+                    selected = searchType == GroupSearchType.NAME,
+                    onClick = { searchType = GroupSearchType.NAME }
+                )
+                SearchTypeChip(
+                    text = stringResource(R.string.tag),
+                    selected = searchType == GroupSearchType.TAG,
+                    onClick = { searchType = GroupSearchType.TAG }
+                )
+                SearchTypeChip(
+                    text = stringResource(R.string.plugin),
+                    selected = searchType == GroupSearchType.PLUGIN,
+                    onClick = { searchType = GroupSearchType.PLUGIN }
+                )
                     
                     Spacer(modifier = Modifier.weight(1f))
                     
@@ -200,7 +200,7 @@ private fun ConfigItem(
     config: SystemTtsV2,
     isSelected: Boolean,
     onToggleSelection: () -> Unit,
-    searchType: SearchType,
+    searchType: GroupSearchType,
     pluginNameCache: Map<String, String> = emptyMap()
 ) {
     // 安全获取 TtsConfigurationDTO
@@ -226,12 +226,12 @@ private fun ConfigItem(
             
             // 显示额外信息
             val extraInfo = when (searchType) {
-                SearchType.TAG -> {
+                GroupSearchType.TAG -> {
                     if (ttsConfig != null && ttsConfig.speechRule.tagName.isNotEmpty()) {
                         "${stringResource(R.string.tag)}: ${ttsConfig.speechRule.tagName}"
                     } else null
                 }
-                SearchType.PLUGIN -> {
+                GroupSearchType.PLUGIN -> {
                     when (val source = ttsConfig?.source) {
                         is PluginTtsSource -> {
                             // 使用缓存的插件名称
@@ -242,7 +242,7 @@ private fun ConfigItem(
                         else -> null
                     }
                 }
-                else -> null
+                GroupSearchType.NAME -> null
             }
             
             if (extraInfo != null) {
@@ -256,6 +256,4 @@ private fun ConfigItem(
     }
 }
 
-enum class SearchType {
-    NAME, TAG, PLUGIN
-}
+

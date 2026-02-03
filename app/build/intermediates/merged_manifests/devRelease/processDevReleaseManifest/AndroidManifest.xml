@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.jing332.tts_server_android.dev"
-    android:versionCode="1441"
-    android:versionName="1.26.020101" >
+    android:versionCode="1451"
+    android:versionName="1.26.020402" >
 
     <uses-sdk
         android:minSdkVersion="21"
@@ -173,6 +173,10 @@
             </intent-filter>
         </activity>
         <activity android:name="com.github.jing332.tts_server_android.compose.LibrariesActivity" />
+        <activity
+            android:name="com.github.jing332.tts_server_android.compose.RestartActivity"
+            android:exported="false"
+            android:theme="@style/Theme.TtsServer" />
         <activity
             android:name="com.github.jing332.tts_server_android.compose.MainActivity"
             android:exported="true"

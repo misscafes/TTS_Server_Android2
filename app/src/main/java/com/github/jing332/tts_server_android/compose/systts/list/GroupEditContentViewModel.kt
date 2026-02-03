@@ -42,7 +42,7 @@ class GroupEditContentViewModel : ViewModel() {
     fun filterConfigs(
         configs: List<SystemTtsV2>,
         query: String,
-        searchType: SearchType,
+        searchType: GroupSearchType,
         pluginCache: Map<String, String> = emptyMap()
     ): List<SystemTtsV2> {
         if (query.isBlank()) return configs
@@ -52,16 +52,16 @@ class GroupEditContentViewModel : ViewModel() {
             val ttsConfig = config.config as? TtsConfigurationDTO ?: return@filter false
             
             when (searchType) {
-                SearchType.NAME -> {
+                GroupSearchType.NAME -> {
                     config.displayName.contains(query, ignoreCase = true)
                 }
-                SearchType.TAG -> {
+                GroupSearchType.TAG -> {
                     val speechRule = ttsConfig.speechRule
                     speechRule.tagName.contains(query, ignoreCase = true) ||
                     speechRule.tag.contains(query, ignoreCase = true) ||
                     speechRule.tagData.values.any { it.contains(query, ignoreCase = true) }
                 }
-                SearchType.PLUGIN -> {
+                GroupSearchType.PLUGIN -> {
                     when (val source = ttsConfig.source) {
                         is PluginTtsSource -> {
                             // 搜索 pluginId 或使用缓存的插件名称

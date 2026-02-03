@@ -2445,6 +2445,7 @@ string request_timeout_summary
 string reset
 string restart
 string restarted
+string restarting
 string restore
 string restore_confirm
 string restore_finished

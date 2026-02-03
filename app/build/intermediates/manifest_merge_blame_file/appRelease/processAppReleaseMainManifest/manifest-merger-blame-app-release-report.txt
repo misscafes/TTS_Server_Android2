@@ -1,8 +1,8 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="com.github.jing332.tts_server_android"
-4    android:versionCode="1441"
-5    android:versionName="1.26.020101" >
+4    android:versionCode="1451"
+5    android:versionName="1.26.020402" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="21"
@@ -91,7 +91,7 @@
 42-->[androidx.core:core:1.15.0] /root/.gradle/caches/8.10.2/transforms/0bf2e7bec03b77d20b66869045dc58bd/transformed/core-1.15.0/AndroidManifest.xml:26:22-94
 43
 44    <application
-44-->/workspace/app/src/main/AndroidManifest.xml:36:5-326:19
+44-->/workspace/app/src/main/AndroidManifest.xml:36:5-330:19
 45        android:name="com.github.jing332.tts_server_android.App"
 45-->/workspace/app/src/main/AndroidManifest.xml:37:9-28
 46        android:allowBackup="true"
@@ -383,407 +383,415 @@
 175-->/workspace/app/src/main/AndroidManifest.xml:165:9-63
 175-->/workspace/app/src/main/AndroidManifest.xml:165:19-60
 176        <activity
-176-->/workspace/app/src/main/AndroidManifest.xml:166:9-177:20
-177            android:name="com.github.jing332.tts_server_android.compose.MainActivity"
-177-->/workspace/app/src/main/AndroidManifest.xml:167:13-49
-178            android:exported="true"
-178-->/workspace/app/src/main/AndroidManifest.xml:168:13-36
-179            android:launchMode="singleTask" >
-179-->/workspace/app/src/main/AndroidManifest.xml:169:13-44
-180            <intent-filter>
-180-->/workspace/app/src/main/AndroidManifest.xml:170:13-176:29
-181                <action android:name="android.intent.action.MAIN" />
-181-->/workspace/app/src/main/AndroidManifest.xml:171:17-69
-181-->/workspace/app/src/main/AndroidManifest.xml:171:25-66
-182
-183                <category android:name="android.intent.category.LAUNCHER" />
-183-->/workspace/app/src/main/AndroidManifest.xml:173:17-77
-183-->/workspace/app/src/main/AndroidManifest.xml:173:27-74
-184
-185                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
-185-->/workspace/app/src/main/AndroidManifest.xml:175:17-99
-185-->/workspace/app/src/main/AndroidManifest.xml:175:25-96
-186            </intent-filter>
-187        </activity>
-188        <activity android:name="com.github.jing332.tts_server_android.compose.systts.plugin.login.PluginLoginActivity" />
-188-->/workspace/app/src/main/AndroidManifest.xml:179:9-85
-188-->/workspace/app/src/main/AndroidManifest.xml:179:19-82
-189        <activity
-189-->/workspace/app/src/main/AndroidManifest.xml:181:9-185:62
-190            android:name="com.github.jing332.tts_server_android.ui.forwarder.SystemForwarderSwitchActivity"
-190-->/workspace/app/src/main/AndroidManifest.xml:182:13-71
-191            android:exported="true"
-191-->/workspace/app/src/main/AndroidManifest.xml:183:13-36
-192            android:taskAffinity="sc.switch"
-192-->/workspace/app/src/main/AndroidManifest.xml:184:13-45
-193            android:theme="@android:style/Theme.NoDisplay" />
-193-->/workspace/app/src/main/AndroidManifest.xml:185:13-59
-194        <activity
-194-->/workspace/app/src/main/AndroidManifest.xml:186:9-195:20
-195            android:name="com.github.jing332.tts_server_android.service.systts.CheckVoiceData"
-195-->/workspace/app/src/main/AndroidManifest.xml:187:13-58
-196            android:exported="true"
-196-->/workspace/app/src/main/AndroidManifest.xml:188:13-36
-197            android:label="CheckVoiceData" >
-197-->/workspace/app/src/main/AndroidManifest.xml:189:13-43
-198            <intent-filter>
-198-->/workspace/app/src/main/AndroidManifest.xml:190:13-194:29
-199                <action android:name="android.speech.tts.engine.CHECK_TTS_DATA" />
-199-->/workspace/app/src/main/AndroidManifest.xml:191:17-83
-199-->/workspace/app/src/main/AndroidManifest.xml:191:25-80
-200
-201                <category android:name="android.intent.category.DEFAULT" />
-201-->/workspace/app/src/main/AndroidManifest.xml:76:17-76
-201-->/workspace/app/src/main/AndroidManifest.xml:76:27-73
-202            </intent-filter>
-203        </activity>
-204        <activity
-204-->/workspace/app/src/main/AndroidManifest.xml:197:9-201:48
-205            android:name="com.github.jing332.tts_server_android.compose.DebugSystemTtsActivity"
-205-->/workspace/app/src/main/AndroidManifest.xml:198:13-59
-206            android:exported="true"
-206-->/workspace/app/src/main/AndroidManifest.xml:199:13-36
-207            android:label="@string/debug"
-207-->/workspace/app/src/main/AndroidManifest.xml:200:13-42
-208            android:taskAffinity="debug.tts" />
-208-->/workspace/app/src/main/AndroidManifest.xml:201:13-45
-209
-210        <service
-210-->/workspace/app/src/main/AndroidManifest.xml:203:9-210:19
-211            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
-211-->/workspace/app/src/main/AndroidManifest.xml:204:13-82
-212            android:enabled="false"
-212-->/workspace/app/src/main/AndroidManifest.xml:205:13-36
-213            android:exported="false" >
-213-->/workspace/app/src/main/AndroidManifest.xml:206:13-37
-214            <meta-data
-214-->/workspace/app/src/main/AndroidManifest.xml:207:13-209:41
-215                android:name="autoStoreLocales"
-215-->/workspace/app/src/main/AndroidManifest.xml:208:17-48
-216                android:value="false" /> <!-- 禁用Android自动存储语言 -->
-216-->/workspace/app/src/main/AndroidManifest.xml:209:17-38
-217        </service>
-218        <service
-218-->/workspace/app/src/main/AndroidManifest.xml:211:9-226:19
-219            android:name="com.github.jing332.tts_server_android.service.systts.SystemTtsService"
-219-->/workspace/app/src/main/AndroidManifest.xml:212:13-60
-220            android:exported="true"
-220-->/workspace/app/src/main/AndroidManifest.xml:213:13-36
-221            android:foregroundServiceType="mediaPlayback"
-221-->/workspace/app/src/main/AndroidManifest.xml:214:13-58
-222            android:label="@string/app_name" >
-222-->/workspace/app/src/main/AndroidManifest.xml:215:13-45
-223            <intent-filter>
-223-->/workspace/app/src/main/AndroidManifest.xml:217:13-221:29
-224                <action android:name="android.intent.action.TTS_SERVICE" />
-224-->/workspace/app/src/main/AndroidManifest.xml:7:13-72
-224-->/workspace/app/src/main/AndroidManifest.xml:7:21-69
-225
-226                <category android:name="android.intent.category.DEFAULT" />
-226-->/workspace/app/src/main/AndroidManifest.xml:76:17-76
-226-->/workspace/app/src/main/AndroidManifest.xml:76:27-73
-227            </intent-filter>
-228
-229            <meta-data
-229-->/workspace/app/src/main/AndroidManifest.xml:223:13-225:54
-230                android:name="android.speech.tts"
-230-->/workspace/app/src/main/AndroidManifest.xml:224:17-50
-231                android:resource="@xml/tts_engine" />
-231-->/workspace/app/src/main/AndroidManifest.xml:225:17-51
-232        </service>
-233        <service
-233-->/workspace/app/src/main/AndroidManifest.xml:228:9-238:19
-234            android:name="com.github.jing332.tts_server_android.service.forwarder.system.QSTileService"
-234-->/workspace/app/src/main/AndroidManifest.xml:229:13-67
-235            android:exported="true"
-235-->/workspace/app/src/main/AndroidManifest.xml:230:13-36
-236            android:icon="@drawable/ic_app_notification"
-236-->/workspace/app/src/main/AndroidManifest.xml:231:13-57
-237            android:label="@string/forwarder_systts"
-237-->/workspace/app/src/main/AndroidManifest.xml:232:13-53
-238            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
-238-->/workspace/app/src/main/AndroidManifest.xml:233:13-77
-239            <intent-filter>
-239-->/workspace/app/src/main/AndroidManifest.xml:235:13-237:29
-240                <action android:name="android.service.quicksettings.action.QS_TILE" />
-240-->/workspace/app/src/main/AndroidManifest.xml:236:17-87
-240-->/workspace/app/src/main/AndroidManifest.xml:236:25-84
-241            </intent-filter>
-242        </service>
-243        <service
-243-->/workspace/app/src/main/AndroidManifest.xml:239:9-244:61
-244            android:name="com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService"
-244-->/workspace/app/src/main/AndroidManifest.xml:240:13-76
-245            android:enabled="true"
-245-->/workspace/app/src/main/AndroidManifest.xml:241:13-35
-246            android:exported="true"
-246-->/workspace/app/src/main/AndroidManifest.xml:242:13-36
-247            android:foregroundServiceType="mediaPlayback" />
-247-->/workspace/app/src/main/AndroidManifest.xml:243:13-58
-248
-249        <!-- 后台保活服务 -->
-250        <service
-250-->/workspace/app/src/main/AndroidManifest.xml:247:9-251:58
-251            android:name="com.github.jing332.tts_server_android.service.keepalive.KeepAliveService"
-251-->/workspace/app/src/main/AndroidManifest.xml:248:13-63
-252            android:enabled="true"
-252-->/workspace/app/src/main/AndroidManifest.xml:249:13-35
-253            android:exported="false"
-253-->/workspace/app/src/main/AndroidManifest.xml:250:13-37
-254            android:foregroundServiceType="specialUse" />
-254-->/workspace/app/src/main/AndroidManifest.xml:251:13-55
-255
-256        <!-- JobScheduler 保活服务 -->
-257        <service
-257-->/workspace/app/src/main/AndroidManifest.xml:254:9-258:72
-258            android:name="com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService"
-258-->/workspace/app/src/main/AndroidManifest.xml:255:13-66
-259            android:enabled="true"
-259-->/workspace/app/src/main/AndroidManifest.xml:256:13-35
-260            android:exported="false"
-260-->/workspace/app/src/main/AndroidManifest.xml:257:13-37
-261            android:permission="android.permission.BIND_JOB_SERVICE" />
-261-->/workspace/app/src/main/AndroidManifest.xml:258:13-69
-262
-263        <!-- 无障碍保活服务 -->
-264        <service
-264-->/workspace/app/src/main/AndroidManifest.xml:261:9-273:19
-265            android:name="com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService"
-265-->/workspace/app/src/main/AndroidManifest.xml:262:13-76
-266            android:enabled="true"
-266-->/workspace/app/src/main/AndroidManifest.xml:263:13-35
-267            android:exported="true"
-267-->/workspace/app/src/main/AndroidManifest.xml:264:13-36
-268            android:label="@string/keep_alive_accessibility_label"
-268-->/workspace/app/src/main/AndroidManifest.xml:266:13-67
-269            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
-269-->/workspace/app/src/main/AndroidManifest.xml:265:13-79
-270            <intent-filter>
-270-->/workspace/app/src/main/AndroidManifest.xml:267:13-269:29
-271                <action android:name="android.accessibilityservice.AccessibilityService" />
-271-->/workspace/app/src/main/AndroidManifest.xml:268:17-92
-271-->/workspace/app/src/main/AndroidManifest.xml:268:25-89
-272            </intent-filter>
-273
-274            <meta-data
-274-->/workspace/app/src/main/AndroidManifest.xml:270:13-272:72
-275                android:name="android.accessibilityservice"
-275-->/workspace/app/src/main/AndroidManifest.xml:271:17-60
-276                android:resource="@xml/accessibility_service_config" />
-276-->/workspace/app/src/main/AndroidManifest.xml:272:17-69
-277        </service>
-278
-279        <!-- 通知监听保活服务 -->
-280        <service
-280-->/workspace/app/src/main/AndroidManifest.xml:276:9-285:19
-281            android:name="com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService"
-281-->/workspace/app/src/main/AndroidManifest.xml:277:13-75
-282            android:enabled="true"
-282-->/workspace/app/src/main/AndroidManifest.xml:278:13-35
-283            android:exported="true"
-283-->/workspace/app/src/main/AndroidManifest.xml:279:13-36
-284            android:label="@string/keep_alive_notification_label"
-284-->/workspace/app/src/main/AndroidManifest.xml:281:13-66
-285            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
-285-->/workspace/app/src/main/AndroidManifest.xml:280:13-87
-286            <intent-filter>
-286-->/workspace/app/src/main/AndroidManifest.xml:282:13-284:29
-287                <action android:name="android.service.notification.NotificationListenerService" />
-287-->/workspace/app/src/main/AndroidManifest.xml:283:17-99
-287-->/workspace/app/src/main/AndroidManifest.xml:283:25-96
-288            </intent-filter>
-289        </service>
-290
-291        <!-- 闹钟唤醒接收器 -->
-292        <receiver
-292-->/workspace/app/src/main/AndroidManifest.xml:288:9-291:40
-293            android:name="com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver"
-293-->/workspace/app/src/main/AndroidManifest.xml:289:13-69
-294            android:enabled="true"
-294-->/workspace/app/src/main/AndroidManifest.xml:290:13-35
-295            android:exported="false" />
-295-->/workspace/app/src/main/AndroidManifest.xml:291:13-37
-296
-297        <!-- 网络连接保活服务（对转发器有用） -->
-298        <service
-298-->/workspace/app/src/main/AndroidManifest.xml:294:9-298:56
-299            android:name="com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService"
-299-->/workspace/app/src/main/AndroidManifest.xml:295:13-70
-300            android:enabled="true"
-300-->/workspace/app/src/main/AndroidManifest.xml:296:13-35
-301            android:exported="false"
-301-->/workspace/app/src/main/AndroidManifest.xml:297:13-37
-302            android:foregroundServiceType="dataSync" />
-302-->/workspace/app/src/main/AndroidManifest.xml:298:13-53
-303
-304        <!-- 像素保活服务（1像素悬浮窗） -->
-305        <service
-305-->/workspace/app/src/main/AndroidManifest.xml:301:9-304:40
-306            android:name="com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService"
-306-->/workspace/app/src/main/AndroidManifest.xml:302:13-68
-307            android:enabled="true"
-307-->/workspace/app/src/main/AndroidManifest.xml:303:13-35
-308            android:exported="false" />
-308-->/workspace/app/src/main/AndroidManifest.xml:304:13-37
-309
-310        <!-- 开机自启动接收器 -->
-311        <receiver
-311-->/workspace/app/src/main/AndroidManifest.xml:307:9-315:20
-312            android:name="com.github.jing332.tts_server_android.service.keepalive.BootCompleteReceiver"
-312-->/workspace/app/src/main/AndroidManifest.xml:308:13-67
-313            android:enabled="true"
-313-->/workspace/app/src/main/AndroidManifest.xml:309:13-35
-314            android:exported="true"
-314-->/workspace/app/src/main/AndroidManifest.xml:310:13-36
-315            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
-315-->/workspace/app/src/main/AndroidManifest.xml:311:13-75
-316            <intent-filter>
-316-->/workspace/app/src/main/AndroidManifest.xml:312:13-314:29
-317                <action android:name="android.intent.action.BOOT_COMPLETED" />
-317-->/workspace/app/src/main/AndroidManifest.xml:313:17-79
-317-->/workspace/app/src/main/AndroidManifest.xml:313:25-76
-318            </intent-filter>
-319        </receiver>
-320
-321        <provider
-322            android:name="androidx.core.content.FileProvider"
-322-->/workspace/app/src/main/AndroidManifest.xml:318:13-62
-323            android:authorities="com.github.jing332.tts_server_android.fileprovider"
-323-->/workspace/app/src/main/AndroidManifest.xml:319:13-64
-324            android:exported="false"
-324-->/workspace/app/src/main/AndroidManifest.xml:320:13-37
-325            android:grantUriPermissions="true" >
-325-->/workspace/app/src/main/AndroidManifest.xml:321:13-47
-326            <meta-data
-326-->/workspace/app/src/main/AndroidManifest.xml:322:13-324:54
-327                android:name="android.support.FILE_PROVIDER_PATHS"
-327-->/workspace/app/src/main/AndroidManifest.xml:323:17-67
-328                android:resource="@xml/file_paths" />
-328-->/workspace/app/src/main/AndroidManifest.xml:324:17-51
-329        </provider>
-330        <provider
-330-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:38:9-46:20
-331            android:name="androidx.startup.InitializationProvider"
-331-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:39:13-67
-332            android:authorities="com.github.jing332.tts_server_android.androidx-startup"
-332-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:40:13-68
-333            android:directBootAware="true"
-333-->[com.louiscad.splitties:splitties-appctx-android:3.0.0] /root/.gradle/caches/8.10.2/transforms/7e75c5a5832a329c8541dc6108042adf/transformed/jetified-splitties-appctx-release/AndroidManifest.xml:15:13-43
-334            android:exported="false" >
-334-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:41:13-37
-335            <meta-data
-335-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:43:13-45:52
-336                android:name="com.drake.net.internal.NetInitializer"
-336-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:44:17-69
-337                android:value="androidx.startup" />
-337-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:45:17-49
-338            <meta-data
-338-->[androidx.emoji2:emoji2:1.3.0] /root/.gradle/caches/8.10.2/transforms/edb4e3a6b230fb1eeaaad42e6f525157/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
-339                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-339-->[androidx.emoji2:emoji2:1.3.0] /root/.gradle/caches/8.10.2/transforms/edb4e3a6b230fb1eeaaad42e6f525157/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:30:17-75
-340                android:value="androidx.startup" />
-340-->[androidx.emoji2:emoji2:1.3.0] /root/.gradle/caches/8.10.2/transforms/edb4e3a6b230fb1eeaaad42e6f525157/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:31:17-49
-341            <meta-data
-341-->[androidx.lifecycle:lifecycle-process:2.8.7] /root/.gradle/caches/8.10.2/transforms/0c7ab9bb08d8a803718f303c6158b21d/transformed/jetified-lifecycle-process-2.8.7/AndroidManifest.xml:29:13-31:52
-342                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-342-->[androidx.lifecycle:lifecycle-process:2.8.7] /root/.gradle/caches/8.10.2/transforms/0c7ab9bb08d8a803718f303c6158b21d/transformed/jetified-lifecycle-process-2.8.7/AndroidManifest.xml:30:17-78
-343                android:value="androidx.startup" />
-343-->[androidx.lifecycle:lifecycle-process:2.8.7] /root/.gradle/caches/8.10.2/transforms/0c7ab9bb08d8a803718f303c6158b21d/transformed/jetified-lifecycle-process-2.8.7/AndroidManifest.xml:31:17-49
-344            <meta-data
-344-->[com.louiscad.splitties:splitties-appctx-android:3.0.0] /root/.gradle/caches/8.10.2/transforms/7e75c5a5832a329c8541dc6108042adf/transformed/jetified-splitties-appctx-release/AndroidManifest.xml:19:13-21:52
-345                android:name="splitties.init.AppCtxInitializer"
-345-->[com.louiscad.splitties:splitties-appctx-android:3.0.0] /root/.gradle/caches/8.10.2/transforms/7e75c5a5832a329c8541dc6108042adf/transformed/jetified-splitties-appctx-release/AndroidManifest.xml:20:17-64
-346                android:value="androidx.startup" />
-346-->[com.louiscad.splitties:splitties-appctx-android:3.0.0] /root/.gradle/caches/8.10.2/transforms/7e75c5a5832a329c8541dc6108042adf/transformed/jetified-splitties-appctx-release/AndroidManifest.xml:21:17-49
-347            <meta-data
-347-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:29:13-31:52
-348                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-348-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:30:17-85
-349                android:value="androidx.startup" />
-349-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:31:17-49
-350        </provider>
-351
-352        <activity
-352-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:10:9-14:72
-353            android:name="me.rosuh.filepicker.FilePickerActivity"
-353-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:11:13-66
-354            android:configChanges="orientation|screenSize"
-354-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:12:13-59
-355            android:exported="false"
-355-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:13:13-37
-356            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-356-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:14:13-69
-357
-358        <provider
-358-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:8:9-12:43
-359            android:name="com.petterp.floatingx.assist.FxContentProvider"
-359-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:9:13-74
-360            android:authorities="com.github.jing332.tts_server_android.fx.provider"
-360-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:10:13-63
-361            android:exported="false"
-361-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:11:13-37
-362            android:multiprocess="true" />
-362-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:12:13-40
-363
-364        <uses-library
-364-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:25:9-27:40
-365            android:name="androidx.window.extensions"
-365-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:26:13-54
-366            android:required="false" />
-366-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:27:13-37
-367        <uses-library
-367-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:28:9-30:40
-368            android:name="androidx.window.sidecar"
-368-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:29:13-51
-369            android:required="false" />
-369-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:30:13-37
-370
-371        <service
-371-->[androidx.room:room-runtime:2.6.1] /root/.gradle/caches/8.10.2/transforms/47ed903f88a536d3f412f04d7b9b2b75/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
-372            android:name="androidx.room.MultiInstanceInvalidationService"
-372-->[androidx.room:room-runtime:2.6.1] /root/.gradle/caches/8.10.2/transforms/47ed903f88a536d3f412f04d7b9b2b75/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
-373            android:directBootAware="true"
-373-->[androidx.room:room-runtime:2.6.1] /root/.gradle/caches/8.10.2/transforms/47ed903f88a536d3f412f04d7b9b2b75/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
-374            android:exported="false" />
-374-->[androidx.room:room-runtime:2.6.1] /root/.gradle/caches/8.10.2/transforms/47ed903f88a536d3f412f04d7b9b2b75/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
-375
-376        <receiver
-376-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:34:9-52:20
-377            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-377-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:35:13-76
-378            android:directBootAware="false"
-378-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:36:13-44
-379            android:enabled="true"
-379-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:37:13-35
-380            android:exported="true"
-380-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:38:13-36
-381            android:permission="android.permission.DUMP" >
-381-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:39:13-57
-382            <intent-filter>
-382-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:40:13-42:29
-383                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-383-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:41:17-91
-383-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:41:25-88
-384            </intent-filter>
-385            <intent-filter>
-385-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:43:13-45:29
-386                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-386-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:44:17-85
-386-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:44:25-82
-387            </intent-filter>
-388            <intent-filter>
-388-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:46:13-48:29
-389                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-389-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:47:17-88
-389-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:47:25-85
-390            </intent-filter>
-391            <intent-filter>
-391-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:49:13-51:29
-392                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-392-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:50:17-95
-392-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:50:25-92
-393            </intent-filter>
-394        </receiver>
-395    </application>
-396
-397</manifest>
+176-->/workspace/app/src/main/AndroidManifest.xml:166:9-169:54
+177            android:name="com.github.jing332.tts_server_android.compose.RestartActivity"
+177-->/workspace/app/src/main/AndroidManifest.xml:167:13-52
+178            android:exported="false"
+178-->/workspace/app/src/main/AndroidManifest.xml:168:13-37
+179            android:theme="@style/Theme.TtsServer" />
+179-->/workspace/app/src/main/AndroidManifest.xml:169:13-51
+180        <activity
+180-->/workspace/app/src/main/AndroidManifest.xml:170:9-181:20
+181            android:name="com.github.jing332.tts_server_android.compose.MainActivity"
+181-->/workspace/app/src/main/AndroidManifest.xml:171:13-49
+182            android:exported="true"
+182-->/workspace/app/src/main/AndroidManifest.xml:172:13-36
+183            android:launchMode="singleTask" >
+183-->/workspace/app/src/main/AndroidManifest.xml:173:13-44
+184            <intent-filter>
+184-->/workspace/app/src/main/AndroidManifest.xml:174:13-180:29
+185                <action android:name="android.intent.action.MAIN" />
+185-->/workspace/app/src/main/AndroidManifest.xml:175:17-69
+185-->/workspace/app/src/main/AndroidManifest.xml:175:25-66
+186
+187                <category android:name="android.intent.category.LAUNCHER" />
+187-->/workspace/app/src/main/AndroidManifest.xml:177:17-77
+187-->/workspace/app/src/main/AndroidManifest.xml:177:27-74
+188
+189                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+189-->/workspace/app/src/main/AndroidManifest.xml:179:17-99
+189-->/workspace/app/src/main/AndroidManifest.xml:179:25-96
+190            </intent-filter>
+191        </activity>
+192        <activity android:name="com.github.jing332.tts_server_android.compose.systts.plugin.login.PluginLoginActivity" />
+192-->/workspace/app/src/main/AndroidManifest.xml:183:9-85
+192-->/workspace/app/src/main/AndroidManifest.xml:183:19-82
+193        <activity
+193-->/workspace/app/src/main/AndroidManifest.xml:185:9-189:62
+194            android:name="com.github.jing332.tts_server_android.ui.forwarder.SystemForwarderSwitchActivity"
+194-->/workspace/app/src/main/AndroidManifest.xml:186:13-71
+195            android:exported="true"
+195-->/workspace/app/src/main/AndroidManifest.xml:187:13-36
+196            android:taskAffinity="sc.switch"
+196-->/workspace/app/src/main/AndroidManifest.xml:188:13-45
+197            android:theme="@android:style/Theme.NoDisplay" />
+197-->/workspace/app/src/main/AndroidManifest.xml:189:13-59
+198        <activity
+198-->/workspace/app/src/main/AndroidManifest.xml:190:9-199:20
+199            android:name="com.github.jing332.tts_server_android.service.systts.CheckVoiceData"
+199-->/workspace/app/src/main/AndroidManifest.xml:191:13-58
+200            android:exported="true"
+200-->/workspace/app/src/main/AndroidManifest.xml:192:13-36
+201            android:label="CheckVoiceData" >
+201-->/workspace/app/src/main/AndroidManifest.xml:193:13-43
+202            <intent-filter>
+202-->/workspace/app/src/main/AndroidManifest.xml:194:13-198:29
+203                <action android:name="android.speech.tts.engine.CHECK_TTS_DATA" />
+203-->/workspace/app/src/main/AndroidManifest.xml:195:17-83
+203-->/workspace/app/src/main/AndroidManifest.xml:195:25-80
+204
+205                <category android:name="android.intent.category.DEFAULT" />
+205-->/workspace/app/src/main/AndroidManifest.xml:76:17-76
+205-->/workspace/app/src/main/AndroidManifest.xml:76:27-73
+206            </intent-filter>
+207        </activity>
+208        <activity
+208-->/workspace/app/src/main/AndroidManifest.xml:201:9-205:48
+209            android:name="com.github.jing332.tts_server_android.compose.DebugSystemTtsActivity"
+209-->/workspace/app/src/main/AndroidManifest.xml:202:13-59
+210            android:exported="true"
+210-->/workspace/app/src/main/AndroidManifest.xml:203:13-36
+211            android:label="@string/debug"
+211-->/workspace/app/src/main/AndroidManifest.xml:204:13-42
+212            android:taskAffinity="debug.tts" />
+212-->/workspace/app/src/main/AndroidManifest.xml:205:13-45
+213
+214        <service
+214-->/workspace/app/src/main/AndroidManifest.xml:207:9-214:19
+215            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+215-->/workspace/app/src/main/AndroidManifest.xml:208:13-82
+216            android:enabled="false"
+216-->/workspace/app/src/main/AndroidManifest.xml:209:13-36
+217            android:exported="false" >
+217-->/workspace/app/src/main/AndroidManifest.xml:210:13-37
+218            <meta-data
+218-->/workspace/app/src/main/AndroidManifest.xml:211:13-213:41
+219                android:name="autoStoreLocales"
+219-->/workspace/app/src/main/AndroidManifest.xml:212:17-48
+220                android:value="false" /> <!-- 禁用Android自动存储语言 -->
+220-->/workspace/app/src/main/AndroidManifest.xml:213:17-38
+221        </service>
+222        <service
+222-->/workspace/app/src/main/AndroidManifest.xml:215:9-230:19
+223            android:name="com.github.jing332.tts_server_android.service.systts.SystemTtsService"
+223-->/workspace/app/src/main/AndroidManifest.xml:216:13-60
+224            android:exported="true"
+224-->/workspace/app/src/main/AndroidManifest.xml:217:13-36
+225            android:foregroundServiceType="mediaPlayback"
+225-->/workspace/app/src/main/AndroidManifest.xml:218:13-58
+226            android:label="@string/app_name" >
+226-->/workspace/app/src/main/AndroidManifest.xml:219:13-45
+227            <intent-filter>
+227-->/workspace/app/src/main/AndroidManifest.xml:221:13-225:29
+228                <action android:name="android.intent.action.TTS_SERVICE" />
+228-->/workspace/app/src/main/AndroidManifest.xml:7:13-72
+228-->/workspace/app/src/main/AndroidManifest.xml:7:21-69
+229
+230                <category android:name="android.intent.category.DEFAULT" />
+230-->/workspace/app/src/main/AndroidManifest.xml:76:17-76
+230-->/workspace/app/src/main/AndroidManifest.xml:76:27-73
+231            </intent-filter>
+232
+233            <meta-data
+233-->/workspace/app/src/main/AndroidManifest.xml:227:13-229:54
+234                android:name="android.speech.tts"
+234-->/workspace/app/src/main/AndroidManifest.xml:228:17-50
+235                android:resource="@xml/tts_engine" />
+235-->/workspace/app/src/main/AndroidManifest.xml:229:17-51
+236        </service>
+237        <service
+237-->/workspace/app/src/main/AndroidManifest.xml:232:9-242:19
+238            android:name="com.github.jing332.tts_server_android.service.forwarder.system.QSTileService"
+238-->/workspace/app/src/main/AndroidManifest.xml:233:13-67
+239            android:exported="true"
+239-->/workspace/app/src/main/AndroidManifest.xml:234:13-36
+240            android:icon="@drawable/ic_app_notification"
+240-->/workspace/app/src/main/AndroidManifest.xml:235:13-57
+241            android:label="@string/forwarder_systts"
+241-->/workspace/app/src/main/AndroidManifest.xml:236:13-53
+242            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE" >
+242-->/workspace/app/src/main/AndroidManifest.xml:237:13-77
+243            <intent-filter>
+243-->/workspace/app/src/main/AndroidManifest.xml:239:13-241:29
+244                <action android:name="android.service.quicksettings.action.QS_TILE" />
+244-->/workspace/app/src/main/AndroidManifest.xml:240:17-87
+244-->/workspace/app/src/main/AndroidManifest.xml:240:25-84
+245            </intent-filter>
+246        </service>
+247        <service
+247-->/workspace/app/src/main/AndroidManifest.xml:243:9-248:61
+248            android:name="com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService"
+248-->/workspace/app/src/main/AndroidManifest.xml:244:13-76
+249            android:enabled="true"
+249-->/workspace/app/src/main/AndroidManifest.xml:245:13-35
+250            android:exported="true"
+250-->/workspace/app/src/main/AndroidManifest.xml:246:13-36
+251            android:foregroundServiceType="mediaPlayback" />
+251-->/workspace/app/src/main/AndroidManifest.xml:247:13-58
+252
+253        <!-- 后台保活服务 -->
+254        <service
+254-->/workspace/app/src/main/AndroidManifest.xml:251:9-255:58
+255            android:name="com.github.jing332.tts_server_android.service.keepalive.KeepAliveService"
+255-->/workspace/app/src/main/AndroidManifest.xml:252:13-63
+256            android:enabled="true"
+256-->/workspace/app/src/main/AndroidManifest.xml:253:13-35
+257            android:exported="false"
+257-->/workspace/app/src/main/AndroidManifest.xml:254:13-37
+258            android:foregroundServiceType="specialUse" />
+258-->/workspace/app/src/main/AndroidManifest.xml:255:13-55
+259
+260        <!-- JobScheduler 保活服务 -->
+261        <service
+261-->/workspace/app/src/main/AndroidManifest.xml:258:9-262:72
+262            android:name="com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService"
+262-->/workspace/app/src/main/AndroidManifest.xml:259:13-66
+263            android:enabled="true"
+263-->/workspace/app/src/main/AndroidManifest.xml:260:13-35
+264            android:exported="false"
+264-->/workspace/app/src/main/AndroidManifest.xml:261:13-37
+265            android:permission="android.permission.BIND_JOB_SERVICE" />
+265-->/workspace/app/src/main/AndroidManifest.xml:262:13-69
+266
+267        <!-- 无障碍保活服务 -->
+268        <service
+268-->/workspace/app/src/main/AndroidManifest.xml:265:9-277:19
+269            android:name="com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService"
+269-->/workspace/app/src/main/AndroidManifest.xml:266:13-76
+270            android:enabled="true"
+270-->/workspace/app/src/main/AndroidManifest.xml:267:13-35
+271            android:exported="true"
+271-->/workspace/app/src/main/AndroidManifest.xml:268:13-36
+272            android:label="@string/keep_alive_accessibility_label"
+272-->/workspace/app/src/main/AndroidManifest.xml:270:13-67
+273            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+273-->/workspace/app/src/main/AndroidManifest.xml:269:13-79
+274            <intent-filter>
+274-->/workspace/app/src/main/AndroidManifest.xml:271:13-273:29
+275                <action android:name="android.accessibilityservice.AccessibilityService" />
+275-->/workspace/app/src/main/AndroidManifest.xml:272:17-92
+275-->/workspace/app/src/main/AndroidManifest.xml:272:25-89
+276            </intent-filter>
+277
+278            <meta-data
+278-->/workspace/app/src/main/AndroidManifest.xml:274:13-276:72
+279                android:name="android.accessibilityservice"
+279-->/workspace/app/src/main/AndroidManifest.xml:275:17-60
+280                android:resource="@xml/accessibility_service_config" />
+280-->/workspace/app/src/main/AndroidManifest.xml:276:17-69
+281        </service>
+282
+283        <!-- 通知监听保活服务 -->
+284        <service
+284-->/workspace/app/src/main/AndroidManifest.xml:280:9-289:19
+285            android:name="com.github.jing332.tts_server_android.service.keepalive.NotificationKeepAliveService"
+285-->/workspace/app/src/main/AndroidManifest.xml:281:13-75
+286            android:enabled="true"
+286-->/workspace/app/src/main/AndroidManifest.xml:282:13-35
+287            android:exported="true"
+287-->/workspace/app/src/main/AndroidManifest.xml:283:13-36
+288            android:label="@string/keep_alive_notification_label"
+288-->/workspace/app/src/main/AndroidManifest.xml:285:13-66
+289            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+289-->/workspace/app/src/main/AndroidManifest.xml:284:13-87
+290            <intent-filter>
+290-->/workspace/app/src/main/AndroidManifest.xml:286:13-288:29
+291                <action android:name="android.service.notification.NotificationListenerService" />
+291-->/workspace/app/src/main/AndroidManifest.xml:287:17-99
+291-->/workspace/app/src/main/AndroidManifest.xml:287:25-96
+292            </intent-filter>
+293        </service>
+294
+295        <!-- 闹钟唤醒接收器 -->
+296        <receiver
+296-->/workspace/app/src/main/AndroidManifest.xml:292:9-295:40
+297            android:name="com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver"
+297-->/workspace/app/src/main/AndroidManifest.xml:293:13-69
+298            android:enabled="true"
+298-->/workspace/app/src/main/AndroidManifest.xml:294:13-35
+299            android:exported="false" />
+299-->/workspace/app/src/main/AndroidManifest.xml:295:13-37
+300
+301        <!-- 网络连接保活服务（对转发器有用） -->
+302        <service
+302-->/workspace/app/src/main/AndroidManifest.xml:298:9-302:56
+303            android:name="com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService"
+303-->/workspace/app/src/main/AndroidManifest.xml:299:13-70
+304            android:enabled="true"
+304-->/workspace/app/src/main/AndroidManifest.xml:300:13-35
+305            android:exported="false"
+305-->/workspace/app/src/main/AndroidManifest.xml:301:13-37
+306            android:foregroundServiceType="dataSync" />
+306-->/workspace/app/src/main/AndroidManifest.xml:302:13-53
+307
+308        <!-- 像素保活服务（1像素悬浮窗） -->
+309        <service
+309-->/workspace/app/src/main/AndroidManifest.xml:305:9-308:40
+310            android:name="com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService"
+310-->/workspace/app/src/main/AndroidManifest.xml:306:13-68
+311            android:enabled="true"
+311-->/workspace/app/src/main/AndroidManifest.xml:307:13-35
+312            android:exported="false" />
+312-->/workspace/app/src/main/AndroidManifest.xml:308:13-37
+313
+314        <!-- 开机自启动接收器 -->
+315        <receiver
+315-->/workspace/app/src/main/AndroidManifest.xml:311:9-319:20
+316            android:name="com.github.jing332.tts_server_android.service.keepalive.BootCompleteReceiver"
+316-->/workspace/app/src/main/AndroidManifest.xml:312:13-67
+317            android:enabled="true"
+317-->/workspace/app/src/main/AndroidManifest.xml:313:13-35
+318            android:exported="true"
+318-->/workspace/app/src/main/AndroidManifest.xml:314:13-36
+319            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
+319-->/workspace/app/src/main/AndroidManifest.xml:315:13-75
+320            <intent-filter>
+320-->/workspace/app/src/main/AndroidManifest.xml:316:13-318:29
+321                <action android:name="android.intent.action.BOOT_COMPLETED" />
+321-->/workspace/app/src/main/AndroidManifest.xml:317:17-79
+321-->/workspace/app/src/main/AndroidManifest.xml:317:25-76
+322            </intent-filter>
+323        </receiver>
+324
+325        <provider
+326            android:name="androidx.core.content.FileProvider"
+326-->/workspace/app/src/main/AndroidManifest.xml:322:13-62
+327            android:authorities="com.github.jing332.tts_server_android.fileprovider"
+327-->/workspace/app/src/main/AndroidManifest.xml:323:13-64
+328            android:exported="false"
+328-->/workspace/app/src/main/AndroidManifest.xml:324:13-37
+329            android:grantUriPermissions="true" >
+329-->/workspace/app/src/main/AndroidManifest.xml:325:13-47
+330            <meta-data
+330-->/workspace/app/src/main/AndroidManifest.xml:326:13-328:54
+331                android:name="android.support.FILE_PROVIDER_PATHS"
+331-->/workspace/app/src/main/AndroidManifest.xml:327:17-67
+332                android:resource="@xml/file_paths" />
+332-->/workspace/app/src/main/AndroidManifest.xml:328:17-51
+333        </provider>
+334        <provider
+334-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:38:9-46:20
+335            android:name="androidx.startup.InitializationProvider"
+335-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:39:13-67
+336            android:authorities="com.github.jing332.tts_server_android.androidx-startup"
+336-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:40:13-68
+337            android:directBootAware="true"
+337-->[com.louiscad.splitties:splitties-appctx-android:3.0.0] /root/.gradle/caches/8.10.2/transforms/7e75c5a5832a329c8541dc6108042adf/transformed/jetified-splitties-appctx-release/AndroidManifest.xml:15:13-43
+338            android:exported="false" >
+338-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:41:13-37
+339            <meta-data
+339-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:43:13-45:52
+340                android:name="com.drake.net.internal.NetInitializer"
+340-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:44:17-69
+341                android:value="androidx.startup" />
+341-->[com.github.liangjingkanji:Net:3.7.0] /root/.gradle/caches/8.10.2/transforms/eac7ee0c0faf6015848ae622634bcb7f/transformed/jetified-Net-3.7.0/AndroidManifest.xml:45:17-49
+342            <meta-data
+342-->[androidx.emoji2:emoji2:1.3.0] /root/.gradle/caches/8.10.2/transforms/edb4e3a6b230fb1eeaaad42e6f525157/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+343                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+343-->[androidx.emoji2:emoji2:1.3.0] /root/.gradle/caches/8.10.2/transforms/edb4e3a6b230fb1eeaaad42e6f525157/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:30:17-75
+344                android:value="androidx.startup" />
+344-->[androidx.emoji2:emoji2:1.3.0] /root/.gradle/caches/8.10.2/transforms/edb4e3a6b230fb1eeaaad42e6f525157/transformed/jetified-emoji2-1.3.0/AndroidManifest.xml:31:17-49
+345            <meta-data
+345-->[androidx.lifecycle:lifecycle-process:2.8.7] /root/.gradle/caches/8.10.2/transforms/0c7ab9bb08d8a803718f303c6158b21d/transformed/jetified-lifecycle-process-2.8.7/AndroidManifest.xml:29:13-31:52
+346                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+346-->[androidx.lifecycle:lifecycle-process:2.8.7] /root/.gradle/caches/8.10.2/transforms/0c7ab9bb08d8a803718f303c6158b21d/transformed/jetified-lifecycle-process-2.8.7/AndroidManifest.xml:30:17-78
+347                android:value="androidx.startup" />
+347-->[androidx.lifecycle:lifecycle-process:2.8.7] /root/.gradle/caches/8.10.2/transforms/0c7ab9bb08d8a803718f303c6158b21d/transformed/jetified-lifecycle-process-2.8.7/AndroidManifest.xml:31:17-49
+348            <meta-data
+348-->[com.louiscad.splitties:splitties-appctx-android:3.0.0] /root/.gradle/caches/8.10.2/transforms/7e75c5a5832a329c8541dc6108042adf/transformed/jetified-splitties-appctx-release/AndroidManifest.xml:19:13-21:52
+349                android:name="splitties.init.AppCtxInitializer"
+349-->[com.louiscad.splitties:splitties-appctx-android:3.0.0] /root/.gradle/caches/8.10.2/transforms/7e75c5a5832a329c8541dc6108042adf/transformed/jetified-splitties-appctx-release/AndroidManifest.xml:20:17-64
+350                android:value="androidx.startup" />
+350-->[com.louiscad.splitties:splitties-appctx-android:3.0.0] /root/.gradle/caches/8.10.2/transforms/7e75c5a5832a329c8541dc6108042adf/transformed/jetified-splitties-appctx-release/AndroidManifest.xml:21:17-49
+351            <meta-data
+351-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:29:13-31:52
+352                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+352-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:30:17-85
+353                android:value="androidx.startup" />
+353-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:31:17-49
+354        </provider>
+355
+356        <activity
+356-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:10:9-14:72
+357            android:name="me.rosuh.filepicker.FilePickerActivity"
+357-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:11:13-66
+358            android:configChanges="orientation|screenSize"
+358-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:12:13-59
+359            android:exported="false"
+359-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:13:13-37
+360            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+360-->[me.rosuh:AndroidFilePicker:1.0.1] /root/.gradle/caches/8.10.2/transforms/9955d1bb5b4d438fdeb4b4a51f8b5612/transformed/jetified-AndroidFilePicker-1.0.1/AndroidManifest.xml:14:13-69
+361
+362        <provider
+362-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:8:9-12:43
+363            android:name="com.petterp.floatingx.assist.FxContentProvider"
+363-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:9:13-74
+364            android:authorities="com.github.jing332.tts_server_android.fx.provider"
+364-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:10:13-63
+365            android:exported="false"
+365-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:11:13-37
+366            android:multiprocess="true" />
+366-->[io.github.petterpx:floatingx:2.3.4] /root/.gradle/caches/8.10.2/transforms/3be24f68f78f63e18fc8dfcf2ea9d6bd/transformed/jetified-floatingx-2.3.4/AndroidManifest.xml:12:13-40
+367
+368        <uses-library
+368-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:25:9-27:40
+369            android:name="androidx.window.extensions"
+369-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:26:13-54
+370            android:required="false" />
+370-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:27:13-37
+371        <uses-library
+371-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:28:9-30:40
+372            android:name="androidx.window.sidecar"
+372-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:29:13-51
+373            android:required="false" />
+373-->[androidx.window:window:1.0.0] /root/.gradle/caches/8.10.2/transforms/1ef6ad2307eaf8a49dc2731b989ecaa4/transformed/jetified-window-1.0.0/AndroidManifest.xml:30:13-37
+374
+375        <service
+375-->[androidx.room:room-runtime:2.6.1] /root/.gradle/caches/8.10.2/transforms/47ed903f88a536d3f412f04d7b9b2b75/transformed/room-runtime-2.6.1/AndroidManifest.xml:24:9-28:63
+376            android:name="androidx.room.MultiInstanceInvalidationService"
+376-->[androidx.room:room-runtime:2.6.1] /root/.gradle/caches/8.10.2/transforms/47ed903f88a536d3f412f04d7b9b2b75/transformed/room-runtime-2.6.1/AndroidManifest.xml:25:13-74
+377            android:directBootAware="true"
+377-->[androidx.room:room-runtime:2.6.1] /root/.gradle/caches/8.10.2/transforms/47ed903f88a536d3f412f04d7b9b2b75/transformed/room-runtime-2.6.1/AndroidManifest.xml:26:13-43
+378            android:exported="false" />
+378-->[androidx.room:room-runtime:2.6.1] /root/.gradle/caches/8.10.2/transforms/47ed903f88a536d3f412f04d7b9b2b75/transformed/room-runtime-2.6.1/AndroidManifest.xml:27:13-37
+379
+380        <receiver
+380-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:34:9-52:20
+381            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+381-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:35:13-76
+382            android:directBootAware="false"
+382-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:36:13-44
+383            android:enabled="true"
+383-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:37:13-35
+384            android:exported="true"
+384-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:38:13-36
+385            android:permission="android.permission.DUMP" >
+385-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:39:13-57
+386            <intent-filter>
+386-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:40:13-42:29
+387                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+387-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:41:17-91
+387-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:41:25-88
+388            </intent-filter>
+389            <intent-filter>
+389-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:43:13-45:29
+390                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+390-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:44:17-85
+390-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:44:25-82
+391            </intent-filter>
+392            <intent-filter>
+392-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:46:13-48:29
+393                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+393-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:47:17-88
+393-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:47:25-85
+394            </intent-filter>
+395            <intent-filter>
+395-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:49:13-51:29
+396                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+396-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:50:17-95
+396-->[androidx.profileinstaller:profileinstaller:1.4.1] /root/.gradle/caches/8.10.2/transforms/8dbcef335d3c3ac6cd38f63e045cd1cd/transformed/jetified-profileinstaller-1.4.1/AndroidManifest.xml:50:25-92
+397            </intent-filter>
+398        </receiver>
+399    </application>
+400
+401</manifest>
