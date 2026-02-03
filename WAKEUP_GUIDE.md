@@ -209,7 +209,29 @@ class Console(val source: LogSource = LogSource.PLUGIN) {
 
 ---
 
-### 问题6: 日志搜索框样式优化 (2026-01-29)
+### 问题6: 首页搜索功能增强 (2026-02-04)
+
+**问题：** 首页搜索键的选项无效，只能按名称搜索
+
+**修复方案：**
+- 新增 `SearchType` 枚举：NAME, TAG, PLUGIN, GROUP
+- `GroupSearchType` 枚举（编辑分组使用）：NAME, TAG, PLUGIN
+- 修改 `ListManagerViewModel` 支持按类型过滤
+
+**搜索类型说明：**
+- **名称**：按配置名称搜索
+- **标签**：按标签名称、标签值搜索  
+- **插件**：按插件ID或插件名称搜索
+- **分组**：按分组名称搜索（首页特有）
+
+**相关文件：**
+- `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/SearchTextField.kt`（新建）
+- `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerScreen.kt`
+- `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerViewModel.kt`
+
+---
+
+### 问题7: 日志搜索框样式优化 (2026-01-29)
 
 **需求：** 搜索框字体大小统一 + 美观的圆角透明样式
 
@@ -230,7 +252,7 @@ OutlinedTextField(
 
 ---
 
-### 问题7: 日志上限自动清空 (2026-01-31)
+### 问题8: 日志上限自动清空 (2026-01-31)
 
 **需求：** 日志无单条限制，但满50万条自动清空防止内存溢出
 
@@ -513,6 +535,7 @@ android.enableR8.fullMode=false
 **本次移植功能：**
 1. **分组编辑增强** - 支持按名称/标签/插件搜索并批量移动配置
 2. **日志系统升级** - 支持日志搜索和级别筛选
+3. **首页搜索增强** - 支持按名称/标签/插件/分组搜索
 
 **移植原则：**
 - 只移植功能代码，不移植 master 的 ProGuard 规则
@@ -583,6 +606,7 @@ pkill -f gradlew; sleep 2
 
 | 日期 | 版本 | 内容 |
 |------|------|------|
+| 2026-02-04 | v1.5 | **搜索功能增强** - 首页搜索支持名称/标签/插件/分组四种类型，编辑分组支持名称/标签/插件三种类型 |
 | 2026-01-31 | v1.4 | **更新构建环境** - 添加从零配置构建环境步骤，更新SDK版本为API 35，添加日志上限50万条自动清空功能 |
 | 2026-01-30 | v1.3 | **添加致命配置警告** - 强调gradle.properties中R8配置的重要性，避免编辑器崩溃 |
 | 2026-01-29 | v1.2 | 添加 AI 协作工作模式，记录音频参数修复和日志系统增强 |
