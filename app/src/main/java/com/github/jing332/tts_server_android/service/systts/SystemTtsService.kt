@@ -155,24 +155,10 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
             // 停止TTS服务
             context.stopService(Intent(context, SystemTtsService::class.java))
             
-            // 使用 AlarmManager 延迟重启，确保当前 Activity 完全结束
-            val intent = Intent(context, com.github.jing332.tts_server_android.compose.MainActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            }
-            val pendingIntent = PendingIntent.getActivity(
-                context, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
-            )
-            
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            // 使用 RTC_WAKEUP，在当前时间之后 500ms 启动
-            alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + 500,
-                pendingIntent
-            )
-            
-            // 立即结束当前进程
+            // 使用与 App.restart() 相同的方式重启
+            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)!!
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            context.startActivity(intent)
             Process.killProcess(Process.myPid())
         }
     }
