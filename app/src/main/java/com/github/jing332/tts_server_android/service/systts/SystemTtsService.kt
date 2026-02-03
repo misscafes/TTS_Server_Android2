@@ -146,19 +146,33 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
         }
 
         /**
-         * 完全重启应用：停止所有服务，然后重新启动应用
-         * 比 restartService 更彻底，会重新创建整个应用进程
+         * 完全重启应用：停止所有服务，然后重新启动应用到首页
+         * 先跳转到 RestartActivity 显示加载动画，再执行真正重启
          */
         fun restartApp(context: Context) {
+            // 跳转到重启过渡界面
+            val intent = Intent(context, com.github.jing332.tts_server_android.compose.RestartActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            }
+            context.startActivity(intent)
+        }
+        
+        /**
+         * 真正执行重启（在 RestartActivity 中调用）
+         * 停止服务，启动 MainActivity，然后杀进程
+         */
+        fun doRestartApp(context: Context) {
             // 停止转发器服务
             context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
             // 停止TTS服务
             context.stopService(Intent(context, SystemTtsService::class.java))
             
-            // 使用与 App.restart() 相同的方式重启
+            // 启动主界面
             val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)!!
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             context.startActivity(intent)
+            
+            // 结束当前进程
             Process.killProcess(Process.myPid())
         }
     }
