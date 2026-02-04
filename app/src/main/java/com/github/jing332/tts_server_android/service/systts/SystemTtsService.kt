@@ -16,6 +16,7 @@ import android.media.AudioFormat
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.PowerManager
+import android.os.Process
 import android.speech.tts.SynthesisRequest
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeechService

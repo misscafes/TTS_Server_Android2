@@ -1,6 +1,5 @@
 package com.github.jing332.tts_server_android.compose
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -19,8 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.jing332.tts_server_android.R
+import com.github.jing332.tts_server_android.app
 import com.github.jing332.tts_server_android.compose.theme.AppTheme
-import com.github.jing332.tts_server_android.service.systts.SystemTtsService
 import kotlinx.coroutines.delay
 
 /**
@@ -28,34 +27,10 @@ import kotlinx.coroutines.delay
  * 点击首页重启键后先跳转到此界面，显示加载动画，然后执行重启
  */
 class RestartActivity : AppCompatActivity() {
-    
-    companion object {
-        private const val PREFS_NAME = "restart_state"
-        private const val KEY_FORWARDER_WAS_RUNNING = "forwarder_was_running"
-        
-        /**
-         * 保存重启前的状态
-         */
-        fun saveState(context: Context, forwarderWasRunning: Boolean) {
-            context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit()
-                .putBoolean(KEY_FORWARDER_WAS_RUNNING, forwarderWasRunning)
-                .apply()
-        }
-        
-        /**
-         * 获取并清除转发器状态
-         */
-        fun getAndClearForwarderState(context: Context): Boolean {
-            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            val wasRunning = prefs.getBoolean(KEY_FORWARDER_WAS_RUNNING, false)
-            prefs.edit().remove(KEY_FORWARDER_WAS_RUNNING).apply()
-            return wasRunning
-        }
-    }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         setContent {
             AppTheme {
                 Box(
@@ -74,12 +49,12 @@ class RestartActivity : AppCompatActivity() {
                         )
                     }
                 }
-                
+
                 LaunchedEffect(Unit) {
                     // 延迟一点时间让用户看到动画
                     delay(300)
                     // 执行真正的重启
-                    SystemTtsService.doRestartApp(this@RestartActivity)
+                    app.restart()
                 }
             }
         }
