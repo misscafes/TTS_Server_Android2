@@ -57,6 +57,43 @@ STORE_PASSWORD=Ktouls123456
 
 ## 🐛 已知问题及修复方法
 
+### 问题9: 保活设置界面闪退 (2026-02-04)
+
+**症状：** 点击"保活设置"进入界面后立即闪退
+
+**根本原因：** `KeepAliveSettingsActivity` 直接在 `remember { }` 中委托访问 `SystemTtsConfig` 的状态属性，而该配置依赖 `app` 对象初始化，在某些情况下可能导致空指针异常
+
+**修复文件：**
+- `app/src/main/java/com/github/jing332/tts_server_android/compose/settings/KeepAliveSettingsActivity.kt`
+
+**修复要点：**
+1. 使用本地 `mutableStateOf()` 替代直接委托给 `SystemTtsConfig`
+2. 在 `LaunchedEffect` 中安全加载配置值（使用 `runCatching` 包装）
+3. 在开关回调中使用 `runCatching` 保存配置值
+
+```kotlin
+// 修复前 - 直接委托，可能导致崩溃
+var isKeepAliveEnabled by remember { SystemTtsConfig.isKeepAliveEnabled }
+
+// 修复后 - 本地状态 + 安全加载/保存
+var isKeepAliveEnabled by remember { mutableStateOf(false) }
+LaunchedEffect(Unit) {
+    runCatching {
+        isKeepAliveEnabled = SystemTtsConfig.isKeepAliveEnabled.value
+    }
+}
+SwitchPreference(
+    checked = isKeepAliveEnabled,
+    onCheckedChange = { enabled ->
+        isKeepAliveEnabled = enabled
+        runCatching { SystemTtsConfig.isKeepAliveEnabled.value = enabled }
+        // ... 其他逻辑
+    }
+)
+```
+
+---
+
 ### 问题1: TTS插件语言和声音列表不刷新
 
 **症状：** 编辑插件并保存预览后，语言和声音列表不更新
@@ -628,10 +665,108 @@ pkill -f gradlew; sleep 2
 
 ---
 
+## 🎙️ 通义千问插件 - 克隆音色抓包教程
+
+### 前置条件
+- **工具**：Reqable 或 HttpCanary（小黄鸟）
+- **环境**：手机和电脑/抓包设备连接同一 WiFi
+
+### 第一步：配置抓包环境
+
+**Reqable 配置：**
+1. 电脑安装 Reqable（https://reqable.com/）
+2. 手机 WiFi 设置代理：服务器填电脑IP，端口填 9000
+3. 手机浏览器访问 `http://reqable.proxy/ssl` 下载安装证书
+
+**HttpCanary 配置：**
+1. 安装 HttpCanary，首次打开时安装证书
+2. 设置 → 目标应用 → 选择"通义千问"
+
+### 第二步：抓包获取数据
+
+1. **开启抓包**：Reqable/HttpCanary 点击开始
+2. **打开通义千问 APP**
+3. **关键步骤**：点击语音按钮，**选择你要抓的克隆音色**（必须是克隆音色，预设音色没有 audio_text/audio_url）
+4. **发送任意消息**（如"你好"）
+5. **停止抓包**
+
+### 第三步：导出 HAR 文件
+
+- **Reqable**：找到 `speech-tts.qianwen.com` 请求 → 右键 → 导出 → HAR
+- **HttpCanary**：长按请求 → 分享 → 导出 HAR
+
+### 第四步：提取三个关键值
+
+**方法：用文本编辑器打开 HAR 文件，搜索以下关键词**
+
+| 搜索关键词 | 提取内容 | 示例 |
+|-----------|---------|------|
+| `"vcn":"create_voice` | 克隆音色ID | `create_voice_2018904938500661248` |
+| `"audio_text":"` | 参考音频文本 | `中国里的小缺幸其实很多呢...` |
+| `"audio_url":"` | 参考音频URL | `http://quarklive.oss-cn-zhangjiakou.aliyuncs.com/...` |
+
+**⚠️ 注意事项：**
+- `audio_url` 很长，必须复制完整（包含 `?Expires=...` 参数）
+- 不要漏掉结尾的 `"`
+
+### 第五步：配置到 TTS Server
+
+**方式一：变量配置（推荐，支持多个音色）**
+
+变量名：`manualCloneVoices`
+变量值格式：`音色ID@显示名称@audio_text@audio_url`
+
+示例（多个音色用 `;` 分隔）：
+```
+create_voice_2018904938500661248@元宝@中国里的小缺幸其实很多呢像吃到一块甜甜的蛋糕，没问题。@http://quarklive.oss-cn-zhangjiakou.aliyuncs.com/xxx.wav;create_voice_2018962051129143296@名称@国人餐桌上必不可少的主食...@http://quarklive.oss-cn-zhangjiakou.aliyuncs.com/yyy.wav
+```
+
+**方式二：UI 配置（单个音色）**
+
+1. 选择音色列表中的 **"➕ 添加克隆音色"**
+2. 填写三个输入框：
+   - **克隆音色ID**：`create_voice_xxx`
+   - **参考音频文本**：`audio_text 内容`
+   - **参考音频URL**：`audio_url 完整链接`
+
+### 插件内置预设音色
+
+当前插件内置以下预设音色（无需抓包）：
+
+| 音色名称 | 音色ID |
+|---------|--------|
+| 沐阳 | `zh_female_quarkF531S0_ptts` |
+| 若初 | `zh_female_quark_lulu` |
+| 苏荷姐姐 | `zh_female_quark_ajiao` |
+| 元气草莓 | `zh_female_quark_luoying` |
+| 活力嘉蓓 | `zh_female_quark_jiabei` |
+| 起司妹妹 | `zh_female_quark_xinshen` |
+| 电台华姐 | `zh_female_quark_xiaoning` |
+| 彩虹甜豆 | `zh_female_quark_f29` |
+| **念念** | `zh_female_quark_xiaoxiao` |
+| **方晴师姐** | `zh_female_quark_zheque` |
+| 浅吻雾梨 | `longqiang` |
+| 午夜甜茶 | `longyan` |
+| 皓东 | `zh_male_quark_bb01` |
+| 温屿哥哥 | `zh_male_quark_m24` |
+| 阿辉 | `zh_male_chengfeng_ICL` |
+
+### 快速检查清单
+
+- [ ] 使用的是克隆音色（不是预设音色）
+- [ ] HAR 文件导出成功
+- [ ] 提取了完整的三个值（ID、text、URL）
+- [ ] URL 包含 `?Expires=` 参数
+- [ ] 配置到变量或 UI 后测试发音正常
+
+---
+
 ## 📝 修改历史
 
 | 日期 | 版本 | 内容 |
 |------|------|------|
+| 2026-02-04 | v1.9 | **修复保活设置闪退** - 使用本地状态管理替代直接委托，添加安全加载/保存机制，解决进入界面闪退问题 |
+| 2026-02-04 | v1.8 | **新增克隆音色抓包教程** - 添加通义千问插件配置指南，新增念念、方晴师姐两个预设音色 |
 | 2026-02-04 | v1.7 | **修复转发器重启恢复** - 新增 RestartActivity 保存转发器状态，重启后自动恢复 |
 | 2026-02-04 | v1.6 | **应用重启功能** - 首页重启键改为完全重启应用，解决转发器状态不同步问题 |
 | 2026-02-04 | v1.5 | **搜索功能增强** - 首页搜索支持名称/标签/插件/分组四种类型，编辑分组支持名称/标签/插件三种类型 |

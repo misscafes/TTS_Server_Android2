@@ -34,6 +34,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -91,9 +92,17 @@ class KeepAliveSettingsActivity : ComposeActivity() {
         // 帮助详情页面状态
         var showHelpDetail by remember { mutableStateOf(false) }
 
-        // 保活配置状态
-        var isKeepAliveEnabled by remember { SystemTtsConfig.isKeepAliveEnabled }
-        var isAutoStartEnabled by remember { SystemTtsConfig.isAutoStartEnabled }
+        // 保活配置状态 - 使用本地状态避免直接委托导致的崩溃
+        var isKeepAliveEnabled by remember { mutableStateOf(false) }
+        var isAutoStartEnabled by remember { mutableStateOf(false) }
+        
+        // 在副作用中安全加载配置
+        LaunchedEffect(Unit) {
+            runCatching {
+                isKeepAliveEnabled = SystemTtsConfig.isKeepAliveEnabled.value
+                isAutoStartEnabled = SystemTtsConfig.isAutoStartEnabled.value
+            }
+        }
 
         // 显示帮助详情页面
         if (showHelpDetail) {
@@ -170,6 +179,8 @@ class KeepAliveSettingsActivity : ComposeActivity() {
                     checked = isKeepAliveEnabled,
                     onCheckedChange = { enabled ->
                         isKeepAliveEnabled = enabled
+                        // 安全保存配置
+                        runCatching { SystemTtsConfig.isKeepAliveEnabled.value = enabled }
                         if (enabled) {
                             if (!isForwarderRunning) {
                                 KeepAliveService.start(context)
@@ -189,7 +200,11 @@ class KeepAliveSettingsActivity : ComposeActivity() {
                     title = { Text(stringResource(R.string.enable_auto_start)) },
                     subTitle = { Text(stringResource(R.string.enable_auto_start_summary)) },
                     checked = isAutoStartEnabled,
-                    onCheckedChange = { isAutoStartEnabled = it },
+                    onCheckedChange = { 
+                        isAutoStartEnabled = it
+                        // 安全保存配置
+                        runCatching { SystemTtsConfig.isAutoStartEnabled.value = it }
+                    },
                     icon = { Icon(Icons.Default.Refresh, null) }
                 )
 
@@ -246,9 +261,19 @@ class KeepAliveSettingsActivity : ComposeActivity() {
     private fun AdvancedKeepAliveOptions() {
         val context = LocalContext.current
 
-        var isAccessibilityEnabled by remember { SystemTtsConfig.isAccessibilityKeepAliveEnabled }
-        var isNotificationEnabled by remember { SystemTtsConfig.isNotificationKeepAliveEnabled }
-        var isAlarmEnabled by remember { SystemTtsConfig.isAlarmKeepAliveEnabled }
+        // 使用本地状态避免直接委托导致的崩溃
+        var isAccessibilityEnabled by remember { mutableStateOf(false) }
+        var isNotificationEnabled by remember { mutableStateOf(false) }
+        var isAlarmEnabled by remember { mutableStateOf(false) }
+        
+        // 在副作用中安全加载配置
+        LaunchedEffect(Unit) {
+            runCatching {
+                isAccessibilityEnabled = SystemTtsConfig.isAccessibilityKeepAliveEnabled.value
+                isNotificationEnabled = SystemTtsConfig.isNotificationKeepAliveEnabled.value
+                isAlarmEnabled = SystemTtsConfig.isAlarmKeepAliveEnabled.value
+            }
+        }
 
         // 检查实际运行状态
         val isAccessibilityRunning = remember { AccessibilityKeepAliveService.isEnabled(context) }
@@ -300,6 +325,8 @@ class KeepAliveSettingsActivity : ComposeActivity() {
             checked = isAlarmEnabled,
             onCheckedChange = { enabled ->
                 isAlarmEnabled = enabled
+                // 安全保存配置
+                runCatching { SystemTtsConfig.isAlarmKeepAliveEnabled.value = enabled }
                 if (enabled) {
                     AlarmKeepAliveReceiver.schedule(context)
                 } else {
@@ -309,14 +336,19 @@ class KeepAliveSettingsActivity : ComposeActivity() {
             icon = { Icon(Icons.Default.Alarm, null) }
         )
 
-        // 网络连接保活
-        var isNetworkEnabled by remember { SystemTtsConfig.isNetworkKeepAliveEnabled }
+        // 网络连接保活 - 使用本地状态
+        var isNetworkEnabled by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            runCatching { isNetworkEnabled = SystemTtsConfig.isNetworkKeepAliveEnabled.value }
+        }
         SwitchPreference(
             title = { Text(stringResource(R.string.network_keep_alive)) },
             subTitle = { Text(stringResource(R.string.network_keep_alive_summary)) },
             checked = isNetworkEnabled,
             onCheckedChange = { enabled ->
                 isNetworkEnabled = enabled
+                // 安全保存配置
+                runCatching { SystemTtsConfig.isNetworkKeepAliveEnabled.value = enabled }
                 if (enabled) {
                     NetworkKeepAliveService.start(context)
                 } else {
@@ -326,8 +358,11 @@ class KeepAliveSettingsActivity : ComposeActivity() {
             icon = { Icon(Icons.Default.MobileFriendly, null) }
         )
 
-        // 像素保活
-        var isPixelEnabled by remember { SystemTtsConfig.isPixelKeepAliveEnabled }
+        // 像素保活 - 使用本地状态
+        var isPixelEnabled by remember { mutableStateOf(false) }
+        LaunchedEffect(Unit) {
+            runCatching { isPixelEnabled = SystemTtsConfig.isPixelKeepAliveEnabled.value }
+        }
         val canDrawOverlays = remember { PixelKeepAliveService.canDrawOverlays(context) }
         SwitchPreference(
             title = { Text(stringResource(R.string.pixel_keep_alive)) },
@@ -345,6 +380,8 @@ class KeepAliveSettingsActivity : ComposeActivity() {
                     PixelKeepAliveService.start(context)
                 } else {
                     isPixelEnabled = enabled
+                    // 安全保存配置
+                    runCatching { SystemTtsConfig.isPixelKeepAliveEnabled.value = enabled }
                     if (enabled) {
                         PixelKeepAliveService.start(context)
                     } else {
