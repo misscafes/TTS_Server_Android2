@@ -323,9 +323,7 @@ internal fun ListManagerScreen(
                     } else {
                         IconButton(onClick = {
                             // 完全重启应用，停止所有服务并重新启动
-                            val intent = android.content.Intent(context, com.github.jing332.tts_server_android.compose.RestartActivity::class.java).apply {
-                                addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            }
+                            val intent = android.content.Intent(context, com.github.jing332.tts_server_android.compose.RestartActivity::class.java)
                             context.startActivity(intent)
                         }) {
                             Icon(Icons.Default.Refresh, stringResource(id = R.string.restart))
