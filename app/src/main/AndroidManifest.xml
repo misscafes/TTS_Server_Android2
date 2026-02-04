@@ -171,6 +171,11 @@
         <activity android:name=".compose.systts.plugin.login.PluginLoginActivity" />
 
         <activity
+            android:name=".compose.settings.KeepAliveSettingsActivity"
+            android:exported="false"
+            android:label="@string/keep_alive_settings" />
+
+        <activity
             android:name=".ui.forwarder.SystemForwarderSwitchActivity"
             android:exported="true"
             android:taskAffinity="sc.switch"
