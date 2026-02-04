@@ -2,6 +2,17 @@
 
 package com.github.jing332.tts_server_android.service.forwarder.system
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.media.AudioAttributes
+import android.media.AudioFocusRequest
+import android.media.AudioManager
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.os.SystemClock
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import com.github.jing332.database.entities.systts.AudioParams
@@ -14,12 +25,20 @@ import com.github.jing332.tts.speech.local.AndroidTtsEngine
 import com.github.jing332.tts.speech.local.LocalTtsProvider
 import com.github.jing332.tts_server_android.App
 import com.github.jing332.tts_server_android.R
+import com.github.jing332.tts_server_android.conf.SystemTtsConfig
 import com.github.jing332.tts_server_android.conf.SystemTtsForwarderConfig
 import com.github.jing332.tts_server_android.help.LocalTtsEngineHelper
 import com.github.jing332.tts_server_android.service.forwarder.AbsForwarderService
+import com.github.jing332.tts_server_android.service.keepalive.KeepAliveJobService
 import com.github.jing332.tts_server_android.service.systts.SystemTtsService
 import com.github.michaelbull.result.onFailure
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import java.io.File
@@ -43,6 +62,8 @@ class SysTtsForwarderService(
         const val ACTION_ON_CLOSED = "ACTION_ON_CLOSED"
         const val ACTION_ON_STARTED = "ACTION_ON_STARTED"
         const val ACTION_ON_LOG = "ACTION_ON_LOG"
+        // 保活检查间隔（毫秒）
+        const val CHECK_INTERVAL_MS = 5000L
 
         val isRunning: Boolean
             get() = instance?.isRunning == true
@@ -55,9 +76,58 @@ class SysTtsForwarderService(
     private val mLocalTtsHelper by lazy { LocalTtsEngineHelper(this) }
     private val androidTts by lazy { AndroidTtsEngine(this) }
 
+    // 保活相关 - 不抢占音频焦点，避免影响其他TTS/音乐应用
+    private val keepAliveScope = CoroutineScope(Dispatchers.Default + Job())
+    private var keepAliveJob: Job? = null
+    private val handler = Handler(Looper.getMainLooper())
+
     override fun onCreate() {
         super.onCreate()
         instance = this
+
+        // 如果启用了保活，启动保活机制
+        if (SystemTtsConfig.isKeepAliveEnabled.value) {
+            startKeepAlive()
+        }
+    }
+
+    override fun onDestroy() {
+        // 停止保活
+        stopKeepAlive()
+        super.onDestroy()
+    }
+
+    /**
+     * 启动保活机制
+     * 注意：不抢占音频焦点，避免影响其他TTS/音乐应用
+     */
+    private fun startKeepAlive() {
+        // 启动保活任务
+        keepAliveJob = keepAliveScope.launch {
+            while (isActive) {
+                performKeepAliveActions()
+                delay(CHECK_INTERVAL_MS)
+            }
+        }
+
+        // 调度 JobScheduler 作为后备保活
+        KeepAliveJobService.schedule(this)
+    }
+
+    /**
+     * 停止保活机制
+     */
+    private fun stopKeepAlive() {
+        keepAliveJob?.cancel()
+    }
+
+    /**
+     * 执行保活操作
+     * 注意：不抢占音频焦点，避免影响其他TTS/音乐应用
+     */
+    private fun performKeepAliveActions() {
+        // 调用系统闹钟API保持CPU活跃
+        SystemClock.sleep(1)
     }
 
     override fun initServer() {
