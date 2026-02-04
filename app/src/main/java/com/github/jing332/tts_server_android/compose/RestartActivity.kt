@@ -51,8 +51,8 @@ class RestartActivity : AppCompatActivity() {
                 }
 
                 LaunchedEffect(Unit) {
-                    // 延迟一点时间让用户看到动画
-                    delay(300)
+                    // 延迟1.5秒确保转圈圈页面已显示
+                    delay(1500)
                     // 执行真正的重启
                     app.restart()
                 }
