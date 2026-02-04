@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,7 +24,6 @@ import com.github.jing332.tts_server_android.service.forwarder.ForwarderServiceM
 import com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService
 import com.github.jing332.tts_server_android.ui.forwarder.SystemForwarderSwitchActivity
 import com.github.jing332.tts_server_android.utils.MyTools
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,19 +50,6 @@ fun SystemTtsForwarderScreen(cfgVM: ConfigViewModel = viewModel()) {
         },
         configScreen = {
             var isRunning by remember { mutableStateOf(SysTtsForwarderService.isRunning) }
-
-            // 定期同步服务状态，确保UI与实际服务状态一致
-            // 修复：从首页重启服务后，转发器界面开关状态不同步的问题
-            LaunchedEffect(Unit) {
-                while (true) {
-                    delay(500) // 每500ms检查一次
-                    val actualRunningState = SysTtsForwarderService.isRunning
-                    if (isRunning != actualRunningState) {
-                        isRunning = actualRunningState
-                    }
-                }
-            }
-
             BasicConfigScreen(
                 modifier = Modifier.fillMaxSize(),
                 vm = cfgVM,

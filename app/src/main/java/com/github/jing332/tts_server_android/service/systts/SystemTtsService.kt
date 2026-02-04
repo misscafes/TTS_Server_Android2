@@ -2,7 +2,6 @@
 
 package com.github.jing332.tts_server_android.service.systts
 
-import android.app.AlarmManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -17,7 +16,6 @@ import android.media.AudioFormat
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.PowerManager
-import android.os.Process
 import android.speech.tts.SynthesisRequest
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeechService
@@ -105,79 +103,6 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
                 AppConst.localBroadcast.sendBroadcast(Intent(ACTION_UPDATE_REPLACER))
             else
                 AppConst.localBroadcast.sendBroadcast(Intent(ACTION_UPDATE_CONFIG))
-        }
-
-        /**
-         * 强制重启服务：停止所有服务并重新启动
-         * 修复：增加等待时间确保端口完全释放，避免 "Address already in use" 错误
-         */
-        fun restartService(context: Context) {
-            // 异步执行重启，避免阻塞UI
-            kotlinx.coroutines.GlobalScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                // 先保存转发器状态（必须在停止服务前保存！）
-                val forwarderWasRunning = com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService.isRunning
-                
-                // 停止转发器服务
-                context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
-                // 停止TTS服务
-                context.stopService(Intent(context, SystemTtsService::class.java))
-                
-                // 等待服务完全停止（最多3秒，每100ms检查一次）
-                var waitCount = 0
-                while (com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService.isRunning && waitCount < 30) {
-                    kotlinx.coroutines.delay(100)
-                    waitCount++
-                }
-                
-                // 额外等待500ms确保端口完全释放
-                kotlinx.coroutines.delay(500)
-                
-                // 重新启动TTS服务
-                context.startService(Intent(context, SystemTtsService::class.java))
-                
-                // 如果转发器之前在运行，也重新启动它
-                if (forwarderWasRunning) {
-                    kotlinx.coroutines.delay(200)
-                    com.github.jing332.tts_server_android.service.forwarder.ForwarderServiceManager.run {
-                        context.startSysTtsForwarder()
-                    }
-                }
-            }
-        }
-
-        /**
-         * 完全重启应用：停止所有服务，然后重新启动应用到首页
-         * 先跳转到 RestartActivity 显示加载动画，再执行真正重启
-         */
-        fun restartApp(context: Context) {
-            // 保存转发器状态（必须在停止服务前保存！）
-            val forwarderWasRunning = com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService.isRunning
-            com.github.jing332.tts_server_android.compose.RestartActivity.saveState(context, forwarderWasRunning)
-            
-            // 跳转到重启过渡界面
-            val intent = Intent(context, com.github.jing332.tts_server_android.compose.RestartActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            }
-            context.startActivity(intent)
-        }
-        
-        /**
-         * 真正执行重启（在 RestartActivity 中调用）
-         * 停止服务，启动 MainActivity，然后杀进程
-         */
-        fun doRestartApp(context: Context) {
-            // 停止转发器服务
-            context.stopService(Intent(context, com.github.jing332.tts_server_android.service.forwarder.system.SysTtsForwarderService::class.java))
-            // 停止TTS服务
-            context.stopService(Intent(context, SystemTtsService::class.java))
-            
-            // 启动主界面
-            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)!!
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            context.startActivity(intent)
-            
-            // 结束当前进程
-            Process.killProcess(Process.myPid())
         }
     }
 
