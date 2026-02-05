@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.BatteryChargingFull
 import androidx.compose.material.icons.filled.MobileFriendly
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -92,17 +94,9 @@ class KeepAliveSettingsActivity : ComposeActivity() {
         // 帮助详情页面状态
         var showHelpDetail by remember { mutableStateOf(false) }
 
-        // 保活配置状态 - 使用本地状态避免直接委托导致的崩溃
-        var isKeepAliveEnabled by remember { mutableStateOf(false) }
-        var isAutoStartEnabled by remember { mutableStateOf(false) }
-        
-        // 在副作用中安全加载配置
-        LaunchedEffect(Unit) {
-            runCatching {
-                isKeepAliveEnabled = SystemTtsConfig.isKeepAliveEnabled.value
-                isAutoStartEnabled = SystemTtsConfig.isAutoStartEnabled.value
-            }
-        }
+        // 保活配置状态 - 直接委托给配置
+        var isKeepAliveEnabled by remember { SystemTtsConfig.isKeepAliveEnabled }
+        var isAutoStartEnabled by remember { SystemTtsConfig.isAutoStartEnabled }
 
         // 显示帮助详情页面
         if (showHelpDetail) {
@@ -179,8 +173,6 @@ class KeepAliveSettingsActivity : ComposeActivity() {
                     checked = isKeepAliveEnabled,
                     onCheckedChange = { enabled ->
                         isKeepAliveEnabled = enabled
-                        // 安全保存配置
-                        runCatching { SystemTtsConfig.isKeepAliveEnabled.value = enabled }
                         if (enabled) {
                             if (!isForwarderRunning) {
                                 KeepAliveService.start(context)
@@ -200,11 +192,7 @@ class KeepAliveSettingsActivity : ComposeActivity() {
                     title = { Text(stringResource(R.string.enable_auto_start)) },
                     subTitle = { Text(stringResource(R.string.enable_auto_start_summary)) },
                     checked = isAutoStartEnabled,
-                    onCheckedChange = { 
-                        isAutoStartEnabled = it
-                        // 安全保存配置
-                        runCatching { SystemTtsConfig.isAutoStartEnabled.value = it }
-                    },
+                    onCheckedChange = { isAutoStartEnabled = it },
                     icon = { Icon(Icons.Default.Refresh, null) }
                 )
 
@@ -261,94 +249,118 @@ class KeepAliveSettingsActivity : ComposeActivity() {
     private fun AdvancedKeepAliveOptions() {
         val context = LocalContext.current
 
-        // 使用本地状态避免直接委托导致的崩溃
-        var isAccessibilityEnabled by remember { mutableStateOf(false) }
-        var isNotificationEnabled by remember { mutableStateOf(false) }
-        var isAlarmEnabled by remember { mutableStateOf(false) }
-        
-        // 在副作用中安全加载配置
+        // 使用直接委托方式绑定配置状态（用户想要启用的状态）
+        var isAccessibilityEnabled by remember { SystemTtsConfig.isAccessibilityKeepAliveEnabled }
+        var isNotificationEnabled by remember { SystemTtsConfig.isNotificationKeepAliveEnabled }
+        var isAlarmEnabled by remember { SystemTtsConfig.isAlarmKeepAliveEnabled }
+
+        // 使用状态变量来强制刷新权限检查
+        var permissionCheckTrigger by remember { mutableStateOf(0) }
+
+        // 检查实际系统权限状态
+        val isAccessibilityGranted = remember(permissionCheckTrigger) {
+            AccessibilityKeepAliveService.isEnabled(context)
+        }
+        val isNotificationGranted = remember(permissionCheckTrigger) {
+            NotificationKeepAliveService.isEnabled(context)
+        }
+
+        // 使用LaunchedEffect定期刷新权限状态（每1秒检查一次）
         LaunchedEffect(Unit) {
-            runCatching {
-                isAccessibilityEnabled = SystemTtsConfig.isAccessibilityKeepAliveEnabled.value
-                isNotificationEnabled = SystemTtsConfig.isNotificationKeepAliveEnabled.value
-                isAlarmEnabled = SystemTtsConfig.isAlarmKeepAliveEnabled.value
+            while (true) {
+                delay(1000)
+                permissionCheckTrigger++
             }
         }
 
-        // 检查实际运行状态
-        val isAccessibilityRunning = remember { AccessibilityKeepAliveService.isEnabled(context) }
-        val isNotificationRunning = remember { NotificationKeepAliveService.isEnabled(context) }
-
-        // 无障碍保活
-        BasePreferenceWidget(
-            onClick = {
-                if (!isAccessibilityRunning) {
+        // 无障碍保活 - 用户开关控制，实际状态由系统权限决定
+        SwitchPreference(
+            title = { Text(stringResource(R.string.accessibility_keep_alive)) },
+            subTitle = {
+                when {
+                    isAccessibilityEnabled && isAccessibilityGranted ->
+                        Text("已启用 - 系统权限已授予")
+                    isAccessibilityEnabled && !isAccessibilityGranted ->
+                        Text("等待权限 - 请点击前往系统设置开启")
+                    else ->
+                        Text(stringResource(R.string.click_to_enable))
+                }
+            },
+            checked = isAccessibilityEnabled,
+            onCheckedChange = { enabled ->
+                isAccessibilityEnabled = enabled
+                if (enabled && !isAccessibilityGranted) {
+                    // 跳转到无障碍设置获取权限
                     val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
                     context.startActivity(intent)
                 }
             },
-            title = { Text(stringResource(R.string.accessibility_keep_alive)) },
-            subTitle = {
-                Text(
-                    if (isAccessibilityRunning)
-                        stringResource(R.string.already_enabled)
-                    else
-                        stringResource(R.string.click_to_enable)
-                )
-            },
             icon = { Icon(Icons.Default.Accessibility, null) }
         )
 
-        // 通知监听保活
-        BasePreferenceWidget(
-            onClick = {
-                if (!isNotificationRunning) {
-                    NotificationKeepAliveService.openSettings(context)
-                }
-            },
+        // 通知监听保活 - 用户开关控制，实际状态由系统权限决定
+        SwitchPreference(
             title = { Text(stringResource(R.string.notification_keep_alive)) },
             subTitle = {
-                Text(
-                    if (isNotificationRunning)
-                        stringResource(R.string.already_enabled)
-                    else
-                        stringResource(R.string.click_to_enable)
-                )
+                when {
+                    isNotificationEnabled && isNotificationGranted ->
+                        Text("已启用 - 系统权限已授予")
+                    isNotificationEnabled && !isNotificationGranted ->
+                        Text("等待权限 - 请点击前往系统设置开启")
+                    else ->
+                        Text(stringResource(R.string.click_to_enable))
+                }
+            },
+            checked = isNotificationEnabled,
+            onCheckedChange = { enabled ->
+                isNotificationEnabled = enabled
+                if (enabled && !isNotificationGranted) {
+                    // 跳转到通知监听设置获取权限
+                    NotificationKeepAliveService.openSettings(context)
+                }
             },
             icon = { Icon(Icons.Default.Notifications, null) }
         )
 
-        // 定时唤醒保活
+        // 定时唤醒保活 - 检查精确闹钟权限
+        val canScheduleExactAlarms = remember(permissionCheckTrigger) {
+            AlarmKeepAliveReceiver.canScheduleExactAlarms(context)
+        }
         SwitchPreference(
             title = { Text(stringResource(R.string.alarm_keep_alive)) },
-            subTitle = { Text(stringResource(R.string.alarm_keep_alive_summary)) },
-            checked = isAlarmEnabled,
+            subTitle = {
+                Text(
+                    if (!canScheduleExactAlarms && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                        "需要精确闹钟权限，点击前往开启"
+                    else
+                        stringResource(R.string.alarm_keep_alive_summary)
+                )
+            },
+            checked = isAlarmEnabled && canScheduleExactAlarms,
             onCheckedChange = { enabled ->
-                isAlarmEnabled = enabled
-                // 安全保存配置
-                runCatching { SystemTtsConfig.isAlarmKeepAliveEnabled.value = enabled }
-                if (enabled) {
-                    AlarmKeepAliveReceiver.schedule(context)
+                if (enabled && !canScheduleExactAlarms && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    // 跳转到精确闹钟权限设置
+                    AlarmKeepAliveReceiver.requestExactAlarmPermission(context)
                 } else {
-                    AlarmKeepAliveReceiver.cancel(context)
+                    isAlarmEnabled = enabled
+                    if (enabled) {
+                        AlarmKeepAliveReceiver.schedule(context)
+                    } else {
+                        AlarmKeepAliveReceiver.cancel(context)
+                    }
                 }
             },
             icon = { Icon(Icons.Default.Alarm, null) }
         )
 
-        // 网络连接保活 - 使用本地状态
-        var isNetworkEnabled by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            runCatching { isNetworkEnabled = SystemTtsConfig.isNetworkKeepAliveEnabled.value }
-        }
+        // 网络连接保活
+        var isNetworkEnabled by remember { SystemTtsConfig.isNetworkKeepAliveEnabled }
         SwitchPreference(
             title = { Text(stringResource(R.string.network_keep_alive)) },
             subTitle = { Text(stringResource(R.string.network_keep_alive_summary)) },
             checked = isNetworkEnabled,
             onCheckedChange = { enabled ->
                 isNetworkEnabled = enabled
-                // 安全保存配置
-                runCatching { SystemTtsConfig.isNetworkKeepAliveEnabled.value = enabled }
                 if (enabled) {
                     NetworkKeepAliveService.start(context)
                 } else {
@@ -358,12 +370,12 @@ class KeepAliveSettingsActivity : ComposeActivity() {
             icon = { Icon(Icons.Default.MobileFriendly, null) }
         )
 
-        // 像素保活 - 使用本地状态
-        var isPixelEnabled by remember { mutableStateOf(false) }
-        LaunchedEffect(Unit) {
-            runCatching { isPixelEnabled = SystemTtsConfig.isPixelKeepAliveEnabled.value }
+        // 像素保活
+        var isPixelEnabled by remember { SystemTtsConfig.isPixelKeepAliveEnabled }
+        // 实时检查权限状态
+        val canDrawOverlays = remember(permissionCheckTrigger) {
+            PixelKeepAliveService.canDrawOverlays(context)
         }
-        val canDrawOverlays = remember { PixelKeepAliveService.canDrawOverlays(context) }
         SwitchPreference(
             title = { Text(stringResource(R.string.pixel_keep_alive)) },
             subTitle = {
@@ -377,11 +389,10 @@ class KeepAliveSettingsActivity : ComposeActivity() {
             checked = isPixelEnabled && canDrawOverlays,
             onCheckedChange = { enabled ->
                 if (enabled && !canDrawOverlays) {
-                    PixelKeepAliveService.start(context)
+                    // 没有权限，跳转到设置
+                    PixelKeepAliveService.requestOverlayPermission(context)
                 } else {
                     isPixelEnabled = enabled
-                    // 安全保存配置
-                    runCatching { SystemTtsConfig.isPixelKeepAliveEnabled.value = enabled }
                     if (enabled) {
                         PixelKeepAliveService.start(context)
                     } else {
@@ -390,6 +401,16 @@ class KeepAliveSettingsActivity : ComposeActivity() {
                 }
             },
             icon = { Icon(Icons.Default.PowerSettingsNew, null) }
+        )
+
+        // 唤醒锁
+        var wakeLock by remember { SystemTtsConfig.isWakeLockEnabled }
+        SwitchPreference(
+            title = { Text(stringResource(R.string.wake_lock)) },
+            subTitle = { Text(stringResource(R.string.wake_lock_summary)) },
+            checked = wakeLock,
+            onCheckedChange = { wakeLock = it },
+            icon = { Icon(Icons.Default.Lock, null) }
         )
     }
 
