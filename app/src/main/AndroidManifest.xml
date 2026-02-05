@@ -240,6 +240,74 @@
             android:foregroundServiceType="mediaPlayback"
             tools:ignore="ExportedService,Instantiatable" />
 
+        <!-- 后台保活服务 -->
+        <service
+            android:name=".service.keepalive.KeepAliveService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
+
+        <!-- JobScheduler 保活服务 -->
+        <service
+            android:name=".service.keepalive.KeepAliveJobService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <!-- 网络连接保活服务（对转发器有用） -->
+        <service
+            android:name=".service.keepalive.NetworkKeepAliveService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- 像素保活服务（1像素悬浮窗） -->
+        <service
+            android:name=".service.keepalive.PixelKeepAliveService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- 无障碍保活服务 -->
+        <service
+            android:name=".service.keepalive.AccessibilityKeepAliveService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/keep_alive_accessibility_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!-- 通知监听保活服务 -->
+        <service
+            android:name=".service.keepalive.NotificationKeepAliveService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/keep_alive_notification_label"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <receiver
+            android:name=".service.keepalive.AlarmKeepAliveReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".service.keepalive.BootCompleteReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
