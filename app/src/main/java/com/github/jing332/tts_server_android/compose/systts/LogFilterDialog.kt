@@ -36,6 +36,8 @@ fun LogFilterDialog(
     onPluginLogsToggle: () -> Unit,
     showSpeechRuleLogs: Boolean,
     onSpeechRuleLogsToggle: () -> Unit,
+    autoScrollToBottom: Boolean,
+    onAutoScrollToggle: () -> Unit,
     onDismiss: () -> Unit
 ) {
     val levelOptions = listOf(
@@ -130,6 +132,25 @@ fun LogFilterDialog(
                         },
                         colors = FilterChipDefaults.filterChipColors(
                             selectedContainerColor = MaterialTheme.colorScheme.tertiaryContainer
+                        )
+                    )
+
+                    // 实时滚动开关
+                    FilterChip(
+                        selected = autoScrollToBottom,
+                        onClick = { onAutoScrollToggle() },
+                        label = { Text("实时显示最新日志") },
+                        leadingIcon = {
+                            if (autoScrollToBottom) {
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                        },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = MaterialTheme.colorScheme.primaryContainer
                         )
                     )
                 }

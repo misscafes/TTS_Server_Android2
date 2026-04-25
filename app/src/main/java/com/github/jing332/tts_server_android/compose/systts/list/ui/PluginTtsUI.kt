@@ -208,14 +208,14 @@ class PluginTtsUI : IConfigUI() {
         if (showLoadingDialog)
             LoadingDialog(onDismissRequest = { showLoadingDialog = false })
 
-        var showAuditionDialog by remember { mutableStateOf(false) }
+        var auditionSystts by remember { mutableStateOf<SystemTtsV2?>(null) }
         @Suppress("UNCHECKED_CAST")
-        if (showAuditionDialog)
+        if (auditionSystts != null)
             AuditionDialog(
-                systts = systts,
+                systts = auditionSystts!!,
                 engine = if (plugin == null) null else vm.service()
             ) {
-                showAuditionDialog = false
+                auditionSystts = null
             }
 
         Column(modifier) {
@@ -236,7 +236,7 @@ class PluginTtsUI : IConfigUI() {
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     onAudition = {
-                        showAuditionDialog = true
+                        auditionSystts = systts
                     }
                 )
 
@@ -331,6 +331,14 @@ class PluginTtsUI : IConfigUI() {
                                     }
 
                                     displayName = name
+                                },
+                                onEntryLongClick = { voice, name ->
+                                    auditionSystts = systts.copy(
+                                        displayName = name,
+                                        config = (systts.config as TtsConfigurationDTO).copy(
+                                            source = tts.copy(voice = voice as String)
+                                        )
+                                    )
                                 }
                             )
 

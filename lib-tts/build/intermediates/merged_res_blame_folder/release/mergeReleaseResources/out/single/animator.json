@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/animator/fragment_fade_enter.xml",
+        "source": "com.github.jing332.tts.lib-tts-fragment-1.5.4-59:/animator/fragment_fade_enter.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/animator/fragment_close_exit.xml",
+        "source": "com.github.jing332.tts.lib-tts-fragment-1.5.4-59:/animator/fragment_close_exit.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/animator/fragment_close_enter.xml",
+        "source": "com.github.jing332.tts.lib-tts-fragment-1.5.4-59:/animator/fragment_close_enter.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/animator/fragment_open_enter.xml",
+        "source": "com.github.jing332.tts.lib-tts-fragment-1.5.4-59:/animator/fragment_open_enter.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/animator/fragment_fade_exit.xml",
+        "source": "com.github.jing332.tts.lib-tts-fragment-1.5.4-59:/animator/fragment_fade_exit.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/animator/fragment_open_exit.xml",
+        "source": "com.github.jing332.tts.lib-tts-fragment-1.5.4-59:/animator/fragment_open_exit.xml"
+    }
+]

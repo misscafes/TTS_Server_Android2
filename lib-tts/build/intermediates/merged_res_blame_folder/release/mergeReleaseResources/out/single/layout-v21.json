@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/layout-v21/notification_action.xml",
+        "source": "com.github.jing332.tts.lib-tts-core-1.15.0-2:/layout-v21/notification_action.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/layout-v21/notification_action_tombstone.xml",
+        "source": "com.github.jing332.tts.lib-tts-core-1.15.0-2:/layout-v21/notification_action_tombstone.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/layout-v21/notification_template_custom_big.xml",
+        "source": "com.github.jing332.tts.lib-tts-core-1.15.0-2:/layout-v21/notification_template_custom_big.xml"
+    },
+    {
+        "merged": "com.github.jing332.tts.lib-tts-release-77:/layout-v21/notification_template_icon_group.xml",
+        "source": "com.github.jing332.tts.lib-tts-core-1.15.0-2:/layout-v21/notification_template_icon_group.xml"
+    }
+]

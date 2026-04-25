@@ -49,18 +49,18 @@ public final class DatabaseManager_Impl extends DatabaseManager {
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(28) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(30) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `sysTts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `groupId` INTEGER NOT NULL DEFAULT 1, `displayName` TEXT, `isEnabled` INTEGER NOT NULL, `tts` TEXT NOT NULL, `order` INTEGER NOT NULL DEFAULT 0, `speechRule_target` INTEGER NOT NULL, `speechRule_isStandby` INTEGER NOT NULL, `speechRule_specifiedStandbyId` INTEGER, `speechRule_tag` TEXT NOT NULL, `speechRule_tagRuleId` TEXT NOT NULL, `speechRule_tagName` TEXT NOT NULL, `speechRule_tagData` TEXT NOT NULL, `speechRule_configId` INTEGER NOT NULL)");
-        db.execSQL("CREATE TABLE IF NOT EXISTS `system_tts_v2` (`id` INTEGER NOT NULL, `displayName` TEXT NOT NULL, `groupId` INTEGER NOT NULL, `isEnabled` INTEGER NOT NULL, `order` INTEGER NOT NULL, `config` TEXT NOT NULL, PRIMARY KEY(`id`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `system_tts_v2` (`id` INTEGER NOT NULL, `displayName` TEXT NOT NULL, `groupId` INTEGER NOT NULL, `isEnabled` INTEGER NOT NULL, `order` INTEGER NOT NULL, `categoryPath` TEXT NOT NULL DEFAULT '', `config` TEXT NOT NULL, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `SystemTtsGroup` (`groupId` INTEGER NOT NULL, `name` TEXT NOT NULL, `order` INTEGER NOT NULL DEFAULT 0, `isExpanded` INTEGER NOT NULL, `audioParams_speed` REAL NOT NULL, `audioParams_volume` REAL NOT NULL, `audioParams_pitch` REAL NOT NULL, PRIMARY KEY(`groupId`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `replaceRule` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `groupId` INTEGER NOT NULL DEFAULT 1, `name` TEXT NOT NULL, `isEnabled` INTEGER NOT NULL, `isRegex` INTEGER NOT NULL, `pattern` TEXT NOT NULL, `replacement` TEXT NOT NULL, `order` INTEGER NOT NULL DEFAULT 0, `sampleText` TEXT NOT NULL DEFAULT '')");
         db.execSQL("CREATE TABLE IF NOT EXISTS `replaceRuleGroup` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `order` INTEGER NOT NULL, `isExpanded` INTEGER NOT NULL, `onExecution` INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(`id`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS `Plugin` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `isEnabled` INTEGER NOT NULL, `version` INTEGER NOT NULL DEFAULT 0, `name` TEXT NOT NULL, `pluginId` TEXT NOT NULL, `author` TEXT NOT NULL, `iconUrl` TEXT NOT NULL DEFAULT '', `code` TEXT NOT NULL, `defVars` TEXT NOT NULL DEFAULT '{}', `userVars` TEXT NOT NULL DEFAULT '{}', `order` INTEGER NOT NULL DEFAULT 0, `audioParams` TEXT NOT NULL DEFAULT '{}')");
         db.execSQL("CREATE TABLE IF NOT EXISTS `speech_rules` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `isEnabled` INTEGER NOT NULL, `name` TEXT NOT NULL, `version` INTEGER NOT NULL, `ruleId` TEXT NOT NULL, `author` TEXT NOT NULL, `code` TEXT NOT NULL, `tags` TEXT NOT NULL DEFAULT '', `tagsData` TEXT NOT NULL DEFAULT '', `order` INTEGER NOT NULL DEFAULT 0)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '13e222ea85e3cdcb15cf194cb075dbdd')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8f5143de7d21520a24d10e74bc9ed38d')");
       }
 
       @Override
@@ -139,12 +139,13 @@ public final class DatabaseManager_Impl extends DatabaseManager {
                   + " Expected:\n" + _infoSysTts + "\n"
                   + " Found:\n" + _existingSysTts);
         }
-        final HashMap<String, TableInfo.Column> _columnsSystemTtsV2 = new HashMap<String, TableInfo.Column>(6);
+        final HashMap<String, TableInfo.Column> _columnsSystemTtsV2 = new HashMap<String, TableInfo.Column>(7);
         _columnsSystemTtsV2.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSystemTtsV2.put("displayName", new TableInfo.Column("displayName", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSystemTtsV2.put("groupId", new TableInfo.Column("groupId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSystemTtsV2.put("isEnabled", new TableInfo.Column("isEnabled", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsSystemTtsV2.put("order", new TableInfo.Column("order", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsSystemTtsV2.put("categoryPath", new TableInfo.Column("categoryPath", "TEXT", true, 0, "''", TableInfo.CREATED_FROM_ENTITY));
         _columnsSystemTtsV2.put("config", new TableInfo.Column("config", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         final HashSet<TableInfo.ForeignKey> _foreignKeysSystemTtsV2 = new HashSet<TableInfo.ForeignKey>(0);
         final HashSet<TableInfo.Index> _indicesSystemTtsV2 = new HashSet<TableInfo.Index>(0);
@@ -250,7 +251,7 @@ public final class DatabaseManager_Impl extends DatabaseManager {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "13e222ea85e3cdcb15cf194cb075dbdd", "96da26b11fc96b3a29eb661bc6d1e138");
+    }, "8f5143de7d21520a24d10e74bc9ed38d", "7e9bff5ef19106e28dc2137ebea2647e");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -331,6 +332,8 @@ public final class DatabaseManager_Impl extends DatabaseManager {
     _autoMigrations.add(new DatabaseManager_AutoMigration_25_26_Impl());
     _autoMigrations.add(new DatabaseManager_AutoMigration_26_27_Impl());
     _autoMigrations.add(new DatabaseManager_AutoMigration_27_28_Impl());
+    _autoMigrations.add(new DatabaseManager_AutoMigration_28_29_Impl());
+    _autoMigrations.add(new DatabaseManager_AutoMigration_29_30_Impl());
     return _autoMigrations;
   }
 

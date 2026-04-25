@@ -477,6 +477,17 @@
     <string name="text_processor_init_failed">文本处理器在初始化阶段出现错误，无法继续执行。可能的原因：开启多语音但未指定配置、朗读规则</string>
     <string name="edit_group_content">编辑分组</string>
     <string name="move_to_group">移动 %1$d 项到 %2$s</string>
+    <string name="create_sub_group">新建子分组</string>
+    <string name="move_to_sub_group">移入子分组</string>
+    <string name="batch_assign_tags">批量分配标签</string>
+    <string name="selected_count">已选 %1$d 项</string>
+    <string name="please_select_voice">请先选择音色</string>
+    <string name="tag_rule_inconsistent">选中音色的朗读规则不一致</string>
+    <string name="no_tags_in_rule">该朗读规则无可用的标签</string>
+    <string name="start_tag">起始标签</string>
+    <string name="assign_in_order">依次分配</string>
+    <string name="clear_tag">清除标签</string>
+    <string name="no_tag">无标签</string>
     <string name="filter_log_level">筛选日志级别</string>
     <string name="select_log_level_to_filter">选择要显示的日志级别</string>
     <string name="filter">筛选</string>

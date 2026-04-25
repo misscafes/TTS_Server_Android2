@@ -85,6 +85,7 @@ fun AppSelectionDialog(
 
     onValueSame: (Any, Any) -> Boolean = { a, b -> a == b },
     onClick: (Any, String) -> Unit,
+    onLongClick: ((Any, String) -> Unit)? = null,
 ) {
 
     var showSearch by remember { mutableStateOf(false) }
@@ -196,7 +197,8 @@ fun AppSelectionDialog(
                                     .clip(MaterialTheme.shapes.medium)
                                     .background(if (isSelected) MaterialTheme.colorScheme.primaryContainer else Color.Unspecified)
                                     .clickableRipple(
-                                        onClick = { onClick(current, entry) }
+                                        onClick = { onClick(current, entry) },
+                                        onLongClick = onLongClick?.let { { it(current, entry) } }
                                     )
                                     .minimumInteractiveComponentSize()
                                     .focusable()

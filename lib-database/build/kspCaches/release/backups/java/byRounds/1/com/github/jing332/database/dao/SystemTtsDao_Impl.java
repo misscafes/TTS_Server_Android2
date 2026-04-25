@@ -1544,7 +1544,7 @@ public final class SystemTtsDao_Impl implements SystemTtsDao {
       return;
     }
     final StringBuilder _stringBuilder = StringUtil.newStringBuilder();
-    _stringBuilder.append("SELECT `id`,`displayName`,`groupId`,`isEnabled`,`order`,`config` FROM `system_tts_v2` WHERE `groupId` IN (");
+    _stringBuilder.append("SELECT `id`,`displayName`,`groupId`,`isEnabled`,`order`,`categoryPath`,`config` FROM `system_tts_v2` WHERE `groupId` IN (");
     final int _inputSize = __mapKeySet.size();
     StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
     _stringBuilder.append(")");
@@ -1567,7 +1567,8 @@ public final class SystemTtsDao_Impl implements SystemTtsDao {
       final int _cursorIndexOfGroupId = 2;
       final int _cursorIndexOfIsEnabled = 3;
       final int _cursorIndexOfOrder = 4;
-      final int _cursorIndexOfConfig = 5;
+      final int _cursorIndexOfCategoryPath = 5;
+      final int _cursorIndexOfConfig = 6;
       while (_cursor.moveToNext()) {
         final long _tmpKey;
         _tmpKey = _cursor.getLong(_itemKeyIndex);
@@ -1586,11 +1587,13 @@ public final class SystemTtsDao_Impl implements SystemTtsDao {
           _tmpIsEnabled = _tmp != 0;
           final int _tmpOrder;
           _tmpOrder = _cursor.getInt(_cursorIndexOfOrder);
+          final String _tmpCategoryPath;
+          _tmpCategoryPath = _cursor.getString(_cursorIndexOfCategoryPath);
           final IConfiguration _tmpConfig;
           final String _tmp_1;
           _tmp_1 = _cursor.getString(_cursorIndexOfConfig);
           _tmpConfig = __converters_1.string2Source(_tmp_1);
-          _item_1 = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpConfig);
+          _item_1 = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpCategoryPath,_tmpConfig);
           _tmpRelation.add(_item_1);
         }
       }

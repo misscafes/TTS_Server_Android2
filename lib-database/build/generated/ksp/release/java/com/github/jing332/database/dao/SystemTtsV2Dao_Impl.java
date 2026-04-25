@@ -56,13 +56,15 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
 
   private final SharedSQLiteStatement __preparedStmtOfDeleteTtsByGroup;
 
+  private final SharedSQLiteStatement __preparedStmtOfUpdateCategoryPath;
+
   public SystemTtsV2Dao_Impl(@NonNull final RoomDatabase __db) {
     this.__db = __db;
     this.__insertionAdapterOfSystemTtsV2 = new EntityInsertionAdapter<SystemTtsV2>(__db) {
       @Override
       @NonNull
       protected String createQuery() {
-        return "INSERT OR REPLACE INTO `system_tts_v2` (`id`,`displayName`,`groupId`,`isEnabled`,`order`,`config`) VALUES (?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `system_tts_v2` (`id`,`displayName`,`groupId`,`isEnabled`,`order`,`categoryPath`,`config`) VALUES (?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -74,8 +76,9 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
         final int _tmp = entity.isEnabled() ? 1 : 0;
         statement.bindLong(4, _tmp);
         statement.bindLong(5, entity.getOrder());
+        statement.bindString(6, entity.getCategoryPath());
         final String _tmp_1 = __converters.source2String(entity.getConfig());
-        statement.bindString(6, _tmp_1);
+        statement.bindString(7, _tmp_1);
       }
     };
     this.__insertionAdapterOfSystemTtsGroup = new EntityInsertionAdapter<SystemTtsGroup>(__db) {
@@ -129,7 +132,7 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       @Override
       @NonNull
       protected String createQuery() {
-        return "UPDATE OR REPLACE `system_tts_v2` SET `id` = ?,`displayName` = ?,`groupId` = ?,`isEnabled` = ?,`order` = ?,`config` = ? WHERE `id` = ?";
+        return "UPDATE OR REPLACE `system_tts_v2` SET `id` = ?,`displayName` = ?,`groupId` = ?,`isEnabled` = ?,`order` = ?,`categoryPath` = ?,`config` = ? WHERE `id` = ?";
       }
 
       @Override
@@ -141,9 +144,10 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
         final int _tmp = entity.isEnabled() ? 1 : 0;
         statement.bindLong(4, _tmp);
         statement.bindLong(5, entity.getOrder());
+        statement.bindString(6, entity.getCategoryPath());
         final String _tmp_1 = __converters.source2String(entity.getConfig());
-        statement.bindString(6, _tmp_1);
-        statement.bindLong(7, entity.getId());
+        statement.bindString(7, _tmp_1);
+        statement.bindLong(8, entity.getId());
       }
     };
     this.__updateAdapterOfSystemTtsGroup = new EntityDeletionOrUpdateAdapter<SystemTtsGroup>(__db) {
@@ -173,6 +177,14 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       @NonNull
       public String createQuery() {
         final String _query = "DELETE from system_tts_v2 WHERE groupId = ?";
+        return _query;
+      }
+    };
+    this.__preparedStmtOfUpdateCategoryPath = new SharedSQLiteStatement(__db) {
+      @Override
+      @NonNull
+      public String createQuery() {
+        final String _query = "UPDATE system_tts_v2 SET categoryPath = ? WHERE id = ?";
         return _query;
       }
     };
@@ -270,6 +282,27 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
   }
 
   @Override
+  public void updateCategoryPath(final long id, final String categoryPath) {
+    __db.assertNotSuspendingTransaction();
+    final SupportSQLiteStatement _stmt = __preparedStmtOfUpdateCategoryPath.acquire();
+    int _argIndex = 1;
+    _stmt.bindString(_argIndex, categoryPath);
+    _argIndex = 2;
+    _stmt.bindLong(_argIndex, id);
+    try {
+      __db.beginTransaction();
+      try {
+        _stmt.executeUpdateDelete();
+        __db.setTransactionSuccessful();
+      } finally {
+        __db.endTransaction();
+      }
+    } finally {
+      __preparedStmtOfUpdateCategoryPath.release(_stmt);
+    }
+  }
+
+  @Override
   public int getCount() {
     final String _sql = "SELECT COUNT(*) FROM system_tts_v2";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
@@ -311,7 +344,7 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
 
   @Override
   public List<SystemTtsV2> getAll() {
-    final String _sql = "SELECT `system_tts_v2`.`id` AS `id`, `system_tts_v2`.`displayName` AS `displayName`, `system_tts_v2`.`groupId` AS `groupId`, `system_tts_v2`.`isEnabled` AS `isEnabled`, `system_tts_v2`.`order` AS `order`, `system_tts_v2`.`config` AS `config` FROM system_tts_v2";
+    final String _sql = "SELECT `system_tts_v2`.`id` AS `id`, `system_tts_v2`.`displayName` AS `displayName`, `system_tts_v2`.`groupId` AS `groupId`, `system_tts_v2`.`isEnabled` AS `isEnabled`, `system_tts_v2`.`order` AS `order`, `system_tts_v2`.`categoryPath` AS `categoryPath`, `system_tts_v2`.`config` AS `config` FROM system_tts_v2";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     __db.assertNotSuspendingTransaction();
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
@@ -321,7 +354,8 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       final int _cursorIndexOfGroupId = 2;
       final int _cursorIndexOfIsEnabled = 3;
       final int _cursorIndexOfOrder = 4;
-      final int _cursorIndexOfConfig = 5;
+      final int _cursorIndexOfCategoryPath = 5;
+      final int _cursorIndexOfConfig = 6;
       final List<SystemTtsV2> _result = new ArrayList<SystemTtsV2>(_cursor.getCount());
       while (_cursor.moveToNext()) {
         final SystemTtsV2 _item;
@@ -337,11 +371,13 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
         _tmpIsEnabled = _tmp != 0;
         final int _tmpOrder;
         _tmpOrder = _cursor.getInt(_cursorIndexOfOrder);
+        final String _tmpCategoryPath;
+        _tmpCategoryPath = _cursor.getString(_cursorIndexOfCategoryPath);
         final IConfiguration _tmpConfig;
         final String _tmp_1;
         _tmp_1 = _cursor.getString(_cursorIndexOfConfig);
         _tmpConfig = __converters.string2Source(_tmp_1);
-        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpConfig);
+        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpCategoryPath,_tmpConfig);
         _result.add(_item);
       }
       return _result;
@@ -410,6 +446,7 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       final int _cursorIndexOfGroupId = CursorUtil.getColumnIndexOrThrow(_cursor, "groupId");
       final int _cursorIndexOfIsEnabled = CursorUtil.getColumnIndexOrThrow(_cursor, "isEnabled");
       final int _cursorIndexOfOrder = CursorUtil.getColumnIndexOrThrow(_cursor, "order");
+      final int _cursorIndexOfCategoryPath = CursorUtil.getColumnIndexOrThrow(_cursor, "categoryPath");
       final int _cursorIndexOfConfig = CursorUtil.getColumnIndexOrThrow(_cursor, "config");
       final SystemTtsV2 _result;
       if (_cursor.moveToFirst()) {
@@ -425,11 +462,13 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
         _tmpIsEnabled = _tmp != 0;
         final int _tmpOrder;
         _tmpOrder = _cursor.getInt(_cursorIndexOfOrder);
+        final String _tmpCategoryPath;
+        _tmpCategoryPath = _cursor.getString(_cursorIndexOfCategoryPath);
         final IConfiguration _tmpConfig;
         final String _tmp_1;
         _tmp_1 = _cursor.getString(_cursorIndexOfConfig);
         _tmpConfig = __converters.string2Source(_tmp_1);
-        _result = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpConfig);
+        _result = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpCategoryPath,_tmpConfig);
       } else {
         _result = null;
       }
@@ -454,6 +493,7 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       final int _cursorIndexOfGroupId = CursorUtil.getColumnIndexOrThrow(_cursor, "groupId");
       final int _cursorIndexOfIsEnabled = CursorUtil.getColumnIndexOrThrow(_cursor, "isEnabled");
       final int _cursorIndexOfOrder = CursorUtil.getColumnIndexOrThrow(_cursor, "order");
+      final int _cursorIndexOfCategoryPath = CursorUtil.getColumnIndexOrThrow(_cursor, "categoryPath");
       final int _cursorIndexOfConfig = CursorUtil.getColumnIndexOrThrow(_cursor, "config");
       final List<SystemTtsV2> _result = new ArrayList<SystemTtsV2>(_cursor.getCount());
       while (_cursor.moveToNext()) {
@@ -470,11 +510,13 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
         _tmpIsEnabled = _tmp != 0;
         final int _tmpOrder;
         _tmpOrder = _cursor.getInt(_cursorIndexOfOrder);
+        final String _tmpCategoryPath;
+        _tmpCategoryPath = _cursor.getString(_cursorIndexOfCategoryPath);
         final IConfiguration _tmpConfig;
         final String _tmp_1;
         _tmp_1 = _cursor.getString(_cursorIndexOfConfig);
         _tmpConfig = __converters.string2Source(_tmp_1);
-        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpConfig);
+        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpCategoryPath,_tmpConfig);
         _result.add(_item);
       }
       return _result;
@@ -630,7 +672,7 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
 
   @Override
   public List<SystemTtsV2> getAllEnabled() {
-    final String _sql = "SELECT `system_tts_v2`.`id` AS `id`, `system_tts_v2`.`displayName` AS `displayName`, `system_tts_v2`.`groupId` AS `groupId`, `system_tts_v2`.`isEnabled` AS `isEnabled`, `system_tts_v2`.`order` AS `order`, `system_tts_v2`.`config` AS `config` FROM system_tts_v2 WHERE isEnabled = 1";
+    final String _sql = "SELECT `system_tts_v2`.`id` AS `id`, `system_tts_v2`.`displayName` AS `displayName`, `system_tts_v2`.`groupId` AS `groupId`, `system_tts_v2`.`isEnabled` AS `isEnabled`, `system_tts_v2`.`order` AS `order`, `system_tts_v2`.`categoryPath` AS `categoryPath`, `system_tts_v2`.`config` AS `config` FROM system_tts_v2 WHERE isEnabled = 1";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 0);
     __db.assertNotSuspendingTransaction();
     final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
@@ -640,7 +682,8 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       final int _cursorIndexOfGroupId = 2;
       final int _cursorIndexOfIsEnabled = 3;
       final int _cursorIndexOfOrder = 4;
-      final int _cursorIndexOfConfig = 5;
+      final int _cursorIndexOfCategoryPath = 5;
+      final int _cursorIndexOfConfig = 6;
       final List<SystemTtsV2> _result = new ArrayList<SystemTtsV2>(_cursor.getCount());
       while (_cursor.moveToNext()) {
         final SystemTtsV2 _item;
@@ -656,11 +699,13 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
         _tmpIsEnabled = _tmp != 0;
         final int _tmpOrder;
         _tmpOrder = _cursor.getInt(_cursorIndexOfOrder);
+        final String _tmpCategoryPath;
+        _tmpCategoryPath = _cursor.getString(_cursorIndexOfCategoryPath);
         final IConfiguration _tmpConfig;
         final String _tmp_1;
         _tmp_1 = _cursor.getString(_cursorIndexOfConfig);
         _tmpConfig = __converters.string2Source(_tmp_1);
-        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpConfig);
+        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpCategoryPath,_tmpConfig);
         _result.add(_item);
       }
       return _result;
@@ -684,6 +729,7 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       final int _cursorIndexOfGroupId = CursorUtil.getColumnIndexOrThrow(_cursor, "groupId");
       final int _cursorIndexOfIsEnabled = CursorUtil.getColumnIndexOrThrow(_cursor, "isEnabled");
       final int _cursorIndexOfOrder = CursorUtil.getColumnIndexOrThrow(_cursor, "order");
+      final int _cursorIndexOfCategoryPath = CursorUtil.getColumnIndexOrThrow(_cursor, "categoryPath");
       final int _cursorIndexOfConfig = CursorUtil.getColumnIndexOrThrow(_cursor, "config");
       final List<SystemTtsV2> _result = new ArrayList<SystemTtsV2>(_cursor.getCount());
       while (_cursor.moveToNext()) {
@@ -700,11 +746,35 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
         _tmpIsEnabled = _tmp != 0;
         final int _tmpOrder;
         _tmpOrder = _cursor.getInt(_cursorIndexOfOrder);
+        final String _tmpCategoryPath;
+        _tmpCategoryPath = _cursor.getString(_cursorIndexOfCategoryPath);
         final IConfiguration _tmpConfig;
         final String _tmp_1;
         _tmp_1 = _cursor.getString(_cursorIndexOfConfig);
         _tmpConfig = __converters.string2Source(_tmp_1);
-        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpConfig);
+        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpCategoryPath,_tmpConfig);
+        _result.add(_item);
+      }
+      return _result;
+    } finally {
+      _cursor.close();
+      _statement.release();
+    }
+  }
+
+  @Override
+  public List<String> getCategoryPathsByGroup(final long groupId) {
+    final String _sql = "SELECT DISTINCT categoryPath FROM system_tts_v2 WHERE groupId = ? AND categoryPath != '' ORDER BY categoryPath ASC";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindLong(_argIndex, groupId);
+    __db.assertNotSuspendingTransaction();
+    final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+    try {
+      final List<String> _result = new ArrayList<String>(_cursor.getCount());
+      while (_cursor.moveToNext()) {
+        final String _item;
+        _item = _cursor.getString(0);
         _result.add(_item);
       }
       return _result;
@@ -842,6 +912,7 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       final int _cursorIndexOfGroupId = CursorUtil.getColumnIndexOrThrow(_cursor, "groupId");
       final int _cursorIndexOfIsEnabled = CursorUtil.getColumnIndexOrThrow(_cursor, "isEnabled");
       final int _cursorIndexOfOrder = CursorUtil.getColumnIndexOrThrow(_cursor, "order");
+      final int _cursorIndexOfCategoryPath = CursorUtil.getColumnIndexOrThrow(_cursor, "categoryPath");
       final int _cursorIndexOfConfig = CursorUtil.getColumnIndexOrThrow(_cursor, "config");
       final List<SystemTtsV2> _result = new ArrayList<SystemTtsV2>(_cursor.getCount());
       while (_cursor.moveToNext()) {
@@ -858,11 +929,13 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
         _tmpIsEnabled = _tmp != 0;
         final int _tmpOrder;
         _tmpOrder = _cursor.getInt(_cursorIndexOfOrder);
+        final String _tmpCategoryPath;
+        _tmpCategoryPath = _cursor.getString(_cursorIndexOfCategoryPath);
         final IConfiguration _tmpConfig;
         final String _tmp_1;
         _tmp_1 = _cursor.getString(_cursorIndexOfConfig);
         _tmpConfig = __converters.string2Source(_tmp_1);
-        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpConfig);
+        _item = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpCategoryPath,_tmpConfig);
         _result.add(_item);
       }
       return _result;
@@ -912,7 +985,7 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       return;
     }
     final StringBuilder _stringBuilder = StringUtil.newStringBuilder();
-    _stringBuilder.append("SELECT `id`,`displayName`,`groupId`,`isEnabled`,`order`,`config` FROM `system_tts_v2` WHERE `groupId` IN (");
+    _stringBuilder.append("SELECT `id`,`displayName`,`groupId`,`isEnabled`,`order`,`categoryPath`,`config` FROM `system_tts_v2` WHERE `groupId` IN (");
     final int _inputSize = __mapKeySet.size();
     StringUtil.appendPlaceholders(_stringBuilder, _inputSize);
     _stringBuilder.append(")");
@@ -935,7 +1008,8 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
       final int _cursorIndexOfGroupId = 2;
       final int _cursorIndexOfIsEnabled = 3;
       final int _cursorIndexOfOrder = 4;
-      final int _cursorIndexOfConfig = 5;
+      final int _cursorIndexOfCategoryPath = 5;
+      final int _cursorIndexOfConfig = 6;
       while (_cursor.moveToNext()) {
         final long _tmpKey;
         _tmpKey = _cursor.getLong(_itemKeyIndex);
@@ -954,11 +1028,13 @@ public final class SystemTtsV2Dao_Impl implements SystemTtsV2Dao {
           _tmpIsEnabled = _tmp != 0;
           final int _tmpOrder;
           _tmpOrder = _cursor.getInt(_cursorIndexOfOrder);
+          final String _tmpCategoryPath;
+          _tmpCategoryPath = _cursor.getString(_cursorIndexOfCategoryPath);
           final IConfiguration _tmpConfig;
           final String _tmp_1;
           _tmp_1 = _cursor.getString(_cursorIndexOfConfig);
           _tmpConfig = __converters.string2Source(_tmp_1);
-          _item_1 = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpConfig);
+          _item_1 = new SystemTtsV2(_tmpId,_tmpDisplayName,_tmpGroupId,_tmpIsEnabled,_tmpOrder,_tmpCategoryPath,_tmpConfig);
           _tmpRelation.add(_item_1);
         }
       }

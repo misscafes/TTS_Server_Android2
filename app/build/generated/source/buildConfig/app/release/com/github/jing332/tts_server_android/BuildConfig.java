@@ -8,10 +8,10 @@ public final class BuildConfig {
   public static final String APPLICATION_ID = "com.github.jing332.tts_server_android";
   public static final String BUILD_TYPE = "release";
   public static final String FLAVOR = "app";
-  public static final int VERSION_CODE = 1451;
-  public static final String VERSION_NAME = "1.26.020402";
+  public static final int VERSION_CODE = 1478;
+  public static final String VERSION_NAME = "1.26.042601";
   // Field from default config.
-  public static final long BUILD_TIME = 1770142852L;
+  public static final long BUILD_TIME = 1777137896L;
   // Field from default config.
   public static final String[] TRANSLATION_ARRAY = new String[]{"en","fa","ja","zh-HK","zh-TW","zh","zh-CN"};
 }

@@ -5,6 +5,8 @@ import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DriveFileRenameOutline
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.AccountTree
+import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -42,6 +44,8 @@ fun Group(
     onEditAudioParams: () -> Unit,
     onSort: () -> Unit,
     onEditContent: () -> Unit = {},
+    onCreateSubGroup: () -> Unit = {},
+    onBatchAssignTags: () -> Unit = {},
 ) {
 
     var showRenameDialog by remember { mutableStateOf(false) }
@@ -103,6 +107,9 @@ fun Group(
                 },
                 CustomAccessibilityAction(context.getString(R.string.edit_group_content)) {
                     showEditContentDialog = true;true
+                },
+                CustomAccessibilityAction(context.getString(R.string.batch_assign_tags)) {
+                    onBatchAssignTags();true
                 }
             )
         },
@@ -161,6 +168,26 @@ fun Group(
                 },
                 leadingIcon = {
                     Icon(Icons.Default.Edit, null)
+                }
+            )
+
+            DropdownMenuItem(text = { Text(stringResource(id = R.string.create_sub_group)) },
+                onClick = {
+                    dismiss()
+                    onCreateSubGroup()
+                },
+                leadingIcon = {
+                    Icon(Icons.Default.AccountTree, null)
+                }
+            )
+
+            DropdownMenuItem(text = { Text(stringResource(id = R.string.batch_assign_tags)) },
+                onClick = {
+                    dismiss()
+                    onBatchAssignTags()
+                },
+                leadingIcon = {
+                    Icon(Icons.Default.Label, null)
                 }
             )
         }

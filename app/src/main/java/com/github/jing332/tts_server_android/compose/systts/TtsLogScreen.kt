@@ -231,7 +231,8 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = paddingValues.calculateTopPadding()),
-            list = vm.filteredLogs
+            list = vm.filteredLogs,
+            autoScrollToBottom = vm.autoScrollToBottom.value
         )
     }
 
@@ -244,6 +245,8 @@ internal fun TtsLogScreen(vm: TtsLogViewModel = viewModel()) {
             onPluginLogsToggle = { vm.showPluginLogs.value = !vm.showPluginLogs.value },
             showSpeechRuleLogs = vm.showSpeechRuleLogs.value,
             onSpeechRuleLogsToggle = { vm.showSpeechRuleLogs.value = !vm.showSpeechRuleLogs.value },
+            autoScrollToBottom = vm.autoScrollToBottom.value,
+            onAutoScrollToggle = { vm.autoScrollToBottom.value = !vm.autoScrollToBottom.value },
             onDismiss = { vm.showFilterDialog.value = false }
         )
     }

@@ -51,6 +51,9 @@ class TtsLogViewModel : ViewModel() {
 
     // 调试模式开关 - 显示/隐藏朗读规则日志（默认隐藏，用户手动开启）
     val showSpeechRuleLogs = mutableStateOf(false)
+
+    // 实时滚动开关 - 勾选后新日志自动滚动到底部（默认不勾选）
+    val autoScrollToBottom = mutableStateOf(false)
     
     val filteredLogs: List<LogEntry>
         get() {

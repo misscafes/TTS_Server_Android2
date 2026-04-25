@@ -57,6 +57,7 @@ fun LogScreen(
     modifier: Modifier,
     list: List<LogEntry>,
     listState: LazyListState = rememberLazyListState(),
+    autoScrollToBottom: Boolean = false,
 ) {
     ControlBottomBarVisibility(listState, LocalBottomBarBehavior.current)
     val scope = rememberCoroutineScope()
@@ -80,7 +81,7 @@ fun LogScreen(
         }
 
         LaunchedEffect(list.size) {
-            if (isAtBottom && list.isNotEmpty())
+            if (autoScrollToBottom && list.isNotEmpty())
                 scope.launch {
                     listState.animateScrollToItem(list.size - 1)
                 }

@@ -1,0 +1,14 @@
+com.github.jing332.database.lib-database-sqlite-2.4.0-0 /root/.gradle/caches/8.10.2/transforms/3cbc6c9793da574bfa156a666bca5ad5/transformed/sqlite-2.4.0/res
+com.github.jing332.database.lib-database-room-runtime-2.6.1-1 /root/.gradle/caches/8.10.2/transforms/47ed903f88a536d3f412f04d7b9b2b75/transformed/room-runtime-2.6.1/res
+com.github.jing332.database.lib-database-jetified-startup-runtime-1.1.0-2 /root/.gradle/caches/8.10.2/transforms/689adb701679a1cecf4b60d9dc312ab5/transformed/jetified-startup-runtime-1.1.0/res
+com.github.jing332.database.lib-database-jetified-room-ktx-2.6.1-3 /root/.gradle/caches/8.10.2/transforms/86b69428ab1432cd52863a6eda56a050/transformed/jetified-room-ktx-2.6.1/res
+com.github.jing332.database.lib-database-jetified-annotation-experimental-1.1.0-rc01-4 /root/.gradle/caches/8.10.2/transforms/ae813e58a7fcd36f07ae962ccde4e147/transformed/jetified-annotation-experimental-1.1.0-rc01/res
+com.github.jing332.database.lib-database-core-runtime-2.2.0-5 /root/.gradle/caches/8.10.2/transforms/be107b5450a943f05f2b15fbf4c35dbd/transformed/core-runtime-2.2.0/res
+com.github.jing332.database.lib-database-sqlite-framework-2.4.0-6 /root/.gradle/caches/8.10.2/transforms/cbd69e6bf803b981325cde66c1c2a08c/transformed/sqlite-framework-2.4.0/res
+com.github.jing332.database.lib-database-pngs-7 /workspace/lib-database/build/generated/res/pngs/release
+com.github.jing332.database.lib-database-resValues-8 /workspace/lib-database/build/generated/res/resValues/release
+com.github.jing332.database.lib-database-mergeReleaseResources-9 /workspace/lib-database/build/intermediates/incremental/release/mergeReleaseResources/merged.dir
+com.github.jing332.database.lib-database-mergeReleaseResources-10 /workspace/lib-database/build/intermediates/incremental/release/mergeReleaseResources/stripped.dir
+com.github.jing332.database.lib-database-release-11 /workspace/lib-database/build/intermediates/merged_res/release/mergeReleaseResources
+com.github.jing332.database.lib-database-main-12 /workspace/lib-database/src/main/res
+com.github.jing332.database.lib-database-release-13 /workspace/lib-database/src/release/res

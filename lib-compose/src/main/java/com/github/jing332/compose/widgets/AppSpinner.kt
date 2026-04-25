@@ -55,6 +55,7 @@ private fun TextFieldSelectionDialog(
 
     onSelectedChange: (key: Any, value: String) -> Unit,
     onValueSame: (current: Any, new: Any) -> Boolean = { current, new -> current == new },
+    onEntryLongClick: ((key: Any, value: String) -> Unit)? = null,
 ) {
     val selectedText = entries.getOrNull(max(0, values.indexOf(value))) ?: ""
     var expanded by rememberSaveable { mutableStateOf(false) }
@@ -77,6 +78,7 @@ private fun TextFieldSelectionDialog(
                 expanded = false
             },
             onValueSame = onValueSame,
+            onLongClick = onEntryLongClick,
         )
     }
 
@@ -148,6 +150,7 @@ fun AppSpinner(
 
     onValueSame: (current: Any, new: Any) -> Boolean = { current, new -> current == new },
     onSelectedChange: (key: Any, value: String) -> Unit,
+    onEntryLongClick: ((key: Any, value: String) -> Unit)? = null,
 ) {
     if (values.isNotEmpty() && !values.contains(value)) {
         onSelectedChange.invoke(values[0], entries[0])
@@ -179,6 +182,7 @@ fun AppSpinner(
             enabled = enabled,
             onValueSame = onValueSame,
             onSelectedChange = onSelectedChange,
+            onEntryLongClick = onEntryLongClick,
         )
     } else
         DropdownTextField(
@@ -214,8 +218,9 @@ private fun ExposedDropTextFieldPreview() {
             ) {
                 Icon(Icons.Default.Add, "添加", tint = Color.Blue)
             }
+        },
+        onSelectedChange = { k, _ ->
+            key = k as Int
         }
-    ) { k, _ ->
-        key = k as Int
-    }
+    )
 }

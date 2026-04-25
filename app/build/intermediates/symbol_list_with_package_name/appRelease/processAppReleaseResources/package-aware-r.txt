@@ -1950,6 +1950,7 @@ string app_name_dev
 string app_switch
 string as_standby
 string aside
+string assign_in_order
 string audio_decoding_error
 string audio_params
 string audio_params_settings
@@ -1963,6 +1964,7 @@ string backup_folder
 string backup_restore
 string backup_to_webdav
 string backup_uploaded_success
+string batch_assign_tags
 string battery_optimization_whitelist
 string battery_optimization_whitelist_desc
 string belonging_group
@@ -1992,6 +1994,7 @@ string clear_cache
 string clear_cache_desc
 string clear_cache_ok
 string clear_log
+string clear_tag
 string clear_text_content
 string clear_web_data
 string cleared
@@ -2020,6 +2023,7 @@ string copied_url
 string copy
 string copy_address
 string copy_group
+string create_sub_group
 string created_time_id
 string current_is_last_version
 string current_playing_bgm
@@ -2341,6 +2345,7 @@ string more_options
 string more_options_desc
 string move_to_bottom
 string move_to_group
+string move_to_sub_group
 string move_to_top
 string msg_group_is_empty
 string name
@@ -2372,6 +2377,8 @@ string no_files_in_dir
 string no_new_version
 string no_plugins
 string no_retries
+string no_tag
+string no_tags_in_rule
 string none
 string not_configured
 string not_found_plugin
@@ -2398,6 +2405,7 @@ string pixel_keep_alive_stopped
 string pixel_keep_alive_summary
 string playing
 string please_choose
+string please_select_voice
 string please_turn_off_direct_play
 string plugin
 string plugin_audio_params
@@ -2473,6 +2481,7 @@ string select_import
 string select_log_level_to_filter
 string select_plugin
 string selected
+string selected_count
 string server_address
 string server_listen_address_local
 string server_log_service_running
@@ -2513,6 +2522,7 @@ string speech_rule_script
 string spinner_drop_down_max_count
 string spinner_drop_down_max_count_summary
 string start
+string start_tag
 string state_empty
 string state_off
 string state_on
@@ -2604,6 +2614,7 @@ string tab
 string tag
 string tag_data
 string tag_data_clear_warn
+string tag_rule_inconsistent
 string template_percent
 string test
 string test_failed

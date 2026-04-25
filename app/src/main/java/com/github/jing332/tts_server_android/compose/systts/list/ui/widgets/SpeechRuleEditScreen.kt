@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.filled.Tag
@@ -68,6 +69,7 @@ fun SpeechRuleEditScreen(
 
     showSpeechTarget: Boolean = true,
     speechRules: List<SpeechRule> = remember { dbm.speechRuleDao.allEnabled },
+    existingCategoryPaths: List<String> = emptyList(),
 ) {
     val context = LocalContext.current
 
@@ -143,6 +145,47 @@ fun SpeechRuleEditScreen(
 
     if (showSpeechTarget)
         Column(modifier.fillMaxWidth()) {
+            // 子分组选择
+            if (existingCategoryPaths.isNotEmpty()) {
+                var showCategoryDropdown by remember { mutableStateOf(false) }
+                OutlinedTextField(
+                    value = systts.categoryPath,
+                    onValueChange = { onSysttsChange(systts.copy(categoryPath = it)) },
+                    label = { Text("子分组 (如: 中文/男声)") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    trailingIcon = {
+                        IconButton(onClick = { showCategoryDropdown = true }) {
+                            Icon(Icons.Default.AccountTree, "选择子分组")
+                        }
+                    },
+                    singleLine = true
+                )
+
+                DropdownMenu(
+                    expanded = showCategoryDropdown,
+                    onDismissRequest = { showCategoryDropdown = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("无") },
+                        onClick = {
+                            showCategoryDropdown = false
+                            onSysttsChange(systts.copy(categoryPath = ""))
+                        }
+                    )
+                    existingCategoryPaths.forEach { path ->
+                        DropdownMenuItem(
+                            text = { Text(path) },
+                            onClick = {
+                                showCategoryDropdown = false
+                                onSysttsChange(systts.copy(categoryPath = path))
+                            }
+                        )
+                    }
+                }
+            }
+
             Row(
                 Modifier
                     .align(Alignment.CenterHorizontally)

@@ -6,7 +6,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.systts.SystemTtsGroup
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.database.entities.systts.TtsConfigurationDTO
@@ -46,6 +49,56 @@ fun GroupEditContentDialog(
     
     val filteredConfigs = remember(searchQuery, searchType, availableConfigs, pluginNameCache) {
         vm.filterConfigs(availableConfigs, searchQuery, searchType, pluginNameCache)
+    }
+
+    var showMoveToSubGroup by remember { mutableStateOf(false) }
+    if (showMoveToSubGroup && selectedConfigs.isNotEmpty()) {
+        val existingPaths = remember {
+            selectedConfigs.map { it.categoryPath }
+                .filter { it.isNotBlank() }
+                .distinct()
+                .sorted()
+        }
+        MoveToSubGroupDialog(
+            existingPaths = existingPaths,
+            onDismissRequest = { showMoveToSubGroup = false },
+            onConfirm = { path ->
+                scope.launch {
+                    selectedConfigs.forEach { config ->
+                        dbm.systemTtsV2.update(config.copy(categoryPath = path))
+                    }
+                    showMoveToSubGroup = false
+                    onDismissRequest()
+                }
+            }
+        )
+    }
+
+    var showDeleteConfirm by remember { mutableStateOf(false) }
+    if (showDeleteConfirm && selectedConfigs.isNotEmpty()) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirm = false },
+            title = { Text(stringResource(R.string.delete)) },
+            text = { Text("确定要删除选中的 ${selectedConfigs.size} 个音色吗？") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        scope.launch {
+                            dbm.systemTtsV2.delete(*selectedConfigs.toTypedArray())
+                            showDeleteConfirm = false
+                            onDismissRequest()
+                        }
+                    }
+                ) {
+                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirm = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
     }
 
     AlertDialog(
@@ -156,27 +209,50 @@ fun GroupEditContentDialog(
             }
         },
         confirmButton = {
-            TextButton(
-                onClick = {
-                    scope.launch {
-                        vm.moveConfigsToGroup(selectedConfigs.toList())
-                        onDismissRequest()
-                    }
-                },
-                enabled = selectedConfigs.isNotEmpty()
-            ) {
-                Text(
-                    stringResource(
-                        R.string.move_to_group,
-                        selectedConfigs.size,
-                        group.name
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextButton(
+                    onClick = {
+                        scope.launch {
+                            vm.moveConfigsToGroup(selectedConfigs.toList())
+                            onDismissRequest()
+                        }
+                    },
+                    enabled = selectedConfigs.isNotEmpty()
+                ) {
+                    Text(
+                        stringResource(
+                            R.string.move_to_group,
+                            selectedConfigs.size,
+                            group.name
+                        )
                     )
-                )
+                }
             }
         },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.cancel))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                TextButton(
+                    onClick = { showMoveToSubGroup = true },
+                    enabled = selectedConfigs.isNotEmpty()
+                ) {
+                    Icon(Icons.Default.AccountTree, null, modifier = Modifier.padding(end = 4.dp))
+                    Text(stringResource(R.string.move_to_sub_group))
+                }
+                TextButton(
+                    onClick = { showDeleteConfirm = true },
+                    enabled = selectedConfigs.isNotEmpty()
+                ) {
+                    Icon(
+                        Icons.Default.DeleteForever,
+                        null,
+                        modifier = Modifier.padding(end = 4.dp),
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                    Text(stringResource(R.string.delete), color = MaterialTheme.colorScheme.error)
+                }
+                TextButton(onClick = onDismissRequest) {
+                    Text(stringResource(R.string.cancel))
+                }
             }
         }
     )

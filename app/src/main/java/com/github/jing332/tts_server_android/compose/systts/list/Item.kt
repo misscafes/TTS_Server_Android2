@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountTree
 import androidx.compose.material.icons.filled.CopyAll
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Edit
@@ -80,6 +81,7 @@ internal fun Item(
     onEdit: () -> Unit,
     onAudition: () -> Unit,
     onExport: () -> Unit,
+    onMoveToSubGroup: () -> Unit = {},
 ) {
     val view = LocalView.current
     val context = LocalContext.current
@@ -270,6 +272,16 @@ internal fun Item(
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Output, stringResource(R.string.export_config))
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("移动到子分组") },
+                            onClick = {
+                                showOptions = false
+                                onMoveToSubGroup()
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Default.AccountTree, null)
                             }
                         )
                         HorizontalDivider()

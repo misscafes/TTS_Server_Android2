@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.jing332.tts_server_android.dev"
-    android:versionCode="1451"
-    android:versionName="1.26.020402" >
+    android:versionCode="1478"
+    android:versionName="1.26.042601" >
 
     <uses-sdk
         android:minSdkVersion="21"
@@ -22,18 +22,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.BIND_JOB_SERVICE" />
-    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE" />
-    <uses-permission android:name="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <permission
         android:name="com.github.jing332.tts_server_android.dev.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -72,10 +68,6 @@
         <activity
             android:name="com.github.jing332.tts_server_android.ui.AppHelpDocumentActivity"
             android:exported="true" />
-        <activity
-            android:name="com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity"
-            android:exported="true"
-            android:label="@string/keep_alive_settings" />
         <activity
             android:name="com.github.jing332.tts_server_android.compose.backup.BackupRestoreActivity"
             android:exported="true"
@@ -191,6 +183,10 @@
         </activity>
         <activity android:name="com.github.jing332.tts_server_android.compose.systts.plugin.login.PluginLoginActivity" />
         <activity
+            android:name="com.github.jing332.tts_server_android.compose.settings.KeepAliveSettingsActivity"
+            android:exported="false"
+            android:label="@string/keep_alive_settings" />
+        <activity
             android:name="com.github.jing332.tts_server_android.ui.forwarder.SystemForwarderSwitchActivity"
             android:exported="true"
             android:taskAffinity="sc.switch"
@@ -264,6 +260,19 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
+        <!-- 网络连接保活服务（对转发器有用） -->
+        <service
+            android:name="com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <!-- 像素保活服务（1像素悬浮窗） -->
+        <service
+            android:name="com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService"
+            android:enabled="true"
+            android:exported="false" />
+
         <!-- 无障碍保活服务 -->
         <service
             android:name="com.github.jing332.tts_server_android.service.keepalive.AccessibilityKeepAliveService"
@@ -292,31 +301,14 @@
             </intent-filter>
         </service>
 
-        <!-- 闹钟唤醒接收器 -->
         <receiver
             android:name="com.github.jing332.tts_server_android.service.keepalive.AlarmKeepAliveReceiver"
             android:enabled="true"
             android:exported="false" />
-
-        <!-- 网络连接保活服务（对转发器有用） -->
-        <service
-            android:name="com.github.jing332.tts_server_android.service.keepalive.NetworkKeepAliveService"
-            android:enabled="true"
-            android:exported="false"
-            android:foregroundServiceType="dataSync" />
-
-        <!-- 像素保活服务（1像素悬浮窗） -->
-        <service
-            android:name="com.github.jing332.tts_server_android.service.keepalive.PixelKeepAliveService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <!-- 开机自启动接收器 -->
         <receiver
             android:name="com.github.jing332.tts_server_android.service.keepalive.BootCompleteReceiver"
             android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
