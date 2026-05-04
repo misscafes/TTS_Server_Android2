@@ -29,7 +29,7 @@ class SysTtsForwarderService(
     override val isWakeLockEnabled: Boolean = SystemTtsForwarderConfig.isWakeLockEnabled.value,
 ) : AbsForwarderService(
     "SysTtsForwarderService",
-    id = 1221,
+    id = 3331,
     actionLog = ACTION_ON_LOG,
     actionStarted = ACTION_ON_STARTED,
     actionClosed = ACTION_ON_CLOSED,
