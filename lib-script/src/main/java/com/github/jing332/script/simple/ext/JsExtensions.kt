@@ -55,10 +55,8 @@ open class JsExtensions(open val context: Context, open val engineId: String = "
      */
     @ScriptInterface
     fun getFile(path: String): File {
-        // 👇👇👇 修改开始：将路径从 Cache 迁移到 Files/plugin_cache 防止被系统清理 👇👇👇
-        val dir = context.getExternalFilesDir("plugin_cache") ?: context.filesDir
-        val cachePath = File(dir, engineId).absolutePath
-        // 👆👆👆 修改结束 👆👆👆
+        // 缓存路径：/storage/emulated/0/Download/chajian
+        val cachePath = File("/storage/emulated/0/Download/chajian", engineId).absolutePath
 
         if (!FileUtils.exists(cachePath)) File(cachePath).mkdirs()
         val aPath = if (path.startsWith(File.separator)) {
