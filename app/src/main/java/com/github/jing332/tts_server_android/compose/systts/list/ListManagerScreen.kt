@@ -65,6 +65,7 @@ import com.github.jing332.database.entities.systts.source.PluginTtsSource
 import com.github.jing332.tts_server_android.AppLocale
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.AppDefaultProperties
+import com.github.jing332.tts_server_android.conf.AppConfig
 import com.github.jing332.tts_server_android.compose.LocalBottomBarBehavior
 import com.github.jing332.tts_server_android.compose.LocalNavController
 import com.github.jing332.tts_server_android.compose.SharedViewModel
@@ -114,8 +115,8 @@ internal fun ListManagerScreen(
     
     var isSearchMode by rememberSaveable { mutableStateOf(false) }
 
-    // 子分组折叠状态：存储折叠的子分组完整路径
-    var collapsedSubGroups by rememberSaveable { mutableStateOf<Set<String>>(emptySet()) }
+    // 子分组展开状态：存储已展开的子分组完整路径（持久化，默认全部折叠）
+    var expandedSubGroups by remember { AppConfig.expandedSubGroups }
 
     BackHandler(enabled = isSearchMode) {
         isSearchMode = false
@@ -744,7 +745,7 @@ internal fun ListManagerScreen(
                                             continue
                                         }
                                         visibleItems.add(fItem)
-                                        if (collapsedSubGroups.contains(fItem.node.fullPath)) {
+                                        if (!expandedSubGroups.contains(fItem.node.fullPath)) {
                                             skipLevel = fItem.node.level
                                         }
                                     }
@@ -780,7 +781,7 @@ internal fun ListManagerScreen(
                                                 modifier = subDragModifier,
                                                 name = fItem.node.name,
                                                 level = fItem.node.level,
-                                                isExpanded = !collapsedSubGroups.contains(fItem.node.fullPath),
+                                                isExpanded = expandedSubGroups.contains(fItem.node.fullPath),
                                                 enabled = subEnabled,
                                                 onEnabledChange = { enabled ->
                                                     scope.launch {
@@ -795,10 +796,10 @@ internal fun ListManagerScreen(
                                                     }
                                                 },
                                                 onClick = {
-                                                    collapsedSubGroups = if (collapsedSubGroups.contains(fItem.node.fullPath)) {
-                                                        collapsedSubGroups - fItem.node.fullPath
+                                                    expandedSubGroups = if (expandedSubGroups.contains(fItem.node.fullPath)) {
+                                                        expandedSubGroups - fItem.node.fullPath
                                                     } else {
-                                                        collapsedSubGroups + fItem.node.fullPath
+                                                        expandedSubGroups + fItem.node.fullPath
                                                     }
                                                 }
                                             )

@@ -34,6 +34,17 @@ object AppConfig {
             }
         )
 
+        registerTypeConverters<Set<String>>(
+            save = { json.encodeToString(it.toList()) },
+            restore = {
+                try {
+                    json.decodeFromString<List<String>>(it).toSet()
+                } catch (_: Exception) {
+                    emptySet()
+                }
+            }
+        )
+
         registerTypeConverters(
             save = { it.id },
             restore = { value ->
@@ -60,4 +71,5 @@ object AppConfig {
     val webDavUser by lazy { mutableDataSaverStateOf(dataSaverPref, "webDavUser", "") }
     val webDavPass by lazy { mutableDataSaverStateOf(dataSaverPref, "webDavPass", "") }
     val webDavPath by lazy { mutableDataSaverStateOf(dataSaverPref, "webDavPath", "/TTS备份") }
+    val expandedSubGroups by lazy { mutableDataSaverStateOf(dataSaverPref, "expandedSubGroups", emptySet<String>()) }
 }
