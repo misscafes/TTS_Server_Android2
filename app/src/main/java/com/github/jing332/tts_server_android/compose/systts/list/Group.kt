@@ -46,6 +46,9 @@ fun Group(
     onEditContent: () -> Unit = {},
     onCreateSubGroup: () -> Unit = {},
     onBatchAssignTags: () -> Unit = {},
+    onReleaseSubGroup: () -> Unit = {},
+    onConvertToSubGroup: () -> Unit = {},
+    onExtractSubGroup: () -> Unit = {},
 ) {
 
     var showRenameDialog by remember { mutableStateOf(false) }
@@ -175,6 +178,36 @@ fun Group(
                 onClick = {
                     dismiss()
                     onCreateSubGroup()
+                },
+                leadingIcon = {
+                    Icon(Icons.Default.AccountTree, null)
+                }
+            )
+
+            DropdownMenuItem(text = { Text("释放子分组") },
+                onClick = {
+                    dismiss()
+                    onReleaseSubGroup()
+                },
+                leadingIcon = {
+                    Icon(Icons.Default.AccountTree, null)
+                }
+            )
+
+            DropdownMenuItem(text = { Text("转为子分组") },
+                onClick = {
+                    dismiss()
+                    onConvertToSubGroup()
+                },
+                leadingIcon = {
+                    Icon(Icons.Default.AccountTree, null)
+                }
+            )
+
+            DropdownMenuItem(text = { Text("移出子分组") },
+                onClick = {
+                    dismiss()
+                    onExtractSubGroup()
                 },
                 leadingIcon = {
                     Icon(Icons.Default.AccountTree, null)

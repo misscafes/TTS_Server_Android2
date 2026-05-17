@@ -20,10 +20,13 @@ class GroupEditContentViewModel : ViewModel() {
     
     private val _pluginNameCache = MutableStateFlow<Map<String, String>>(emptyMap())
     val pluginNameCache: StateFlow<Map<String, String>> = _pluginNameCache.asStateFlow()
-    
+
+    private val _currentGroupSubPaths = MutableStateFlow<List<String>>(emptyList())
+    val currentGroupSubPaths: StateFlow<List<String>> = _currentGroupSubPaths.asStateFlow()
+
     private var currentGroupId: Long = 0
     private var allConfigs: List<SystemTtsV2> = emptyList()
-    
+
     fun load(groupId: Long) {
         viewModelScope.launch {
             currentGroupId = groupId
@@ -31,7 +34,14 @@ class GroupEditContentViewModel : ViewModel() {
                 // 加载配置
                 allConfigs = dbm.systemTtsV2.all
                 _availableConfigs.value = allConfigs.filter { it.groupId != groupId }
-                
+
+                // 获取当前分组已有的所有子分组路径
+                _currentGroupSubPaths.value = allConfigs
+                    .filter { it.groupId == groupId && it.categoryPath.isNotBlank() }
+                    .map { it.categoryPath }
+                    .distinct()
+                    .sorted()
+
                 // 缓存所有插件名称
                 val plugins = dbm.pluginDao.all
                 _pluginNameCache.value = plugins.associate { it.pluginId to it.name }
@@ -82,7 +92,8 @@ class GroupEditContentViewModel : ViewModel() {
     suspend fun moveConfigsToGroup(configs: List<SystemTtsV2>) {
         withContext(Dispatchers.IO) {
             configs.forEach { config ->
-                val updatedConfig = config.copy(groupId = currentGroupId)
+                // 修复：移动到新分组时清空子分组路径，避免保留旧分组的子分组归属
+                val updatedConfig = config.copy(groupId = currentGroupId, categoryPath = "")
                 dbm.systemTtsV2.update(updatedConfig)
             }
         }

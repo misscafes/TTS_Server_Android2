@@ -191,51 +191,96 @@ class ListManagerViewModel : ViewModel() {
     fun reorder(from: ItemPosition, to: ItemPosition) {
         if (_keyword.value.isNotEmpty()) return
 
-        if (from.key is String && to.key is String) {
-            val fromKey = from.key as String
-            val toKey = to.key as String
+        if (from.key !is String || to.key !is String) return
+        val fromKey = from.key
+        val toKey = to.key
 
-            if (fromKey.startsWith("g") && toKey.startsWith("g")) {
-                val mList = list.value.map { it.group }.toMutableList()
+        // 子分组拖动：交换两个子分组的整组内容顺序
+        if (fromKey.startsWith("sub_") || toKey.startsWith("sub_")) {
+            if (!fromKey.startsWith("sub_") || !toKey.startsWith("sub_")) return
 
-                val fromId = fromKey.substring(2).toLong()
-                val fromIndex = mList.indexOfFirst { it.id == fromId }
+            val fromGroupId = fromKey.removePrefix("sub_").substringBefore("_").toLong()
+            val toGroupId = toKey.removePrefix("sub_").substringBefore("_").toLong()
+            if (fromGroupId != toGroupId) return
 
-                val toId = toKey.substring(2).toLong()
-                val toIndex = mList.indexOfFirst { it.id == toId }
+            val fromPath = fromKey.removePrefix("sub_${fromGroupId}_")
+            val toPath = toKey.removePrefix("sub_${toGroupId}_")
+            if (fromPath == toPath) return
 
-                try {
-                    Collections.swap(mList, fromIndex, toIndex)
-                } catch (_: IndexOutOfBoundsException) {
-                    return
+            val allItems = findListInGroup(fromGroupId).toMutableList()
+            if (allItems.isEmpty()) return
+
+            data class Block(val path: String, val items: MutableList<SystemTtsV2>)
+            val blocks = mutableListOf<Block>()
+            var currentBlock: Block? = null
+            for (item in allItems) {
+                val path = item.categoryPath
+                if (currentBlock == null || currentBlock.path != path) {
+                    currentBlock = Block(path, mutableListOf())
+                    blocks.add(currentBlock)
                 }
-                mList.forEachIndexed { index, systemTtsGroup ->
-                    if (systemTtsGroup.order != index)
-                        dbm.systemTtsV2.updateGroup(systemTtsGroup.copy(order = index))
-                }
-            } else if (!fromKey.startsWith("g") && !toKey.startsWith("g")) {
-                val (fromGId, fromId) = fromKey.split("_").map { it.toLong() }
-                val (toGId, toId) = toKey.split("_").map { it.toLong() }
-                if (fromGId != toGId) return
-
-                val listInGroup = findListInGroup(fromGId).toMutableList()
-                val fromIndex = listInGroup.indexOfFirst { it.id == fromId }
-                val toIndex = listInGroup.indexOfFirst { it.id == toId }
-                Log.d(TAG, "fromIndex: $fromIndex, toIndex: $toIndex")
-
-                try {
-                    Collections.swap(listInGroup, fromIndex, toIndex)
-                } catch (_: IndexOutOfBoundsException) {
-                    return
-                }
-
-                listInGroup.forEachIndexed { index, systts ->
-                    Log.d(TAG, "$index ${systts.displayName}")
-                    if (systts.order != index)
-                        dbm.systemTtsV2.update(systts.copy(order = index))
-                }
+                currentBlock.items.add(item)
             }
 
+            val fromBlockIndex = blocks.indexOfFirst { it.path == fromPath }
+            val toBlockIndex = blocks.indexOfFirst { it.path == toPath }
+            if (fromBlockIndex == -1 || toBlockIndex == -1) return
+
+            val movedBlock = blocks.removeAt(fromBlockIndex)
+            val insertIndex = if (toBlockIndex > fromBlockIndex) toBlockIndex - 1 else toBlockIndex
+            blocks.add(insertIndex, movedBlock)
+
+            var order = 0
+            for (block in blocks) {
+                for (item in block.items) {
+                    if (item.order != order) {
+                        dbm.systemTtsV2.update(item.copy(order = order))
+                    }
+                    order++
+                }
+            }
+            return
+        }
+
+        if (fromKey.startsWith("g_") && toKey.startsWith("g_")) {
+            val mList = list.value.map { it.group }.toMutableList()
+
+            val fromId = fromKey.substring(2).toLong()
+            val fromIndex = mList.indexOfFirst { it.id == fromId }
+
+            val toId = toKey.substring(2).toLong()
+            val toIndex = mList.indexOfFirst { it.id == toId }
+
+            try {
+                Collections.swap(mList, fromIndex, toIndex)
+            } catch (_: IndexOutOfBoundsException) {
+                return
+            }
+            mList.forEachIndexed { index, systemTtsGroup ->
+                if (systemTtsGroup.order != index)
+                    dbm.systemTtsV2.updateGroup(systemTtsGroup.copy(order = index))
+            }
+        } else if (!fromKey.startsWith("g_") && !toKey.startsWith("g_")) {
+            val (fromGId, fromId) = fromKey.split("_").map { it.toLong() }
+            val (toGId, toId) = toKey.split("_").map { it.toLong() }
+            if (fromGId != toGId) return
+
+            val listInGroup = findListInGroup(fromGId).toMutableList()
+            val fromIndex = listInGroup.indexOfFirst { it.id == fromId }
+            val toIndex = listInGroup.indexOfFirst { it.id == toId }
+            Log.d(TAG, "fromIndex: $fromIndex, toIndex: $toIndex")
+
+            try {
+                Collections.swap(listInGroup, fromIndex, toIndex)
+            } catch (_: IndexOutOfBoundsException) {
+                return
+            }
+
+            listInGroup.forEachIndexed { index, systts ->
+                Log.d(TAG, "$index ${systts.displayName}")
+                if (systts.order != index)
+                    dbm.systemTtsV2.update(systts.copy(order = index))
+            }
         }
     }
 

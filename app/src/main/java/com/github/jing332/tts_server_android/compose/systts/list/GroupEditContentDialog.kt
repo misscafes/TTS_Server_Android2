@@ -42,23 +42,20 @@ fun GroupEditContentDialog(
     var searchType by remember { mutableStateOf(GroupSearchType.NAME) }
     val availableConfigs by vm.availableConfigs.collectAsStateWithLifecycle()
     val pluginNameCache by vm.pluginNameCache.collectAsStateWithLifecycle()
-    
+    val currentGroupSubPaths by vm.currentGroupSubPaths.collectAsStateWithLifecycle()
+
     LaunchedEffect(group.id) {
         vm.load(group.id)
     }
-    
+
     val filteredConfigs = remember(searchQuery, searchType, availableConfigs, pluginNameCache) {
         vm.filterConfigs(availableConfigs, searchQuery, searchType, pluginNameCache)
     }
 
     var showMoveToSubGroup by remember { mutableStateOf(false) }
     if (showMoveToSubGroup && selectedConfigs.isNotEmpty()) {
-        val existingPaths = remember {
-            selectedConfigs.map { it.categoryPath }
-                .filter { it.isNotBlank() }
-                .distinct()
-                .sorted()
-        }
+        // 修复：从当前分组所有已有配置中获取子分组路径，而非仅从选中项获取
+        val existingPaths = currentGroupSubPaths
         MoveToSubGroupDialog(
             existingPaths = existingPaths,
             onDismissRequest = { showMoveToSubGroup = false },

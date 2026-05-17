@@ -40,7 +40,7 @@ fun buildSubCategoryTree(items: List<SystemTtsV2>): SubCategoryNode {
 
     val children = childMap.map { (name, list) ->
         buildNode(name, name, 0, list)
-    }.sortedBy { it.name }
+    }.sortedBy { node -> node.items.minOfOrNull { it.order } ?: Int.MAX_VALUE }
 
     return SubCategoryNode("", "", -1, rootItems, children)
 }
@@ -64,7 +64,7 @@ private fun buildNode(name: String, fullPath: String, level: Int, items: List<Sy
     val children = childMap.map { (childName, list) ->
         val childFullPath = if (fullPath.isEmpty()) childName else "$fullPath/$childName"
         buildNode(childName, childFullPath, level + 1, list)
-    }.sortedBy { it.name }
+    }.sortedBy { node -> node.items.minOfOrNull { it.order } ?: Int.MAX_VALUE }
 
     return SubCategoryNode(name, fullPath, level, directItems, children)
 }

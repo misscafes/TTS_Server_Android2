@@ -200,6 +200,178 @@ internal fun ListManagerScreen(
         )
     }
 
+    // === 子分组操作对话框 ===
+    var showReleaseSubGroup by remember { mutableStateOf<SystemTtsGroup?>(null) }
+    if (showReleaseSubGroup != null) {
+        val targetGroup = showReleaseSubGroup!!
+        val currentGroupWithTts = models.find { it.group.id == targetGroup.id }
+        val subPaths = remember(currentGroupWithTts) {
+            currentGroupWithTts?.list
+                ?.map { it.categoryPath }
+                ?.filter { it.isNotBlank() }
+                ?.distinct()
+                ?.sorted()
+                ?: emptyList()
+        }
+        AlertDialog(
+            onDismissRequest = { showReleaseSubGroup = null },
+            title = { Text("释放子分组") },
+            text = {
+                Column {
+                    if (subPaths.isEmpty()) {
+                        Text("当前分组没有子分组")
+                    } else {
+                        Text("选择要释放的子分组，内容将移回根目录：", modifier = Modifier.padding(bottom = 8.dp))
+                        subPaths.forEach { path ->
+                            TextButton(
+                                onClick = {
+                                    scope.launch {
+                                        currentGroupWithTts?.list
+                                            ?.filter { it.categoryPath == path }
+                                            ?.forEach { item ->
+                                                dbm.systemTtsV2.update(item.copy(categoryPath = ""))
+                                            }
+                                        showReleaseSubGroup = null
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(path)
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { showReleaseSubGroup = null }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
+
+    var showConvertToSubGroup by remember { mutableStateOf<SystemTtsGroup?>(null) }
+    if (showConvertToSubGroup != null) {
+        val targetGroup = showConvertToSubGroup!!
+        val currentGroupWithTts = models.find { it.group.id == targetGroup.id }
+        val hasSubGroups = currentGroupWithTts?.list?.any { it.categoryPath.isNotBlank() } == true
+        val otherGroups = remember(models, targetGroup.id) {
+            models.filter { it.group.id != targetGroup.id }.map { it.group }
+        }
+
+        if (hasSubGroups) {
+            AlertDialog(
+                onDismissRequest = { showConvertToSubGroup = null },
+                title = { Text("无法转换") },
+                text = { Text("当前分组包含子分组，无法转换为子分组。请先释放所有子分组。") },
+                confirmButton = {
+                    TextButton(onClick = { showConvertToSubGroup = null }) {
+                        Text("确定")
+                    }
+                }
+            )
+        } else {
+            AlertDialog(
+                onDismissRequest = { showConvertToSubGroup = null },
+                title = { Text("转为子分组") },
+                text = {
+                    Column {
+                        Text("选择目标分组，当前分组将作为其子分组：", modifier = Modifier.padding(bottom = 8.dp))
+                        otherGroups.forEach { otherGroup ->
+                            TextButton(
+                                onClick = {
+                                    scope.launch {
+                                        currentGroupWithTts?.list?.forEach { item ->
+                                            dbm.systemTtsV2.update(
+                                                item.copy(
+                                                    groupId = otherGroup.id,
+                                                    categoryPath = targetGroup.name
+                                                )
+                                            )
+                                        }
+                                        showConvertToSubGroup = null
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(otherGroup.name)
+                            }
+                        }
+                    }
+                },
+                confirmButton = {},
+                dismissButton = {
+                    TextButton(onClick = { showConvertToSubGroup = null }) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                }
+            )
+        }
+    }
+
+    var showExtractSubGroup by remember { mutableStateOf<SystemTtsGroup?>(null) }
+    if (showExtractSubGroup != null) {
+        val targetGroup = showExtractSubGroup!!
+        val currentGroupWithTts = models.find { it.group.id == targetGroup.id }
+        val subPaths = remember(currentGroupWithTts) {
+            currentGroupWithTts?.list
+                ?.map { it.categoryPath }
+                ?.filter { it.isNotBlank() }
+                ?.distinct()
+                ?.sorted()
+                ?: emptyList()
+        }
+        AlertDialog(
+            onDismissRequest = { showExtractSubGroup = null },
+            title = { Text("移出子分组") },
+            text = {
+                Column {
+                    if (subPaths.isEmpty()) {
+                        Text("当前分组没有子分组")
+                    } else {
+                        Text("选择要移出的子分组，将创建为独立分组：", modifier = Modifier.padding(bottom = 8.dp))
+                        subPaths.forEach { path ->
+                            TextButton(
+                                onClick = {
+                                    scope.launch {
+                                        val itemsToMove = currentGroupWithTts?.list
+                                            ?.filter { it.categoryPath == path }
+                                            ?: emptyList()
+                                        val groupName = path.substringAfterLast('/')
+                                        val newGroup = SystemTtsGroup(
+                                            id = System.currentTimeMillis(),
+                                            name = groupName
+                                        )
+                                        dbm.systemTtsV2.insertGroup(newGroup)
+                                        itemsToMove.forEach { item ->
+                                            dbm.systemTtsV2.update(
+                                                item.copy(
+                                                    groupId = newGroup.id,
+                                                    categoryPath = ""
+                                                )
+                                            )
+                                        }
+                                        showExtractSubGroup = null
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(path)
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { showExtractSubGroup = null }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
+
     var showTagClearDialog by remember { mutableStateOf<SystemTtsV2?>(null) }
     if (showTagClearDialog != null) {
         val systts = showTagClearDialog!!
@@ -477,6 +649,15 @@ internal fun ListManagerScreen(
                                 },
                                 onBatchAssignTags = {
                                     showBatchTagDialog = groupWithSystemTts.list
+                                },
+                                onReleaseSubGroup = {
+                                    showReleaseSubGroup = g
+                                },
+                                onConvertToSubGroup = {
+                                    showConvertToSubGroup = g
+                                },
+                                onExtractSubGroup = {
+                                    showExtractSubGroup = g
                                 }
                             )
                         }
@@ -549,8 +730,13 @@ internal fun ListManagerScreen(
                             for (fItem in flattened) {
                                 when (fItem) {
                                     is FlattenedCategoryItem.SubGroupHeader -> {
-                                        if (fItem.node.level < skipLevel) {
+                                        // 遇到同级或上级的 header 时重置跳过状态
+                                        if (fItem.node.level <= skipLevel) {
                                             skipLevel = Int.MAX_VALUE
+                                        }
+                                        // 被跳过的子分组 header 不显示
+                                        if (fItem.node.level > skipLevel) {
+                                            continue
                                         }
                                         visibleItems.add(fItem)
                                         if (collapsedSubGroups.contains(fItem.node.fullPath)) {
@@ -558,7 +744,9 @@ internal fun ListManagerScreen(
                                         }
                                     }
                                     is FlattenedCategoryItem.TtsItem -> {
-                                        if (fItem.displayLevel <= skipLevel + 1) {
+                                        // 修复：displayLevel 必须 <= skipLevel 才显示，
+                                        // 之前 <= skipLevel + 1 导致折叠子分组后其直接内容仍然显示
+                                        if (fItem.displayLevel <= skipLevel) {
                                             visibleItems.add(fItem)
                                         }
                                     }
@@ -574,18 +762,27 @@ internal fun ListManagerScreen(
                                 }) { _, fItem ->
                                 when (fItem) {
                                     is FlattenedCategoryItem.SubGroupHeader -> {
-                                        SubGroupHeader(
-                                            name = fItem.node.name,
-                                            level = fItem.node.level,
-                                            isExpanded = !collapsedSubGroups.contains(fItem.node.fullPath),
-                                            onClick = {
-                                                collapsedSubGroups = if (collapsedSubGroups.contains(fItem.node.fullPath)) {
-                                                    collapsedSubGroups - fItem.node.fullPath
-                                                } else {
-                                                    collapsedSubGroups + fItem.node.fullPath
+                                        val subKey = "sub_${g.id}_${fItem.node.fullPath}"
+                                        val subDragModifier = if (searchKeyword.isNotEmpty()) Modifier
+                                            else Modifier.detectReorderAfterLongPress(reorderState)
+                                        ShadowedDraggableItem(
+                                            reorderableState = reorderState,
+                                            key = subKey
+                                        ) { _ ->
+                                            SubGroupHeader(
+                                                modifier = subDragModifier,
+                                                name = fItem.node.name,
+                                                level = fItem.node.level,
+                                                isExpanded = !collapsedSubGroups.contains(fItem.node.fullPath),
+                                                onClick = {
+                                                    collapsedSubGroups = if (collapsedSubGroups.contains(fItem.node.fullPath)) {
+                                                        collapsedSubGroups - fItem.node.fullPath
+                                                    } else {
+                                                        collapsedSubGroups + fItem.node.fullPath
+                                                    }
                                                 }
-                                            }
-                                        )
+                                            )
+                                        }
                                     }
                                     is FlattenedCategoryItem.TtsItem -> {
                                         val item = fItem.item
