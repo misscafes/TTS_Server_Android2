@@ -293,6 +293,8 @@ internal fun ListManagerScreen(
                                                 )
                                             )
                                         }
+                                        // 当前分组已为空，直接删除
+                                        dbm.systemTtsV2.deleteGroup(targetGroup)
                                         showConvertToSubGroup = null
                                     }
                                 },
