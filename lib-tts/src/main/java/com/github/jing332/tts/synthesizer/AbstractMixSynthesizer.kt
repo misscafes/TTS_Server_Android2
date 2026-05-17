@@ -201,7 +201,7 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
             event(NormalEvent.RequestCountEnded)
             // 发送 0.1 秒的空音频，让上游继续处理后续请求
             val silentAudio = createSilentWavAudio(maxSampleRate, durationMs = 100)
-            channel.send(ChannelPayload.Bytes(silentAudio))
+            channel.trySend(ChannelPayload.Bytes(silentAudio))
             return
         }
 
@@ -221,7 +221,7 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
             ins = stream,
             request = request,
             targetSampleRate = maxSampleRate,
-            callback = { pcm -> channel.send(ChannelPayload.Bytes(pcm.toByteArray())) }
+            callback = { pcm -> channel.trySend(ChannelPayload.Bytes(pcm.toByteArray())) }
         ).onFailure { e ->
             event(ErrorEvent.ResultProcessor(request, e))
             return retry()
