@@ -34,6 +34,15 @@ object CachedEngineManager :
 
     }
 
+    fun removeEngine(source: TextToSpeechSource) {
+        val key = source.getKey() + ";" + source.javaClass.simpleName
+        val engine = cache[key]
+        if (engine != null) {
+            cache.remove(key)
+            engine.onDestroy()
+        }
+    }
+
     fun expireAll() {
         logger.atDebug { message = "Expire all cached engine" }
         cache.removeAll {

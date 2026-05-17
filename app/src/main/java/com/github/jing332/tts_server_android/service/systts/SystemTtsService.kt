@@ -682,7 +682,7 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
         when (e) {
             is ErrorEvent.TextProcessor -> handleTextProcessorError(e.error)
             is ErrorEvent.Request -> logE(R.string.systts_log_failed, e.cause)
-            is ErrorEvent.RequestTimeout -> logW("超时：120秒")
+            is ErrorEvent.RequestTimeout -> logW("超时：${SysTtsConfig.requestTimeout / 1000}秒")
             ErrorEvent.ConfigEmpty -> {
                 logE(R.string.config_empty_error)
             }

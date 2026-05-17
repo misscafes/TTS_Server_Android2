@@ -4,6 +4,7 @@ import androidx.annotation.MainThread
 import com.drake.net.utils.withMain
 import com.github.jing332.common.utils.StringUtils
 import com.github.jing332.common.utils.toByteArray
+import com.github.jing332.tts.CachedEngineManager
 import com.github.jing332.tts.SynthesizerContext
 import com.github.jing332.tts.error.RequesterError
 import com.github.jing332.tts.error.SynthesisError
@@ -27,7 +28,7 @@ import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
+
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -144,14 +145,12 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
     ) {
         val request = RequestPayload(params, config)
         suspend fun retry() {
+            CachedEngineManager.removeEngine(config.source)
             return if (config.standbyConfig != null && context.cfg.toggleTry() > retries) {
                 event(NormalEvent.StandbyTts(request.copy(config = config.standbyConfig)))
                 requestAndProcess(channel, params, config.standbyConfig, 0, maxRetries)
             } else {
                 val next = retries + 1
-                // 2^[next] * 500ms
-                val ms = Math.pow(2.toDouble(), next.coerceAtMost(5).toDouble()) * 500
-                delay(ms.toLong())
                 requestAndProcess(channel, params, config, next, maxRetries)
             }
         }

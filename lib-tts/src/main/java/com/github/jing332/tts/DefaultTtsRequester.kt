@@ -9,6 +9,7 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withTimeout
 
 class DefaultTtsRequester(
@@ -56,11 +57,17 @@ class DefaultTtsRequester(
                         ITtsRequester.Response(stream = engine.getStream(mergedParams, tts.source))
                     )
                 }
+            } catch (e: TimeoutCancellationException) {
+                // 超时后强制销毁引擎并从缓存移除，确保下次重试是新连接
+                engine.onDestroy()
+                CachedEngineManager.removeEngine(tts.source)
+                throw e
             } catch (e: CancellationException) {
                 // 如果是协程主动取消，继续抛出
                 throw e
             } catch (e: Exception) {
-                engine.onDestroy() 
+                engine.onDestroy()
+                CachedEngineManager.removeEngine(tts.source)
                 Err(RequesterError.RequestError(e))
             }
         }
