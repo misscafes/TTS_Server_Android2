@@ -191,9 +191,8 @@ class ListManagerViewModel : ViewModel() {
     fun reorder(from: ItemPosition, to: ItemPosition) {
         if (_keyword.value.isNotEmpty()) return
 
-        if (from.key !is String || to.key !is String) return
-        val fromKey = from.key
-        val toKey = to.key
+        val fromKey = from.key as? String ?: return
+        val toKey = to.key as? String ?: return
 
         // 子分组拖动：交换两个子分组的整组内容顺序
         if (fromKey.startsWith("sub_") || toKey.startsWith("sub_")) {

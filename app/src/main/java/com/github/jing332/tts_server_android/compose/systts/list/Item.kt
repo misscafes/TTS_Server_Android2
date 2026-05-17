@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Output
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.HorizontalDivider
@@ -82,6 +83,7 @@ internal fun Item(
     onAudition: () -> Unit,
     onExport: () -> Unit,
     onMoveToSubGroup: () -> Unit = {},
+    isInSubGroup: Boolean = false,
 ) {
     val view = LocalView.current
     val context = LocalContext.current
@@ -136,24 +138,45 @@ internal fun Item(
                         height = Dimension.fillToConstraints
                     }
                     .detectReorder(reorderState)) {
-                Checkbox(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .semantics {
-                            role = Role.Switch
-                            context
-                                .getString(
-                                    if (enabled) R.string.config_enabled_desc else R.string.config_disabled_desc,
-                                    limitedName
-                                )
-                                .let {
-                                    contentDescription = it
-                                    stateDescription = it
-                                }
-                        },
-                    checked = enabled,
-                    onCheckedChange = onEnabledChange,
-                )
+                if (isInSubGroup) {
+                    RadioButton(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .semantics {
+                                role = Role.Switch
+                                context
+                                    .getString(
+                                        if (enabled) R.string.config_enabled_desc else R.string.config_disabled_desc,
+                                        limitedName
+                                    )
+                                    .let {
+                                        contentDescription = it
+                                        stateDescription = it
+                                    }
+                            },
+                        selected = enabled,
+                        onClick = { onEnabledChange(!enabled) },
+                    )
+                } else {
+                    Checkbox(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .semantics {
+                                role = Role.Switch
+                                context
+                                    .getString(
+                                        if (enabled) R.string.config_enabled_desc else R.string.config_disabled_desc,
+                                        limitedName
+                                    )
+                                    .let {
+                                        contentDescription = it
+                                        stateDescription = it
+                                    }
+                            },
+                        checked = enabled,
+                        onCheckedChange = onEnabledChange,
+                    )
+                }
             }
             Text(
                 limitedName,

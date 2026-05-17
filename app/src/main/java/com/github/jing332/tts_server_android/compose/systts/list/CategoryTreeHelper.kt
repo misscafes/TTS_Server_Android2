@@ -74,12 +74,13 @@ private fun buildNode(name: String, fullPath: String, level: Int, items: List<Sy
  */
 fun flattenSubCategoryTree(node: SubCategoryNode): List<FlattenedCategoryItem> {
     val result = mutableListOf<FlattenedCategoryItem>()
-    for (item in node.items) {
-        result.add(FlattenedCategoryItem.TtsItem(item, node.level + 1))
-    }
+    // 子分组显示在前面，单一配置显示在后面
     for (child in node.children) {
         result.add(FlattenedCategoryItem.SubGroupHeader(child))
         result.addAll(flattenSubCategoryTree(child))
+    }
+    for (item in node.items) {
+        result.add(FlattenedCategoryItem.TtsItem(item, node.level + 1))
     }
     return result
 }
