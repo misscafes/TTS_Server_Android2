@@ -118,7 +118,7 @@ class BackupRestoreActivity : ComposeActivity() {
                                 isLoading = true
                                 vm.viewModelScope.launch {
                                     runCatching {
-                                        val bytes = vm.downloadFromUrl(url)
+                                        val bytes = vm.downloadFromInput(url)
                                         showFromFileRestoreDialog.value = bytes
                                     }.onFailure { displayErrorDialog(it) }
                                     isLoading = false

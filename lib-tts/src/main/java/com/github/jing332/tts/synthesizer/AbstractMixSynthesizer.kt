@@ -38,6 +38,48 @@ import java.io.InputStream
 abstract class AbstractMixSynthesizer() : Synthesizer {
     companion object {
         const val PROCUDE_CAPACITY: Int = 256
+
+        /**
+         * 生成静音 WAV 音频数据
+         * @param sampleRate 采样率，默认 16000
+         * @param durationMs 持续时间，默认 100ms
+         * @return WAV 格式的字节数组
+         */
+        fun createSilentWavAudio(sampleRate: Int = 16000, durationMs: Int = 100): ByteArray {
+            val numChannels: Short = 1
+            val bitsPerSample: Short = 16
+            val numSamples = (sampleRate * durationMs) / 1000
+            val dataSize = numSamples * numChannels * (bitsPerSample / 8)
+            val fileSize = 36 + dataSize
+
+            val wav = java.io.ByteArrayOutputStream()
+            val dos = java.io.DataOutputStream(wav)
+
+            // RIFF header
+            dos.writeBytes("RIFF")
+            dos.writeInt(Integer.reverseBytes(fileSize))
+            dos.writeBytes("WAVE")
+
+            // fmt subchunk
+            dos.writeBytes("fmt ")
+            dos.writeInt(Integer.reverseBytes(16)) // Subchunk1Size
+            dos.writeShort(java.lang.Short.reverseBytes(1.toShort()).toInt()) // AudioFormat (PCM)
+            dos.writeShort(java.lang.Short.reverseBytes(numChannels).toInt()) // NumChannels
+            dos.writeInt(Integer.reverseBytes(sampleRate)) // SampleRate
+            dos.writeInt(Integer.reverseBytes(sampleRate * numChannels * bitsPerSample / 8)) // ByteRate
+            dos.writeShort(java.lang.Short.reverseBytes((numChannels * bitsPerSample / 8).toShort()).toInt()) // BlockAlign
+            dos.writeShort(java.lang.Short.reverseBytes(bitsPerSample).toInt()) // BitsPerSample
+
+            // data subchunk
+            dos.writeBytes("data")
+            dos.writeInt(Integer.reverseBytes(dataSize))
+            // 静音数据（全 0）
+            val silence = ByteArray(dataSize)
+            dos.write(silence)
+
+            dos.flush()
+            return wav.toByteArray()
+        }
     }
 
     private val logger: KLogger
@@ -157,6 +199,9 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
 
         if (retries > maxRetries) {
             event(NormalEvent.RequestCountEnded)
+            // 发送 0.1 秒的空音频，让上游继续处理后续请求
+            val silentAudio = createSilentWavAudio(maxSampleRate, durationMs = 100)
+            channel.trySendBlocking(ChannelPayload.Bytes(silentAudio))
             return
         }
 

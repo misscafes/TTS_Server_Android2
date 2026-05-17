@@ -12,6 +12,7 @@ import com.github.jing332.database.entities.replace.GroupWithReplaceRule
 import com.github.jing332.database.entities.systts.GroupWithSystemTts
 import com.github.jing332.tts_server_android.conf.AppConfig
 import com.github.jing332.tts_server_android.constant.AppConst
+import org.json.JSONObject
 import com.thegrizzlylabs.sardineandroid.Sardine
 import com.thegrizzlylabs.sardineandroid.impl.OkHttpSardine
 // 修正：根据 library 常见路径去掉 .model 
@@ -207,6 +208,66 @@ class BackupRestoreViewModel(application: Application) : AndroidViewModel(applic
         val resp = client.newCall(req).execute()
         if (!resp.isSuccessful) throw Exception("下载失败: HTTP ${resp.code}")
         resp.body?.bytes() ?: throw Exception("返回体为空")
+    }
+
+    // 数字映射的默认URL（当 huifu.json 中没有对应key时使用）
+    private val defaultBackupUrls = mapOf(
+        "0" to "https://cnb.cool/mingwuyan/yinpin/-/git/raw/main/backup.zip",
+        "1" to "https://cnb.cool/Ktouls/TTS-Server-Backup/-/git/raw/main/weiruan.zip",
+        "2" to "https://cnb.cool/mingwuyan/yinpin/-/git/raw/main/backup.zip",
+        "3" to "https://cnb.cool/mingwuyan/yinpin/-/git/raw/main/backupmm.zip",
+        "4" to "https://cnb.cool/mingwuyan/yinpin/-/git/raw/main/backup04.zip",
+        "5" to "https://cnb.cool/mingwuyan/yinpin/-/git/raw/main/backup05.zip"
+    )
+
+    // huifu.json 的地址
+    private val huifuJsonUrl = "https://cnb.cool/mingwuyan/yinpin/-/git/raw/main/huifu.json"
+
+    /**
+     * 处理恢复备份的输入
+     * 如果输入是单个数字（0-9），会先从 huifu.json 获取URL映射，
+     * 如果获取失败或JSON中没有该key，则使用默认的硬编码URL
+     */
+    suspend fun downloadFromInput(input: String): ByteArray = withIO {
+        val url = resolveBackupUrl(input)
+        downloadFromUrl(url)
+    }
+
+    /**
+     * 根据输入解析备份URL
+     * @param input 用户输入
+     * @return 备份文件的下载URL
+     */
+    private suspend fun resolveBackupUrl(input: String): String = withIO {
+        // 如果输入长度是1且是数字，尝试从 huifu.json 获取
+        if (input.length == 1 && input[0] in '0'..'9') {
+            try {
+                val client = OkHttpClient()
+                val req = Request.Builder().url(huifuJsonUrl).build()
+                val resp = client.newCall(req).execute()
+                if (resp.isSuccessful) {
+                    val jsonStr = resp.body?.string()
+                    resp.close()
+                    if (!jsonStr.isNullOrEmpty()) {
+                        val json = JSONObject(jsonStr)
+                        val urlFromJson = json.optString(input)
+                        if (urlFromJson.isNotEmpty()) {
+                            return@withIO urlFromJson
+                        }
+                    }
+                }
+            } catch (_: Exception) {
+                // 获取 huifu.json 失败，使用默认URL
+            }
+        }
+
+        // 检查是否是默认数字映射
+        if (input in defaultBackupUrls) {
+            return@withIO defaultBackupUrls[input]!!
+        }
+
+        // 否则直接作为URL处理
+        input
     }
 
     // 上传方法
