@@ -135,11 +135,11 @@ class JsBridgeInputStream : InputStream() {
                 logger.debug { "close" }
 
                 try {
-                    if (length <= 0) errorCause = IOException("No data written")
+                    if (length <= 0 && errorCause == null) errorCause = IOException("No data written")
 
                     this@JsBridgeInputStream.close()
                 } catch (e: IOException) {
-                    errorCause = e
+                    if (errorCause == null) errorCause = e
                 } finally {
                     if (mutex.isLocked) mutex.unlock()
                 }

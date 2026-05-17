@@ -24,6 +24,7 @@ import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.produce
 import kotlinx.coroutines.channels.trySendBlocking
@@ -188,6 +189,7 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
         val request = RequestPayload(params, config)
         suspend fun retry() {
             CachedEngineManager.removeEngine(config.source)
+            delay(context.cfg.retryDelay())
             return if (config.standbyConfig != null && context.cfg.toggleTry() > retries) {
                 event(NormalEvent.StandbyTts(request.copy(config = config.standbyConfig)))
                 requestAndProcess(channel, params, config.standbyConfig, 0, maxRetries)

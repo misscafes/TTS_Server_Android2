@@ -10,6 +10,7 @@ data class SynthesizerConfig(
     var requestTimeout: ValueProvider<Long> = { 300000 },
     var maxRetryTimes: ValueProvider<Int> = { 1 },
     var toggleTry: ValueProvider<Int> = { 1 },
+    var retryDelay: ValueProvider<Long> = { 1000 },
     var streamPlayEnabled: ValueProvider<Boolean> = { true },
     var silenceSkipEnabled: ValueProvider<Boolean> = { false },
     var audioParams: ValueProvider<AudioParams> = { AudioParams(1f, 1f, 1f) },

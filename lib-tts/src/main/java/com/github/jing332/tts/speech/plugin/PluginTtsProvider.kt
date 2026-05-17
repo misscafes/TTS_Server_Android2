@@ -66,6 +66,7 @@ open class PluginTtsProvider(
     override fun onDestroy() {
         state = EngineState.Uninitialized()
         mEngine?.onStop()
+        TtsPluginEngineManager.remove(plugin.pluginId)
         mEngine = null
     }
 }
