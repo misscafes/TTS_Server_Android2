@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandCircleDown
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -27,6 +28,8 @@ fun SubGroupHeader(
     level: Int,
     isExpanded: Boolean,
     onClick: () -> Unit,
+    enabled: Boolean = false,
+    onEnabledChange: (Boolean) -> Unit = {},
 ) {
     val rotationAngle by animateFloatAsState(
         targetValue = if (isExpanded) 0f else -45f,
@@ -77,6 +80,11 @@ fun SubGroupHeader(
             modifier = Modifier
                 .padding(start = 8.dp)
                 .weight(1f)
+        )
+
+        Checkbox(
+            checked = enabled,
+            onCheckedChange = onEnabledChange,
         )
     }
 }

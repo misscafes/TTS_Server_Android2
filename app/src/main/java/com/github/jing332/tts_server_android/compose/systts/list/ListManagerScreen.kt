@@ -774,11 +774,26 @@ internal fun ListManagerScreen(
                                             reorderableState = reorderState,
                                             key = subKey
                                         ) { _ ->
+                                            val subItems = fItem.node.items
+                                            val subEnabled = subItems.isNotEmpty() && subItems.all { it.isEnabled }
                                             SubGroupHeader(
                                                 modifier = subDragModifier,
                                                 name = fItem.node.name,
                                                 level = fItem.node.level,
                                                 isExpanded = !collapsedSubGroups.contains(fItem.node.fullPath),
+                                                enabled = subEnabled,
+                                                onEnabledChange = { enabled ->
+                                                    scope.launch {
+                                                        subItems.forEach { item ->
+                                                            if (item.isEnabled != enabled) {
+                                                                dbm.systemTtsV2.update(
+                                                                    item.copy(isEnabled = enabled)
+                                                                )
+                                                            }
+                                                        }
+                                                        if (enabled) SystemTtsService.notifyUpdateConfig()
+                                                    }
+                                                },
                                                 onClick = {
                                                     collapsedSubGroups = if (collapsedSubGroups.contains(fItem.node.fullPath)) {
                                                         collapsedSubGroups - fItem.node.fullPath
