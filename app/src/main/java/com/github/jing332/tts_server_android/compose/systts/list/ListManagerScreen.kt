@@ -129,6 +129,62 @@ internal fun ListManagerScreen(
         list = showSortDialog!!
     )
 
+    // 子分组操作对话框状态
+    var showSubGroupRename by remember { mutableStateOf<Pair<List<SystemTtsV2>, String>?>(null) }
+    if (showSubGroupRename != null) {
+        val (items, oldPath) = showSubGroupRename!!
+        var newName by remember { mutableStateOf(oldPath.substringAfterLast('/')) }
+        TextFieldDialog(
+            title = "重命名子分组",
+            text = newName,
+            onTextChange = { newName = it },
+            onDismissRequest = { showSubGroupRename = null }
+        ) {
+            scope.launch {
+                val newPath = if (oldPath.contains('/')) {
+                    oldPath.substringBeforeLast('/') + "/" + newName
+                } else newName
+                items.forEach { item ->
+                    dbm.systemTtsV2.update(item.copy(categoryPath = newPath))
+                }
+                showSubGroupRename = null
+            }
+        }
+    }
+
+    var showSubGroupAudioParams by remember { mutableStateOf<List<SystemTtsV2>?>(null) }
+    if (showSubGroupAudioParams != null) {
+        val items = showSubGroupAudioParams!!
+        val firstParams = (items.firstOrNull()?.config as? TtsConfigurationDTO)?.audioParams
+            ?: com.github.jing332.database.entities.systts.AudioParams()
+        GroupAudioParamsDialog(
+            onDismissRequest = { showSubGroupAudioParams = null },
+            params = firstParams,
+            onConfirm = { params ->
+                scope.launch {
+                    items.forEach { item ->
+                        val config = item.config
+                        if (config is TtsConfigurationDTO) {
+                            dbm.systemTtsV2.update(
+                                item.copy(config = config.copy(audioParams = params))
+                            )
+                        }
+                    }
+                    if (items.any { it.isEnabled }) SystemTtsService.notifyUpdateConfig()
+                    showSubGroupAudioParams = null
+                }
+            }
+        )
+    }
+
+    var showSubGroupBatchTag by remember { mutableStateOf<List<SystemTtsV2>?>(null) }
+    if (showSubGroupBatchTag != null) {
+        BatchTagDialog(
+            groupItems = showSubGroupBatchTag!!,
+            onDismissRequest = { showSubGroupBatchTag = null }
+        )
+    }
+
     var showQuickEdit by remember { mutableStateOf<SystemTtsV2?>(null) }
     if (showQuickEdit != null) {
         QuickEditBottomSheet(onDismissRequest = {
@@ -800,6 +856,28 @@ internal fun ListManagerScreen(
                                                         expandedSubGroups - fItem.node.fullPath
                                                     } else {
                                                         expandedSubGroups + fItem.node.fullPath
+                                                    }
+                                                },
+                                                onRename = {
+                                                    showSubGroupRename = subItems to fItem.node.fullPath
+                                                },
+                                                onEditAudioParams = {
+                                                    showSubGroupAudioParams = subItems
+                                                },
+                                                onSort = {
+                                                    showSortDialog = subItems
+                                                },
+                                                onBatchAssignTags = {
+                                                    showSubGroupBatchTag = subItems
+                                                },
+                                                onDelete = {
+                                                    scope.launch {
+                                                        dbm.systemTtsV2.delete(*subItems.toTypedArray())
+                                                    }
+                                                },
+                                                onExport = {
+                                                    showExportSheet = subItems.map {
+                                                        it.copy(groupId = AbstractListGroup.DEFAULT_GROUP_ID)
                                                     }
                                                 }
                                             )

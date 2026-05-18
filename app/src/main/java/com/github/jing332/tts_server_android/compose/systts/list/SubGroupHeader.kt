@@ -8,13 +8,28 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.DriveFileRenameOutline
 import androidx.compose.material.icons.filled.ExpandCircleDown
+import androidx.compose.material.icons.filled.Label
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Output
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import com.github.jing332.tts_server_android.compose.systts.ConfigDeleteDialog
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -30,6 +45,12 @@ fun SubGroupHeader(
     onClick: () -> Unit,
     enabled: Boolean = false,
     onEnabledChange: (Boolean) -> Unit = {},
+    onRename: () -> Unit = {},
+    onEditAudioParams: () -> Unit = {},
+    onSort: () -> Unit = {},
+    onBatchAssignTags: () -> Unit = {},
+    onDelete: () -> Unit = {},
+    onExport: () -> Unit = {},
 ) {
     val rotationAngle by animateFloatAsState(
         targetValue = if (isExpanded) 0f else -45f,
@@ -42,6 +63,14 @@ fun SubGroupHeader(
         1 -> 8.dp to 6.dp
         else -> 6.dp to 4.dp
     }
+
+    var showOptions by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
+    if (showDeleteDialog)
+        ConfigDeleteDialog(
+            onDismissRequest = { showDeleteDialog = false }, content = name, onConfirm = onDelete
+        )
 
     Row(
         modifier = modifier
@@ -86,5 +115,89 @@ fun SubGroupHeader(
             checked = enabled,
             onCheckedChange = onEnabledChange,
         )
+
+        IconButton(onClick = { showOptions = true }) {
+            Icon(
+                Icons.Default.MoreVert,
+                contentDescription = "更多选项"
+            )
+
+            DropdownMenu(
+                expanded = showOptions,
+                onDismissRequest = { showOptions = false }
+            ) {
+                DropdownMenuItem(
+                    text = { Text("重命名") },
+                    onClick = {
+                        showOptions = false
+                        onRename()
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.DriveFileRenameOutline, null)
+                    }
+                )
+
+                DropdownMenuItem(
+                    text = { Text("音频参数") },
+                    onClick = {
+                        showOptions = false
+                        onEditAudioParams()
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.Speed, null)
+                    }
+                )
+
+                DropdownMenuItem(
+                    text = { Text("排序") },
+                    onClick = {
+                        showOptions = false
+                        onSort()
+                    },
+                    leadingIcon = {
+                        Icon(Icons.AutoMirrored.Default.Sort, null)
+                    }
+                )
+
+                DropdownMenuItem(
+                    text = { Text("批量分配标签") },
+                    onClick = {
+                        showOptions = false
+                        onBatchAssignTags()
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.Label, null)
+                    }
+                )
+
+                DropdownMenuItem(
+                    text = { Text("导出") },
+                    onClick = {
+                        showOptions = false
+                        onExport()
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.Output, null)
+                    }
+                )
+
+                HorizontalDivider()
+
+                DropdownMenuItem(
+                    text = { Text("删除", color = MaterialTheme.colorScheme.error) },
+                    onClick = {
+                        showOptions = false
+                        showDeleteDialog = true
+                    },
+                    leadingIcon = {
+                        Icon(
+                            Icons.Default.DeleteForever,
+                            null,
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                )
+            }
+        }
     }
 }
