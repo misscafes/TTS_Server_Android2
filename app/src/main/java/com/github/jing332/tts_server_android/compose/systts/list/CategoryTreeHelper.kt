@@ -18,7 +18,11 @@ data class SubCategoryNode(
  */
 sealed class FlattenedCategoryItem {
     data class SubGroupHeader(val node: SubCategoryNode) : FlattenedCategoryItem()
-    data class TtsItem(val item: SystemTtsV2, val displayLevel: Int) : FlattenedCategoryItem()
+    data class TtsItem(
+        val item: SystemTtsV2,
+        val displayLevel: Int,
+        val categoryPath: String
+    ) : FlattenedCategoryItem()
 }
 
 /**
@@ -76,13 +80,14 @@ private fun buildNode(name: String, fullPath: String, level: Int, items: List<Sy
  */
 fun flattenSubCategoryTree(node: SubCategoryNode): List<FlattenedCategoryItem> {
     val result = mutableListOf<FlattenedCategoryItem>()
+    val currentPath = node.fullPath
     // 子分组显示在前面，单一配置显示在后面
     for (child in node.children) {
         result.add(FlattenedCategoryItem.SubGroupHeader(child))
         result.addAll(flattenSubCategoryTree(child))
     }
     for (item in node.items.sortedBy { it.order }) {
-        result.add(FlattenedCategoryItem.TtsItem(item, node.level + 1))
+        result.add(FlattenedCategoryItem.TtsItem(item, node.level + 1, currentPath))
     }
     return result
 }

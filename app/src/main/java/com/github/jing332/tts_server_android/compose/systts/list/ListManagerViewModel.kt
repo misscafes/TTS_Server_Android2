@@ -241,6 +241,45 @@ class ListManagerViewModel : ViewModel() {
             return
         }
 
+        // 子分组内配置项拖动：确保在同一子分组内交换
+        if (fromKey.startsWith("item_") || toKey.startsWith("item_")) {
+            if (!fromKey.startsWith("item_") || !toKey.startsWith("item_")) return
+
+            // 解析 key 格式: item_${groupId}_${categoryPath}_${itemId}
+            val fromParts = fromKey.removePrefix("item_").split("_", limit = 3)
+            val toParts = toKey.removePrefix("item_").split("_", limit = 3)
+            if (fromParts.size < 3 || toParts.size < 3) return
+
+            val fromGroupId = fromParts[0].toLongOrNull() ?: return
+            val fromCategoryPath = fromParts[1]
+            val fromItemId = fromParts.drop(2).joinToString("_").toLongOrNull() ?: return
+
+            val toGroupId = toParts[0].toLongOrNull() ?: return
+            val toCategoryPath = toParts[1]
+            val toItemId = toParts.drop(2).joinToString("_").toLongOrNull() ?: return
+
+            // 确保在同一分组和同一子分组内
+            if (fromGroupId != toGroupId || fromCategoryPath != toCategoryPath) return
+
+            val allItems = findListInGroup(fromGroupId).toMutableList()
+            val fromIndex = allItems.indexOfFirst { it.id == fromItemId && it.categoryPath == fromCategoryPath }
+            val toIndex = allItems.indexOfFirst { it.id == toItemId && it.categoryPath == toCategoryPath }
+            if (fromIndex == -1 || toIndex == -1) return
+
+            try {
+                Collections.swap(allItems, fromIndex, toIndex)
+            } catch (_: IndexOutOfBoundsException) {
+                return
+            }
+
+            allItems.forEachIndexed { index, systts ->
+                if (systts.order != index) {
+                    dbm.systemTtsV2.update(systts.copy(order = index))
+                }
+            }
+            return
+        }
+
         if (fromKey.startsWith("g_") && toKey.startsWith("g_")) {
             val mList = list.value.map { it.group }.toMutableList()
 

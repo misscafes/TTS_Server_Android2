@@ -323,6 +323,7 @@
 -dontwarn coil3.PlatformContext
 -dontwarn java.lang.reflect.AnnotatedType
 -dontwarn kotlinx.coroutines.slf4j.MDCContext
+-dontwarn com.sun.nio.file.SensitivityWatchEventModifier
 
 -dontwarn com.aayushatharva.brotli4j.Brotli4jLoader
 -dontwarn com.aayushatharva.brotli4j.decoder.DecoderJNI$Status
