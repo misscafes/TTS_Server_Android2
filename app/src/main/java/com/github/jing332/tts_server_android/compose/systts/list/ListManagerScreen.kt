@@ -57,6 +57,7 @@ import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.AbstractListGroup
 import com.github.jing332.database.entities.systts.BgmConfiguration
 import com.github.jing332.database.entities.systts.GroupWithSystemTts
+import com.github.jing332.database.entities.systts.AudioParams
 import com.github.jing332.database.entities.systts.SystemTtsGroup
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.database.entities.systts.TtsConfigurationDTO
@@ -152,25 +153,23 @@ internal fun ListManagerScreen(
         }
     }
 
-    var showSubGroupAudioParams by remember { mutableStateOf<List<SystemTtsV2>?>(null) }
+    var showSubGroupAudioParams by remember { mutableStateOf<Pair<SystemTtsGroup, String>?>(null) }
     if (showSubGroupAudioParams != null) {
-        val items = showSubGroupAudioParams!!
-        val firstParams = (items.firstOrNull()?.config as? TtsConfigurationDTO)?.audioParams
-            ?: com.github.jing332.database.entities.systts.AudioParams()
+        val (group, path) = showSubGroupAudioParams!!
+        val subGroupMap = group.subGroupAudioParamsJson.let { jsonStr ->
+            if (jsonStr.isBlank() || jsonStr == "{}") emptyMap()
+            else SystemTtsV2.Converters.json.decodeFromString<Map<String, com.github.jing332.database.entities.systts.AudioParams>>(jsonStr)
+        }
+        val currentParams = subGroupMap[path] ?: com.github.jing332.database.entities.systts.AudioParams()
         GroupAudioParamsDialog(
             onDismissRequest = { showSubGroupAudioParams = null },
-            params = firstParams,
+            params = currentParams,
             onConfirm = { params ->
                 scope.launch {
-                    items.forEach { item ->
-                        val config = item.config
-                        if (config is TtsConfigurationDTO) {
-                            dbm.systemTtsV2.update(
-                                item.copy(config = config.copy(audioParams = params))
-                            )
-                        }
-                    }
-                    if (items.any { it.isEnabled }) SystemTtsService.notifyUpdateConfig()
+                    val newMap = subGroupMap.toMutableMap().apply { put(path, params) }
+                    val newJson = SystemTtsV2.Converters.json.encodeToString(newMap)
+                    dbm.systemTtsV2.updateGroup(group.copy(subGroupAudioParamsJson = newJson))
+                    SystemTtsService.notifyUpdateConfig()
                     showSubGroupAudioParams = null
                 }
             }
@@ -182,6 +181,63 @@ internal fun ListManagerScreen(
         BatchTagDialog(
             groupItems = showSubGroupBatchTag!!,
             onDismissRequest = { showSubGroupBatchTag = null }
+        )
+    }
+
+    // 子分组转为大分组确认对话框
+    var showSubGroupExtractToGroup by remember { mutableStateOf<Pair<SystemTtsGroup, String>?>(null) }
+    if (showSubGroupExtractToGroup != null) {
+        val (group, path) = showSubGroupExtractToGroup!!
+        AlertDialog(
+            onDismissRequest = { showSubGroupExtractToGroup = null },
+            title = { Text("转为大分组") },
+            text = { Text("将子分组 \"${path.substringAfterLast('/')}\" 移出为独立的大分组？") },
+            confirmButton = {
+                TextButton(onClick = {
+                    scope.launch {
+                        val currentGroupWithTts = models.find { it.group.id == group.id }
+                        val itemsToMove = currentGroupWithTts?.list
+                            ?.filter { it.categoryPath == path }
+                            ?: emptyList()
+
+                        val subGroupAudioParams = group.subGroupAudioParamsJson.let { jsonStr ->
+                            if (jsonStr.isBlank() || jsonStr == "{}") emptyMap()
+                            else SystemTtsV2.Converters.json.decodeFromString<Map<String, AudioParams>>(jsonStr)
+                        }
+                        val audioParamsForNewGroup = subGroupAudioParams[path] ?: AudioParams()
+
+                        if (subGroupAudioParams.containsKey(path)) {
+                            val newSubMap = subGroupAudioParams.toMutableMap().apply { remove(path) }
+                            val newSubJson = SystemTtsV2.Converters.json.encodeToString(newSubMap)
+                            dbm.systemTtsV2.updateGroup(group.copy(subGroupAudioParamsJson = newSubJson))
+                        }
+
+                        val groupName = path.substringAfterLast('/')
+                        val newGroup = SystemTtsGroup(
+                            id = System.currentTimeMillis(),
+                            name = groupName,
+                            audioParams = audioParamsForNewGroup
+                        )
+                        dbm.systemTtsV2.insertGroup(newGroup)
+                        itemsToMove.forEach { item ->
+                            dbm.systemTtsV2.update(
+                                item.copy(
+                                    groupId = newGroup.id,
+                                    categoryPath = ""
+                                )
+                            )
+                        }
+                        showSubGroupExtractToGroup = null
+                    }
+                }) {
+                    Text("确定")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSubGroupExtractToGroup = null }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
         )
     }
 
@@ -342,6 +398,15 @@ internal fun ListManagerScreen(
                             TextButton(
                                 onClick = {
                                     scope.launch {
+                                        // 将原大分组的音频参数作为子分组参数保存到目标分组
+                                        val subMap = otherGroup.subGroupAudioParamsJson.let { jsonStr ->
+                                            if (jsonStr.isBlank() || jsonStr == "{}") emptyMap()
+                                            else SystemTtsV2.Converters.json.decodeFromString<Map<String, com.github.jing332.database.entities.systts.AudioParams>>(jsonStr)
+                                        }.toMutableMap()
+                                        subMap[targetGroup.name] = targetGroup.audioParams
+                                        val newJson = SystemTtsV2.Converters.json.encodeToString(subMap)
+                                        dbm.systemTtsV2.updateGroup(otherGroup.copy(subGroupAudioParamsJson = newJson))
+
                                         currentGroupWithTts?.list?.forEach { item ->
                                             dbm.systemTtsV2.update(
                                                 item.copy(
@@ -400,10 +465,26 @@ internal fun ListManagerScreen(
                                         val itemsToMove = currentGroupWithTts?.list
                                             ?.filter { it.categoryPath == path }
                                             ?: emptyList()
+
+                                        // 读取子分组音频参数
+                                        val subGroupAudioParams = targetGroup.subGroupAudioParamsJson.let { jsonStr ->
+                                            if (jsonStr.isBlank() || jsonStr == "{}") emptyMap()
+                                            else SystemTtsV2.Converters.json.decodeFromString<Map<String, com.github.jing332.database.entities.systts.AudioParams>>(jsonStr)
+                                        }
+                                        val audioParamsForNewGroup = subGroupAudioParams[path] ?: com.github.jing332.database.entities.systts.AudioParams()
+
+                                        // 从原分组中移除该子分组参数记录
+                                        if (subGroupAudioParams.containsKey(path)) {
+                                            val newSubMap = subGroupAudioParams.toMutableMap().apply { remove(path) }
+                                            val newSubJson = SystemTtsV2.Converters.json.encodeToString(newSubMap)
+                                            dbm.systemTtsV2.updateGroup(targetGroup.copy(subGroupAudioParamsJson = newSubJson))
+                                        }
+
                                         val groupName = path.substringAfterLast('/')
                                         val newGroup = SystemTtsGroup(
                                             id = System.currentTimeMillis(),
-                                            name = groupName
+                                            name = groupName,
+                                            audioParams = audioParamsForNewGroup
                                         )
                                         dbm.systemTtsV2.insertGroup(newGroup)
                                         itemsToMove.forEach { item ->
@@ -862,7 +943,7 @@ internal fun ListManagerScreen(
                                                     showSubGroupRename = subItems to fItem.node.fullPath
                                                 },
                                                 onEditAudioParams = {
-                                                    showSubGroupAudioParams = subItems
+                                                    showSubGroupAudioParams = g to fItem.node.fullPath
                                                 },
                                                 onSort = {
                                                     showSortDialog = subItems
@@ -879,6 +960,9 @@ internal fun ListManagerScreen(
                                                     showExportSheet = subItems.map {
                                                         it.copy(groupId = AbstractListGroup.DEFAULT_GROUP_ID)
                                                     }
+                                                },
+                                                onExtractToGroup = {
+                                                    showSubGroupExtractToGroup = g to fItem.node.fullPath
                                                 }
                                             )
                                         }

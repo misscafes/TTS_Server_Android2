@@ -22,5 +22,8 @@ data class SystemTtsGroup(
     override var isExpanded: Boolean = false,
 
     @Embedded(prefix = "audioParams_")
-    var audioParams: AudioParams = AudioParams()
+    var audioParams: AudioParams = AudioParams(),
+
+    @ColumnInfo(defaultValue = "{}")
+    var subGroupAudioParamsJson: String = "{}",
 ) : AbstractListGroup, Parcelable

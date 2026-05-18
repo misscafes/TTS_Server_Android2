@@ -75,5 +75,16 @@ data class SystemTtsV2(
             }
 
         }
+
+        @TypeConverter
+        fun subGroupAudioParamsMap2String(map: Map<String, AudioParams>): String {
+            return json.encodeToString(map)
+        }
+
+        @TypeConverter
+        fun string2SubGroupAudioParamsMap(s: String): Map<String, AudioParams> {
+            return if (s.isBlank() || s == "{}") emptyMap()
+            else json.decodeFromString(s)
+        }
     }
 }

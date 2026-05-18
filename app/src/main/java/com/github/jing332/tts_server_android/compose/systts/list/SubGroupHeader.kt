@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Output
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material.icons.automirrored.filled.Sort
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -51,6 +52,7 @@ fun SubGroupHeader(
     onBatchAssignTags: () -> Unit = {},
     onDelete: () -> Unit = {},
     onExport: () -> Unit = {},
+    onExtractToGroup: () -> Unit = {},
 ) {
     val rotationAngle by animateFloatAsState(
         targetValue = if (isExpanded) 0f else -45f,
@@ -178,6 +180,17 @@ fun SubGroupHeader(
                     },
                     leadingIcon = {
                         Icon(Icons.Default.Output, null)
+                    }
+                )
+
+                DropdownMenuItem(
+                    text = { Text("转为大分组") },
+                    onClick = {
+                        showOptions = false
+                        onExtractToGroup()
+                    },
+                    leadingIcon = {
+                        Icon(Icons.AutoMirrored.Filled.ExitToApp, null)
                     }
                 )
 
