@@ -23,7 +23,11 @@ internal enum class SortFields(@StringRes val strResId: Int) {
 }
 
 @Composable
-internal fun SortDialog(onDismissRequest: () -> Unit, list: List<SystemTtsV2>) {
+internal fun SortDialog(
+    onDismissRequest: () -> Unit,
+    list: List<SystemTtsV2>,
+    groupList: List<SystemTtsV2>? = null,
+) {
     var index by remember { mutableIntStateOf(0) }
     ListSortSettingsDialog(
         name = list.size.toString(),
@@ -42,8 +46,22 @@ internal fun SortDialog(onDismissRequest: () -> Unit, list: List<SystemTtsV2>) {
                 }.run {
                     if (descending) this.reversed() else this
                 }
-                sortedList.forEachIndexed { i, systemTts ->
-                    dbm.systemTtsV2.update(systemTts.copy(order = i))
+
+                if (groupList != null) {
+                    // 子分组排序：保持子分组在大分组中的相对位置，只改变子分组内部顺序
+                    val subIds = list.map { it.id }.toSet()
+                    val allSorted = groupList.sortedBy { it.order }.toMutableList()
+                    val firstSubIndex = allSorted.indexOfFirst { it.id in subIds }
+                        .coerceAtLeast(0)
+                    allSorted.removeAll { it.id in subIds }
+                    allSorted.addAll(firstSubIndex, sortedList)
+                    allSorted.forEachIndexed { i, systts ->
+                        dbm.systemTtsV2.update(systts.copy(order = i))
+                    }
+                } else {
+                    sortedList.forEachIndexed { i, systemTts ->
+                        dbm.systemTtsV2.update(systemTts.copy(order = i))
+                    }
                 }
             }
         }

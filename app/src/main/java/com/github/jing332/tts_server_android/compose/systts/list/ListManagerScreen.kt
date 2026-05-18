@@ -124,11 +124,15 @@ internal fun ListManagerScreen(
         vm.setSearchKeyword("")
     }
 
-    var showSortDialog by remember { mutableStateOf<List<SystemTtsV2>?>(null) }
-    if (showSortDialog != null) SortDialog(
-        onDismissRequest = { showSortDialog = null },
-        list = showSortDialog!!
-    )
+    var showSortDialog by remember { mutableStateOf<Pair<List<SystemTtsV2>, List<SystemTtsV2>?>?>(null) }
+    if (showSortDialog != null) {
+        val (list, groupList) = showSortDialog!!
+        SortDialog(
+            onDismissRequest = { showSortDialog = null },
+            list = list,
+            groupList = groupList
+        )
+    }
 
     // 子分组操作对话框状态
     var showSubGroupRename by remember { mutableStateOf<Pair<List<SystemTtsV2>, String>?>(null) }
@@ -785,7 +789,7 @@ internal fun ListManagerScreen(
                                     showGroupExportSheet = listOf(groupWithSystemTts)
                                 },
                                 onSort = {
-                                    showSortDialog = groupWithSystemTts.list
+                                    showSortDialog = groupWithSystemTts.list to null
                                 },
                                 onCreateSubGroup = {
                                     showCreateSubGroup = g.id
@@ -946,7 +950,7 @@ internal fun ListManagerScreen(
                                                     showSubGroupAudioParams = g to fItem.node.fullPath
                                                 },
                                                 onSort = {
-                                                    showSortDialog = subItems
+                                                    showSortDialog = subItems to groupWithSystemTts.list
                                                 },
                                                 onBatchAssignTags = {
                                                     showSubGroupBatchTag = subItems
@@ -969,50 +973,60 @@ internal fun ListManagerScreen(
                                     }
                                     is FlattenedCategoryItem.TtsItem -> {
                                         val item = fItem.item
-                                        val descriptor = remember(item) {
-                                            ItemDescriptorFactory.from(context, item)
-                                        }
-                                        Item(
-                                            reorderState = reorderState,
-                                            modifier = Modifier.padding(
-                                                start = 8.dp,
-                                                end = 8.dp,
-                                                top = 4.dp,
-                                                bottom = 4.dp
-                                            ),
-                                            name = item.displayName,
-                                            tagName = descriptor.tagName,
-                                            type = descriptor.type,
-                                            standby = descriptor.standby,
-                                            enabled = item.isEnabled,
-                                            onEnabledChange = {
-                                                vm.updateTtsEnabled(item, it)
-                                                if (it) SystemTtsService.notifyUpdateConfig()
-                                            },
-                                            desc = descriptor.desc,
-                                            params = descriptor.bottom,
-                                            onClick = { showQuickEdit = item },
-                                            onLongClick = { switchSpeechTarget(item) },
-                                            onCopy = {
-                                                navigateToEdit(item.copy(id = System.currentTimeMillis()))
-                                            },
-                                            onDelete = { deleteTts = item },
-                                            onEdit = { navigateToEdit(item) },
-                                            onAudition = {
-                                                if (item.config is TtsConfigurationDTO) {
-                                                    showAuditionDialog = item.copy()
-                                                } else
-                                                    context.toast(R.string.not_support_audition)
-                                            },
-                                            isInSubGroup = fItem.displayLevel > 0,
-                                            onExport = {
-                                                showExportSheet =
-                                                    listOf(item.copy(groupId = AbstractListGroup.DEFAULT_GROUP_ID))
-                                            },
-                                            onMoveToSubGroup = {
-                                                showMoveToSubGroup = item
+                                        val itemKey = "${g.id}_${item.id}"
+                                        val itemDragModifier = if (searchKeyword.isNotEmpty()) Modifier
+                                            else Modifier.detectReorderAfterLongPress(reorderState)
+                                        ShadowedDraggableItem(
+                                            reorderableState = reorderState,
+                                            key = itemKey
+                                        ) { _ ->
+                                            val descriptor = remember(item) {
+                                                ItemDescriptorFactory.from(context, item)
                                             }
-                                        )
+                                            Item(
+                                                reorderState = reorderState,
+                                                modifier = itemDragModifier.then(
+                                                    Modifier.padding(
+                                                        start = 8.dp,
+                                                        end = 8.dp,
+                                                        top = 4.dp,
+                                                        bottom = 4.dp
+                                                    )
+                                                ),
+                                                name = item.displayName,
+                                                tagName = descriptor.tagName,
+                                                type = descriptor.type,
+                                                standby = descriptor.standby,
+                                                enabled = item.isEnabled,
+                                                onEnabledChange = {
+                                                    vm.updateTtsEnabled(item, it)
+                                                    if (it) SystemTtsService.notifyUpdateConfig()
+                                                },
+                                                desc = descriptor.desc,
+                                                params = descriptor.bottom,
+                                                onClick = { showQuickEdit = item },
+                                                onLongClick = { switchSpeechTarget(item) },
+                                                onCopy = {
+                                                    navigateToEdit(item.copy(id = System.currentTimeMillis()))
+                                                },
+                                                onDelete = { deleteTts = item },
+                                                onEdit = { navigateToEdit(item) },
+                                                onAudition = {
+                                                    if (item.config is TtsConfigurationDTO) {
+                                                        showAuditionDialog = item.copy()
+                                                    } else
+                                                        context.toast(R.string.not_support_audition)
+                                                },
+                                                isInSubGroup = fItem.displayLevel > 0,
+                                                onExport = {
+                                                    showExportSheet =
+                                                        listOf(item.copy(groupId = AbstractListGroup.DEFAULT_GROUP_ID))
+                                                },
+                                                onMoveToSubGroup = {
+                                                    showMoveToSubGroup = item
+                                                }
+                                            )
+                                        }
                                     }
                                 }
                             }
