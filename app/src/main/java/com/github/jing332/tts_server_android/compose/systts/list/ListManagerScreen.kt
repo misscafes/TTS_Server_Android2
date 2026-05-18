@@ -974,8 +974,6 @@ internal fun ListManagerScreen(
                                     is FlattenedCategoryItem.TtsItem -> {
                                         val item = fItem.item
                                         val itemKey = "${g.id}_${item.id}"
-                                        val itemDragModifier = if (searchKeyword.isNotEmpty()) Modifier
-                                            else Modifier.detectReorderAfterLongPress(reorderState)
                                         ShadowedDraggableItem(
                                             reorderableState = reorderState,
                                             key = itemKey
@@ -985,13 +983,11 @@ internal fun ListManagerScreen(
                                             }
                                             Item(
                                                 reorderState = reorderState,
-                                                modifier = itemDragModifier.then(
-                                                    Modifier.padding(
-                                                        start = 8.dp,
-                                                        end = 8.dp,
-                                                        top = 4.dp,
-                                                        bottom = 4.dp
-                                                    )
+                                                modifier = Modifier.padding(
+                                                    start = 8.dp,
+                                                    end = 8.dp,
+                                                    top = 4.dp,
+                                                    bottom = 4.dp
                                                 ),
                                                 name = item.displayName,
                                                 tagName = descriptor.tagName,

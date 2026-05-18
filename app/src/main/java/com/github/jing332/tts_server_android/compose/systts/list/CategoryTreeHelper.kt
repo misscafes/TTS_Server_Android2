@@ -25,10 +25,11 @@ sealed class FlattenedCategoryItem {
  * 将音色列表按 categoryPath 构建为子分组树
  */
 fun buildSubCategoryTree(items: List<SystemTtsV2>): SubCategoryNode {
+    val sortedItems = items.sortedBy { it.order }
     val rootItems = mutableListOf<SystemTtsV2>()
     val childMap = mutableMapOf<String, MutableList<SystemTtsV2>>()
 
-    for (item in items) {
+    for (item in sortedItems) {
         if (item.categoryPath.isBlank()) {
             rootItems.add(item)
         } else {
@@ -42,15 +43,16 @@ fun buildSubCategoryTree(items: List<SystemTtsV2>): SubCategoryNode {
         buildNode(name, name, 0, list)
     }.sortedBy { node -> node.items.minOfOrNull { it.order } ?: Int.MAX_VALUE }
 
-    return SubCategoryNode("", "", -1, rootItems, children)
+    return SubCategoryNode("", "", -1, rootItems.sortedBy { it.order }, children)
 }
 
 private fun buildNode(name: String, fullPath: String, level: Int, items: List<SystemTtsV2>): SubCategoryNode {
+    val sortedItems = items.sortedBy { it.order }
     val directItems = mutableListOf<SystemTtsV2>()
     val childMap = mutableMapOf<String, MutableList<SystemTtsV2>>()
 
     val prefix = if (fullPath.isEmpty()) "" else "$fullPath/"
-    for (item in items) {
+    for (item in sortedItems) {
         if (item.categoryPath == fullPath) {
             directItems.add(item)
         } else if (item.categoryPath.startsWith(prefix)) {
@@ -66,7 +68,7 @@ private fun buildNode(name: String, fullPath: String, level: Int, items: List<Sy
         buildNode(childName, childFullPath, level + 1, list)
     }.sortedBy { node -> node.items.minOfOrNull { it.order } ?: Int.MAX_VALUE }
 
-    return SubCategoryNode(name, fullPath, level, directItems, children)
+    return SubCategoryNode(name, fullPath, level, directItems.sortedBy { it.order }, children)
 }
 
 /**
@@ -79,7 +81,7 @@ fun flattenSubCategoryTree(node: SubCategoryNode): List<FlattenedCategoryItem> {
         result.add(FlattenedCategoryItem.SubGroupHeader(child))
         result.addAll(flattenSubCategoryTree(child))
     }
-    for (item in node.items) {
+    for (item in node.items.sortedBy { it.order }) {
         result.add(FlattenedCategoryItem.TtsItem(item, node.level + 1))
     }
     return result
