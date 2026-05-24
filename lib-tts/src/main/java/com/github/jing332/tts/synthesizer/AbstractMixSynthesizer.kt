@@ -41,45 +41,22 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
         const val PROCUDE_CAPACITY: Int = 256
 
         /**
-         * 生成静音 WAV 音频数据
-         * @param sampleRate 采样率，默认 16000
+         * 生成静音 PCM 音频数据（不含 WAV 头）
+         *
+         * 注意：TTS 回调已通过 onSynthesizeStart(sampleRate) 声明了音频格式，
+         * 因此 onSynthesizeAvailable 应发送裸 PCM 数据，不能带 WAV 头，
+         * 否则 44 字节的 RIFF 头会被当成音频数据播放产生噪音。
+         *
+         * @param sampleRate 采样率，必须与 onSynthesizeStart 声明的一致
          * @param durationMs 持续时间，默认 100ms
-         * @return WAV 格式的字节数组
+         * @return PCM 格式的字节数组（16bit 单声道）
          */
-        fun createSilentWavAudio(sampleRate: Int = 16000, durationMs: Int = 100): ByteArray {
-            val numChannels: Short = 1
-            val bitsPerSample: Short = 16
+        fun createSilentPcmAudio(sampleRate: Int = 16000, durationMs: Int = 100): ByteArray {
+            val numChannels = 1
+            val bitsPerSample = 16
             val numSamples = (sampleRate * durationMs) / 1000
             val dataSize = numSamples * numChannels * (bitsPerSample / 8)
-            val fileSize = 36 + dataSize
-
-            val wav = java.io.ByteArrayOutputStream()
-            val dos = java.io.DataOutputStream(wav)
-
-            // RIFF header
-            dos.writeBytes("RIFF")
-            dos.writeInt(Integer.reverseBytes(fileSize))
-            dos.writeBytes("WAVE")
-
-            // fmt subchunk
-            dos.writeBytes("fmt ")
-            dos.writeInt(Integer.reverseBytes(16)) // Subchunk1Size
-            dos.writeShort(java.lang.Short.reverseBytes(1.toShort()).toInt()) // AudioFormat (PCM)
-            dos.writeShort(java.lang.Short.reverseBytes(numChannels).toInt()) // NumChannels
-            dos.writeInt(Integer.reverseBytes(sampleRate)) // SampleRate
-            dos.writeInt(Integer.reverseBytes(sampleRate * numChannels * bitsPerSample / 8)) // ByteRate
-            dos.writeShort(java.lang.Short.reverseBytes((numChannels * bitsPerSample / 8).toShort()).toInt()) // BlockAlign
-            dos.writeShort(java.lang.Short.reverseBytes(bitsPerSample).toInt()) // BitsPerSample
-
-            // data subchunk
-            dos.writeBytes("data")
-            dos.writeInt(Integer.reverseBytes(dataSize))
-            // 静音数据（全 0）
-            val silence = ByteArray(dataSize)
-            dos.write(silence)
-
-            dos.flush()
-            return wav.toByteArray()
+            return ByteArray(dataSize) // 全 0 即静音
         }
     }
 
@@ -201,8 +178,9 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
 
         if (retries > maxRetries) {
             event(NormalEvent.RequestCountEnded)
-            // 发送 0.1 秒的空音频，让上游继续处理后续请求
-            val silentAudio = createSilentWavAudio(maxSampleRate, durationMs = 100)
+            // 发送 0.1 秒的静音 PCM，让上游继续处理后续请求
+            // 必须是裸 PCM（无 WAV 头），因为 onSynthesizeStart 已声明格式
+            val silentAudio = createSilentPcmAudio(maxSampleRate, durationMs = 100)
             channel.trySend(ChannelPayload.Bytes(silentAudio))
             return
         }

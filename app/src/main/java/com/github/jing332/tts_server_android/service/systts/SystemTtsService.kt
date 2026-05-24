@@ -358,7 +358,10 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
                     // 🛠️ 增加 125 秒总保护
                     withTimeoutOrNull(125000L) {
                         mTtsManager?.synthesize(
-                            params = SystemParams(text = request.charSequenceText.toString()),
+                            params = SystemParams(
+                            text = request.charSequenceText.toString(),
+                            requestTimeout = SysTtsConfig.requestTimeout.toLong()
+                        ),
                             forceConfigId = cfgId,
                             callback = object :
                                 com.github.jing332.tts.synthesizer.SynthesisCallback {

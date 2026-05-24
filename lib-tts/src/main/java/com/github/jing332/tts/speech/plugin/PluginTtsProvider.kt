@@ -40,12 +40,14 @@ open class PluginTtsProvider(
                 voice = source.voice,
                 rate = speed,
                 volume = volume,
-                pitch = pitch
+                pitch = pitch,
+                timeoutMs = params.requestTimeout
             ) ?: throw IllegalStateException("Engine not initialized: ${plugin.pluginId}")
         } catch (e: Exception) {
-            // 修正：发生网络或其他异常时，重置引擎状态为未初始化
-            // 这将强制下一次请求重新执行 onInit()，从而实现网络恢复后的自愈
+            // 发生网络或其他异常时，重置引擎状态并强制销毁
+            // 确保下次请求重新执行 onInit()，实现网络恢复后的自愈
             state = EngineState.Uninitialized()
+            onDestroy()
             throw e
         }
     }
