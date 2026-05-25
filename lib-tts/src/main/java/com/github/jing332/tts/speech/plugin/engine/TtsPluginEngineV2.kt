@@ -39,9 +39,17 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
         const val FUNC_ON_STOP = "onStop"
 
         private val executor = ThreadPoolExecutor(
-            4, 12, 30L, TimeUnit.SECONDS,
+            14, 30, 30L, TimeUnit.SECONDS,
             LinkedBlockingQueue(64)
-        )
+        ).apply { allowCoreThreadTimeOut(true) }
+
+        /**
+         * 动态更新线程池空闲回收时间，跟随设置里的请求超时。
+         * 最低不低于 30 秒，防止设置过短时线程频繁创建销毁。
+         */
+        fun updateThreadPoolKeepAlive(keepAliveMs: Long) {
+            executor.setKeepAliveTime(keepAliveMs.coerceAtLeast(30000L), TimeUnit.MILLISECONDS)
+        }
 
         /**
          * 在独立线程中执行 block，并通过 CompletableDeferred + withTimeout 确保：

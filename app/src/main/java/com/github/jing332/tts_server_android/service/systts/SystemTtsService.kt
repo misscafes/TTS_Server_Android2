@@ -50,6 +50,7 @@ import com.github.jing332.tts.synthesizer.event.ErrorEvent
 import com.github.jing332.tts.synthesizer.event.Event
 import com.github.jing332.tts.synthesizer.event.IEventDispatcher
 import com.github.jing332.tts.synthesizer.event.NormalEvent
+import com.github.jing332.tts.speech.plugin.engine.TtsPluginEngineV2
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.MainActivity
 import com.github.jing332.tts_server_android.conf.SysTtsConfig
@@ -160,6 +161,8 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
 
     fun initManager() {
         logger.debug { "initialize or load configruation" }
+        // 线程池 keepAlive 跟随设置的超时时间
+        TtsPluginEngineV2.updateThreadPoolKeepAlive(SysTtsConfig.requestTimeout)
         mScope.launch {
             mTtsManager = mTtsManager ?: MixSynthesizer.global.apply {
                 context.androidContext = appCtx
