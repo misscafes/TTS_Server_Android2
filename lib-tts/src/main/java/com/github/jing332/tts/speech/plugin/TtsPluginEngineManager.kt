@@ -16,7 +16,9 @@ object TtsPluginEngineManager : AbstractCachedManager<String, TtsPluginUiEngineV
             return cachedEngine
         }
 
-        // 代码已更改，创建新引擎
+        // 代码已更改，销毁旧引擎并创建新引擎
+        cachedEngine?.destroy()
+
         val engine = TtsPluginUiEngineV2(context, plugin)
         engine.eval()
         cache.put(plugin.pluginId, engine)

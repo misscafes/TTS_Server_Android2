@@ -182,6 +182,10 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
             // 必须是裸 PCM（无 WAV 头），因为 onSynthesizeStart 已声明格式
             val silentAudio = createSilentPcmAudio(maxSampleRate, durationMs = 100)
             channel.trySend(ChannelPayload.Bytes(silentAudio))
+            if (context.cfg.isRestartOnMaxRetryEnabled()) {
+                logger.warn { "max retries exceeded, restarting app..." }
+                Runtime.getRuntime().exit(0)
+            }
             return
         }
 

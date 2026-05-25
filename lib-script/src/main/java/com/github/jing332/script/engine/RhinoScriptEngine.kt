@@ -27,6 +27,7 @@ open class RhinoScriptEngine(val runtime: RhinoScriptRuntime) :
     }
 
     override fun destroy() {
+        scope = null
     }
 
 

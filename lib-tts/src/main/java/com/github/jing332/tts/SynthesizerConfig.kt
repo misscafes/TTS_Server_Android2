@@ -20,4 +20,6 @@ data class SynthesizerConfig(
     var bgmEnabled: ValueProvider<Boolean> = { true },
 
     var provider: ValueProvider<Int> = { 0 },
+
+    var isRestartOnMaxRetryEnabled: ValueProvider<Boolean> = { false },
 )

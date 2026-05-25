@@ -152,4 +152,10 @@ object SysTtsConfig {
         set(value) {
             SystemTtsConfig.isAutoStartEnabled.value = value
         }
+
+    var isRestartOnMaxRetryEnabled: Boolean
+        get() = SystemTtsConfig.isRestartOnMaxRetryEnabled.value
+        set(value) {
+            SystemTtsConfig.isRestartOnMaxRetryEnabled.value = value
+        }
 }

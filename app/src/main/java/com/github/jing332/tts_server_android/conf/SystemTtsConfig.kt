@@ -203,4 +203,11 @@ object SystemTtsConfig {
         key = "isPixelKeepAliveEnabled",
         initialValue = false
     )
+
+    /** 超重试后自动重启应用 */
+    val isRestartOnMaxRetryEnabled = mutableDataSaverStateOf(
+        dataSaverInterface = dataSaverPref,
+        key = "isRestartOnMaxRetryEnabled",
+        initialValue = false
+    )
 }

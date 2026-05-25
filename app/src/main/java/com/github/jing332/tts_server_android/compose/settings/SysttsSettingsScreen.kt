@@ -83,6 +83,15 @@ internal fun ColumnScope.SysttsSettingsScreen(modifier: Modifier = Modifier) {
         label = maxRetryValue,
     )
 
+    var restartOnMaxRetry by remember { SystemTtsConfig.isRestartOnMaxRetryEnabled }
+    SwitchPreference(
+        title = { Text(stringResource(id = R.string.restart_on_max_retry)) },
+        subTitle = { Text(stringResource(id = R.string.restart_on_max_retry_summary)) },
+        checked = restartOnMaxRetry,
+        onCheckedChange = { restartOnMaxRetry = it },
+        icon = { Icon(Icons.Default.Repeat, null) }
+    )
+
     var standbyTriggeredIndex by remember { SystemTtsConfig.standbyTriggeredRetryIndex }
     val standbyTriggeredIndexValue = standbyTriggeredIndex.toString()
     SliderPreference(

@@ -3,7 +3,6 @@ package com.github.jing332.tts.speech.plugin.engine
 import androidx.annotation.Keep
 import com.github.jing332.script.exception.ScriptException
 import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.sync.Mutex
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.typedarrays.NativeArrayBuffer
 import org.mozilla.javascript.typedarrays.NativeUint8Array
@@ -98,8 +97,7 @@ class JsBridgeInputStream : InputStream() {
         fun error(data: Any?)
     }
 
-    suspend fun getCallback(mutex: Mutex): Callback {
-        mutex.lock()
+    suspend fun getCallback(): Callback {
         return object : Callback {
             private var length = 0
             private fun writeBytes(data: ByteArray) {
@@ -140,8 +138,6 @@ class JsBridgeInputStream : InputStream() {
                     this@JsBridgeInputStream.close()
                 } catch (e: IOException) {
                     if (errorCause == null) errorCause = e
-                } finally {
-                    if (mutex.isLocked) mutex.unlock()
                 }
             }
 

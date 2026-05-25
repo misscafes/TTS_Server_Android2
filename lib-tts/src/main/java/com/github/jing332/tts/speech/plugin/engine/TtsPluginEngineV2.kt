@@ -15,6 +15,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withTimeout
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -25,7 +26,8 @@ import org.mozilla.javascript.typedarrays.NativeArrayBuffer
 import org.mozilla.javascript.typedarrays.NativeTypedArrayView
 import java.io.ByteArrayInputStream
 import java.io.InputStream
-import java.util.concurrent.Executors
+import java.util.concurrent.LinkedBlockingQueue
+import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
 open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
@@ -36,7 +38,10 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
         const val FUNC_ON_LOAD = "onLoad"
         const val FUNC_ON_STOP = "onStop"
 
-        private val executor = Executors.newCachedThreadPool()
+        private val executor = ThreadPoolExecutor(
+            4, 12, 30L, TimeUnit.SECONDS,
+            LinkedBlockingQueue(64)
+        )
 
         /**
          * 在独立线程中执行 block，并通过 CompletableDeferred + withTimeout 确保：
@@ -61,6 +66,7 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
                 withTimeout(timeoutMs) { deferred.await() }
             } finally {
                 handle?.dispose()
+                future.cancel(true) // 确保超时或协程取消时中断后台线程
             }
         }
     }
@@ -97,6 +103,11 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
     fun onLoad(): Any? = runCatching { engine.invokeMethod(pluginJsObj, FUNC_ON_LOAD) }.getOrNull()
     fun onStop(): Any? = runCatching { engine.invokeMethod(pluginJsObj, FUNC_ON_STOP) }.getOrNull()
 
+    open fun destroy() {
+        onStop()
+        engine.destroy()
+    }
+
     private fun handleAudioResult(result: Any?, timeoutMs: Long): InputStream? {
         if (result == null || result is Undefined) return null
         return when (result) {
@@ -126,9 +137,9 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
 
     private val mMutex by lazy { Mutex() }
 
-    private suspend fun getAudioV2(request: Map<String, Any>, timeoutMs: Long): InputStream {
+    private suspend fun getAudioV2Internal(request: Map<String, Any>, timeoutMs: Long): InputStream {
         val ins = JsBridgeInputStream()
-        val callback = ins.getCallback(mMutex)
+        val callback = ins.getCallback()
         val result = runWithTimeout(timeoutMs) {
             engine.invokeMethod(pluginJsObj, FUNC_GET_AUDIO_V2, request, callback)
                 ?: throw NoSuchMethodException("getAudioV2() not found")
@@ -144,16 +155,19 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
         val r = (rate * 50f).toInt(); val v = (volume * 50f).toInt(); val p = (pitch * 50f).toInt()
         Log.d("TtsPluginEngineV2", "getAudio: rate=$rate->$r, volume=$volume->$v, pitch=$pitch->$p, timeout=$timeoutMs")
 
-        val result = try {
-            runWithTimeout(timeoutMs) {
-                engine.invokeMethod(pluginJsObj, FUNC_GET_AUDIO, text, locale, voice, r, v, p)
+        return mMutex.withLock {
+            val result = try {
+                runWithTimeout(timeoutMs) {
+                    engine.invokeMethod(pluginJsObj, FUNC_GET_AUDIO, text, locale, voice, r, v, p)
+                }
+            } catch (_: NoSuchMethodException) {
+                return@withLock getAudioV2Internal(
+                    mapOf("text" to text, "locale" to locale, "voice" to voice, "rate" to r, "volume" to v, "pitch" to p),
+                    timeoutMs
+                )
             }
-        } catch (_: NoSuchMethodException) {
-            return getAudioV2(
-                mapOf("text" to text, "locale" to locale, "voice" to voice, "rate" to r, "volume" to v, "pitch" to p),
-                timeoutMs
-            )
+            return@withLock handleAudioResult(result, timeoutMs)
+                ?: throw RuntimeException("Synthesis Result is Empty")
         }
-        return handleAudioResult(result, timeoutMs) ?: throw RuntimeException("Synthesis Result is Empty")
     }
 }
