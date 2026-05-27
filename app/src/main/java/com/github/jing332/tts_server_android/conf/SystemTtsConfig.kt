@@ -204,10 +204,10 @@ object SystemTtsConfig {
         initialValue = false
     )
 
-    /** 超重试后自动重启应用 */
-    val isRestartOnMaxRetryEnabled = mutableDataSaverStateOf(
+    /** 超重试后自动重启应用 (0=关闭, 1=直接重启, 2=生成空音频后重启) */
+    val restartOnMaxRetryMode = mutableDataSaverStateOf(
         dataSaverInterface = dataSaverPref,
-        key = "isRestartOnMaxRetryEnabled",
-        initialValue = false
+        key = "restartOnMaxRetryMode",
+        initialValue = 0
     )
 }

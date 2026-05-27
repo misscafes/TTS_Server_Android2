@@ -153,9 +153,9 @@ object SysTtsConfig {
             SystemTtsConfig.isAutoStartEnabled.value = value
         }
 
-    var isRestartOnMaxRetryEnabled: Boolean
-        get() = SystemTtsConfig.isRestartOnMaxRetryEnabled.value
+    var restartOnMaxRetryMode: Int
+        get() = SystemTtsConfig.restartOnMaxRetryMode.value
         set(value) {
-            SystemTtsConfig.isRestartOnMaxRetryEnabled.value = value
+            SystemTtsConfig.restartOnMaxRetryMode.value = value
         }
 }

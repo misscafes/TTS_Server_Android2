@@ -21,5 +21,5 @@ data class SynthesizerConfig(
 
     var provider: ValueProvider<Int> = { 0 },
 
-    var isRestartOnMaxRetryEnabled: ValueProvider<Boolean> = { false },
+    var restartOnMaxRetryMode: ValueProvider<Int> = { 0 },
 )

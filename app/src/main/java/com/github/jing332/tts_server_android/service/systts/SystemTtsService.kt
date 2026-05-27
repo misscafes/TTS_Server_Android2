@@ -172,7 +172,7 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
                     silenceSkipEnabled = { SysTtsConfig.isSkipSilentAudio },
                     bgmShuffleEnabled = { SysTtsConfig.isBgmShuffleEnabled },
                     bgmVolume = { SysTtsConfig.bgmVolume },
-                    isRestartOnMaxRetryEnabled = { SysTtsConfig.isRestartOnMaxRetryEnabled },
+                    restartOnMaxRetryMode = { SysTtsConfig.restartOnMaxRetryMode },
                     audioParams = {
                         AudioParams(
                             speed = SysTtsConfig.audioParamsSpeed,

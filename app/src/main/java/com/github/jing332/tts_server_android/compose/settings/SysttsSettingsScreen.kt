@@ -13,11 +13,14 @@ import androidx.compose.material.icons.filled.StackedLineChart
 import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.icons.filled.Waves
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastRoundToInt
@@ -83,13 +86,45 @@ internal fun ColumnScope.SysttsSettingsScreen(modifier: Modifier = Modifier) {
         label = maxRetryValue,
     )
 
-    var restartOnMaxRetry by remember { SystemTtsConfig.isRestartOnMaxRetryEnabled }
-    SwitchPreference(
+    var restartOnMaxRetryMode by remember { SystemTtsConfig.restartOnMaxRetryMode }
+    var restartMenuExpanded by remember { mutableStateOf(false) }
+    DropdownPreference(
+        expanded = restartMenuExpanded,
+        onExpandedChange = { restartMenuExpanded = it },
+        icon = { Icon(Icons.Default.Repeat, null) },
         title = { Text(stringResource(id = R.string.restart_on_max_retry)) },
-        subTitle = { Text(stringResource(id = R.string.restart_on_max_retry_summary)) },
-        checked = restartOnMaxRetry,
-        onCheckedChange = { restartOnMaxRetry = it },
-        icon = { Icon(Icons.Default.Repeat, null) }
+        subTitle = {
+            Text(
+                when (restartOnMaxRetryMode) {
+                    1 -> stringResource(id = R.string.restart_on_max_retry_direct)
+                    2 -> stringResource(id = R.string.restart_on_max_retry_after_empty)
+                    else -> stringResource(id = R.string.restart_on_max_retry_off)
+                }
+            )
+        },
+        actions = {
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.restart_on_max_retry_off)) },
+                onClick = {
+                    restartMenuExpanded = false
+                    restartOnMaxRetryMode = 0
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.restart_on_max_retry_direct)) },
+                onClick = {
+                    restartMenuExpanded = false
+                    restartOnMaxRetryMode = 1
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.restart_on_max_retry_after_empty)) },
+                onClick = {
+                    restartMenuExpanded = false
+                    restartOnMaxRetryMode = 2
+                }
+            )
+        }
     )
 
     var standbyTriggeredIndex by remember { SystemTtsConfig.standbyTriggeredRetryIndex }

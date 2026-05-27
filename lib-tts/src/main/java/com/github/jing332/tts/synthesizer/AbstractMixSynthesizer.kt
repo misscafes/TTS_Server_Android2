@@ -178,13 +178,21 @@ abstract class AbstractMixSynthesizer() : Synthesizer {
 
         if (retries > maxRetries) {
             event(NormalEvent.RequestCountEnded)
-            // 发送 0.1 秒的静音 PCM，让上游继续处理后续请求
-            // 必须是裸 PCM（无 WAV 头），因为 onSynthesizeStart 已声明格式
-            val silentAudio = createSilentPcmAudio(maxSampleRate, durationMs = 100)
-            channel.trySend(ChannelPayload.Bytes(silentAudio))
-            if (context.cfg.isRestartOnMaxRetryEnabled()) {
-                logger.warn { "max retries exceeded, restarting app..." }
-                Runtime.getRuntime().exit(0)
+            when (context.cfg.restartOnMaxRetryMode()) {
+                1 -> { // 不生成空音频直接重启
+                    logger.warn { "max retries exceeded, restarting app directly..." }
+                    Runtime.getRuntime().exit(0)
+                }
+                2 -> { // 生成空音频后重启
+                    val silentAudio = createSilentPcmAudio(maxSampleRate, durationMs = 100)
+                    channel.trySend(ChannelPayload.Bytes(silentAudio))
+                    logger.warn { "max retries exceeded, restarting app after empty audio..." }
+                    Runtime.getRuntime().exit(0)
+                }
+                else -> { // 0 = 关闭，生成空音频但不重启
+                    val silentAudio = createSilentPcmAudio(maxSampleRate, durationMs = 100)
+                    channel.trySend(ChannelPayload.Bytes(silentAudio))
+                }
             }
             return
         }
