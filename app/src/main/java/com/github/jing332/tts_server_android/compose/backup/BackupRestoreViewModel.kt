@@ -46,7 +46,7 @@ class BackupRestoreViewModel(application: Application) : AndroidViewModel(applic
     }
 
 
-    suspend fun restore(bytes: ByteArray): Boolean {
+    suspend fun restore(bytes: ByteArray): Boolean = withIO {
         var isRestart = false
         val outFileDir = File(restorePath)
         outFileDir.deleteRecursively() // 确保清理旧数据
@@ -71,10 +71,10 @@ class BackupRestoreViewModel(application: Application) : AndroidViewModel(applic
             }
         }
 
-        return isRestart
+        isRestart
     }
 
-    private fun importFromJsonFile(file: File) {
+    private suspend fun importFromJsonFile(file: File) = withIO {
         val jsonStr = file.readText()
         if (file.name.endsWith("list.json")) {
             val list: List<GroupWithSystemTts> = AppConst.jsonBuilder.decodeFromString(jsonStr)

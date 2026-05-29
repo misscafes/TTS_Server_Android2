@@ -82,7 +82,7 @@ val LocalImportFilePath = compositionLocalOf { mutableStateOf("") }
 fun ConfigImportBottomSheet(
     content: @Composable ColumnScope.() -> Unit = {},
     onDismissRequest: () -> Unit,
-    onImport: (json: String) -> Unit,
+    onImport: suspend (json: String) -> Unit,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -272,9 +272,10 @@ data class ConfigModel(
 fun SelectImportConfigDialog(
     onDismissRequest: () -> Unit,
     models: List<ConfigModel>,
-    onSelectedList: (list: List<Any>) -> Int,
+    onSelectedList: suspend (list: List<Any>) -> Int,
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val modelsState = remember { mutableStateListOf(*models.toTypedArray()) }
     AppDialog(
         onDismissRequest = onDismissRequest,
@@ -307,11 +308,17 @@ fun SelectImportConfigDialog(
         },
         buttons = {
             TextButton(onClick = {
-                val count =
-                    onSelectedList.invoke(modelsState.filter { it.isSelected }.map { it.data })
-                if (count > 0) {
-                    onDismissRequest()
-                    context.longToast(R.string.config_import_success_msg, count)
+                scope.launch {
+                    runCatching {
+                        val count =
+                            onSelectedList.invoke(modelsState.filter { it.isSelected }.map { it.data })
+                        if (count > 0) {
+                            onDismissRequest()
+                            context.longToast(R.string.config_import_success_msg, count)
+                        }
+                    }.onFailure {
+                        context.displayErrorDialog(it)
+                    }
                 }
             }) {
                 Text(stringResource(id = R.string.import_config))

@@ -11,6 +11,8 @@ import com.github.jing332.tts_server_android.compose.systts.SelectImportConfigDi
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.plugin.Plugin
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun PluginImportBottomSheet(onDismissRequest: () -> Unit) {
@@ -27,14 +29,18 @@ fun PluginImportBottomSheet(onDismissRequest: () -> Unit) {
                 )
             },
             onSelectedList = {
-                dbm.pluginDao.insert(*it.map { plugin -> plugin as Plugin }.toTypedArray())
-
+                withContext(Dispatchers.IO) {
+                    dbm.pluginDao.insert(*it.map { plugin -> plugin as Plugin }.toTypedArray())
+                }
                 it.size
             }
         )
     }
 
     ConfigImportBottomSheet(onDismissRequest = onDismissRequest, onImport = {
-        list = AppConst.jsonBuilder.decodeFromString<List<Plugin>>(it)
+        val decoded = withContext(Dispatchers.IO) {
+            AppConst.jsonBuilder.decodeFromString<List<Plugin>>(it)
+        }
+        list = decoded
     })
 }

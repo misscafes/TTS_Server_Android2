@@ -15,6 +15,8 @@ import com.github.jing332.database.entities.replace.ReplaceRule
 import com.github.jing332.database.entities.replace.ReplaceRuleGroup
 import com.github.jing332.common.utils.StringUtils
 import com.github.jing332.common.utils.toJsonListString
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
 @Composable
@@ -25,49 +27,54 @@ fun ReplaceRuleImportBottomSheet(onDismissRequest: () -> Unit) {
             onDismissRequest = { list = null },
             models = list!!,
             onSelectedList = { selectedList ->
-                selectedList.map { it as Pair<ReplaceRuleGroup, ReplaceRule> }.forEach {
-                    val group = it.first
-                    val rule = it.second
+                withContext(Dispatchers.IO) {
+                    selectedList.map { it as Pair<ReplaceRuleGroup, ReplaceRule> }.forEach {
+                        val group = it.first
+                        val rule = it.second
 
-                    dbm.replaceRuleDao.insert(rule)
-                    dbm.replaceRuleDao.insertGroup(group)
+                        dbm.replaceRuleDao.insert(rule)
+                        dbm.replaceRuleDao.insertGroup(group)
+                    }
+                    dbm.replaceRuleDao.updateAllOrder()
                 }
-                dbm.replaceRuleDao.updateAllOrder()
                 selectedList.size
             }
         )
     }
 
     ConfigImportBottomSheet(onDismissRequest = onDismissRequest, onImport = { json ->
-        val allList = mutableListOf<ConfigModel>()
-        if (json.contains("\"group\"")) {
-            AppConst.jsonBuilder.decodeFromString<List<GroupWithReplaceRule>>(json.toJsonListString())
-                .forEach { groupWithRule ->
-                    val group = groupWithRule.group
-                    groupWithRule.list.forEach {
-                        allList.add(
+        val allList = withContext(Dispatchers.IO) {
+            val result = mutableListOf<ConfigModel>()
+            if (json.contains("\"group\"")) {
+                AppConst.jsonBuilder.decodeFromString<List<GroupWithReplaceRule>>(json.toJsonListString())
+                    .forEach { groupWithRule ->
+                        val group = groupWithRule.group
+                        groupWithRule.list.forEach {
+                            result.add(
+                                ConfigModel(
+                                    isSelected = true,
+                                    title = it.name,
+                                    subtitle = group.name,
+                                    data = Pair(group, it)
+                                )
+                            )
+                        }
+                    }
+
+            } else {
+                val groupName = StringUtils.formattedDate()
+                val group = ReplaceRuleGroup(name = groupName)
+                AppConst.jsonBuilder.decodeFromString<List<ReplaceRule>>(json.toJsonListString())
+                    .forEach {
+                        result.add(
                             ConfigModel(
-                                isSelected = true,
-                                title = it.name,
-                                subtitle = group.name,
-                                data = Pair(group, it)
+                                isSelected = true, title = it.name, subtitle = groupName,
+                                data = Pair(group, it.apply { groupId = group.id })
                             )
                         )
                     }
-                }
-
-        } else {
-            val groupName = StringUtils.formattedDate()
-            val group = ReplaceRuleGroup(name = groupName)
-            AppConst.jsonBuilder.decodeFromString<List<ReplaceRule>>(json.toJsonListString())
-                .forEach {
-                    allList.add(
-                        ConfigModel(
-                            isSelected = true, title = it.name, subtitle = groupName,
-                            data = Pair(group, it.apply { groupId = group.id })
-                        )
-                    )
-                }
+            }
+            result
         }
 
         list = allList

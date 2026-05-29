@@ -11,6 +11,8 @@ import com.github.jing332.tts_server_android.compose.systts.SelectImportConfigDi
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.SpeechRule
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SpeechRuleImportBottomSheet(onDismissRequest: () -> Unit) {
@@ -21,14 +23,20 @@ fun SpeechRuleImportBottomSheet(onDismissRequest: () -> Unit) {
             onDismissRequest = { showSelectDialog = null },
             models = list.map { ConfigModel(true, it.name, "${it.author} - v${it.version}", it) },
             onSelectedList = {
-                 dbm.speechRuleDao.insert(*it.map { speechRule -> speechRule as SpeechRule }.toTypedArray())
-
+                withContext(Dispatchers.IO) {
+                    it.forEach { speechRule ->
+                        dbm.speechRuleDao.insert(speechRule as SpeechRule)
+                    }
+                }
                 it.size
             }
         )
     }
 
     ConfigImportBottomSheet(onDismissRequest = onDismissRequest, onImport = {
-        showSelectDialog = AppConst.jsonBuilder.decodeFromString<List<SpeechRule>>(it)
+        val list = withContext(Dispatchers.IO) {
+            AppConst.jsonBuilder.decodeFromString<List<SpeechRule>>(it)
+        }
+        showSelectDialog = list
     })
 }

@@ -2,6 +2,15 @@
 
 ## 版本变更记录
 
+### v1.26.0529-patch2（大规则导入闪退修复）
+
+#### 导入/恢复线程安全修复
+- `ConfigImportBottomSheet.kt`：`onImport` 改为 `suspend`，`SelectImportConfigDialog` 的 `onSelectedList` 改为 `suspend`，按钮点击增加 `scope.launch + runCatching` 异常捕获
+- `SpeechRuleImportBottomSheet.kt` / `PluginImportBottomSheet.kt` / `ReplaceRuleImportBottomSheet.kt` / `ListImportBottomSheet.kt`：JSON 解析与数据库插入全部移到 `Dispatchers.IO` 执行，避免主线程阻塞导致闪退
+- `BackupRestoreViewModel.kt`：`restore()` 与 `importFromJsonFile()` 统一包上 `withIO`，确保备份恢复全过程在后台线程执行
+
+---
+
 ### v1.26.0529（性能优化 + Bug修复 + 快捷音色）
 
 #### P0 严重阻塞问题修复

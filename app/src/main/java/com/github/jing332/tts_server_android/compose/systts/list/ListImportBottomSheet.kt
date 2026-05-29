@@ -16,6 +16,8 @@ import com.github.jing332.tts_server_android.compose.systts.ConfigImportBottomSh
 import com.github.jing332.tts_server_android.compose.systts.ConfigModel
 import com.github.jing332.tts_server_android.compose.systts.SelectImportConfigDialog
 import com.github.jing332.tts_server_android.constant.AppConst
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun ListImportBottomSheet(onDismissRequest: () -> Unit) {
@@ -25,17 +27,18 @@ fun ListImportBottomSheet(onDismissRequest: () -> Unit) {
             onDismissRequest = { selectDialog = null },
             models = selectDialog!!,
             onSelectedList = { list ->
-                list.map {
-                    @Suppress("UNCHECKED_CAST")
-                    it as Pair<SystemTtsGroup, SystemTtsV2>
-                }
-                    .forEach {
-                        val group = it.first
-                        val tts = it.second
-                        dbm.systemTtsV2.insertGroup(group)
-                        dbm.systemTtsV2.insert(tts)
+                withContext(Dispatchers.IO) {
+                    list.map {
+                        @Suppress("UNCHECKED_CAST")
+                        it as Pair<SystemTtsGroup, SystemTtsV2>
                     }
-
+                        .forEach {
+                            val group = it.first
+                            val tts = it.second
+                            dbm.systemTtsV2.insertGroup(group)
+                            dbm.systemTtsV2.insert(tts)
+                        }
+                }
                 list.size
             }
         )
@@ -43,17 +46,20 @@ fun ListImportBottomSheet(onDismissRequest: () -> Unit) {
 
     ConfigImportBottomSheet(onDismissRequest = onDismissRequest,
         onImport = { json ->
-            val allList = mutableListOf<ConfigModel>()
-            getImportList(json, false)?.forEach { groupWithTts ->
-                val group = groupWithTts.group
-                groupWithTts.list.forEach { sysTts ->
-                    allList.add(
-                        ConfigModel(
-                            true, sysTts.displayName.toString(),
-                            group.name, group to sysTts
+            val allList = withContext(Dispatchers.IO) {
+                val result = mutableListOf<ConfigModel>()
+                getImportList(json, false)?.forEach { groupWithTts ->
+                    val group = groupWithTts.group
+                    groupWithTts.list.forEach { sysTts ->
+                        result.add(
+                            ConfigModel(
+                                true, sysTts.displayName.toString(),
+                                group.name, group to sysTts
+                            )
                         )
-                    )
+                    }
                 }
+                result
             }
             selectDialog = allList
         }
