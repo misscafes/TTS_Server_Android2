@@ -62,7 +62,6 @@ class AndroidTtsEngine(
 
                     TextToSpeech.ERROR -> {
                         continuation.resume(false)
-                        release()
                     }
                 }
             }, engineName)
@@ -143,7 +142,7 @@ class AndroidTtsEngine(
             val ret = tts.synthesizeToFile(text, bundle, file, filename)
             if (ret != TextToSpeech.SUCCESS) {
                 delete()
-                return@coroutineScope Err(TtsEngineError.Engine())
+                return@coroutineScope Err(TtsEngineError.Engine)
             }
 
             // 使用 suspendCancellableCoroutine 等待合成完成
@@ -159,12 +158,7 @@ class AndroidTtsEngine(
                     override fun onError(utteranceId: String?) {
                         // 合成出错，删除文件并返回错误
                         delete()
-                        continuation.resume(Err(TtsEngineError.Engine()))
-                    }
-
-                    override fun onError(utteranceId: String?, errorCode: Int) {
-                        delete()
-                        continuation.resume(Err(TtsEngineError.Engine(errorCode)))
+                        continuation.resume(Err(TtsEngineError.Engine)) // 可以考虑更具体的错误
                     }
 
                 })
@@ -206,7 +200,7 @@ class AndroidTtsEngine(
             val bundle = setEnginePlayParams(tts, locale, voice, extraParams, params)
             val ret = tts.synthesizeToFile(text, bundle, file, filename)
             if (ret != TextToSpeech.SUCCESS)
-                return@coroutineScope Err(TtsEngineError.Engine())
+                return@coroutineScope Err(TtsEngineError.Engine)
 
             suspendCancellableCoroutine<Result<InputStream, TtsEngineError>> { continuation ->
                 val pos = PipedOutputStream()
@@ -228,19 +222,6 @@ class AndroidTtsEngine(
                             pos.close()
                         }
                         delete()
-                        if (continuation.isActive) {
-                            continuation.resume(Err(TtsEngineError.Engine()))
-                        }
-                    }
-
-                    override fun onError(utteranceId: String?, errorCode: Int) {
-                        runCatching {
-                            pos.close()
-                        }
-                        delete()
-                        if (continuation.isActive) {
-                            continuation.resume(Err(TtsEngineError.Engine(errorCode)))
-                        }
                     }
 
                     override fun onAudioAvailable(utteranceId: String, audio: ByteArray) {
@@ -285,7 +266,7 @@ class AndroidTtsEngine(
             val bundle = setEnginePlayParams(tts, locale, voice, extraParams, params)
             val ret = tts.synthesizeToFile(text, bundle, file, filename)
             if (ret != TextToSpeech.SUCCESS)
-                return@coroutineScope Err(TtsEngineError.Engine())
+                return@coroutineScope Err(TtsEngineError.Engine)
 
             suspendCancellableCoroutine<Result<Unit, TtsEngineError>> { continuation ->
                 tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
@@ -300,13 +281,12 @@ class AndroidTtsEngine(
                     }
 
                     override fun onError(utteranceId: String) {
-                        continuation.resume(Err(TtsEngineError.Engine()))
+                        continuation.resume(Err(TtsEngineError.Engine))
                         delete()
                     }
 
                     override fun onError(utteranceId: String?, errorCode: Int) {
-                        continuation.resume(Err(TtsEngineError.Engine(errorCode)))
-                        delete()
+                        super.onError(utteranceId, errorCode)
                     }
 
                     override fun onAudioAvailable(utteranceId: String, audio: ByteArray) {
@@ -336,7 +316,7 @@ class AndroidTtsEngine(
         val bundle = setEnginePlayParams(tts, locale, voice, extraParams, params)
         // The [utteranceId] Cannot be null, it will cause no [OnUtteranceProgressListener]
         val ret = tts.speak(text, queueMode, bundle, "")
-        if (ret != TextToSpeech.SUCCESS) return@withLock Err(TtsEngineError.Engine())
+        if (ret != TextToSpeech.SUCCESS) return@withLock Err(TtsEngineError.Engine)
 
         suspendCancellableCoroutine<Result<Unit, TtsEngineError>> { continuation ->
             tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
@@ -348,11 +328,7 @@ class AndroidTtsEngine(
                 }
 
                 override fun onError(utteranceId: String?) {
-                    continuation.resume(Err(TtsEngineError.Engine()))
-                }
-
-                override fun onError(utteranceId: String?, errorCode: Int) {
-                    continuation.resume(Err(TtsEngineError.Engine(errorCode)))
+                    continuation.resume(Err(TtsEngineError.Engine))
                 }
             })
 

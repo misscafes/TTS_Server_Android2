@@ -2,13 +2,12 @@
 
 ## 版本变更记录
 
-### v1.26.052920（TTS 引擎错误信息优化 + 合成失败修复 + 构建配置调整）
+### v1.26.052921（回滚 TTS 引擎修改 + 构建配置调整）
 
-#### TTS 引擎错误信息优化
-- `TtsEngineError.kt`：`object` 改为 `data object` / `data class`，`Engine` 新增 `errorCode: Int?` 字段，解决日志输出 `TtsEngineError$Engine@b4e4790` 等不可读问题
-- `AndroidTtsEngine.kt`：`UtteranceProgressListener` 全面补充 `onError(utteranceId, errorCode)` 回调（API 23+），避免新错误码路径下协程永远挂起
-- `AndroidTtsEngine.kt`：`init()` 初始化失败时自动调用 `release()`，防止残留无效 `TextToSpeech` 实例
-- `SysTtsForwarderService.kt`：`androidTts.init()` 增加返回值检查，初始化失败立即返回错误日志，不再继续调用 `getFile()`
+#### TTS 引擎修改回滚
+- `TtsEngineError.kt` / `AndroidTtsEngine.kt` / `SysTtsForwarderService.kt`：回滚到 `v1.26.052919` 状态（`0497a853`），排除 `AndroidTtsEngine` 修改导致的"无输出声音"问题
+- 保留 `ListManagerScreen.kt` 标题栏点击进入完整编辑界面的修改
+- 保留 `app/build.gradle` 版本号格式和 APK 文件名后缀优化
 
 #### 构建配置回退与 APK 命名优化
 - `app/build.gradle`：版本号格式从 `1.yy.MMdd.n` 恢复为 **`1.yy.MMddHH`**（精确到小时），移除 `buildCounter()` 和 `.build_counter` 文件逻辑
@@ -70,14 +69,14 @@
 
 ## 会话摘要
 
-### 2026-05-29 本次会话（v1.26.052920）
-- **当前版本**：v1.26.052920（基于 `hhh4` 分支）
+### 2026-05-29 本次会话（v1.26.052921）
+- **当前版本**：v1.26.052921（基于 `hhh4` 分支）
 - **已完成事项**：
   1. P0~P2 性能优化（ANR 修复、内存泄漏修复、资源复用优化）
   2. `SQLiteBlobTooBigException` 崩溃修复（CursorWindow 扩大 + 轻量查询 + 备份降级）
   3. 新增"快捷音色"功能（列表项设为快捷音色 + 标题栏点击进入）
   4. **大规则导入闪退修复**：所有导入路径（朗读规则/插件/替换规则/列表/备份恢复）的 JSON 解析与数据库插入全部移至 `Dispatchers.IO`，并增加 `runCatching` 异常捕获
-  5. **TTS 引擎错误信息优化**：`TtsEngineError` 改为 `data class` / `data object`，`Engine` 支持 `errorCode`；全面补充 `onError(errorCode)` 回调；`init()` 失败时释放实例；`SysTtsForwarderService` 增加初始化返回值检查
+  5. **TTS 引擎修改回滚**：`AndroidTtsEngine` / `TtsEngineError` / `SysTtsForwarderService` 回滚到 `v1.26.052919` 状态，排查"无输出声音"问题
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留（项目中存在大量 UI 层同步数据库调用，移除需专门的数据库异步化迭代）
   - `SystemTtsService` 的 `runBlocking` 已完全移除，合成逻辑全部在后台协程执行
