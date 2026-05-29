@@ -17,6 +17,9 @@
 - `app/build.gradle` 版本号格式 `1.yy.MMddHH` 和 APK 文件名后缀优化
 - `SysTtsForwarderService.kt` `WeakReference` 内存泄漏修复（此改动与声音无关，保留）
 
+#### 测试结果
+- ✅ **`TTS-Server-v1.26.052922-runblocking.apk` → 有声音**
+
 #### 构建配置回退与 APK 命名优化
 - `app/build.gradle`：版本号格式从 `1.yy.MMdd.n` 恢复为 **`1.yy.MMddHH`**（精确到小时），移除 `buildCounter()` 和 `.build_counter` 文件逻辑
 - `app/build.gradle`：APK 文件名现在自动带上 flavor / buildType 后缀（如 `-dev`、`-debug`），避免 `appRelease` 与 `devRelease` 输出同名 APK 导致混淆装成多个应用
@@ -81,7 +84,7 @@
   2. `SQLiteBlobTooBigException` 崩溃修复（CursorWindow 扩大 + 轻量查询 + 备份降级）
   3. 新增"快捷音色"功能（列表项设为快捷音色 + 标题栏点击进入完整编辑界面）
   4. **大规则导入闪退修复**：所有导入路径（朗读规则/插件/替换规则/列表/备份恢复）的 JSON 解析与数据库插入全部移至 `Dispatchers.IO`，并增加 `runCatching` 异常捕获
-  5. **P0 无声音问题最终修复**：经多轮对照 APK 测试，确认真正原因是 `SystemTtsService.onSynthesizeText()` 移除了 `runBlocking`（破坏了 Android TTS 同步契约），而非 `TtsEngineError` 改动。已恢复 `runBlocking { synthesizerJob?.join() }`。
+  5. **P0 无声音问题最终修复**：经多轮对照 APK 测试，确认真正原因是 `SystemTtsService.onSynthesizeText()` 移除了 `runBlocking`（破坏了 Android TTS 同步契约）。已恢复 `runBlocking { synthesizerJob?.join() }`。**已验证有声音**。
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留（项目中存在大量 UI 层同步数据库调用，移除需专门的数据库异步化迭代）
   - `SystemTtsService` 的 `runBlocking` **已恢复**（这是 Android `TextToSpeechService` 的同步契约要求，不能移除）
