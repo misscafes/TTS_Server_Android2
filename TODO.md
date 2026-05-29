@@ -2,6 +2,23 @@
 
 ## 版本变更记录
 
+### v1.26.052920（TTS 引擎错误信息优化 + 合成失败修复 + 构建配置调整）
+
+#### TTS 引擎错误信息优化
+- `TtsEngineError.kt`：`object` 改为 `data object` / `data class`，`Engine` 新增 `errorCode: Int?` 字段，解决日志输出 `TtsEngineError$Engine@b4e4790` 等不可读问题
+- `AndroidTtsEngine.kt`：`UtteranceProgressListener` 全面补充 `onError(utteranceId, errorCode)` 回调（API 23+），避免新错误码路径下协程永远挂起
+- `AndroidTtsEngine.kt`：`init()` 初始化失败时自动调用 `release()`，防止残留无效 `TextToSpeech` 实例
+- `SysTtsForwarderService.kt`：`androidTts.init()` 增加返回值检查，初始化失败立即返回错误日志，不再继续调用 `getFile()`
+
+#### 构建配置回退与 APK 命名优化
+- `app/build.gradle`：版本号格式从 `1.yy.MMdd.n` 恢复为 **`1.yy.MMddHH`**（精确到小时），移除 `buildCounter()` 和 `.build_counter` 文件逻辑
+- `app/build.gradle`：APK 文件名现在自动带上 flavor / buildType 后缀（如 `-dev`、`-debug`），避免 `appRelease` 与 `devRelease` 输出同名 APK 导致混淆装成多个应用
+
+#### 其他
+- `AndroidTtsEngine.kt`：`getStream()` 的 `onError` 增加 `continuation.isActive` 保护，防止极端情况下协程未恢复导致挂起
+
+---
+
 ### v1.26.0529-patch2（大规则导入闪退修复）
 
 #### 导入/恢复线程安全修复
@@ -47,19 +64,20 @@
 #### 新功能：快捷音色
 - `AppConfig.kt`：新增 `quickAccessTtsId` 持久化配置（默认 `-1L`）
 - `Item.kt`：新增 `onSetQuickAccess` / `isQuickAccess` 参数；DropdownMenu 添加"设为/取消快捷音色"选项；列表项显示 ⭐ 星星标记
-- `ListManagerScreen.kt`：标题栏"系统TTS"文字添加 `clickable`，点击后直接进入快捷音色的快捷编辑面板
+- `ListManagerScreen.kt`：标题栏"系统TTS"文字添加 `clickable`，点击后直接进入快捷音色的**完整编辑界面**（`TtsEditContainerScreen`）
 
 ---
 
 ## 会话摘要
 
-### 2026-05-29 本次会话（patch2）
-- **当前版本**：v1.26.0529-patch2（基于 `hhh4` 分支）
+### 2026-05-29 本次会话（v1.26.052920）
+- **当前版本**：v1.26.052920（基于 `hhh4` 分支）
 - **已完成事项**：
   1. P0~P2 性能优化（ANR 修复、内存泄漏修复、资源复用优化）
   2. `SQLiteBlobTooBigException` 崩溃修复（CursorWindow 扩大 + 轻量查询 + 备份降级）
   3. 新增"快捷音色"功能（列表项设为快捷音色 + 标题栏点击进入）
   4. **大规则导入闪退修复**：所有导入路径（朗读规则/插件/替换规则/列表/备份恢复）的 JSON 解析与数据库插入全部移至 `Dispatchers.IO`，并增加 `runCatching` 异常捕获
+  5. **TTS 引擎错误信息优化**：`TtsEngineError` 改为 `data class` / `data object`，`Engine` 支持 `errorCode`；全面补充 `onError(errorCode)` 回调；`init()` 失败时释放实例；`SysTtsForwarderService` 增加初始化返回值检查
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留（项目中存在大量 UI 层同步数据库调用，移除需专门的数据库异步化迭代）
   - `SystemTtsService` 的 `runBlocking` 已完全移除，合成逻辑全部在后台协程执行

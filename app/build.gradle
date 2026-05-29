@@ -14,27 +14,10 @@ static def buildTime() {
 }
 
 static def releaseTime() {
-    return new Date().format("yy.MMdd", TimeZone.getTimeZone("GMT+8"))
+    return new Date().format("yy.MMddHH", TimeZone.getTimeZone("GMT+8"))
 }
 
-static def buildCounter() {
-    def counterFile = new File(".build_counter")
-    def today = new Date().format("yyMMdd", TimeZone.getTimeZone("GMT+8"))
-    def count = 1
-    if (counterFile.exists()) {
-        def content = counterFile.text.trim()
-        if (!content.isEmpty()) {
-            def parts = content.split(",")
-            if (parts.length == 2 && parts[0] == today) {
-                count = Integer.parseInt(parts[1]) + 1
-            }
-        }
-    }
-    counterFile.text = "${today},${count}"
-    return count
-}
-
-def version = "1." + releaseTime() + "." + buildCounter()
+def version = "1." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list HEAD --count'.execute().text.trim())
 
 android {
@@ -150,10 +133,15 @@ android {
         variant.outputs.configureEach { output ->
             //noinspection GrDeprecatedAPIUsage
             def abiName = output.getFilter(com.android.build.OutputFile.ABI)
+            def flavor = variant.flavorName ?: ""
+            def buildType = variant.buildType.name
+            def suffix = ""
+            if (flavor && flavor != "app") suffix += "-${flavor}"
+            if (buildType && buildType != "release") suffix += "-${buildType}"
             if (abiName == null)
-                output.outputFileName = "TTS-Server-v${variant.versionName}.apk"
+                output.outputFileName = "TTS-Server-v${variant.versionName}${suffix}.apk"
             else
-                output.outputFileName = "TTS-Server-v${variant.versionName}_${abiName}.apk"
+                output.outputFileName = "TTS-Server-v${variant.versionName}${suffix}_${abiName}.apk"
         }
     }
 

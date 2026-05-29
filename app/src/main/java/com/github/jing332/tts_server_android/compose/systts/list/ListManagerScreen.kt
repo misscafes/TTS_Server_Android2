@@ -706,7 +706,7 @@ internal fun ListManagerScreen(
                                         context.toast("快捷音色已不存在，请重新设置")
                                         AppConfig.quickAccessTtsId.value = -1L
                                     } else {
-                                        showQuickEdit = qaItem
+                                        navigateToEdit(qaItem)
                                     }
                                 }
                             }

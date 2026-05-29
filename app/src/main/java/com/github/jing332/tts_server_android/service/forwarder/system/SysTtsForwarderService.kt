@@ -84,7 +84,12 @@ class SysTtsForwarderService(
                     withTimeoutOrNull(130000L) {
                         Log.d(TAG, "android tts init: ${params.engine}")
                         sendLog(com.github.jing332.common.LogLevel.DEBUG, "初始化引擎: ${params.engine}")
-                        androidTts.init(params.engine)
+                        val initOk = androidTts.init(params.engine)
+                        if (!initOk) {
+                            Log.e(TAG, "TTS引擎初始化失败: ${params.engine}")
+                            sendLog(com.github.jing332.common.LogLevel.ERROR, "TTS引擎初始化失败: ${params.engine}")
+                            return@withTimeoutOrNull null
+                        }
 
                         Log.d(TAG, "android tts get file...")
                         sendLog(com.github.jing332.common.LogLevel.DEBUG, "获取音频文件...")
