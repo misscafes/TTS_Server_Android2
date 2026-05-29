@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Headphones
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Output
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.RadioButton
@@ -84,6 +85,7 @@ internal fun Item(
     onAudition: () -> Unit,
     onExport: () -> Unit,
     onMoveToSubGroup: () -> Unit = {},
+    onSwitchTag: () -> Unit = {},
     onSetQuickAccess: () -> Unit = {},
     isQuickAccess: Boolean = false,
     isInSubGroup: Boolean = false,
@@ -298,6 +300,16 @@ internal fun Item(
                             },
                             leadingIcon = {
                                 Icon(Icons.Default.Output, stringResource(R.string.export_config))
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(id = R.string.switch_tag)) },
+                            onClick = {
+                                showOptions = false
+                                onSwitchTag()
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Default.Tag, null)
                             }
                         )
                         DropdownMenuItem(

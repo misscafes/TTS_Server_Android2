@@ -860,7 +860,15 @@ internal fun ListManagerScreen(
                                         desc = descriptor.desc,
                                         params = descriptor.bottom,
                                         onClick = { showQuickEdit = item },
-                                        onLongClick = { switchSpeechTarget(item) },
+                                        onLongClick = {
+                                            if (AppConfig.quickAccessTtsId.value == item.id) {
+                                                AppConfig.quickAccessTtsId.value = -1L
+                                                context.toast("已取消快捷音色")
+                                            } else {
+                                                AppConfig.quickAccessTtsId.value = item.id
+                                                context.toast("已设为快捷音色: ${item.displayName}")
+                                            }
+                                        },
                                         onCopy = {
                                             navigateToEdit(item.copy(id = System.currentTimeMillis()))
                                         },
@@ -880,6 +888,7 @@ internal fun ListManagerScreen(
                                         onMoveToSubGroup = {
                                             showMoveToSubGroup = item
                                         },
+                                        onSwitchTag = { switchSpeechTarget(item) },
                                         onSetQuickAccess = {
                                             if (AppConfig.quickAccessTtsId.value == item.id) {
                                                 AppConfig.quickAccessTtsId.value = -1L
@@ -1030,7 +1039,15 @@ internal fun ListManagerScreen(
                                                 desc = descriptor.desc,
                                                 params = descriptor.bottom,
                                                 onClick = { showQuickEdit = item },
-                                                onLongClick = { switchSpeechTarget(item) },
+                                                onLongClick = {
+                                                    if (AppConfig.quickAccessTtsId.value == item.id) {
+                                                        AppConfig.quickAccessTtsId.value = -1L
+                                                        context.toast("已取消快捷音色")
+                                                    } else {
+                                                        AppConfig.quickAccessTtsId.value = item.id
+                                                        context.toast("已设为快捷音色: ${item.displayName}")
+                                                    }
+                                                },
                                                 onCopy = {
                                                     navigateToEdit(item.copy(id = System.currentTimeMillis()))
                                                 },
@@ -1050,6 +1067,7 @@ internal fun ListManagerScreen(
                                                 onMoveToSubGroup = {
                                                     showMoveToSubGroup = item
                                                 },
+                                                onSwitchTag = { switchSpeechTarget(item) },
                                                 onSetQuickAccess = {
                                                     if (AppConfig.quickAccessTtsId.value == item.id) {
                                                         AppConfig.quickAccessTtsId.value = -1L

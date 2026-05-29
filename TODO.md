@@ -9,6 +9,12 @@
 - `SpeechRuleImportBottomSheet.kt` / `PluginImportBottomSheet.kt` / `ReplaceRuleImportBottomSheet.kt` / `ListImportBottomSheet.kt`：JSON 解析与数据库插入全部移到 `Dispatchers.IO` 执行，避免主线程阻塞导致闪退
 - `BackupRestoreViewModel.kt`：`restore()` 与 `importFromJsonFile()` 统一包上 `withIO`，确保备份恢复全过程在后台线程执行
 
+#### 快捷音色交互优化
+- `ListManagerScreen.kt`：系统 TTS 列表项**长按**改为设置/取消快捷音色（原来长按是切换标签）
+- `ListManagerScreen.kt`：系统 TTS 列表项**轻按**保持进入快捷编辑面板（已有行为，未改动）
+- `Item.kt`：DropdownMenu 中新增「切换标签」选项，保留 `switchSpeechTarget` 功能入口
+- `Item.kt`：新增 `onSwitchTag` 回调参数
+
 ---
 
 ### v1.26.0529（性能优化 + Bug修复 + 快捷音色）
