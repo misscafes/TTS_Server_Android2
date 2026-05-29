@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
+import android.os.Build
 import android.os.Process 
 import com.github.jing332.compose.widgets.AsyncCircleImageSettings
 import com.github.jing332.database.entities.systts.SystemTtsV2
@@ -16,8 +18,9 @@ import coil3.ImageLoader
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
 import coil3.request.crossfade
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 // 👇 新增：NetConfig 配置所需的包
 import com.drake.net.NetConfig
@@ -45,6 +48,12 @@ class App : Application() {
     @OptIn(DelicateCoroutinesApi::class, DelicateCoilApi::class)
     override fun onCreate() {
         super.onCreate()
+
+        // 🛠️ 扩大 CursorWindow 至 10MB，解决 speech_rules.code 等大字段导致的
+        // SQLiteBlobTooBigException: Row too big to fit into CursorWindow
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            SQLiteDatabase.setCursorWindowSize(10 * 1024 * 1024)
+        }
         
         // 🛠️ 拔掉引线：暂时关闭 CrashHandler，它会触发崩溃的日志初始化
         // CrashHandler(this) 
@@ -67,7 +76,8 @@ class App : Application() {
                 .build()
         )
 
-        GlobalScope.launch {
+        val appScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        appScope.launch {
             HanlpManager.initDir(
                 context.getExternalFilesDir("hanlp")?.absolutePath
                     ?: "/data/data/$packageName/files/hanlp"

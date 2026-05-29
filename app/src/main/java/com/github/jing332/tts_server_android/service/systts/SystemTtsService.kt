@@ -70,7 +70,6 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 import splitties.init.appCtx
 import splitties.systemservices.notificationManager
@@ -119,6 +118,36 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
 
     private lateinit var mScope: CoroutineScope
 
+    // 内存缓存：避免系统 TTS 回调在主线程频繁查询数据库
+    private var cachedVoices: MutableList<Voice> = mutableListOf()
+    private var cachedAllTts: List<SystemTtsV2> = emptyList()
+
+    private fun refreshCache() {
+        cachedVoices = mutableListOf(
+            Voice(DEFAULT_VOICE_NAME, Locale.getDefault(), 0, 0, true, emptySet())
+        )
+        dbm.systemTtsV2.getAllGroupWithTts().forEach { groups ->
+            groups.list.forEach { item ->
+                if (item.config is TtsConfigurationDTO) {
+                    val tts = (item.config as TtsConfigurationDTO).source
+                    cachedVoices.add(
+                        Voice(
+                            name = "${item.displayName}_${item.id}",
+                            locale = Locale.forLanguageTag(tts.locale),
+                            quality = 0,
+                            latency = 0,
+                            requiresNetworkConnection = true,
+                            features = mutableSetOf<String>().apply {
+                                add(item.order.toString())
+                                add(item.id.toString())
+                            }
+                        )
+                    )
+                }
+            }
+        }
+        cachedAllTts = dbm.systemTtsV2.all
+    }
 
     // WIFI 锁
     private val mWifiLock by lazy {
@@ -161,6 +190,8 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
     fun initManager() {
         logger.debug { "initialize or load configruation" }
         mScope.launch {
+            refreshCache()
+
             mTtsManager = mTtsManager ?: MixSynthesizer.global.apply {
                 context.androidContext = appCtx
                 context.event = this@SystemTtsService
@@ -244,42 +275,14 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
 
 
     override fun onGetVoices(): MutableList<Voice> {
-        val list =
-            mutableListOf(Voice(DEFAULT_VOICE_NAME, Locale.getDefault(), 0, 0, true, emptySet()))
-
-        dbm.systemTtsV2.getAllGroupWithTts().forEach { groups ->
-            groups.list.forEach { it ->
-                if (it.config is TtsConfigurationDTO) {
-                    val tts = (it.config as TtsConfigurationDTO).source
-
-                    list.add(
-                        Voice(
-                            /* name = */ "${it.displayName}_${it.id}",
-                            /* locale = */ Locale.forLanguageTag(tts.locale),
-                            /* quality = */ 0,
-                            /* latency = */ 0,
-                            /* requiresNetworkConnection = */true,
-                            /* features = */mutableSetOf<String>().apply {
-                                add(it.order.toString())
-                                add(it.id.toString())
-                            }
-                        )
-                    )
-                }
-
-            }
-        }
-
-        return list
+        return cachedVoices
     }
 
     override fun onIsValidVoiceName(voiceName: String?): Int {
         val isDefault = voiceName == DEFAULT_VOICE_NAME
         if (isDefault) return TextToSpeech.SUCCESS
 
-        val index =
-            dbm.systemTtsV2.all.indexOfFirst { "${it.displayName}_${it.id}" == voiceName }
-
+        val index = cachedAllTts.indexOfFirst { "${it.displayName}_${it.id}" == voiceName }
         return if (index == -1) TextToSpeech.ERROR else TextToSpeech.SUCCESS
     }
 
@@ -339,67 +342,63 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
         val enabledBgm = request.params.getBoolean(PARAM_BGM_ENABLED, true)
         mTtsManager?.context?.cfg?.bgmEnabled = { enabledBgm }
 
-        runBlocking {
-            var cfgId: Long? = getConfigIdFromVoiceName(request.voiceName ?: "").onFailure {
+        val exceptionHandler = CoroutineExceptionHandler { _, e ->
+            Log.e(TAG, "Synthesize Crash Caught: ${e.message}", e)
+            callback.error(TextToSpeech.ERROR_SYNTHESIS)
+            callback.done()
+        }
+
+        synthesizerJob = mScope.launch(exceptionHandler) {
+            val cfgId = getConfigIdFromVoiceName(request.voiceName ?: "").onFailure {
                 longToast(R.string.voice_name_bad_format)
                 callback.error(TextToSpeech.ERROR_INVALID_REQUEST)
                 callback.done()
-                return@runBlocking
+                return@launch
             }.value
 
-            val exceptionHandler = CoroutineExceptionHandler { _, e ->
-                Log.e(TAG, "Synthesize Crash Caught: ${e.message}", e)
-                callback.error(TextToSpeech.ERROR_SYNTHESIS)
-                callback.done()
-            }
-
-            synthesizerJob = mScope.launch(exceptionHandler) {
-                var isAudioOutputted = false
-                try {
-                    // 🛠️ 增加 125 秒总保护
-                    withTimeoutOrNull(125000L) {
-                        mTtsManager?.synthesize(
-                            params = SystemParams(
-                            text = request.charSequenceText.toString(),
-                            requestTimeout = SysTtsConfig.requestTimeout.toLong()
-                        ),
-                            forceConfigId = cfgId,
-                            callback = object :
-                                com.github.jing332.tts.synthesizer.SynthesisCallback {
-                                override fun onSynthesizeStart(sampleRate: Int) {
-                                    callback.start(
-                                        /* sampleRateInHz = */ sampleRate,
-                                        /* audioFormat = */ AudioFormat.ENCODING_PCM_16BIT,
-                                        /* channelCount = */ 1
-                                    )
-                                }
-
-                                override fun onSynthesizeAvailable(audio: ByteArray) {
-                                    isAudioOutputted = true
-                                    writeToCallBack(callback, audio)
-                                }
-
+            var isAudioOutputted = false
+            try {
+                // 🛠️ 增加 125 秒总保护
+                withTimeoutOrNull(125000L) {
+                    mTtsManager?.synthesize(
+                        params = SystemParams(
+                        text = request.charSequenceText.toString(),
+                        requestTimeout = SysTtsConfig.requestTimeout.toLong()
+                    ),
+                        forceConfigId = cfgId,
+                        callback = object :
+                            com.github.jing332.tts.synthesizer.SynthesisCallback {
+                            override fun onSynthesizeStart(sampleRate: Int) {
+                                callback.start(
+                                    /* sampleRateInHz = */ sampleRate,
+                                    /* audioFormat = */ AudioFormat.ENCODING_PCM_16BIT,
+                                    /* channelCount = */ 1
+                                )
                             }
-                        )
-                    }?.onSuccess {
-                        // 如果插件“跳过”了重试且没给音频，向系统报错
-                        if (!isAudioOutputted) {
-                            callback.error(TextToSpeech.ERROR_NETWORK_TIMEOUT)
-                        }
-                    }?.onFailure {
-                        handleSynthesisError(it, callback)
-                    }
-                } catch (e: Exception) {
-                    Log.e(TAG, "Synthesize Interrupted: ${e.message}")
-                    callback.error(TextToSpeech.ERROR_SYNTHESIS)
-                } finally {
-                    // 🛠️ 结案铁律：确保必须调用 done()，防止队列挂起
-                    callback.done()
-                    if (lastTtsCallback == callback) lastTtsCallback = null
-                }
-            }
 
-            synthesizerJob?.join()
+                            override fun onSynthesizeAvailable(audio: ByteArray) {
+                                isAudioOutputted = true
+                                writeToCallBack(callback, audio)
+                            }
+
+                        }
+                    )
+                }?.onSuccess {
+                    // 如果插件“跳过”了重试且没给音频，向系统报错
+                    if (!isAudioOutputted) {
+                        callback.error(TextToSpeech.ERROR_NETWORK_TIMEOUT)
+                    }
+                }?.onFailure {
+                    handleSynthesisError(it, callback)
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Synthesize Interrupted: ${e.message}")
+                callback.error(TextToSpeech.ERROR_SYNTHESIS)
+            } finally {
+                // 🛠️ 结案铁律：确保必须调用 done()，防止队列挂起
+                callback.done()
+                if (lastTtsCallback == callback) lastTtsCallback = null
+            }
         }
 
 
@@ -584,7 +583,10 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
     inner class LocalReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
-                ACTION_UPDATE_CONFIG -> initManager()
+                ACTION_UPDATE_CONFIG -> {
+                    mScope.launch { refreshCache() }
+                    initManager()
+                }
                 ACTION_UPDATE_REPLACER -> loadReplacer()
             }
         }

@@ -63,7 +63,6 @@ import com.github.jing332.compose.rememberLazyListReorderCache
 import com.github.jing332.compose.widgets.ShadowedDraggableItem
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.plugin.Plugin
-import com.github.jing332.database.entities.plugin.PluginListItem
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.AppDefaultProperties
 import com.github.jing332.tts_server_android.compose.LocalNavController
@@ -100,11 +99,11 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
         }
     }
 
-    var showDeleteDialog by remember { mutableStateOf<PluginListItem?>(null) }
+    var showDeleteDialog by remember { mutableStateOf<Plugin?>(null) }
     if (showDeleteDialog != null) {
         val plugin = showDeleteDialog!!
         ConfigDeleteDialog(onDismissRequest = { showDeleteDialog = null }, content = plugin.name) {
-            dbm.pluginDao.deleteById(plugin.id)
+            dbm.pluginDao.delete(plugin)
             showDeleteDialog = null
         }
     }
@@ -144,8 +143,7 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
         )
     }
 
-    fun onEdit(pluginId: Long? = null) {
-        val plugin = pluginId?.let { dbm.pluginDao.getById(it) } ?: Plugin()
+    fun onEdit(plugin: Plugin = Plugin()) {
         sharedVM.put(NavRoutes.PluginEdit.KEY_DATA, plugin)
         navController.navigate(NavRoutes.PluginEdit.id)
     }
@@ -223,7 +221,7 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
                 }
             )
         }) { paddingValues ->
-        val flowAll = remember { dbm.pluginDao.flowAllListItems().conflate() }
+        val flowAll = remember { dbm.pluginDao.flowAll().conflate() }
         val list by flowAll.collectAsStateWithLifecycle(emptyList())
 
         val cache = rememberLazyListReorderCache(list)
@@ -233,7 +231,7 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
         }, onDragEnd = { from, to ->
             cache.list.forEachIndexed { index, plugin ->
                 if (index != plugin.order)
-                    dbm.pluginDao.updateOrder(plugin.id, index)
+                    dbm.pluginDao.update(plugin.copy(order = index))
             }
         })
 
@@ -256,32 +254,24 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
                         modifier = Modifier
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                             .detectReorderAfterLongPress(reorderState),
-                        hasDefVars = item.hasDefVars,
-                        needSetVars = item.needSetVars,
+                        hasDefVars = item.defVars.isNotEmpty(),
+                        needSetVars = item.defVars.isNotEmpty() && item.userVars.isEmpty(),
                         name = item.name,
                         desc = desc,
                         iconUrl = item.iconUrl,
                         isEnabled = item.isEnabled,
                         onEnabledChange = {
-                            dbm.pluginDao.updateEnabled(item.id, it)
+                            dbm.pluginDao.update(item.copy(isEnabled = it))
                         },
-                        onEdit = { onEdit(item.id) },
-                        onSetVars = {
-                            dbm.pluginDao.getById(item.id)?.let { showVarsSettings = it }
-                        },
-                        onAudioParams = {
-                            dbm.pluginDao.getById(item.id)?.let { showAudioParamsDialog = it }
-                        },
+                        onEdit = { onEdit(item) },
+                        onSetVars = { showVarsSettings = item },
+                        onAudioParams = { showAudioParamsDialog = item },
                         onDelete = { showDeleteDialog = item },
                         onClear = {
-                            PluginManager(item.pluginId).clearCache()
+                            PluginManager(item).clearCache()
                             context.longToast(R.string.clear_cache_ok)
                         },
-                        onExport = {
-                            dbm.pluginDao.getById(item.id)?.let { fullItem ->
-                                showExportConfig = listOf(fullItem)
-                            }
-                        }
+                        onExport = { showExportConfig = listOf(item) }
                     )
                 }
             }

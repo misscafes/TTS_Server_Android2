@@ -54,7 +54,6 @@ import com.github.jing332.compose.widgets.LazyListIndexStateSaver
 import com.github.jing332.compose.widgets.ShadowedDraggableItem
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.SpeechRule
-import com.github.jing332.database.entities.SpeechRuleListItem
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.compose.LocalNavController
 import com.github.jing332.tts_server_android.compose.SharedViewModel
@@ -82,13 +81,13 @@ fun SpeechRuleManagerScreen(sharedVM: SharedViewModel, finish: () -> Unit) {
             list = showExportSheet!!,
         )
 
-    var showDeleteDialog by remember { mutableStateOf<SpeechRuleListItem?>(null) }
+    var showDeleteDialog by remember { mutableStateOf<SpeechRule?>(null) }
     if (showDeleteDialog != null)
         ConfigDeleteDialog(
             onDismissRequest = { showDeleteDialog = null },
             content = showDeleteDialog!!.name
         ) {
-            dbm.speechRuleDao.deleteById(showDeleteDialog!!.id)
+            dbm.speechRuleDao.delete(showDeleteDialog!!)
             showDeleteDialog = null
         }
 
@@ -170,7 +169,7 @@ fun SpeechRuleManagerScreen(sharedVM: SharedViewModel, finish: () -> Unit) {
 //            }
 //        }
 
-        val flowAll = remember { dbm.speechRuleDao.flowAllListItems().conflate() }
+        val flowAll = remember { dbm.speechRuleDao.flowAllLite().conflate() }
         val list by flowAll.collectAsState(initial = emptyList())
 
         val listState = remember { LazyListState() }
@@ -215,16 +214,11 @@ fun SpeechRuleManagerScreen(sharedVM: SharedViewModel, finish: () -> Unit) {
 
                         },
                         onEdit = {
-                            dbm.speechRuleDao.getById(item.id)?.let { fullItem ->
-                                sharedVM.put(NavRoutes.SpeechRuleEdit.KEY_DATA, fullItem)
-                                navController.navigate(NavRoutes.SpeechRuleEdit.id)
-                            }
+                            val fullItem = dbm.speechRuleDao.getById(item.id)
+                            sharedVM.put(NavRoutes.SpeechRuleEdit.KEY_DATA, fullItem)
+                            navController.navigate(NavRoutes.SpeechRuleEdit.id)
                         },
-                        onExport = {
-                            dbm.speechRuleDao.getById(item.id)?.let { fullItem ->
-                                showExportSheet = listOf(fullItem)
-                            }
-                        },
+                        onExport = { showExportSheet = listOf(item) },
                         onDelete = { showDeleteDialog = item }
                     )
                 }

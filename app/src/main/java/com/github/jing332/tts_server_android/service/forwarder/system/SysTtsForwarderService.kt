@@ -23,6 +23,7 @@ import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import java.io.File
+import java.lang.ref.WeakReference
 
 class SysTtsForwarderService(
     override val port: Int = SystemTtsForwarderConfig.port.value,
@@ -47,7 +48,8 @@ class SysTtsForwarderService(
         val isRunning: Boolean
             get() = instance?.isRunning == true
 
-        var instance: SysTtsForwarderService? = null
+        private var instanceRef: WeakReference<SysTtsForwarderService>? = null
+        val instance: SysTtsForwarderService? get() = instanceRef?.get()
     }
 
     private var mServer: SystemTtsForwardServer? = null
@@ -57,7 +59,12 @@ class SysTtsForwarderService(
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
+        instanceRef = WeakReference(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        instanceRef = null
     }
 
     override fun initServer() {

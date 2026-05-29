@@ -44,7 +44,7 @@ class KeepAliveService : Service() {
         const val ACTION_STOP_KEEP_ALIVE = "ACTION_STOP_KEEP_ALIVE"
 
         // 保活检查间隔（毫秒）
-        const val CHECK_INTERVAL_MS = 5000L
+        const val CHECK_INTERVAL_MS = 30000L
         // 唤醒锁持有时间（毫秒）
         const val WAKE_LOCK_TIMEOUT_MS = 10 * 60 * 1000L // 10分钟
 

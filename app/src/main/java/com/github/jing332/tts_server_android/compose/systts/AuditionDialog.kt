@@ -38,6 +38,7 @@ import com.github.jing332.tts.synthesizer.TtsConfiguration
 import com.github.jing332.tts.synthesizer.TtsConfiguration.Companion.toVO
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.conf.AppConfig
+import com.github.jing332.tts_server_android.conf.SysTtsConfig
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -81,7 +82,8 @@ fun AuditionDialog(
                             text = text,
                             speed = config.audioParams.speed,
                             volume = config.audioParams.volume,
-                            pitch = config.audioParams.pitch
+                            pitch = config.audioParams.pitch,
+                            requestTimeout = SysTtsConfig.requestTimeout.toLong()
                         ),
                         config.source
                     )
@@ -91,7 +93,8 @@ fun AuditionDialog(
                             text = text,
                             speed = config.audioParams.speed,
                             volume = config.audioParams.volume,
-                            pitch = config.audioParams.pitch
+                            pitch = config.audioParams.pitch,
+                            requestTimeout = SysTtsConfig.requestTimeout.toLong()
                         ),
                         config.source
                     )

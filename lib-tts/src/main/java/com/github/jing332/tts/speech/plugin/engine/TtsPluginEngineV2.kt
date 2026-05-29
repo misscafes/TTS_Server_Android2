@@ -21,6 +21,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import org.mozilla.javascript.ScriptableObject
+import java.util.concurrent.atomic.AtomicInteger
 import org.mozilla.javascript.Undefined
 import org.mozilla.javascript.typedarrays.NativeArrayBuffer
 import org.mozilla.javascript.typedarrays.NativeTypedArrayView
@@ -37,7 +38,12 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
         const val FUNC_ON_LOAD = "onLoad"
         const val FUNC_ON_STOP = "onStop"
 
-        private val executor = Executors.newCachedThreadPool()
+        private val threadNum = AtomicInteger(0)
+        private val executor = Executors.newCachedThreadPool { r ->
+            Thread(r, "TtsPluginEngine-\${threadNum.getAndIncrement()}").apply { isDaemon = true }
+        }
+
+        private val sharedOkHttpClient = OkHttpClient.Builder().build()
 
         /**
          * 在独立线程中执行 block，并通过 CompletableDeferred + withTimeout 确保：
@@ -118,7 +124,7 @@ open class TtsPluginEngineV2(val context: Context, var plugin: Plugin) {
             is CharSequence -> {
                 val str = result.toString()
                 if (str.startsWith("http")) {
-                    val client = OkHttpClient.Builder()
+                    val client = sharedOkHttpClient.newBuilder()
                         .connectTimeout(timeoutMs, TimeUnit.MILLISECONDS)
                         .readTimeout(timeoutMs, TimeUnit.MILLISECONDS)
                         .build()

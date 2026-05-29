@@ -5,7 +5,6 @@ import android.os.Looper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 private val mainLooper: Looper
     get() = Looper.getMainLooper()
@@ -26,11 +25,7 @@ fun runOnUI(function: () -> Unit) {
 }
 
 fun CoroutineScope.runOnIO(function: suspend () -> Unit) {
-    if (isMainThread) {
-        launch(IO) {
-            function()
-        }
-    } else {
-        runBlocking { function() }
+    launch(IO) {
+        function()
     }
 }

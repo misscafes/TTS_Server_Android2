@@ -1,0 +1,46 @@
+# 待办事项（TODO）
+
+## 版本变更记录
+
+### v1.26.0529（性能优化 + Bug修复 + 快捷音色）
+
+#### P0 严重阻塞问题修复
+- `SystemTtsService.kt`：移除 `runBlocking`，`onSynthesizeText` 改为纯后台协程启动，解决最长 125 秒主线程阻塞导致的 ANR
+- `HandlerUtils.kt`：`runOnIO` 中 `runBlocking` 改为 `launch(IO)`，避免后台线程被无意义阻塞
+- `SystemTtsService.kt`：新增 `cachedVoices` + `cachedAllTts` 内存缓存，`onGetVoices()` / `onIsValidVoiceName()` 不再频繁查询数据库
+
+#### P1 内存泄漏与生命周期修复
+- `SysTtsForwarderService.kt`：`instance` 改为 `WeakReference`，`onDestroy` 中置空，减少内存泄漏
+- `App.kt`：`GlobalScope` 改为 `CoroutineScope(SupervisorJob() + Dispatchers.IO)`，协程生命周期可控
+- `KeepAliveService.kt`：保活检查间隔 `5000ms` → `30000ms`，减少主线程唤醒和电量消耗
+
+#### P2 频繁创建对象 / 资源未复用修复
+- `TtsPluginEngineV2.kt`：新增 `sharedOkHttpClient` 单例，`newBuilder()` 复用连接池，避免每次请求新建 `OkHttpClient`
+- `TtsPluginEngineV2.kt`：`newCachedThreadPool()` 改为带命名 + `daemon` 的线程工厂，防止高并发时无限创建线程
+
+#### SQLiteBlobTooBigException 修复
+- `App.kt`：`SQLiteDatabase.setCursorWindowSize(10 * 1024 * 1024)`（Android 11+），全局扩大 CursorWindow
+- `SpeechRuleDao.kt`：新增 `allLite` / `allEnabledLite` / `flowAllLite()` 轻量查询（不查 `code` 字段），避免大字段导致 CursorWindow 溢出
+- `SpeechRuleDao.kt`：新增 `updateEnabled(id, isEnabled)` / `updateOrder(id, order)` 字段级更新，防止用轻量实体覆盖 `code`
+- `SpeechRuleDao.kt`：新增 `getById(id: Long)`，编辑时按需加载完整数据
+- `SpeechRuleManagerScreen.kt`：列表改用 `flowAllLite()` + 字段级更新，编辑时通过 `getById` 获取完整数据
+- `BackupRestoreViewModel.kt`：备份 `speechRuleDao.all` 添加 try-catch，若触发 `SQLiteBlobTooBigException` 自动降级为逐条 `getById` 查询
+
+#### 新功能：快捷音色
+- `AppConfig.kt`：新增 `quickAccessTtsId` 持久化配置（默认 `-1L`）
+- `Item.kt`：新增 `onSetQuickAccess` / `isQuickAccess` 参数；DropdownMenu 添加"设为/取消快捷音色"选项；列表项显示 ⭐ 星星标记
+- `ListManagerScreen.kt`：标题栏"系统TTS"文字添加 `clickable`，点击后直接进入快捷音色的快捷编辑面板
+
+---
+
+## 会话摘要
+
+### 2026-05-29 本次会话
+- **当前版本**：v1.26.0529（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. P0~P2 性能优化（ANR 修复、内存泄漏修复、资源复用优化）
+  2. `SQLiteBlobTooBigException` 崩溃修复（CursorWindow 扩大 + 轻量查询 + 备份降级）
+  3. 新增"快捷音色"功能（列表项设为快捷音色 + 标题栏点击进入）
+- **注意事项**：
+  - `allowMainThreadQueries` 暂时保留（项目中存在大量 UI 层同步数据库调用，移除需专门的数据库异步化迭代）
+  - `SystemTtsService` 的 `runBlocking` 已完全移除，合成逻辑全部在后台协程执行

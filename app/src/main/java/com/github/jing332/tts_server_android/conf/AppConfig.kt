@@ -72,4 +72,7 @@ object AppConfig {
     val webDavPass by lazy { mutableDataSaverStateOf(dataSaverPref, "webDavPass", "") }
     val webDavPath by lazy { mutableDataSaverStateOf(dataSaverPref, "webDavPath", "/TTS备份") }
     val expandedSubGroups by lazy { mutableDataSaverStateOf(dataSaverPref, "expandedSubGroups", emptySet<String>()) }
+
+    /** 快捷音色：存储默认快捷音色的 ID，-1L 表示未设置 */
+    val quickAccessTtsId by lazy { mutableDataSaverStateOf(dataSaverPref, "quickAccessTtsId", -1L) }
 }

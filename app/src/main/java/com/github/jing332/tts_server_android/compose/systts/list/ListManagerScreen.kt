@@ -3,6 +3,7 @@ package com.github.jing332.tts_server_android.compose.systts.list
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -693,7 +694,23 @@ internal fun ListManagerScreen(
                             )
                         }
                     } else {
-                        Text(stringResource(id = R.string.system_tts))
+                        Text(
+                            text = stringResource(id = R.string.system_tts),
+                            modifier = Modifier.clickable {
+                                val qaId = AppConfig.quickAccessTtsId.value
+                                if (qaId == -1L) {
+                                    context.toast("未设置快捷音色，请在列表中点击 ⋮ 设为快捷音色")
+                                } else {
+                                    val qaItem = dbm.systemTtsV2.all.find { it.id == qaId }
+                                    if (qaItem == null) {
+                                        context.toast("快捷音色已不存在，请重新设置")
+                                        AppConfig.quickAccessTtsId.value = -1L
+                                    } else {
+                                        showQuickEdit = qaItem
+                                    }
+                                }
+                            }
+                        )
                     }
                 }, actions = {
                     if (isSearchMode) {
@@ -719,7 +736,7 @@ internal fun ListManagerScreen(
                             MenuMoreOptions(
                                 expanded = showOptions,
                                 onDismissRequest = { showOptions = false },
-                                onExportAll = { showGroupExportSheet = models },
+                                onExportAll = { showGroupExportSheet = models }
                             )
                         }
                     }
@@ -862,7 +879,17 @@ internal fun ListManagerScreen(
                                         },
                                         onMoveToSubGroup = {
                                             showMoveToSubGroup = item
-                                        }
+                                        },
+                                        onSetQuickAccess = {
+                                            if (AppConfig.quickAccessTtsId.value == item.id) {
+                                                AppConfig.quickAccessTtsId.value = -1L
+                                                context.toast("已取消快捷音色")
+                                            } else {
+                                                AppConfig.quickAccessTtsId.value = item.id
+                                                context.toast("已设为快捷音色: ${item.displayName}")
+                                            }
+                                        },
+                                        isQuickAccess = AppConfig.quickAccessTtsId.value == item.id
                                     )
                                 }
                             }
@@ -1022,7 +1049,17 @@ internal fun ListManagerScreen(
                                                 },
                                                 onMoveToSubGroup = {
                                                     showMoveToSubGroup = item
-                                                }
+                                                },
+                                                onSetQuickAccess = {
+                                                    if (AppConfig.quickAccessTtsId.value == item.id) {
+                                                        AppConfig.quickAccessTtsId.value = -1L
+                                                        context.toast("已取消快捷音色")
+                                                    } else {
+                                                        AppConfig.quickAccessTtsId.value = item.id
+                                                        context.toast("已设为快捷音色: ${item.displayName}")
+                                                    }
+                                                },
+                                                isQuickAccess = AppConfig.quickAccessTtsId.value == item.id
                                             )
                                         }
                                     }

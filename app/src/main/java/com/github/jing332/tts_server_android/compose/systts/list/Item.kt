@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Headphones
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Output
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.RadioButton
@@ -83,6 +84,8 @@ internal fun Item(
     onAudition: () -> Unit,
     onExport: () -> Unit,
     onMoveToSubGroup: () -> Unit = {},
+    onSetQuickAccess: () -> Unit = {},
+    isQuickAccess: Boolean = false,
     isInSubGroup: Boolean = false,
 ) {
     val view = LocalView.current
@@ -307,6 +310,16 @@ internal fun Item(
                                 Icon(Icons.Default.AccountTree, null)
                             }
                         )
+                        DropdownMenuItem(
+                            text = { Text(if (isQuickAccess) "取消快捷音色" else "设为快捷音色") },
+                            onClick = {
+                                showOptions = false
+                                onSetQuickAccess()
+                            },
+                            leadingIcon = {
+                                Icon(Icons.Default.Star, null)
+                            }
+                        )
                         HorizontalDivider()
                         DropdownMenuItem(
                             text = { Text(stringResource(id = R.string.delete)) },
@@ -336,6 +349,14 @@ internal fun Item(
                     .padding(end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                if (isQuickAccess) {
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "快捷音色",
+                        modifier = Modifier.padding(end = 4.dp).padding(vertical = 2.dp),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                }
                 if (standby) {
                     Text(
                         modifier = Modifier.padding(end = 4.dp),

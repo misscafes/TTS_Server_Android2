@@ -138,7 +138,15 @@ class BackupRestoreViewModel(application: Application) : AndroidViewModel(applic
             }
 
             is Type.SpeechRule -> {
-                encodeJsonAndCopyToTmpZipPath(dbm.speechRuleDao.all, "speechRules")
+                val speechRules = try {
+                    dbm.speechRuleDao.all
+                } catch (e: android.database.sqlite.SQLiteBlobTooBigException) {
+                    // 降级：逐条查询，避免单行过大导致 CursorWindow 溢出
+                    dbm.speechRuleDao.allLite.mapNotNull { lite ->
+                        dbm.speechRuleDao.getById(lite.id)
+                    }
+                }
+                encodeJsonAndCopyToTmpZipPath(speechRules, "speechRules")
             }
 
             is Type.ReplaceRule -> {
