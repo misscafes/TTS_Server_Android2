@@ -2,19 +2,23 @@
 
 ## 版本变更记录
 
-### v1.26.052921（回滚 TTS 引擎修改 + 构建配置调整）
+### v1.26.052922（TTS 引擎修改全回滚 + 问题定位）
 
-#### TTS 引擎修改回滚
-- `TtsEngineError.kt` / `AndroidTtsEngine.kt` / `SysTtsForwarderService.kt`：回滚到 `v1.26.052919` 状态（`0497a853`），排除 `AndroidTtsEngine` 修改导致的"无输出声音"问题
+#### 问题定位结果（对照测试）
+- **upstream 原版有声音** → 原始代码没问题
+- **只改 `TtsEngineError.kt`（`Engine` → `data class`）→ 没有声音**
+- **只改 `AndroidTtsEngine.kt` listener + 去掉 `init()` `release()` → 没有声音**
+- **结论：罪魁祸首是 `TtsEngineError.Engine` 从 `object` 改为 `data class`**
+- 原因待查（仅是一个错误类型定义改动，不应影响音频逻辑，但实测可 100% 复现）
+
+#### 回滚内容
+- `TtsEngineError.kt` / `AndroidTtsEngine.kt` / `SysTtsForwarderService.kt`：全部回滚到 `v1.26.052919` 原始状态
 - 保留 `ListManagerScreen.kt` 标题栏点击进入完整编辑界面的修改
 - 保留 `app/build.gradle` 版本号格式和 APK 文件名后缀优化
 
 #### 构建配置回退与 APK 命名优化
 - `app/build.gradle`：版本号格式从 `1.yy.MMdd.n` 恢复为 **`1.yy.MMddHH`**（精确到小时），移除 `buildCounter()` 和 `.build_counter` 文件逻辑
 - `app/build.gradle`：APK 文件名现在自动带上 flavor / buildType 后缀（如 `-dev`、`-debug`），避免 `appRelease` 与 `devRelease` 输出同名 APK 导致混淆装成多个应用
-
-#### 其他
-- `AndroidTtsEngine.kt`：`getStream()` 的 `onError` 增加 `continuation.isActive` 保护，防止极端情况下协程未恢复导致挂起
 
 ---
 
@@ -69,15 +73,15 @@
 
 ## 会话摘要
 
-### 2026-05-29 本次会话（v1.26.052921）
-- **当前版本**：v1.26.052921（基于 `hhh4` 分支）
+### 2026-05-29 本次会话（v1.26.052922）
+- **当前版本**：v1.26.052922（基于 `hhh4` 分支）
 - **已完成事项**：
   1. P0~P2 性能优化（ANR 修复、内存泄漏修复、资源复用优化）
   2. `SQLiteBlobTooBigException` 崩溃修复（CursorWindow 扩大 + 轻量查询 + 备份降级）
-  3. 新增"快捷音色"功能（列表项设为快捷音色 + 标题栏点击进入）
+  3. 新增"快捷音色"功能（列表项设为快捷音色 + 标题栏点击进入完整编辑界面）
   4. **大规则导入闪退修复**：所有导入路径（朗读规则/插件/替换规则/列表/备份恢复）的 JSON 解析与数据库插入全部移至 `Dispatchers.IO`，并增加 `runCatching` 异常捕获
-  5. **TTS 引擎修改回滚**：`AndroidTtsEngine` / `TtsEngineError` / `SysTtsForwarderService` 回滚到 `v1.26.052919` 状态，排查"无输出声音"问题
+  5. **TTS 引擎问题定位**：经多轮对照 APK 测试，确认 `TtsEngineError.Engine` 从 `object` 改为 `data class` 会导致 TTS 无输出声音，已全量回滚
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留（项目中存在大量 UI 层同步数据库调用，移除需专门的数据库异步化迭代）
   - `SystemTtsService` 的 `runBlocking` 已完全移除，合成逻辑全部在后台协程执行
-  - 编译环境为 Java 26，Gradle 8.10.2 不兼容，无法本地编译验证，需在其他环境确认
+  - 编译环境需使用 Android Studio 自带 JDK 21（Java 26 与 Gradle 8.10.2 不兼容）
