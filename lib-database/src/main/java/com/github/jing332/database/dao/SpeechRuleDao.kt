@@ -2,6 +2,7 @@ package com.github.jing332.database.dao
 
 import androidx.room.*
 import com.github.jing332.database.entities.SpeechRule
+import com.github.jing332.database.entities.SpeechRuleIdVersion
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -16,16 +17,16 @@ interface SpeechRuleDao {
      * 轻量查询：不包含 code 字段，用于列表展示等无需执行脚本的场景
      * 避免大 code 字段导致 CursorWindow 溢出
      */
-    @get:Query("SELECT id, isEnabled, name, version, ruleId, author, tags, tagsData, `order` FROM speech_rules ORDER BY `order` ASC")
+    @get:Query("SELECT id, isEnabled, name, version, ruleId, author, '' as code, tags, tagsData, `order` FROM speech_rules ORDER BY `order` ASC")
     val allLite: List<SpeechRule>
 
-    @get:Query("SELECT id, isEnabled, name, version, ruleId, author, tags, tagsData, `order` FROM speech_rules WHERE isEnabled = '1'")
+    @get:Query("SELECT id, isEnabled, name, version, ruleId, author, '' as code, tags, tagsData, `order` FROM speech_rules WHERE isEnabled = '1'")
     val allEnabledLite: List<SpeechRule>
 
     @Query("SELECT * FROM speech_rules ORDER BY `order` ASC")
     fun flowAll(): Flow<List<SpeechRule>>
 
-    @Query("SELECT id, isEnabled, name, version, ruleId, author, tags, tagsData, `order` FROM speech_rules ORDER BY `order` ASC")
+    @Query("SELECT id, isEnabled, name, version, ruleId, author, '' as code, tags, tagsData, `order` FROM speech_rules ORDER BY `order` ASC")
     fun flowAllLite(): Flow<List<SpeechRule>>
 
     @get:Query("SELECT count(*) FROM speech_rules")
@@ -43,6 +44,10 @@ interface SpeechRuleDao {
     @Query("SELECT * FROM speech_rules WHERE ruleId = :ruleId AND isEnabled = :isEnabled LIMIT 1")
     fun getByRuleId(ruleId: String, isEnabled: Boolean = true): SpeechRule?
 
+    /** 轻量查询：只取 id + version，避免 insertOrUpdate 时加载大 code 字段 */
+    @Query("SELECT id, version FROM speech_rules WHERE ruleId = :ruleId LIMIT 1")
+    fun getIdVersionByRuleId(ruleId: String): SpeechRuleIdVersion?
+
     @Query("SELECT * FROM speech_rules WHERE id = :id LIMIT 1")
     fun getById(id: Long): SpeechRule?
 
@@ -58,13 +63,13 @@ interface SpeechRuleDao {
 
     fun insertOrUpdate(vararg args: SpeechRule) {
         for (v in args) {
-            val old = getByRuleId(v.ruleId)
+            val old = getIdVersionByRuleId(v.ruleId)
             if (old == null) {
                 insert(v)
                 continue
             }
 
-            if (v.ruleId == old.ruleId && v.version > old.version)
+            if (v.version > old.version)
                 update(v.copy(id = old.id))
         }
     }

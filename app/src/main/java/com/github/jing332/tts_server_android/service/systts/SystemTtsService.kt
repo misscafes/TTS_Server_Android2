@@ -132,12 +132,12 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
                     val tts = (item.config as TtsConfigurationDTO).source
                     cachedVoices.add(
                         Voice(
-                            name = "${item.displayName}_${item.id}",
-                            locale = Locale.forLanguageTag(tts.locale),
-                            quality = 0,
-                            latency = 0,
-                            requiresNetworkConnection = true,
-                            features = mutableSetOf<String>().apply {
+                            "${item.displayName}_${item.id}",
+                            Locale.forLanguageTag(tts.locale),
+                            0,
+                            0,
+                            true,
+                            mutableSetOf<String>().apply {
                                 add(item.order.toString())
                                 add(item.id.toString())
                             }

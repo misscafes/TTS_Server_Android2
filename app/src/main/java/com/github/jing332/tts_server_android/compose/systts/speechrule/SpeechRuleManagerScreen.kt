@@ -215,8 +215,10 @@ fun SpeechRuleManagerScreen(sharedVM: SharedViewModel, finish: () -> Unit) {
                         },
                         onEdit = {
                             val fullItem = dbm.speechRuleDao.getById(item.id)
-                            sharedVM.put(NavRoutes.SpeechRuleEdit.KEY_DATA, fullItem)
-                            navController.navigate(NavRoutes.SpeechRuleEdit.id)
+                            if (fullItem != null) {
+                                sharedVM.put(NavRoutes.SpeechRuleEdit.KEY_DATA, fullItem)
+                                navController.navigate(NavRoutes.SpeechRuleEdit.id)
+                            }
                         },
                         onExport = { showExportSheet = listOf(item) },
                         onDelete = { showDeleteDialog = item }

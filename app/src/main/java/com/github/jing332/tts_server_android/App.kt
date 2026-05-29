@@ -45,14 +45,18 @@ class App : Application() {
     }
 
     @SuppressLint("SdCardPath")
-    @OptIn(DelicateCoroutinesApi::class, DelicateCoilApi::class)
+    @OptIn(DelicateCoilApi::class)
     override fun onCreate() {
         super.onCreate()
 
         // 🛠️ 扩大 CursorWindow 至 10MB，解决 speech_rules.code 等大字段导致的
         // SQLiteBlobTooBigException: Row too big to fit into CursorWindow
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            SQLiteDatabase.setCursorWindowSize(10 * 1024 * 1024)
+            try {
+                SQLiteDatabase::class.java
+                    .getMethod("setCursorWindowSize", Long::class.javaPrimitiveType)
+                    .invoke(null, 10 * 1024 * 1024L)
+            } catch (_: Exception) { }
         }
         
         // 🛠️ 拔掉引线：暂时关闭 CrashHandler，它会触发崩溃的日志初始化

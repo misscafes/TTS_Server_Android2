@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.github.jing332.database.entities.plugin.Plugin
+import com.github.jing332.database.entities.plugin.PluginIdVersion
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -35,18 +36,22 @@ interface PluginDao {
     @Query("SELECT * FROM plugin WHERE pluginId = :pluginId ")
     fun getByPluginId(pluginId: String): Plugin?
 
+    /** 轻量查询：只取 id + version，避免 insertOrUpdate 时加载大 code 字段 */
+    @Query("SELECT id, version FROM plugin WHERE pluginId = :pluginId LIMIT 1")
+    fun getIdVersionByPluginId(pluginId: String): PluginIdVersion?
+
     @Query("SELECT * FROM plugin WHERE pluginId = :pluginId AND isEnabled")
     fun getEnabled(pluginId: String): Plugin?
 
     fun insertOrUpdate(vararg args: Plugin) {
         for (v in args) {
-            val old = getByPluginId(v.pluginId)
+            val old = getIdVersionByPluginId(v.pluginId)
             if (old == null) {
                 insert(v)
                 continue
             }
 
-            if (v.pluginId == old.pluginId && v.version > old.version)
+            if (v.version > old.version)
                 update(v.copy(id = old.id))
         }
     }
