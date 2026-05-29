@@ -15,6 +15,9 @@
 - `Item.kt`：DropdownMenu 中新增「切换标签」选项，保留 `switchSpeechTarget` 功能入口
 - `Item.kt`：新增 `onSwitchTag` 回调参数
 
+#### 构建配置
+- `app/build.gradle`：版本号格式从 `1.yy.MMddHH` 改为 **`1.yy.MMdd.n`**，其中 `n` 为**当日构建序号**（每次构建自动 +1），方便同日多次构建时区分 APK
+
 ---
 
 ### v1.26.0529（性能优化 + Bug修复 + 快捷音色）
