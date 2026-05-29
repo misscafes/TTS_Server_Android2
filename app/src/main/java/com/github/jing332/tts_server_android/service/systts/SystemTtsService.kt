@@ -70,6 +70,7 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 import splitties.init.appCtx
 import splitties.systemservices.notificationManager
@@ -342,65 +343,68 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
         val enabledBgm = request.params.getBoolean(PARAM_BGM_ENABLED, true)
         mTtsManager?.context?.cfg?.bgmEnabled = { enabledBgm }
 
-        val exceptionHandler = CoroutineExceptionHandler { _, e ->
-            Log.e(TAG, "Synthesize Crash Caught: ${e.message}", e)
-            callback.error(TextToSpeech.ERROR_SYNTHESIS)
-            callback.done()
-        }
-
-        synthesizerJob = mScope.launch(exceptionHandler) {
+        runBlocking {
             val cfgId = getConfigIdFromVoiceName(request.voiceName ?: "").onFailure {
                 longToast(R.string.voice_name_bad_format)
                 callback.error(TextToSpeech.ERROR_INVALID_REQUEST)
                 callback.done()
-                return@launch
+                return@runBlocking
             }.value
 
-            var isAudioOutputted = false
-            try {
-                // 🛠️ 增加 125 秒总保护
-                withTimeoutOrNull(125000L) {
-                    mTtsManager?.synthesize(
-                        params = SystemParams(
-                        text = request.charSequenceText.toString(),
-                        requestTimeout = SysTtsConfig.requestTimeout.toLong()
-                    ),
-                        forceConfigId = cfgId,
-                        callback = object :
-                            com.github.jing332.tts.synthesizer.SynthesisCallback {
-                            override fun onSynthesizeStart(sampleRate: Int) {
-                                callback.start(
-                                    /* sampleRateInHz = */ sampleRate,
-                                    /* audioFormat = */ AudioFormat.ENCODING_PCM_16BIT,
-                                    /* channelCount = */ 1
-                                )
-                            }
-
-                            override fun onSynthesizeAvailable(audio: ByteArray) {
-                                isAudioOutputted = true
-                                writeToCallBack(callback, audio)
-                            }
-
-                        }
-                    )
-                }?.onSuccess {
-                    // 如果插件“跳过”了重试且没给音频，向系统报错
-                    if (!isAudioOutputted) {
-                        callback.error(TextToSpeech.ERROR_NETWORK_TIMEOUT)
-                    }
-                }?.onFailure {
-                    handleSynthesisError(it, callback)
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Synthesize Interrupted: ${e.message}")
+            val exceptionHandler = CoroutineExceptionHandler { _, e ->
+                Log.e(TAG, "Synthesize Crash Caught: ${e.message}", e)
                 callback.error(TextToSpeech.ERROR_SYNTHESIS)
-            } finally {
-                // 🛠️ 结案铁律：确保必须调用 done()，防止队列挂起
                 callback.done()
-                if (lastTtsCallback == callback) lastTtsCallback = null
             }
-        }
 
+            synthesizerJob = mScope.launch(exceptionHandler) {
+                var isAudioOutputted = false
+                try {
+                    // 🛠️ 增加 125 秒总保护
+                    withTimeoutOrNull(125000L) {
+                        mTtsManager?.synthesize(
+                            params = SystemParams(
+                            text = request.charSequenceText.toString(),
+                            requestTimeout = SysTtsConfig.requestTimeout.toLong()
+                        ),
+                            forceConfigId = cfgId,
+                            callback = object :
+                                com.github.jing332.tts.synthesizer.SynthesisCallback {
+                                override fun onSynthesizeStart(sampleRate: Int) {
+                                    callback.start(
+                                        /* sampleRateInHz = */ sampleRate,
+                                        /* audioFormat = */ AudioFormat.ENCODING_PCM_16BIT,
+                                        /* channelCount = */ 1
+                                    )
+                                }
+
+                                override fun onSynthesizeAvailable(audio: ByteArray) {
+                                    isAudioOutputted = true
+                                    writeToCallBack(callback, audio)
+                                }
+
+                            }
+                        )
+                    }?.onSuccess {
+                        // 如果插件“跳过”了重试且没给音频，向系统报错
+                        if (!isAudioOutputted) {
+                            callback.error(TextToSpeech.ERROR_NETWORK_TIMEOUT)
+                        }
+                    }?.onFailure {
+                        handleSynthesisError(it, callback)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Synthesize Interrupted: ${e.message}")
+                    callback.error(TextToSpeech.ERROR_SYNTHESIS)
+                } finally {
+                    // 🛠️ 结案铁律：确保必须调用 done()，防止队列挂起
+                    callback.done()
+                    if (lastTtsCallback == callback) lastTtsCallback = null
+                }
+            }
+
+            synthesizerJob?.join()
+        }
 
         mNotificationJob = mScope.launch {
             delay(5000)

@@ -2,19 +2,20 @@
 
 ## 版本变更记录
 
-### v1.26.052922（TTS 引擎修改全回滚 + 问题定位）
+### v1.26.052922（P0 无声音问题最终修复：恢复 runBlocking）
 
-#### 问题定位结果（对照测试）
-- **upstream 原版有声音** → 原始代码没问题
-- **只改 `TtsEngineError.kt`（`Engine` → `data class`）→ 没有声音**
-- **只改 `AndroidTtsEngine.kt` listener + 去掉 `init()` `release()` → 没有声音**
-- **结论：罪魁祸首是 `TtsEngineError.Engine` 从 `object` 改为 `data class`**
-- 原因待查（仅是一个错误类型定义改动，不应影响音频逻辑，但实测可 100% 复现）
+#### 问题根因重定位
+- **之前结论错误**：`TtsEngineError.Engine` 改为 `data class` 并非真正原因
+- **真正原因**：`SystemTtsService.onSynthesizeText()` 中移除了 `runBlocking { synthesizerJob?.join() }`
+  - Android 的 `TextToSpeechService` 通过 `onSynthesizeText()` 回调驱动 TTS 合成
+  - 该回调要求**同步阻塞**直到音频全部写入 `SynthesisCallback`，否则系统会立即认为合成完成并关闭音频流
+  - 移除 `runBlocking` 后，`onSynthesizeText()` 立即返回，后台协程还没输出音频，音频流已被系统回收 → 无声音
+- **修复**：恢复 `runBlocking { ... synthesizerJob?.join() }` 结构，重新添加 `import kotlinx.coroutines.runBlocking`
 
-#### 回滚内容
-- `TtsEngineError.kt` / `AndroidTtsEngine.kt` / `SysTtsForwarderService.kt`：全部回滚到 `v1.26.052919` 原始状态
-- 保留 `ListManagerScreen.kt` 标题栏点击进入完整编辑界面的修改
-- 保留 `app/build.gradle` 版本号格式和 APK 文件名后缀优化
+#### 保留的修改
+- `ListManagerScreen.kt` 标题栏点击进入完整编辑界面
+- `app/build.gradle` 版本号格式 `1.yy.MMddHH` 和 APK 文件名后缀优化
+- `SysTtsForwarderService.kt` `WeakReference` 内存泄漏修复（此改动与声音无关，保留）
 
 #### 构建配置回退与 APK 命名优化
 - `app/build.gradle`：版本号格式从 `1.yy.MMdd.n` 恢复为 **`1.yy.MMddHH`**（精确到小时），移除 `buildCounter()` 和 `.build_counter` 文件逻辑
@@ -80,8 +81,8 @@
   2. `SQLiteBlobTooBigException` 崩溃修复（CursorWindow 扩大 + 轻量查询 + 备份降级）
   3. 新增"快捷音色"功能（列表项设为快捷音色 + 标题栏点击进入完整编辑界面）
   4. **大规则导入闪退修复**：所有导入路径（朗读规则/插件/替换规则/列表/备份恢复）的 JSON 解析与数据库插入全部移至 `Dispatchers.IO`，并增加 `runCatching` 异常捕获
-  5. **TTS 引擎问题定位**：经多轮对照 APK 测试，确认 `TtsEngineError.Engine` 从 `object` 改为 `data class` 会导致 TTS 无输出声音，已全量回滚
+  5. **P0 无声音问题最终修复**：经多轮对照 APK 测试，确认真正原因是 `SystemTtsService.onSynthesizeText()` 移除了 `runBlocking`（破坏了 Android TTS 同步契约），而非 `TtsEngineError` 改动。已恢复 `runBlocking { synthesizerJob?.join() }`。
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留（项目中存在大量 UI 层同步数据库调用，移除需专门的数据库异步化迭代）
-  - `SystemTtsService` 的 `runBlocking` 已完全移除，合成逻辑全部在后台协程执行
+  - `SystemTtsService` 的 `runBlocking` **已恢复**（这是 Android `TextToSpeechService` 的同步契约要求，不能移除）
   - 编译环境需使用 Android Studio 自带 JDK 21（Java 26 与 Gradle 8.10.2 不兼容）
