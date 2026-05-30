@@ -102,13 +102,14 @@
 ## 会话摘要
 
 ### 2026-05-30 本次会话（v1.26.0530 - 息屏停止修复）
-- **当前版本**：v1.26.0530（基于 `hhh4` 分支）
+- **当前版本**：v1.26.053012（基于 `hhh4` 分支）
 - **已完成事项**：
   1. **TTS Server 息屏停止问题修复**：
      - 将 `AbsForwarderService` 从 `IntentService` 改为 `Service`
      - `onStartCommand` 返回 `START_STICKY`，进程被杀后自动重启
      - `onCreate` 中立即调用 `startForeground()`，避免超时崩溃
      - 启动入口统一使用 `startForegroundServiceCompat()`
+  2. **生成正式版 APK**：`newapk/TTS-Server-v1.26.053012.apk`
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留
   - `SystemTtsService` 的 `runBlocking` **已恢复**
