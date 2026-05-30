@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -318,6 +319,14 @@ internal fun ListManagerScreen(
         BatchTagDialog(
             groupItems = showBatchTagDialog!!,
             onDismissRequest = { showBatchTagDialog = null }
+        )
+    }
+
+    var showBatchSwitchTag by remember { mutableStateOf(false) }
+    if (showBatchSwitchTag) {
+        BatchSwitchTagDialog(
+            allItems = models.flatMap { it.list },
+            onDismissRequest = { showBatchSwitchTag = false }
         )
     }
 
@@ -730,6 +739,9 @@ internal fun ListManagerScreen(
                         }
                         IconButton(onClick = { isSearchMode = true }) {
                             Icon(Icons.Default.Search, stringResource(id = R.string.search))
+                        }
+                        IconButton(onClick = { showBatchSwitchTag = true }) {
+                            Icon(Icons.Default.SwapHoriz, stringResource(id = R.string.batch_switch_tag))
                         }
                         IconButton(onClick = { showOptions = true }) {
                             Icon(Icons.Default.MoreVert, stringResource(id = R.string.more_options))

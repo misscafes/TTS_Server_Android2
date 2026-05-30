@@ -2,7 +2,7 @@
 
 ## 版本变更记录
 
-### v1.26.053012（JobCancellationException 加载配置失败修复）
+### v1.26.053014（批量切换标签 + JobCancellationException 修复）
 
 #### 问题现象
 - 系统 TTS 使用过程中偶现「加载配置失败：kotlinx.coroutines.JobCancellationException: Parent job is Cancelling」
@@ -120,12 +120,17 @@
 ## 会话摘要
 
 ### 2026-05-30 本次会话（v1.26.053012 - JobCancellationException 修复）
-- **当前版本**：v1.26.053012（基于 `hhh4` 分支）
+- **当前版本**：v1.26.053014（基于 `hhh4` 分支）
 - **已完成事项**：
-  1. **修复「加载配置失败：JobCancellationException」**：
+  1. **新增「批量切换标签」功能**：
+     - `ListManagerScreen.kt` AppBar 右侧新增切换标签按钮（`Icons.Default.SwapHoriz`）
+     - 新建 `BatchSwitchTagDialog.kt`：复选列表选择音色，点击「切换」批量将每个条目标签切换到下一个
+     - 切换逻辑：ALL→第一个标签→下一个标签…最后一个标签循环回第一个标签
+     - BGM 类型条目自动排除
+  2. **修复「加载配置失败：JobCancellationException」**：
      - `SystemTtsService.kt`：`mScope` 从普通 `Job` 改为 `SupervisorJob()`
      - 根因：普通 `Job` fail-fast，单个子协程异常会导致整个 Scope 被取消，后续任务全部抛出 `JobCancellationException`
-  2. **生成正式版 APK**：`newapk/TTS-Server-v1.26.053012.apk`
+  3. **生成正式版 APK**：`newapk/TTS-Server-v1.26.053014.apk`
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留
   - `SystemTtsService` 的 `runBlocking` **已恢复**

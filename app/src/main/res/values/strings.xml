@@ -536,6 +536,9 @@
     <string name="create_sub_group">新建子分组</string>
     <string name="move_to_sub_group">移入子分组</string>
     <string name="batch_assign_tags">批量分配标签</string>
+    <string name="batch_switch_tag">Batch Switch Tags</string>
+    <string name="batch_switch">Switch</string>
+    <string name="no_switchable_items">No switchable items</string>
     <string name="selected_count">已选 %1$d 项</string>
     <string name="please_select_voice">请先选择音色</string>
     <string name="tag_rule_inconsistent">选中音色的朗读规则不一致</string>
