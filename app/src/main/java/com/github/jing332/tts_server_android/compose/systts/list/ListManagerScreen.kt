@@ -325,7 +325,7 @@ internal fun ListManagerScreen(
     var showBatchSwitchTag by remember { mutableStateOf(false) }
     if (showBatchSwitchTag) {
         BatchSwitchTagDialog(
-            allItems = models.flatMap { it.list },
+            groups = models,
             onDismissRequest = { showBatchSwitchTag = false }
         )
     }

@@ -16,8 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import com.github.jing332.database.dbm
+import com.github.jing332.database.entities.systts.GroupWithSystemTts
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.database.entities.systts.TtsConfigurationDTO
+import com.github.jing332.database.entities.systts.source.PluginTtsSource
 import com.github.jing332.tts_server_android.R
 import com.github.jing332.tts_server_android.constant.SpeechTarget
 import com.github.jing332.tts_server_android.model.rhino.speech_rule.SpeechRuleEngine
@@ -29,7 +31,7 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BatchSwitchTagDialog(
-    allItems: List<SystemTtsV2>,
+    groups: List<GroupWithSystemTts>,
     onDismissRequest: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
@@ -37,12 +39,22 @@ fun BatchSwitchTagDialog(
 
     var selectedItems by remember { mutableStateOf<Set<SystemTtsV2>>(emptySet()) }
 
-    // 按 order 排序，并只保留有 TtsConfigurationDTO 且非 BGM 的项
-    val sortedItems = remember(allItems) {
-        allItems.sortedBy { it.order }.filter {
-            it.config is TtsConfigurationDTO &&
-                    (it.config as TtsConfigurationDTO).speechRule.target != SpeechTarget.BGM
-        }
+    // 按分组组织，只保留 PluginTTS 且非 BGM 的项
+    val groupedItems = remember(groups) {
+        groups.map { groupWithTts ->
+            val pluginItems = groupWithTts.list
+                .sortedBy { it.order }
+                .filter {
+                    it.config is TtsConfigurationDTO &&
+                            (it.config as TtsConfigurationDTO).source is PluginTtsSource &&
+                            (it.config as TtsConfigurationDTO).speechRule.target != SpeechTarget.BGM
+                }
+            groupWithTts.group.name to pluginItems
+        }.filter { it.second.isNotEmpty() }
+    }
+
+    val allSwitchableItems = remember(groupedItems) {
+        groupedItems.flatMap { it.second }
     }
 
     AlertDialog(
@@ -68,12 +80,12 @@ fun BatchSwitchTagDialog(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    val allSelected = sortedItems.isNotEmpty() && sortedItems.all { it in selectedItems }
+                    val allSelected = allSwitchableItems.isNotEmpty() && allSwitchableItems.all { it in selectedItems }
                     IconButton(
                         onClick = {
-                            selectedItems = if (allSelected) emptySet() else sortedItems.toSet()
+                            selectedItems = if (allSelected) emptySet() else allSwitchableItems.toSet()
                         },
-                        enabled = sortedItems.isNotEmpty()
+                        enabled = allSwitchableItems.isNotEmpty()
                     ) {
                         Icon(
                             imageVector = if (allSelected) Icons.Default.Clear else Icons.Default.DoneAll,
@@ -88,56 +100,71 @@ fun BatchSwitchTagDialog(
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // 音色列表
+                // 按分组显示音色列表
                 LazyColumn(
                     modifier = Modifier.weight(1f),
                     verticalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
-                    itemsIndexed(sortedItems, key = { _, it -> it.id }) { index, item ->
-                        val isSelected = item in selectedItems
-                        val config = item.config as TtsConfigurationDTO
-                        val currentTagName = config.speechRule.tagName.ifBlank {
-                            if (config.speechRule.target == SpeechTarget.ALL)
-                                stringResource(R.string.no_tag) else ""
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    selectedItems = if (isSelected) selectedItems - item else selectedItems + item
-                                }
-                                .padding(horizontal = 4.dp, vertical = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Checkbox(
-                                checked = isSelected,
-                                onCheckedChange = null
+                    if (groupedItems.isEmpty()) {
+                        item {
+                            Text(
+                                text = stringResource(R.string.no_switchable_items),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 16.dp),
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Column(modifier = Modifier.weight(1f)) {
+                        }
+                    } else {
+                        groupedItems.forEach { (groupName, items) ->
+                            item(key = "header_$groupName") {
                                 Text(
-                                    text = "${index + 1}. ${item.displayName}",
-                                    style = MaterialTheme.typography.bodyMedium
+                                    text = groupName,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    color = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(horizontal = 4.dp, vertical = 6.dp)
                                 )
-                                if (currentTagName.isNotEmpty()) {
-                                    Text(
-                                        text = "${stringResource(R.string.tag)}: $currentTagName",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                            }
+                            itemsIndexed(items, key = { _, it -> it.id }) { index, item ->
+                                val isSelected = item in selectedItems
+                                val config = item.config as TtsConfigurationDTO
+                                val currentTagName = config.speechRule.tagName.ifBlank {
+                                    if (config.speechRule.target == SpeechTarget.ALL)
+                                        stringResource(R.string.no_tag) else ""
+                                }
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable {
+                                            selectedItems = if (isSelected) selectedItems - item else selectedItems + item
+                                        }
+                                        .padding(horizontal = 4.dp, vertical = 6.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Checkbox(
+                                        checked = isSelected,
+                                        onCheckedChange = null
                                     )
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Column(modifier = Modifier.weight(1f)) {
+                                        Text(
+                                            text = "${index + 1}. ${item.displayName}",
+                                            style = MaterialTheme.typography.bodyMedium
+                                        )
+                                        if (currentTagName.isNotEmpty()) {
+                                            Text(
+                                                text = "${stringResource(R.string.tag)}: $currentTagName",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                }
-
-                if (sortedItems.isEmpty()) {
-                    Text(
-                        text = stringResource(R.string.no_switchable_items),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
                 }
             }
         },

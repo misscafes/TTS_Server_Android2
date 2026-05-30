@@ -125,6 +125,8 @@
   1. **新增「批量切换标签」功能**：
      - `ListManagerScreen.kt` AppBar 右侧新增切换标签按钮（`Icons.Default.SwapHoriz`）
      - 新建 `BatchSwitchTagDialog.kt`：复选列表选择音色，点击「切换」批量将每个条目标签切换到下一个
+     - **按分组显示**：对话框内按 Group 分组展示条目，保留分组结构
+     - **只切换插件音色**：仅对 `PluginTtsSource` 类型的条目生效，本地 TTS 自动过滤
      - 切换逻辑：ALL→第一个标签→下一个标签…最后一个标签循环回第一个标签
      - BGM 类型条目自动排除
   2. **修复「加载配置失败：JobCancellationException」**：
