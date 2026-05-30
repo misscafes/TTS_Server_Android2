@@ -3,7 +3,7 @@
 package com.github.jing332.tts_server_android.service.forwarder
 
 import android.annotation.SuppressLint
-import android.app.IntentService
+import android.app.Service
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,6 +13,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.os.IBinder
 import android.os.PowerManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -45,7 +46,7 @@ abstract class AbsForwarderService(
     @StringRes val notificationChanTitle: Int,
     @StringRes val notificationTitle: Int,
     @DrawableRes val notificationIcon: Int,
-) : IntentService(name) {
+) : Service() {
     private val notificationActionCopyUrl = "ACTION_NOTIFICATION_COPY_URL_$name"
     private val notificationActionClose = "ACTION_NOTIFICATION_CLOSE_$name"
 
@@ -68,16 +69,16 @@ abstract class AbsForwarderService(
     private val mNotificationReceiver = NotificationActionReceiver()
     protected val scope = CoroutineScope(Dispatchers.Default)
 
+    @Volatile
+    private var serverStarted = false
+
     @SuppressLint("WakelockTimeout", "UnspecifiedRegisterReceiverFlag")
     override fun onCreate() {
         super.onCreate()
         isRunning = true
 
-        scope.launch {
-            val host = NetworkUtils.getLocalIpAddress().firstOrNull()?.hostName ?: "localhost"
-            listenAddress = "$host:$port"
-            withMain { initNotification(listenAddress) }
-        }
+        // 立即启动前台服务，避免 ForegroundServiceDidNotStartInTimeException
+        initNotification("")
 
         registerGlobalReceiver(
             listOf(notificationActionCopyUrl, notificationActionClose),
@@ -95,15 +96,30 @@ abstract class AbsForwarderService(
         initServer()
     }
 
-    override fun onHandleIntent(intent: Intent?) {
-        synchronized(this) {
-            kotlin.runCatching {
-                startServer()
-            }.onFailure {
-                sendLog(LogLevel.ERROR, it.localizedMessage ?: it.toString())
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (!serverStarted) {
+            serverStarted = true
+            scope.launch {
+                kotlin.runCatching {
+                    val host = NetworkUtils.getLocalIpAddress().firstOrNull()?.hostName ?: "localhost"
+                    listenAddress = "$host:$port"
+                    withMain { updateNotification(listenAddress) }
+
+                    startServer()
+                }.onFailure {
+                    sendLog(LogLevel.ERROR, it.localizedMessage ?: it.toString())
+                }
+
+                // 服务器停止后，清理状态并停止服务
+                isRunning = false
+                serverStarted = false
+                stopSelf()
             }
         }
+        return START_STICKY
     }
+
+    override fun onBind(intent: Intent?): IBinder? = null
 
     protected fun notifiStarted() {
         val intent = Intent(actionStarted)
@@ -127,13 +143,14 @@ abstract class AbsForwarderService(
     override fun onDestroy() {
         super.onDestroy()
         isRunning = false
-        unregisterReceiver(mNotificationReceiver)
+        serverStarted = false
+        kotlin.runCatching { unregisterReceiver(mNotificationReceiver) }
 
         wakeLock?.release()
         wakeLock = null
     }
 
-    private fun initNotification(localAddress: String) {
+    private fun createNotificationBuilder(): Notification.Builder {
         /*Android 12(S)+ 必须指定PendingIntent.FLAG_*/
         val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
             PendingIntent.FLAG_IMMUTABLE
@@ -146,12 +163,7 @@ abstract class AbsForwarderService(
                 this, 0, Intent(
                     this,
                     MainActivity::class.java
-                ).apply {
-//                    putExtra(
-//                        ImportConfigActivity.KEY_FRAGMENT_INDEX,
-//                        ImportConfigActivity.INDEX_FORWARDER_SYS
-//                    )
-                },
+                ),
                 pendingIntentFlags
             )
         /*当点击退出按钮时发送广播*/
@@ -172,7 +184,7 @@ abstract class AbsForwarderService(
 
         val smallIconRes: Int
         val builder = Notification.Builder(applicationContext)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {/*Android 8.0+ 要求必须设置通知信道*/
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val chan = NotificationChannel(
                 notificationChanId,
                 getString(notificationChanTitle),
@@ -187,18 +199,30 @@ abstract class AbsForwarderService(
         } else {
             smallIconRes = R.mipmap.ic_app_notification
         }
-        val notification = builder
+
+        return builder
             .setColor(ContextCompat.getColor(this, R.color.md_theme_light_primary))
             .setContentTitle(getString(notificationTitle))
-            .setContentText(getString(R.string.server_listen_address_local, localAddress))
             .setSmallIcon(smallIconRes)
             .setContentIntent(pendingIntent)
             .addAction(0, getString(R.string.exit), closePendingIntent)
             .addAction(0, getString(R.string.copy_address), copyAddressPendingIntent)
-            .build()
+    }
 
-        // 前台服务
-        startForegroundCompat(id, notification)
+    private fun initNotification(localAddress: String) {
+        val builder = createNotificationBuilder()
+        if (localAddress.isNotBlank()) {
+            builder.setContentText(getString(R.string.server_listen_address_local, localAddress))
+        }
+        startForegroundCompat(id, builder.build())
+    }
+
+    private fun updateNotification(localAddress: String) {
+        val notification = createNotificationBuilder()
+            .setContentText(getString(R.string.server_listen_address_local, localAddress))
+            .build()
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(id, notification)
     }
 
     inner class NotificationActionReceiver : BroadcastReceiver() {

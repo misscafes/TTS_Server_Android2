@@ -75,9 +75,46 @@
 
 ---
 
+---
+
+### v1.26.0530（TTS Server 息屏停止问题修复）
+
+#### 问题现象
+- TTS Server（系统TTS转发器）工作时，界面停留在日志页面，手机自动息屏后服务停止，需手动重启
+
+#### 根因分析
+- `AbsForwarderService` 继承自 `IntentService`，默认返回 `START_NOT_STICKY`
+- 息屏后系统进入 Doze 模式或内存紧张时进程被清理，`IntentService` 不会自动重启
+- `ForwarderServiceManager` 使用普通 `startService()` 而非 `startForegroundService()`，在后台启动受限
+
+#### 修复内容
+- `AbsForwarderService.kt`：
+  - 将基类从 `IntentService` 改为 `Service`
+  - `onStartCommand` 返回 `START_STICKY`，确保进程被杀后系统自动重启服务
+  - 在 `onCreate()` 中**立即**调用 `startForeground()`（使用临时通知），避免 `ForegroundServiceDidNotStartInTimeException`
+  - IP 地址获取成功后通过 `updateNotification()` 更新通知内容
+  - 服务器停止后自动调用 `stopSelf()` 清理
+- `ForwarderServiceManager.kt`：使用 `startForegroundServiceCompat()` 替代 `startService()`
+- `SystemForwarderSwitchActivity.kt`：使用 `startForegroundServiceCompat()` 替代 `startService()`
+
+---
+
 ## 会话摘要
 
-### 2026-05-30 本次会话（回退到 v1.26.052922）
+### 2026-05-30 本次会话（v1.26.0530 - 息屏停止修复）
+- **当前版本**：v1.26.0530（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. **TTS Server 息屏停止问题修复**：
+     - 将 `AbsForwarderService` 从 `IntentService` 改为 `Service`
+     - `onStartCommand` 返回 `START_STICKY`，进程被杀后自动重启
+     - `onCreate` 中立即调用 `startForeground()`，避免超时崩溃
+     - 启动入口统一使用 `startForegroundServiceCompat()`
+- **注意事项**：
+  - `allowMainThreadQueries` 暂时保留
+  - `SystemTtsService` 的 `runBlocking` **已恢复**
+  - 编译环境需使用 Android Studio 自带 JDK 21（Java 26 与 Gradle 8.10.2 不兼容）
+
+### 2026-05-30 上次会话（回退到 v1.26.052922）
 - **操作**：从 v1.26.053011 **回退**到 v1.26.052922
 - **回退原因**：v1.26.053011（TTS Server 息屏停止修复）验证不通过，退回上一稳定版本
 - **回退内容**：
