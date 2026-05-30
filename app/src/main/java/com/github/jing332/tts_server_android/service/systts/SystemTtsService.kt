@@ -66,6 +66,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
@@ -162,7 +163,7 @@ class SystemTtsService : TextToSpeechService(), IEventDispatcher {
     override fun onCreate() {
         super.onCreate()
         updateNotification(getString(R.string.systts_service), "")
-        mScope = CoroutineScope(Dispatchers.IO)
+        mScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
         registerGlobalReceiver(
             listOf(ACTION_NOTIFY_KILL_PROCESS, ACTION_NOTIFY_CANCEL), mNotificationReceiver

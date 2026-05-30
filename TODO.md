@@ -2,6 +2,24 @@
 
 ## 版本变更记录
 
+### v1.26.053012（JobCancellationException 加载配置失败修复）
+
+#### 问题现象
+- 系统 TTS 使用过程中偶现「加载配置失败：kotlinx.coroutines.JobCancellationException: Parent job is Cancelling」
+
+#### 根因分析
+- `SystemTtsService.onCreate()` 中 `mScope = CoroutineScope(Dispatchers.IO)` 使用了**普通 `Job`**
+- 普通 `Job` 具有 fail-fast 特性：任意子协程异常会导致整个 Scope 的 Job 进入 Cancelling 状态
+- 此后在该 Scope 中启动的新协程（如 `initManager()` 里的 `mTtsManager!!.init()`）会在 suspend 点抛出 `JobCancellationException`
+- 该异常被 `AbstractMixSynthesizer.init()` 的 `catch (e: Exception)` 捕获，转化为 `ErrorEvent.Repository`，最终在日志中显示为「加载配置失败」
+
+#### 修复内容
+- `SystemTtsService.kt`：`mScope` 改为 `CoroutineScope(SupervisorJob() + Dispatchers.IO)`
+  - `SupervisorJob` 确保子协程之间相互独立，一个任务失败不会拖垮整个 Service 的协程生命周期
+- 新增 `import kotlinx.coroutines.SupervisorJob`
+
+---
+
 ### v1.26.052922（P0 无声音问题最终修复：恢复 runBlocking）
 
 #### 问题根因重定位
@@ -101,8 +119,20 @@
 
 ## 会话摘要
 
-### 2026-05-30 本次会话（v1.26.0530 - 息屏停止修复）
+### 2026-05-30 本次会话（v1.26.053012 - JobCancellationException 修复）
 - **当前版本**：v1.26.053012（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. **修复「加载配置失败：JobCancellationException」**：
+     - `SystemTtsService.kt`：`mScope` 从普通 `Job` 改为 `SupervisorJob()`
+     - 根因：普通 `Job` fail-fast，单个子协程异常会导致整个 Scope 被取消，后续任务全部抛出 `JobCancellationException`
+  2. **生成正式版 APK**：`newapk/TTS-Server-v1.26.053012.apk`
+- **注意事项**：
+  - `allowMainThreadQueries` 暂时保留
+  - `SystemTtsService` 的 `runBlocking` **已恢复**
+  - 编译环境需使用 Android Studio 自带 JDK 21（Java 26 与 Gradle 8.10.2 不兼容）
+
+### 2026-05-30 上次会话（v1.26.0530 - 息屏停止修复 / 已回退）
+- **当前版本**：v1.26.053012
 - **已完成事项**：
   1. **TTS Server 息屏停止问题修复**：
      - 将 `AbsForwarderService` 从 `IntentService` 改为 `Service`
