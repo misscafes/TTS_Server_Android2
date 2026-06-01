@@ -29,6 +29,12 @@ interface SystemTtsV2Dao {
     @get:Query("SELECT * FROM SystemTtsGroup")
     val allGroup: List<SystemTtsGroup>
 
+    @Query("SELECT * FROM SystemTtsGroup WHERE parentGroupId = :parentId ORDER BY `order`")
+    fun getGroupsByParent(parentId: Long = 0L): List<SystemTtsGroup>
+
+    @Query("SELECT COUNT(*) FROM SystemTtsGroup WHERE parentGroupId = :parentId")
+    fun getGroupCountByParent(parentId: Long = 0L): Int
+
     @Query("SELECT * FROM system_tts_v2 WHERE id = :id")
     fun get(id: Long): SystemTtsV2
 

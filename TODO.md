@@ -2,7 +2,32 @@
 
 ## 版本变更记录
 
-### v1.26.060109（批量切换标签 + JobCancellationException 修复 + JDK 21 配置固定）
+### v1.26.060110（批量编辑 + 分组管理 + AI 生成配置 + 数据库 parentGroupId）
+
+#### 数据库架构升级
+- `SystemTtsGroup`：新增 `parentGroupId` 字段（默认 `0L`），为后续分组嵌套做准备
+- `DatabaseManager`：版本号 31 → 32，添加 `AutoMigration(from = 31, to = 32)`
+- `SystemTtsV2Dao`：新增 `getGroupsByParent()` / `getGroupCountByParent()` 树形查询方法
+
+#### 新增功能：批量编辑模式
+- **入口**：系统 TTS 列表 AppBar 右侧「✏️ 批量编辑」按钮
+- **功能**：
+  - 列表项左侧显示 Checkbox，点击勾选/取消勾选
+  - 批量删除：删除所有选中的音色（含确认对话框）
+  - 批量切换插件：将选中的插件音色批量替换为另一个插件（清空 locale/voice）
+  - 批量编辑模式下禁用原有点击/长按操作，点击列表项变为切换选中状态
+  - 返回键或「取消」按钮退出批量编辑模式
+
+#### 新增功能：分组管理
+- **入口**：系统 TTS 列表 AppBar 右侧「🗂️ 分组管理」按钮
+- **功能**：一键将所有根分组合并到一个新建的父分组下（利用 `parentGroupId`）
+
+#### 新增功能：AI 生成配置（占位）
+- **入口**：系统 TTS 列表 AppBar 右侧「🤖 AI 生成配置」按钮
+- **状态**：对话框框架已搭建，核心 AI 调用逻辑待后续配置 API 后完善
+
+#### 图标统一
+- 所有新增按钮均使用 Material Icons（EditNote、FolderCopy、SmartToy、Delete、Extension），与现有 UI 风格一致
 
 #### 构建配置
 - `gradle.properties`：新增 `org.gradle.java.home=C:\Program Files\Android\Android Studio\jbr`，固定使用 Android Studio 自带 JDK 21，避免系统 Java 26 与 Gradle 8.10.2 不兼容
@@ -138,7 +163,7 @@
   3. **修复「加载配置失败：JobCancellationException」**：
      - `SystemTtsService.kt`：`mScope` 从普通 `Job` 改为 `SupervisorJob()`
      - 根因：普通 `Job` fail-fast，单个子协程异常会导致整个 Scope 被取消，后续任务全部抛出 `JobCancellationException`
-  4. **生成正式版 APK**：`newapk/TTS-Server-v1.26.060109.apk`
+  5. **生成正式版 APK**：`newapk/TTS-Server-v1.26.060110.apk`
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留
   - `SystemTtsService` 的 `runBlocking` **已恢复**

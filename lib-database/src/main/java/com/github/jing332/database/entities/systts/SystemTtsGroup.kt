@@ -26,4 +26,7 @@ data class SystemTtsGroup(
 
     @ColumnInfo(defaultValue = "{}")
     var subGroupAudioParamsJson: String = "{}",
+
+    @ColumnInfo(defaultValue = "0")
+    var parentGroupId: Long = 0L,
 ) : AbstractListGroup, Parcelable
