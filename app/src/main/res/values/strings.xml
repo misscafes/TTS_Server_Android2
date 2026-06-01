@@ -548,13 +548,6 @@
     <string name="target_plugin">Target Plugin</string>
     <string name="switch_plugin">Switch Plugin</string>
     <string name="batch_switch_done">Batch switch completed</string>
-    <string name="group_manage">Group Management</string>
-    <string name="group_manage_desc">Merge all root groups into a parent group</string>
-    <string name="new_parent_group_name">Parent Group Name</string>
-    <string name="group_manage_done">Group management completed</string>
-    <string name="ai_generate_config">AI Generate Config</string>
-    <string name="ai_generate_config_desc">Auto-generate TTS config based on speech rules and plugin voices</string>
-    <string name="ai_generate_config_todo">(Work in progress, please configure AI API to use)</string>
     <string name="selected_count">已选 %1$d 项</string>
     <string name="please_select_voice">请先选择音色</string>
     <string name="tag_rule_inconsistent">选中音色的朗读规则不一致</string>

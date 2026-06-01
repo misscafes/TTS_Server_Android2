@@ -2,7 +2,7 @@
 
 ## 版本变更记录
 
-### v1.26.060110（批量编辑 + 分组管理 + AI 生成配置 + 数据库 parentGroupId）
+### v1.26.060110（批量编辑 + 数据库 parentGroupId）
 
 #### 数据库架构升级
 - `SystemTtsGroup`：新增 `parentGroupId` 字段（默认 `0L`），为后续分组嵌套做准备
@@ -18,16 +18,8 @@
   - 批量编辑模式下禁用原有点击/长按操作，点击列表项变为切换选中状态
   - 返回键或「取消」按钮退出批量编辑模式
 
-#### 新增功能：分组管理
-- **入口**：系统 TTS 列表 AppBar 右侧「🗂️ 分组管理」按钮
-- **功能**：一键将所有根分组合并到一个新建的父分组下（利用 `parentGroupId`）
-
-#### 新增功能：AI 生成配置（占位）
-- **入口**：系统 TTS 列表 AppBar 右侧「🤖 AI 生成配置」按钮
-- **状态**：对话框框架已搭建，核心 AI 调用逻辑待后续配置 API 后完善
-
 #### 图标统一
-- 所有新增按钮均使用 Material Icons（EditNote、FolderCopy、SmartToy、Delete、Extension），与现有 UI 风格一致
+- 新增按钮使用 Material Icons（EditNote、Delete、Extension）
 
 #### 构建配置
 - `gradle.properties`：新增 `org.gradle.java.home=C:\Program Files\Android\Android Studio\jbr`，固定使用 Android Studio 自带 JDK 21，避免系统 Java 26 与 Gradle 8.10.2 不兼容

@@ -21,19 +21,16 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.Extension
-import androidx.compose.material.icons.filled.FolderCopy
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.SmartToy
-import androidx.compose.material.icons.filled.SwapHoriz
+
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -336,14 +333,6 @@ internal fun ListManagerScreen(
         BatchTagDialog(
             groupItems = showBatchTagDialog!!,
             onDismissRequest = { showBatchTagDialog = null }
-        )
-    }
-
-    var showBatchSwitchTag by remember { mutableStateOf(false) }
-    if (showBatchSwitchTag) {
-        BatchSwitchTagDialog(
-            groups = models,
-            onDismissRequest = { showBatchSwitchTag = false }
         )
     }
 
@@ -800,82 +789,6 @@ internal fun ListManagerScreen(
         )
     }
 
-    // ===== 分组管理对话框 =====
-    var showGroupManageDialog by remember { mutableStateOf(false) }
-    if (showGroupManageDialog) {
-        var newGroupName by remember { mutableStateOf("") }
-        AlertDialog(
-            onDismissRequest = { showGroupManageDialog = false },
-            title = { Text(stringResource(R.string.group_manage)) },
-            text = {
-                Column {
-                    Text(stringResource(R.string.group_manage_desc))
-                    Spacer(Modifier.height(12.dp))
-                    androidx.compose.material3.OutlinedTextField(
-                        value = newGroupName,
-                        onValueChange = { newGroupName = it },
-                        label = { Text(stringResource(R.string.new_parent_group_name)) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = {
-                    showGroupManageDialog = false
-                    val name = newGroupName.ifBlank { "总目录" }
-                    scope.launch {
-                        withIO {
-                            val rootGroups = dbm.systemTtsV2.allGroup.filter { it.parentGroupId == 0L }
-                            if (rootGroups.size <= 1) return@withIO
-                            val parentId = System.currentTimeMillis()
-                            dbm.systemTtsV2.insertGroup(
-                                SystemTtsGroup(id = parentId, name = name, order = 0, isExpanded = true)
-                            )
-                            rootGroups.forEachIndexed { index, group ->
-                                dbm.systemTtsV2.updateGroup(group.copy(parentGroupId = parentId, order = index))
-                            }
-                        }
-                        SystemTtsService.notifyUpdateConfig()
-                        context.longToast(R.string.group_manage_done)
-                    }
-                }) {
-                    Text(stringResource(R.string.confirm))
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showGroupManageDialog = false }) {
-                    Text(stringResource(R.string.cancel))
-                }
-            }
-        )
-    }
-
-    // ===== AI 生成配置占位对话框 =====
-    var showAiGenerateDialog by remember { mutableStateOf(false) }
-    if (showAiGenerateDialog) {
-        AlertDialog(
-            onDismissRequest = { showAiGenerateDialog = false },
-            title = { Text(stringResource(R.string.ai_generate_config)) },
-            text = {
-                Column {
-                    Text(stringResource(R.string.ai_generate_config_desc))
-                    Spacer(Modifier.height(12.dp))
-                    Text(
-                        stringResource(R.string.ai_generate_config_todo),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            },
-            confirmButton = {
-                TextButton(onClick = { showAiGenerateDialog = false }) {
-                    Text(stringResource(R.string.close))
-                }
-            }
-        )
-    }
-
     var showOptions by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -964,15 +877,6 @@ internal fun ListManagerScreen(
                         }
                         IconButton(onClick = { isSearchMode = true }) {
                             Icon(Icons.Default.Search, stringResource(id = R.string.search))
-                        }
-                        IconButton(onClick = { showBatchSwitchTag = true }) {
-                            Icon(Icons.Default.SwapHoriz, stringResource(id = R.string.batch_switch_tag))
-                        }
-                        IconButton(onClick = { showGroupManageDialog = true }) {
-                            Icon(Icons.Default.FolderCopy, stringResource(id = R.string.group_manage))
-                        }
-                        IconButton(onClick = { showAiGenerateDialog = true }) {
-                            Icon(Icons.Default.SmartToy, stringResource(id = R.string.ai_generate_config))
                         }
                         IconButton(onClick = {
                             isBatchEditMode = true
