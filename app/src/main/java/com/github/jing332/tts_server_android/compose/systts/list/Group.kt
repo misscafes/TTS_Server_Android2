@@ -6,6 +6,9 @@ import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.DriveFileRenameOutline
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.AccountTree
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.CreateNewFolder
 import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.Speed
 import androidx.compose.material3.DropdownMenuItem
@@ -49,6 +52,9 @@ fun Group(
     onReleaseSubGroup: () -> Unit = {},
     onConvertToSubGroup: () -> Unit = {},
     onExtractSubGroup: () -> Unit = {},
+    onAddChildGroup: (() -> Unit)? = null,
+    onPromoteToRoot: (() -> Unit)? = null,
+    onMoveToParent: (() -> Unit)? = null,
 ) {
 
     var showRenameDialog by remember { mutableStateOf(false) }
@@ -223,6 +229,42 @@ fun Group(
                     Icon(Icons.Default.Label, null)
                 }
             )
+
+            if (onAddChildGroup != null) {
+                DropdownMenuItem(text = { Text("新建子目录") },
+                    onClick = {
+                        dismiss()
+                        onAddChildGroup()
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.CreateNewFolder, null)
+                    }
+                )
+            }
+
+            if (onPromoteToRoot != null) {
+                DropdownMenuItem(text = { Text("升级为一级目录") },
+                    onClick = {
+                        dismiss()
+                        onPromoteToRoot()
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.ArrowUpward, null)
+                    }
+                )
+            }
+
+            if (onMoveToParent != null) {
+                DropdownMenuItem(text = { Text("降级为子目录") },
+                    onClick = {
+                        dismiss()
+                        onMoveToParent()
+                    },
+                    leadingIcon = {
+                        Icon(Icons.Default.ArrowDownward, null)
+                    }
+                )
+            }
         }
     )
 

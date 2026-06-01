@@ -2,6 +2,30 @@
 
 ## 版本变更记录
 
+### v1.26.060118（无限子分组树形模式）
+
+#### 系统 TTS 列表：无限子分组树形模式
+- **核心改动**：系统 TTS 分组列表从「平面分组 + categoryPath 子分组」双轨机制，升级为以 `parentGroupId` 为唯一机制的**无限层级树形分组**
+- **ViewModel 层**：
+  - `_list` 从 `List<GroupWithSystemTts>` 改为 `List<GroupTreeNode>`
+  - 新增 `GroupTreeNode` 数据类，含 `group`/`list`/`children` 字段和 `allTts()` 方法
+  - 新增 `toTree()` 从数据库平面数据构建树、`flattenNodes()`/`findNodeByGroupId()` 树遍历辅助
+  - 新增 `updateGroupExpanded()`/`addGroup()`/`moveGroupToRoot()`/`moveGroupToParent()`/`wrapRootGroupsIntoParent()` 树形操作
+  - `reorder()` 限制分组只能在同一 `parentGroupId` 内交换
+- **UI 层**：
+  - `LazyColumn` 中新增 `fun LazyListScope.groupTreeNode()` 递归渲染函数（参考拉取仓库实现方式）
+  - 分组 Header 使用 `stickyHeader`，子分组通过递归调用 `groupTreeNode(child, level + 1)` 渲染
+  - 缩进通过 `(level * 20).dp` 实现，支持无限层级视觉嵌套
+  - `Group` 组件新增 `onAddChildGroup`/`onPromoteToRoot`/`onMoveToParent` 树形操作回调
+  - 保留原有的批量编辑模式和 `categoryPath` 子分组兼容逻辑
+- **数据库**：`parentGroupId` 字段和 `getGroupsByParent()` DAO 方法在 v32 升级时已就绪
+
+#### AI 生成配置按钮图标替换
+- 系统 TTS 列表 AppBar AI 按钮从 `Text("🤖")` 改为 `Icon(Icons.Default.SmartToy, ...)`
+- 新增字符串资源 `ai_generate_config`（中文：AI生成配置）
+
+---
+
 ### v1.26.060109-patch（AI 生成配置）
 
 #### 新增功能：AI 生成配置
@@ -157,7 +181,23 @@
 
 ## 会话摘要
 
-### 2026-06-01 本次会话（v1.26.060109-patch - AI 生成配置移植）
+### 2026-06-01 本次会话（v1.26.060118 - 无限子分组树形模式）
+- **当前版本**：v1.26.060118（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. **系统 TTS 列表升级为无限子分组树形模式**：
+     - `ListManagerViewModel`：`GroupTreeNode` 树节点、`toTree()`/`flattenNodes()`/`findNodeByGroupId()`、树形增删改操作
+     - `ListManagerScreen`：`fun LazyListScope.groupTreeNode()` 递归渲染（参考拉取仓库实现方式），`stickyHeader` + 缩进实现无限层级
+     - `Group` 组件：新增 `onAddChildGroup`/`onPromoteToRoot`/`onMoveToParent` 树形操作回调
+     - 拖拽限制：分组只能在同一 `parentGroupId` 内交换
+  2. **AI 生成配置按钮图标替换**：`Text("🤖")` → `Icon(Icons.Default.SmartToy, ...)`，新增字符串资源
+  3. **编译通过并构建 Release APK**：`newapk/TTS-Server-v1.26.060118.apk`
+- **注意事项**：
+  - `allowMainThreadQueries` 暂时保留
+  - `SystemTtsService` 的 `runBlocking` **已恢复**
+  - 编译环境需使用 Android Studio 自带 JDK 21
+  - 保留原有 `categoryPath` 子分组兼容逻辑，树形分组和旧子分组机制并存
+
+### 2026-06-01 上次会话（v1.26.060109-patch - AI 生成配置移植）
 - **当前版本**：v1.26.060109-patch（基于 `hhh4` 分支）
 - **已完成事项**：
   1. **移植 AI 生成配置功能**：

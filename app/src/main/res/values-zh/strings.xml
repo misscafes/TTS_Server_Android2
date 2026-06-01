@@ -559,5 +559,6 @@
     <string name="network_keep_alive_stopped">网络连接保活已停止</string>
     <string name="pixel_keep_alive_started">像素保活已启动</string>
     <string name="pixel_keep_alive_stopped">像素保活已停止</string>
+    <string name="ai_generate_config">AI生成配置</string>
 
 </resources>

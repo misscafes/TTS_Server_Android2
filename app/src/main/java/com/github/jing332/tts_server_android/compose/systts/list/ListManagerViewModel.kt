@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.AbstractListGroup.Companion.DEFAULT_GROUP_ID
 import com.github.jing332.database.entities.systts.GroupWithSystemTts
+import com.github.jing332.database.entities.systts.SystemTtsGroup
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.database.entities.systts.TtsConfigurationDTO
 import com.github.jing332.database.entities.systts.source.LocalTtsSource
@@ -16,11 +17,20 @@ import com.github.jing332.tts_server_android.conf.SystemTtsConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.launch
 import org.burnoutcrew.reorderable.ItemPosition
 import java.util.Collections
+
+data class GroupTreeNode(
+    val group: SystemTtsGroup,
+    val list: List<SystemTtsV2>,
+    val children: List<GroupTreeNode> = emptyList()
+) {
+    fun allTts(): List<SystemTtsV2> {
+        return list + children.flatMap { it.allTts() }
+    }
+}
 
 class ListManagerViewModel : ViewModel() {
     companion object {
@@ -33,8 +43,10 @@ class ListManagerViewModel : ViewModel() {
     private val _searchType = MutableStateFlow(SearchType.NAME)
     val searchType: StateFlow<SearchType> get() = _searchType
 
-    private val _list = MutableStateFlow<List<GroupWithSystemTts>>(emptyList())
-    val list: StateFlow<List<GroupWithSystemTts>> get() = _list
+    private val _rawList = MutableStateFlow<List<GroupWithSystemTts>>(emptyList())
+
+    private val _list = MutableStateFlow<List<GroupTreeNode>>(emptyList())
+    val list: StateFlow<List<GroupTreeNode>> get() = _list
 
     // 缓存插件名称
     private val pluginNameCache = MutableStateFlow<Map<String, String>>(emptyMap())
@@ -44,22 +56,55 @@ class ListManagerViewModel : ViewModel() {
             // 加载插件名称缓存
             val plugins = dbm.pluginDao.all
             pluginNameCache.value = plugins.associate { it.pluginId to it.name }
-            
+
             dbm.systemTtsV2.updateAllOrder()
-            
+
             dbm.systemTtsV2.flowAllGroupWithTts().conflate()
-                .combine(_keyword) { list, key -> Pair(list, key) }
-                .combine(_searchType) { pair, type -> Triple(pair.first, pair.second, type) }
-                .collect { (list, key, searchType) ->
-                    val result = if (key.isBlank()) {
-                        list
-                    } else {
-                        filterList(list, key, searchType)
-                    }
-                    Log.d(TAG, "update list: ${result.size}")
-                    _list.value = result
+                .collect { raw ->
+                    _rawList.value = raw
+                    emitList()
                 }
         }
+    }
+
+    private fun emitList() {
+        val raw = _rawList.value
+        val key = _keyword.value
+        val type = _searchType.value
+
+        val filtered = if (key.isBlank()) {
+            raw
+        } else {
+            filterList(raw, key, type)
+        }
+        Log.d(TAG, "update list: ${filtered.size}")
+        _list.value = filtered.toTree()
+    }
+
+    private fun List<GroupWithSystemTts>.toTree(): List<GroupTreeNode> {
+        val groupIdSet = this.map { it.group.id }.toSet()
+        val childrenMap = this.groupBy { it.group.parentGroupId }
+
+        fun buildNode(item: GroupWithSystemTts): GroupTreeNode {
+            val children = childrenMap[item.group.id]
+                .orEmpty()
+                .filter { it.group.id != item.group.id }
+                .sortedBy { it.group.order }
+                .map { buildNode(it) }
+
+            return GroupTreeNode(
+                group = item.group,
+                list = item.list.sortedBy { it.order },
+                children = children
+            )
+        }
+
+        return this
+            .filter {
+                it.group.parentGroupId == 0L || it.group.parentGroupId !in groupIdSet
+            }
+            .sortedBy { it.group.order }
+            .map { buildNode(it) }
     }
 
     private fun filterList(
@@ -81,6 +126,7 @@ class ListManagerViewModel : ViewModel() {
                     } else null
                 }
             }
+
             SearchType.TAG -> {
                 list.mapNotNull { groupWithTts ->
                     val filteredItems = groupWithTts.list.filter { item ->
@@ -88,8 +134,8 @@ class ListManagerViewModel : ViewModel() {
                         if (ttsConfig != null) {
                             val speechRule = ttsConfig.speechRule
                             speechRule.tagName.contains(key, ignoreCase = true) ||
-                            speechRule.tag.contains(key, ignoreCase = true) ||
-                            speechRule.tagData.values.any { it.contains(key, ignoreCase = true) }
+                                    speechRule.tag.contains(key, ignoreCase = true) ||
+                                    speechRule.tagData.values.any { it.contains(key, ignoreCase = true) }
                         } else false
                     }
                     if (filteredItems.isNotEmpty()) {
@@ -100,6 +146,7 @@ class ListManagerViewModel : ViewModel() {
                     } else null
                 }
             }
+
             SearchType.PLUGIN -> {
                 list.mapNotNull { groupWithTts ->
                     val filteredItems = groupWithTts.list.filter { item ->
@@ -107,13 +154,16 @@ class ListManagerViewModel : ViewModel() {
                         if (ttsConfig != null) {
                             when (val source = ttsConfig.source) {
                                 is PluginTtsSource -> {
-                                    val pluginName = pluginNameCache.value[source.pluginId] ?: source.pluginId
+                                    val pluginName =
+                                        pluginNameCache.value[source.pluginId] ?: source.pluginId
                                     source.pluginId.contains(key, ignoreCase = true) ||
-                                    pluginName.contains(key, ignoreCase = true)
+                                            pluginName.contains(key, ignoreCase = true)
                                 }
+
                                 is LocalTtsSource ->
                                     "本地".contains(key, ignoreCase = true) ||
-                                    "local".contains(key, ignoreCase = true)
+                                            "local".contains(key, ignoreCase = true)
+
                                 else -> false
                             }
                         } else false
@@ -126,6 +176,7 @@ class ListManagerViewModel : ViewModel() {
                     } else null
                 }
             }
+
             SearchType.GROUP -> {
                 list.filter {
                     it.group.name.contains(key, ignoreCase = true)
@@ -138,10 +189,12 @@ class ListManagerViewModel : ViewModel() {
 
     fun setSearchKeyword(key: String) {
         _keyword.value = key
+        emitList()
     }
 
     fun setSearchType(type: SearchType) {
         _searchType.value = type
+        emitList()
     }
 
     fun updateTtsEnabled(
@@ -170,12 +223,14 @@ class ListManagerViewModel : ViewModel() {
     }
 
     fun updateGroupEnable(
-        item: GroupWithSystemTts,
+        item: GroupTreeNode,
         enabled: Boolean,
     ) {
+        val targetList = item.allTts()
+
         if (!SystemTtsConfig.isGroupMultipleEnabled.value && enabled) {
-            list.value.forEach {
-                it.list.forEach { systts ->
+            list.value.forEach { root ->
+                root.allTts().forEach { systts ->
                     if (systts.isEnabled)
                         dbm.systemTtsV2.update(systts.copy(isEnabled = false))
                 }
@@ -183,8 +238,80 @@ class ListManagerViewModel : ViewModel() {
         }
 
         dbm.systemTtsV2.update(
-            *item.list.filter { it.isEnabled != enabled }.map { it.copy(isEnabled = enabled) }
+            *targetList
+                .filter { it.isEnabled != enabled }
+                .map { it.copy(isEnabled = enabled) }
                 .toTypedArray()
+        )
+    }
+
+    fun updateGroupExpanded(
+        group: SystemTtsGroup,
+        expanded: Boolean,
+    ) {
+        dbm.systemTtsV2.updateGroup(group.copy(isExpanded = expanded))
+    }
+
+    fun addGroup(
+        name: String,
+        parentGroupId: Long = 0L,
+    ) {
+        val order = dbm.systemTtsV2.getGroupCountByParent(parentGroupId)
+
+        dbm.systemTtsV2.insertGroup(
+            SystemTtsGroup(
+                name = name,
+                order = order,
+                parentGroupId = parentGroupId
+            )
+        )
+    }
+
+    fun moveGroupToRoot(group: SystemTtsGroup) {
+        if (group.parentGroupId == 0L) return
+
+        val order = dbm.systemTtsV2.getGroupCountByParent(0L)
+
+        dbm.systemTtsV2.updateGroup(
+            group.copy(
+                parentGroupId = 0L,
+                order = order
+            )
+        )
+    }
+
+    fun moveGroupToParent(
+        group: SystemTtsGroup,
+        parentGroupId: Long,
+    ) {
+        if (group.id == parentGroupId) return
+
+        if (parentGroupId == 0L) {
+            moveGroupToRoot(group)
+            return
+        }
+
+        val allGroups = dbm.systemTtsV2.allGroup
+
+        fun isDescendant(
+            targetId: Long,
+            parentId: Long,
+        ): Boolean {
+            val children = allGroups.filter { it.parentGroupId == parentId }
+            return children.any { child ->
+                child.id == targetId || isDescendant(targetId, child.id)
+            }
+        }
+
+        if (isDescendant(parentGroupId, group.id)) return
+
+        val order = dbm.systemTtsV2.getGroupCountByParent(parentGroupId)
+
+        dbm.systemTtsV2.updateGroup(
+            group.copy(
+                parentGroupId = parentGroupId,
+                order = order
+            )
         )
     }
 
@@ -245,7 +372,6 @@ class ListManagerViewModel : ViewModel() {
         if (fromKey.startsWith("item_") || toKey.startsWith("item_")) {
             if (!fromKey.startsWith("item_") || !toKey.startsWith("item_")) return
 
-            // 解析 key 格式: item_${groupId}_${categoryPath}_${itemId}
             val fromParts = fromKey.removePrefix("item_").split("_", limit = 3)
             val toParts = toKey.removePrefix("item_").split("_", limit = 3)
             if (fromParts.size < 3 || toParts.size < 3) return
@@ -258,7 +384,6 @@ class ListManagerViewModel : ViewModel() {
             val toCategoryPath = toParts[1]
             val toItemId = toParts.drop(2).joinToString("_").toLongOrNull() ?: return
 
-            // 确保在同一分组和同一子分组内
             if (fromGroupId != toGroupId || fromCategoryPath != toCategoryPath) return
 
             val allItems = findListInGroup(fromGroupId).toMutableList()
@@ -281,12 +406,21 @@ class ListManagerViewModel : ViewModel() {
         }
 
         if (fromKey.startsWith("g_") && toKey.startsWith("g_")) {
-            val mList = list.value.map { it.group }.toMutableList()
-
             val fromId = fromKey.substring(2).toLong()
-            val fromIndex = mList.indexOfFirst { it.id == fromId }
-
             val toId = toKey.substring(2).toLong()
+
+            val fromGroup = findNodeByGroupId(fromId)?.group ?: return
+            val toGroup = findNodeByGroupId(toId)?.group ?: return
+
+            if (fromGroup.parentGroupId != toGroup.parentGroupId) return
+
+            val mList = flattenNodes()
+                .map { it.group }
+                .filter { it.parentGroupId == fromGroup.parentGroupId }
+                .sortedBy { it.order }
+                .toMutableList()
+
+            val fromIndex = mList.indexOfFirst { it.id == fromId }
             val toIndex = mList.indexOfFirst { it.id == toId }
 
             try {
@@ -294,6 +428,7 @@ class ListManagerViewModel : ViewModel() {
             } catch (_: IndexOutOfBoundsException) {
                 return
             }
+
             mList.forEachIndexed { index, systemTtsGroup ->
                 if (systemTtsGroup.order != index)
                     dbm.systemTtsV2.updateGroup(systemTtsGroup.copy(order = index))
@@ -322,15 +457,37 @@ class ListManagerViewModel : ViewModel() {
         }
     }
 
+    private fun flattenNodes(
+        nodes: List<GroupTreeNode> = list.value,
+    ): List<GroupTreeNode> {
+        return nodes.flatMap { node ->
+            listOf(node) + flattenNodes(node.children)
+        }
+    }
+
+    private fun findNodeByGroupId(
+        groupId: Long,
+        nodes: List<GroupTreeNode> = list.value,
+    ): GroupTreeNode? {
+        nodes.forEach { node ->
+            if (node.group.id == groupId) return node
+
+            val found = findNodeByGroupId(groupId, node.children)
+            if (found != null) return found
+        }
+
+        return null
+    }
+
     private fun findListInGroup(groupId: Long): List<SystemTtsV2> {
-        return list.value.find { it.group.id == groupId }?.list?.sortedBy { it.order }
+        return findNodeByGroupId(groupId)?.list?.sortedBy { it.order }
             ?: emptyList()
     }
 
     fun checkListData(context: Context) {
         dbm.systemTtsV2.getGroup(DEFAULT_GROUP_ID) ?: kotlin.run {
             dbm.systemTtsV2.insertGroup(
-                com.github.jing332.database.entities.systts.SystemTtsGroup(
+                SystemTtsGroup(
                     DEFAULT_GROUP_ID,
                     context.getString(R.string.default_group),
                     dbm.systemTtsV2.groupCount
