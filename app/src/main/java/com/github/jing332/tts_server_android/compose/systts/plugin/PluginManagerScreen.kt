@@ -143,14 +143,6 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
         )
     }
 
-    var showBatchReplaceDialog by remember { mutableStateOf<Plugin?>(null) }
-    if (showBatchReplaceDialog != null) {
-        BatchReplacePluginDialog(
-            sourcePlugin = showBatchReplaceDialog!!,
-            onDismissRequest = { showBatchReplaceDialog = null }
-        )
-    }
-
     fun onEdit(plugin: Plugin = Plugin()) {
         sharedVM.put(NavRoutes.PluginEdit.KEY_DATA, plugin)
         navController.navigate(NavRoutes.PluginEdit.id)
@@ -274,7 +266,6 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
                         onEdit = { onEdit(item) },
                         onSetVars = { showVarsSettings = item },
                         onAudioParams = { showAudioParamsDialog = item },
-                        onBatchReplace = { showBatchReplaceDialog = item },
                         onDelete = { showDeleteDialog = item },
                         onClear = {
                             PluginManager(item).clearCache()
@@ -306,7 +297,6 @@ private fun Item(
     onEdit: () -> Unit,
     onSetVars: () -> Unit,
     onAudioParams: () -> Unit,
-    onBatchReplace: () -> Unit,
     onExport: () -> Unit,
     onDelete: () -> Unit,
 ) {
@@ -423,17 +413,6 @@ private fun Item(
                                 },
                                 leadingIcon = {
                                     Icon(Icons.Default.VolumeUp, stringResource(R.string.plugin_audio_params))
-                                }
-                            )
-
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.batch_replace_plugin)) },
-                                onClick = {
-                                    showOptions = false
-                                    onBatchReplace()
-                                },
-                                leadingIcon = {
-                                    Icon(Icons.AutoMirrored.Filled.Input, stringResource(R.string.batch_replace_plugin))
                                 }
                             )
 

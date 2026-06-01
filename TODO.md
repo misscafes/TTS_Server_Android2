@@ -2,16 +2,10 @@
 
 ## 版本变更记录
 
-### v1.26.053014（批量切换标签 + JobCancellationException 修复 + 批量替换插件）
+### v1.26.060109（批量切换标签 + JobCancellationException 修复 + JDK 21 配置固定）
 
-#### 新增功能：批量替换插件
-- **位置**：插件管理界面（`PluginManagerScreen`）→ 每个插件项的「更多」菜单 →「批量替换插件」
-- **功能**：一键将系统 TTS 列表中所有使用了当前插件的音色，批量替换为另一个插件
-- **实现文件**：
-  - 新建 `BatchReplacePluginDialog.kt`：对话框显示当前有多少个音色正在使用该插件，下拉框选择目标插件
-  - 修改 `PluginManagerScreen.kt`：在 `Item` 的 `DropdownMenu` 中新增「批量替换插件」入口
-  - 替换逻辑：查询所有 `SystemTtsV2`，筛选出 `config.source.pluginId == 旧插件` 的条目，将 `pluginId` 改为目标插件，同时清空 `locale` 和 `voice`（不同插件支持的语言/发音人不同）
-  - 更新后自动调用 `SystemTtsService.notifyUpdateConfig()` 使配置立即生效
+#### 构建配置
+- `gradle.properties`：新增 `org.gradle.java.home=C:\Program Files\Android\Android Studio\jbr`，固定使用 Android Studio 自带 JDK 21，避免系统 Java 26 与 Gradle 8.10.2 不兼容
 
 #### 问题现象
 - 系统 TTS 使用过程中偶现「加载配置失败：kotlinx.coroutines.JobCancellationException: Parent job is Cancelling」
@@ -128,13 +122,12 @@
 
 ## 会话摘要
 
-### 2026-06-01 本次会话（v1.26.053014 - 批量替换插件）
-- **当前版本**：v1.26.053014（基于 `hhh4` 分支）
+### 2026-06-01 本次会话（v1.26.060109 - JDK 21 配置固定）
+- **当前版本**：v1.26.060109（基于 `hhh4` 分支）
 - **已完成事项**：
-  1. **新增「批量替换插件」功能**：
-     - `PluginManagerScreen.kt` 每个插件项的「更多」菜单中新增「批量替换插件」入口
-     - 新建 `BatchReplacePluginDialog.kt`：显示当前插件被多少音色使用，下拉框选择目标插件后一键批量替换
-     - 替换后自动清空 `locale` 和 `voice`，并通知服务更新配置
+  1. **固定 Gradle 使用 Android Studio 自带 JDK 21**：
+     - `gradle.properties` 新增 `org.gradle.java.home` 配置
+     - 避免系统 Java 26 与 Gradle 8.10.2 不兼容导致构建失败
   2. **新增「批量切换标签」功能**：
      - `ListManagerScreen.kt` AppBar 右侧新增切换标签按钮（`Icons.Default.SwapHoriz`）
      - 新建 `BatchSwitchTagDialog.kt`：复选列表选择音色，点击「切换」批量将每个条目标签切换到下一个
