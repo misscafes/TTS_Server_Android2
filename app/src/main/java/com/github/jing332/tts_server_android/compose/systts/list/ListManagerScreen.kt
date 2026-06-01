@@ -1,5 +1,6 @@
 package com.github.jing332.tts_server_android.compose.systts.list
 
+import android.content.Context
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -11,11 +12,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
@@ -26,8 +30,10 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
 
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -99,12 +105,22 @@ import com.github.jing332.tts_server_android.model.rhino.speech_rule.SpeechRuleE
 import com.github.jing332.tts_server_android.service.systts.SystemTtsService
 import android.content.Intent
 import com.github.jing332.tts_server_android.toCode
+import com.github.jing332.database.entities.SpeechRule
+import com.github.jing332.database.entities.plugin.Plugin
+import com.github.jing332.database.entities.systts.BasicAudioFormat
+import com.github.jing332.database.entities.systts.SpeechRuleInfo
+import com.github.jing332.tts.speech.plugin.engine.TtsPluginUiEngineV2
 import com.github.jing332.tts_server_android.ui.view.AppDialogs.displayErrorDialog
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
 import org.burnoutcrew.reorderable.rememberReorderableLazyListState
 import org.burnoutcrew.reorderable.reorderable
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.File
+import java.io.OutputStreamWriter
+import java.net.URL
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -126,6 +142,18 @@ internal fun ListManagerScreen(
     // 批量编辑状态
     var isBatchEditMode by rememberSaveable { mutableStateOf(false) }
     var selectedTtsIds by rememberSaveable { mutableStateOf<Set<Long>>(emptySet()) }
+
+    // AI生成配置状态
+    var showAiGenerateConfigDialog by remember { mutableStateOf(false) }
+    var aiGenerateSelectedPluginId by rememberSaveable { mutableStateOf("") }
+    var aiGenerateDynamicPluginId by rememberSaveable { mutableStateOf("") }
+    var aiGenerateDynamicVoices by remember { mutableStateOf<List<AiPluginVoicePreview>>(emptyList()) }
+    var aiGenerateVoiceLoading by remember { mutableStateOf(false) }
+    var aiGenerateVoiceError by remember { mutableStateOf("") }
+    var aiGenerateMatchPreviewText by remember { mutableStateOf("") }
+    var showAiGenerateModelDialog by remember { mutableStateOf(false) }
+    var aiGenerateModelText by remember { mutableStateOf("") }
+    var aiRulePreviewExpanded by rememberSaveable { mutableStateOf(false) }
 
     // 子分组展开状态：存储已展开的子分组完整路径（持久化，默认全部折叠）
     var expandedSubGroups by remember { AppConfig.expandedSubGroups }
@@ -270,6 +298,294 @@ internal fun ListManagerScreen(
         }, systts = showQuickEdit!!, onSysttsChange = {
             showQuickEdit = it
         })
+    }
+
+    if (showAiGenerateModelDialog) {
+        TextFieldDialog(
+            title = "🤖 AI生成配置模型设置",
+            text = aiGenerateModelText,
+            onTextChange = { aiGenerateModelText = it },
+            onDismissRequest = {
+                showAiGenerateModelDialog = false
+            }
+        ) {
+            writeAiGenerateConfigApiText(context, aiGenerateModelText)
+            showAiGenerateModelDialog = false
+            context.toast("已保存 AI生成配置模型设置")
+        }
+    }
+
+    if (showAiGenerateConfigDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showAiGenerateConfigDialog = false
+            },
+            title = {
+                Text("🤖 AI生成配置列表")
+            },
+            text = {
+                val activeRule = remember(showAiGenerateConfigDialog) {
+                    dbm.speechRuleDao.allEnabled.firstOrNull()
+                }
+
+                val aiPluginList = remember(showAiGenerateConfigDialog) {
+                    dbm.pluginDao.all.filter { it.isEnabled }
+                }
+
+                val selectedPlugin = remember(aiGenerateSelectedPluginId, aiPluginList) {
+                    aiPluginList.firstOrNull { it.pluginId == aiGenerateSelectedPluginId }
+                }
+
+                val staticVoicePreview = remember(selectedPlugin?.pluginId) {
+                    selectedPlugin?.let { extractAiPluginVoicePreview(it.code.toString()) }.orEmpty()
+                }
+
+                val voicePreview = remember(
+                    selectedPlugin?.pluginId,
+                    aiGenerateDynamicPluginId,
+                    aiGenerateDynamicVoices,
+                    staticVoicePreview
+                ) {
+                    if (
+                        selectedPlugin != null &&
+                        aiGenerateDynamicPluginId == selectedPlugin.pluginId &&
+                        aiGenerateDynamicVoices.isNotEmpty()
+                    ) {
+                        aiGenerateDynamicVoices
+                    } else {
+                        staticVoicePreview
+                    }
+                }
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    val rolePreviewText = buildAiRuleRolePreviewText(activeRule)
+                    val rolePreviewLines = rolePreviewText.lines()
+                    val rolePreviewCollapsedText = buildString {
+                        rolePreviewLines.take(8).forEachIndexed { index, line ->
+                            append(line)
+                            if (index != minOf(7, rolePreviewLines.size - 1)) {
+                                append("\n")
+                            }
+                        }
+
+                        if (rolePreviewLines.size > 8) {
+                            append("\n…（已折叠，点击展开查看全部）")
+                        }
+                    }
+
+                    Text(
+                        text = if (aiRulePreviewExpanded) rolePreviewText else rolePreviewCollapsedText,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    TextButton(
+                        onClick = {
+                            aiRulePreviewExpanded = !aiRulePreviewExpanded
+                        }
+                    ) {
+                        Text(if (aiRulePreviewExpanded) "收起规则详情" else "展开规则详情")
+                    }
+
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "AI匹配模型",
+                            style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        TextButton(
+                            onClick = {
+                                aiGenerateModelText = readAiGenerateConfigApiText(context)
+                                showAiGenerateModelDialog = true
+                            }
+                        ) {
+                            Text("模型设置")
+                        }
+                    }
+
+                    Text(
+                        text = if (readAiGenerateConfigApiText(context).isBlank()) {
+                            "未单独设置模型，后续将回退使用主规则 miyue.txt。"
+                        } else {
+                            "已设置独立 AI 生成配置模型。"
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                    Text(
+                        text = "选择 TTS 插件",
+                        style = MaterialTheme.typography.titleSmall
+                    )
+
+                    if (aiPluginList.isEmpty()) {
+                        Text(
+                            text = "当前没有可用插件。",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    } else {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(max = 260.dp)
+                                .verticalScroll(rememberScrollState())
+                        ) {
+                            aiPluginList.forEach { plugin ->
+                                TextButton(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    onClick = {
+                                        aiGenerateSelectedPluginId = plugin.pluginId
+                                        aiGenerateDynamicPluginId = ""
+                                        aiGenerateDynamicVoices = emptyList()
+                                        aiGenerateVoiceError = ""
+                                        aiGenerateMatchPreviewText = ""
+                                    }
+                                ) {
+                                    Text(
+                                        text = if (plugin.pluginId == aiGenerateSelectedPluginId) {
+                                            "✅ ${plugin.name.ifBlank { plugin.pluginId }}"
+                                        } else {
+                                            plugin.name.ifBlank { plugin.pluginId }
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    if (selectedPlugin != null) {
+                        TextButton(
+                            enabled = !aiGenerateVoiceLoading,
+                            onClick = {
+                                val plugin = selectedPlugin
+                                if (plugin != null) {
+                                    aiGenerateVoiceLoading = true
+                                    aiGenerateVoiceError = ""
+
+                                    scope.launch {
+                                        val result = withIO {
+                                            runCatching {
+                                                fetchAiPluginVoicesDynamic(context, plugin)
+                                            }
+                                        }
+
+                                        result.onSuccess { voices ->
+                                            aiGenerateDynamicPluginId = plugin.pluginId
+                                            aiGenerateDynamicVoices = voices
+                                            aiGenerateMatchPreviewText = ""
+                                            aiGenerateVoiceError = if (voices.isEmpty()) {
+                                                "动态获取成功，但声音列表为空"
+                                            } else {
+                                                ""
+                                            }
+                                        }.onFailure { e ->
+                                            aiGenerateVoiceError = e.message ?: "动态获取声音列表失败"
+                                        }
+
+                                        aiGenerateVoiceLoading = false
+                                    }
+                                }
+                            }
+                        ) {
+                            Text(if (aiGenerateVoiceLoading) "📡 正在获取声音列表..." else "📡 动态获取声音列表")
+                        }
+
+                        if (aiGenerateVoiceError.isNotBlank()) {
+                            Text(
+                                text = aiGenerateVoiceError,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+
+                    HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                    Text(
+                        text = buildAiPluginVoiceGroupPreviewText(
+                            pluginName = selectedPlugin?.name.orEmpty(),
+                            voices = voicePreview
+                        ),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
+                            aiGenerateMatchPreviewText = "🤖 AI正在匹配，请稍候..."
+
+                            scope.launch {
+                                aiGenerateMatchPreviewText = withIO {
+                                    buildAiGenerateConfigMatchPreviewTextWithAi(
+                                        context = context,
+                                        rule = activeRule,
+                                        pluginName = selectedPlugin?.name.orEmpty(),
+                                        voices = voicePreview
+                                    )
+                                }
+                            }
+                        }
+                    ) {
+                        Text("🎯 生成匹配预览")
+                    }
+
+                    if (aiGenerateMatchPreviewText.isNotBlank()) {
+                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+
+                        Text(
+                            text = aiGenerateMatchPreviewText,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+
+                        Button(
+                            modifier = Modifier.fillMaxWidth(),
+                            onClick = {
+                                val count = generateAiConfigListFromPreview(
+                                    context = context,
+                                    rule = activeRule,
+                                    plugin = selectedPlugin,
+                                    voices = voicePreview
+                                )
+
+                                if (count > 0) {
+                                    context.longToast("已生成 $count 条 TTS 配置")
+                                    SystemTtsService.notifyUpdateConfig()
+                                    showAiGenerateConfigDialog = false
+                                } else {
+                                    aiGenerateMatchPreviewText = "没有生成新配置。可能是已存在相同朗读规则 tag，或当前插件没有可匹配声音。"
+                                }
+                            }
+                        ) {
+                            Text("✅ 确认生成配置列表")
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showAiGenerateConfigDialog = false
+                    }
+                ) {
+                    Text("关闭")
+                }
+            }
+        )
     }
 
     fun navigateToEdit(systts: SystemTtsV2) {
@@ -879,6 +1195,13 @@ internal fun ListManagerScreen(
                             Icon(Icons.Default.Search, stringResource(id = R.string.search))
                         }
                         IconButton(onClick = {
+                            aiRulePreviewExpanded = false
+                            showAiGenerateConfigDialog = true
+                        }) {
+                            Text("🤖")
+                        }
+
+                        IconButton(onClick = {
                             isBatchEditMode = true
                             selectedTtsIds = emptySet()
                         }) {
@@ -1430,4 +1753,1429 @@ internal fun ListManagerScreen(
 
         }
     }
+}
+
+
+// ==================== AI生成配置 ====================
+
+private const val AI_GENERATE_CONFIG_API_FILE_NAME = "ai_generate_config_api.txt"
+
+private fun aiGenerateConfigApiFile(context: Context): File {
+    return File(context.filesDir, AI_GENERATE_CONFIG_API_FILE_NAME)
+}
+
+private fun readAiGenerateConfigApiText(context: Context): String {
+    val file = aiGenerateConfigApiFile(context)
+    return if (file.exists() && file.isFile) {
+        file.readText().trim()
+    } else {
+        ""
+    }
+}
+
+private fun writeAiGenerateConfigApiText(context: Context, text: String) {
+    val file = aiGenerateConfigApiFile(context)
+    file.parentFile?.mkdirs()
+    file.writeText(text.trim())
+}
+
+private data class AiRuleRoleTag(
+    val groupName: String,
+    val displayName: String,
+    val tag: String,
+    val tagName: String,
+    val index: Int,
+)
+
+private fun normalizeAiTagName(raw: String): String {
+    return raw
+        .replace("【", "")
+        .replace("】", "")
+        .replace("[", "")
+        .replace("]", "")
+        .replace("（", "")
+        .replace("）", "")
+        .trim()
+}
+
+private fun parseAiRuleRoleTags(rule: SpeechRule): List<AiRuleRoleTag> {
+    val result = mutableListOf<AiRuleRoleTag>()
+
+    val roleGroups = listOf(
+        "女童",
+        "男童",
+        "少女",
+        "少年",
+        "女青年",
+        "男青年",
+        "女中年",
+        "男中年",
+        "女老年",
+        "男老年"
+    )
+
+    rule.tags.forEach { (tag, tagNameRaw) ->
+        val tagName = normalizeAiTagName(tagNameRaw)
+        val lowerTag = tag.lowercase()
+
+        if (tagName.isBlank()) return@forEach
+        if (lowerTag == "narration" || lowerTag == "narrator") return@forEach
+        if (lowerTag == "duihua" || lowerTag == "duihuaa" || lowerTag == "duihuab") return@forEach
+        if (lowerTag.startsWith("localsound")) return@forEach
+        if (tagName.contains("旁白")) return@forEach
+        if (tagName.contains("音效")) return@forEach
+        if (tagName.contains("括号")) return@forEach
+
+        val matchedGroup = roleGroups.firstOrNull { group ->
+            tagName.contains(group)
+        } ?: return@forEach
+
+        val index = Regex("(\\d{1,3})")
+            .find(tagName)
+            ?.value
+            ?.toIntOrNull()
+            ?: 0
+
+        val gender = when {
+            matchedGroup.startsWith("女") || matchedGroup == "少女" -> "女"
+            matchedGroup.startsWith("男") || matchedGroup == "少年" -> "男"
+            else -> ""
+        }
+
+        val displayName = if (tagName.contains("/")) {
+            tagName
+        } else if (gender.isNotBlank()) {
+            "$gender/$matchedGroup" + if (index > 0) "%02d".format(index) else ""
+        } else {
+            tagName
+        }
+
+        result += AiRuleRoleTag(
+            groupName = matchedGroup,
+            displayName = displayName,
+            tag = tag,
+            tagName = tagNameRaw,
+            index = index
+        )
+    }
+
+    return result.sortedWith(
+        compareBy<AiRuleRoleTag> { it.groupName }
+            .thenBy { it.index }
+            .thenBy { it.displayName }
+    )
+}
+
+private data class AiPluginVoicePreview(
+    val voiceId: String,
+    val voiceName: String,
+    val icon: String? = null
+)
+
+private fun extractAiPluginVoicePreview(pluginCode: String): List<AiPluginVoicePreview> {
+    val result = mutableListOf<AiPluginVoicePreview>()
+
+    val cloneMarker = pluginCode.indexOf("CLONE_VOICE_NAMES")
+    if (cloneMarker >= 0) {
+        val openIndex = pluginCode.indexOf("[", cloneMarker)
+        val closeIndex = pluginCode.indexOf("];", openIndex)
+        if (openIndex >= 0 && closeIndex > openIndex) {
+            val block = pluginCode.substring(openIndex + 1, closeIndex)
+
+            Regex("\"((?:\\\\.|[^\"])*)\"|'((?:\\\\.|[^'])*)'")
+                .findAll(block)
+                .mapNotNull { match ->
+                    val value = match.groups[1]?.value ?: match.groups[2]?.value
+                    value
+                        ?.replace("\\\"", "\"")
+                        ?.replace("\\'", "'")
+                        ?.trim()
+                        ?.takeIf { it.isNotBlank() }
+                }
+                .forEachIndexed { index, name ->
+                    val safeName = name
+                        .replace(Regex("[()（）\\s/\\\\.:：，,;；#?&=\\[\\]{}]+"), "_")
+                        .replace(Regex("_+"), "_")
+                        .trim('_')
+                        .let { if (it.length > 70) it.substring(0, 70) else it }
+
+                    result += AiPluginVoicePreview(
+                        voiceId = "ggref_${index}_$safeName",
+                        voiceName = name
+                    )
+                }
+
+            return result.distinctBy { it.voiceId }
+        }
+    }
+
+    val voiceObjectMarker = pluginCode.indexOf("'VOICES'")
+        .takeIf { it >= 0 }
+        ?: pluginCode.indexOf("\"VOICES\"")
+            .takeIf { it >= 0 }
+        ?: pluginCode.indexOf("VOICES")
+
+    if (voiceObjectMarker >= 0) {
+        val area = pluginCode.substring(voiceObjectMarker, minOf(pluginCode.length, voiceObjectMarker + 12000))
+        Regex("['\"]([^'\"]{2,120})['\"]\\s*:\\s*['\"]([^'\"]{2,160})['\"]")
+            .findAll(area)
+            .take(500)
+            .forEach { m ->
+                result += AiPluginVoicePreview(
+                    voiceId = m.groupValues[1],
+                    voiceName = m.groupValues[2]
+                )
+            }
+    }
+
+    return result.distinctBy { it.voiceId }
+}
+
+private fun classifyAiVoiceGroup(text: String): String? {
+    val value = text.lowercase()
+
+    return when {
+        value.contains("女童") ||
+            value.contains("幼女") ||
+            value.contains("女孩") ||
+            value.contains("儿童") && value.contains("女") -> "女童"
+
+        value.contains("男童") ||
+            value.contains("男孩") ||
+            value.contains("正太") ||
+            value.contains("儿童") && value.contains("男") -> "男童"
+
+        value.contains("少女") ||
+            value.contains("女少年") -> "少女"
+
+        value.contains("少年") ||
+            value.contains("男少年") -> "少年"
+
+        value.contains("女青年") ||
+            value.contains("女青") ||
+            value.contains("御姐") ||
+            value.contains("少御") -> "女青年"
+
+        value.contains("男青年") ||
+            value.contains("男青") ||
+            value.contains("青年") && value.contains("男") -> "男青年"
+
+        value.contains("女中年") ||
+            value.contains("女中青") ||
+            value.contains("中年") && value.contains("女") -> "女中年"
+
+        value.contains("男中年") ||
+            value.contains("男中青") ||
+            value.contains("青叔") ||
+            value.contains("大叔") ||
+            value.contains("中年") && value.contains("男") -> "男中年"
+
+        value.contains("女老年") ||
+            value.contains("女中老") ||
+            value.contains("老年") && value.contains("女") ||
+            value.contains("老妇") ||
+            value.contains("奶奶") -> "女老年"
+
+        value.contains("男老年") ||
+            value.contains("男中老") ||
+            value.contains("老年") && value.contains("男") ||
+            value.contains("老者") ||
+            value.contains("老头") ||
+            value.contains("爷爷") -> "男老年"
+
+        else -> null
+    }
+}
+
+private fun fetchAiPluginVoicesDynamic(
+    context: Context,
+    plugin: Plugin,
+): List<AiPluginVoicePreview> {
+    val source = PluginTtsSource(
+        locale = "zh-CN",
+        voice = "",
+        pluginId = plugin.pluginId
+    )
+
+    val engine = TtsPluginUiEngineV2(context, plugin).apply {
+        eval()
+        this.source = source
+        onLoadData()
+    }
+
+    val locales = runCatching {
+        engine.getLocales().toList()
+    }.getOrDefault(emptyList())
+
+    val locale = locales.firstOrNull { it.first == "zh-CN" }?.first
+        ?: locales.firstOrNull()?.first
+        ?: "zh-CN"
+
+    return engine.getVoices(locale)
+        .map {
+            AiPluginVoicePreview(
+                voiceId = it.id,
+                voiceName = it.name,
+                icon = readVoiceIconByReflection(it)
+            )
+        }
+        .distinctBy { it.voiceId }
+}
+
+private fun aiPluginShortName(pluginName: String): String {
+    val name = pluginName.trim()
+
+    return when {
+        name.contains("呱呱", ignoreCase = true) -> "呱呱"
+        name.contains("mimo", ignoreCase = true) -> "MiMo"
+        name.contains("微软", ignoreCase = true) -> "微软"
+        name.contains("火山", ignoreCase = true) -> "火山"
+        name.contains("豆包", ignoreCase = true) -> "豆包"
+        name.contains("猫箱", ignoreCase = true) -> "猫箱"
+        name.contains("猫", ignoreCase = true) -> "猫箱"
+        name.isNotBlank() -> name.take(4)
+        else -> "插件"
+    }
+}
+
+private fun resolvePluginSampleRate(targetPlugin: Plugin): Int {
+    val code = targetPlugin.code.toString()
+    val markerIndex = code.indexOf("getAudioSampleRate")
+    if (markerIndex < 0) return 16000
+
+    val area = code.substring(markerIndex, minOf(code.length, markerIndex + 800))
+    return Regex("return\\s+(\\d{4,6})")
+        .find(area)
+        ?.groupValues
+        ?.getOrNull(1)
+        ?.toIntOrNull()
+        ?.takeIf { it > 0 }
+        ?: 16000
+}
+
+private fun resolvePluginNeedDecode(targetPlugin: Plugin): Boolean {
+    val code = targetPlugin.code.toString()
+    val markerIndex = code.indexOf("getAudioFormat")
+    if (markerIndex < 0) return true
+
+    val area = code.substring(markerIndex, minOf(code.length, markerIndex + 800))
+    val format = Regex("return\\s+['\"]([^'\"]+)['\"]")
+        .find(area)
+        ?.groupValues
+        ?.getOrNull(1)
+        ?.trim()
+        ?.lowercase()
+        .orEmpty()
+
+    return when {
+        format.contains("raw") -> false
+        format.contains("pcm") -> false
+        else -> true
+    }
+}
+
+private fun resolveVoiceAvatarUri(
+    packageName: String,
+    voiceName: String,
+    voiceId: String,
+    pluginIcon: String?
+): String {
+    val icon = pluginIcon.orEmpty().trim()
+    if (icon.isNotBlank() && (
+        icon.startsWith("http://") ||
+        icon.startsWith("https://") ||
+        icon.startsWith("file://") ||
+        icon.startsWith("content://") ||
+        icon.startsWith("/")
+    )) {
+        return icon
+    }
+    return ""
+}
+
+private fun readVoiceIconByReflection(value: Any?): String? {
+    if (value == null) return null
+
+    val methodNames = listOf(
+        "getIcon",
+        "getAvatarUrl",
+        "getAvatar",
+        "getIconUrl",
+        "getImageUrl",
+        "getImage",
+        "getCoverUrl",
+        "getPhoto",
+        "getPic",
+        "getPortrait",
+        "getFace"
+    )
+
+    methodNames.forEach { methodName ->
+        runCatching {
+            val method = value.javaClass.methods.firstOrNull { it.name == methodName }
+            val result = method?.invoke(value)?.toString()?.trim()
+            if (!result.isNullOrBlank()) return result
+        }
+    }
+
+    val fieldNames = listOf(
+        "icon",
+        "avatarUrl",
+        "avatar",
+        "iconUrl",
+        "imageUrl",
+        "image",
+        "coverUrl",
+        "photo",
+        "pic",
+        "portrait",
+        "face"
+    )
+
+    fieldNames.forEach { fieldName ->
+        runCatching {
+            val field = value.javaClass.declaredFields.firstOrNull { it.name == fieldName }
+            field?.isAccessible = true
+            val result = field?.get(value)?.toString()?.trim()
+            if (!result.isNullOrBlank()) return result
+        }
+    }
+
+    return null
+}
+
+private data class AiGenerateConfigMatch(
+    val role: AiRuleRoleTag,
+    val voice: AiPluginVoicePreview?,
+)
+
+private fun buildAiGenerateConfigMatches(
+    rule: SpeechRule?,
+    voices: List<AiPluginVoicePreview>,
+): List<AiGenerateConfigMatch> {
+    if (rule == null || voices.isEmpty()) return emptyList()
+
+    val groupOrder = listOf(
+        "女童",
+        "男童",
+        "少女",
+        "少年",
+        "女青年",
+        "男青年",
+        "女中年",
+        "男中年",
+        "女老年",
+        "男老年"
+    )
+
+    val roleGrouped = parseAiRuleRoleTags(rule)
+        .groupBy { it.groupName }
+
+    val voiceGrouped = voices
+        .mapNotNull { voice ->
+            val group = classifyAiVoiceGroup("${voice.voiceName} ${voice.voiceId}") ?: return@mapNotNull null
+            group to voice
+        }
+        .groupBy({ it.first }, { it.second })
+
+    val result = mutableListOf<AiGenerateConfigMatch>()
+
+    groupOrder.forEach { group ->
+        val roles = roleGrouped[group]
+            .orEmpty()
+            .sortedWith(
+                compareBy<AiRuleRoleTag> { it.index }
+                    .thenBy { it.displayName }
+            )
+
+        val candidates = voiceGrouped[group].orEmpty()
+
+        if (roles.isEmpty() || candidates.isEmpty()) return@forEach
+
+        val count = minOf(roles.size, candidates.size)
+
+        for (i in 0 until count) {
+            result += AiGenerateConfigMatch(
+                role = roles[i],
+                voice = candidates[i]
+            )
+        }
+    }
+
+    return result
+}
+
+private fun deleteAiGenerateGroupTreeByName(rootName: String) {
+    val root = dbm.systemTtsV2.allGroup.firstOrNull {
+        it.parentGroupId == 0L && it.name == rootName
+    } ?: return
+
+    fun deleteGroupTree(group: SystemTtsGroup) {
+        val children = dbm.systemTtsV2.allGroup.filter { it.parentGroupId == group.id }
+        children.forEach { child ->
+            deleteGroupTree(child)
+        }
+
+        val ttsList = dbm.systemTtsV2.getTtsListByGroupId(group.id)
+        if (ttsList.isNotEmpty()) {
+            dbm.systemTtsV2.delete(*ttsList.toTypedArray())
+        }
+
+        dbm.systemTtsV2.deleteGroup(group)
+    }
+
+    deleteGroupTree(root)
+}
+
+private fun findOrCreateAiGenerateGroup(
+    name: String,
+    parentGroupId: Long,
+    order: Int,
+): SystemTtsGroup {
+    val exists = dbm.systemTtsV2.allGroup.firstOrNull {
+        it.parentGroupId == parentGroupId && it.name == name
+    }
+
+    if (exists != null) return exists
+
+    val group = SystemTtsGroup(
+        id = System.currentTimeMillis() + order,
+        name = name,
+        order = order,
+        parentGroupId = parentGroupId,
+        isExpanded = true
+    )
+
+    dbm.systemTtsV2.insertGroup(group)
+    return group
+}
+
+private fun buildAiVoiceClassifyPrompt(
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+): String {
+    val voiceText = voices
+        .take(500)
+        .joinToString("\n") { voice ->
+            "${voice.voiceId} | ${voice.voiceName}"
+        }
+
+    return """
+你是中文有声书 TTS 声音分类助手。
+请根据 voiceName 的语义判断每个声音属于哪一种角色类型。
+
+只允许使用这些 group：
+女童、男童、少女、少年、女青年、男青年、女中年、男中年、女老年、男老年、unknown。
+
+分类语义参考：
+- 女童：女童、幼女、小女孩、儿童女声、稚嫩女声、萝莉、童声女。
+- 男童：男童、男孩、正太、儿童男声、稚嫩男声、童声男。
+- 少女：少女、女少年、青春少女、灵动少女、元气少女、甜美少女。
+- 少年：少年、男少年、青涩少年、清亮少年、热血少年。
+- 女青年：女青年、青年女声、御姐、少御、女主、女配、年轻女性、清冷女声、甜美女声、成熟女声但未到中年。
+- 男青年：男青年、青年男声、男主、公子、书生、年轻男性、磁性男声、清朗男声、阳光男声。
+- 女中年：女中年、熟女、母亲、夫人、中年女性、端庄女声、成熟女性、慈爱女声。
+- 男中年：男中年、大叔、青叔、成熟男性、父亲、将军、老板、稳重男声、厚重男声。
+- 女老年：女老年、老妇、奶奶、老妪、慈祥老人女声、苍老女声。
+- 男老年：男老年、老者、爷爷、老头、长者、苍老男声、老年男性。
+- unknown：完全无法判断性别年龄的声音。
+
+要求：
+1. 必须只输出 JSON。
+2. JSON key 必须是 voiceId 原文。
+3. group 必须是允许列表之一。
+4. 不要解释，不要 Markdown。
+
+插件名称：
+$pluginName
+
+声音列表：
+$voiceText
+
+输出格式：
+{
+  "voice_id_1": {"group": "女青年"},
+  "voice_id_2": {"group": "男中年"},
+  "voice_id_3": {"group": "unknown"}
+}
+""".trimIndent()
+}
+
+private fun callAiClassifyVoiceGroupsApi(
+    context: Context,
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+): Map<String, String> {
+    val cfg = parseAiGenerateApiConfig(context) ?: return emptyMap()
+    if (voices.isEmpty()) return emptyMap()
+
+    val prompt = buildAiVoiceClassifyPrompt(pluginName, voices)
+
+    return runCatching {
+        val body = JSONObject()
+            .put("model", cfg.model)
+            .put(
+                "messages",
+                JSONArray()
+                    .put(
+                        JSONObject()
+                            .put("role", "system")
+                            .put("content", "你只输出合法 JSON。")
+                    )
+                    .put(
+                        JSONObject()
+                            .put("role", "user")
+                            .put("content", prompt)
+                    )
+            )
+            .put("temperature", 0.1)
+
+        val conn = URL(cfg.endpoint).openConnection() as java.net.HttpURLConnection
+        conn.requestMethod = "POST"
+        conn.connectTimeout = 15000
+        conn.readTimeout = 30000
+        conn.doOutput = true
+        conn.setRequestProperty("Content-Type", "application/json")
+        conn.setRequestProperty("Authorization", "Bearer ${cfg.key}")
+
+        OutputStreamWriter(conn.outputStream, Charsets.UTF_8).use {
+            it.write(body.toString())
+        }
+
+        val responseText = if (conn.responseCode in 200..299) {
+            conn.inputStream.bufferedReader().use { it.readText() }
+        } else {
+            conn.errorStream?.bufferedReader()?.use { it.readText() }.orEmpty()
+        }
+
+        if (conn.responseCode !in 200..299) {
+            aiGenerateMatchLastError = "AI声音分类 HTTP ${conn.responseCode}: " + responseText.take(300)
+            return@runCatching emptyMap<String, String>()
+        }
+
+        val root = JSONObject(responseText)
+        val content = root
+            .getJSONArray("choices")
+            .getJSONObject(0)
+            .getJSONObject("message")
+            .getString("content")
+
+        val jsonStart = content.indexOf("{")
+        val jsonEnd = content.lastIndexOf("}")
+
+        if (jsonStart < 0 || jsonEnd <= jsonStart) {
+            aiGenerateMatchLastError = "AI声音分类返回内容不是 JSON：" + content.take(300)
+            return@runCatching emptyMap<String, String>()
+        }
+
+        val obj = JSONObject(content.substring(jsonStart, jsonEnd + 1))
+        val allowed = setOf(
+            "女童",
+            "男童",
+            "少女",
+            "少年",
+            "女青年",
+            "男青年",
+            "女中年",
+            "男中年",
+            "女老年",
+            "男老年"
+        )
+
+        val result = mutableMapOf<String, String>()
+
+        obj.keys().forEach { voiceId ->
+            val item = obj.optJSONObject(voiceId)
+            val group = item?.optString("group").orEmpty().trim()
+
+            if (group in allowed) {
+                result[voiceId] = group
+            }
+        }
+
+        result
+    }.getOrElse {
+        aiGenerateMatchLastError = it.message ?: "AI声音分类异常"
+        emptyMap()
+    }
+}
+
+private fun callAiClassifyVoiceGroupsApiBatched(
+    context: Context,
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+    batchSize: Int = 30,
+): Map<String, String> {
+    if (voices.isEmpty()) return emptyMap()
+
+    val result = mutableMapOf<String, String>()
+    val chunks = voices.chunked(batchSize)
+
+    chunks.forEachIndexed { index, chunk ->
+        val one = callAiClassifyVoiceGroupsApi(
+            context = context,
+            pluginName = "$pluginName 批次${index + 1}/${chunks.size}",
+            voices = chunk
+        )
+
+        result.putAll(one)
+    }
+
+    return result
+}
+
+private fun buildAiVoiceGroupMapWithAi(
+    context: Context,
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+): Map<String, String> {
+    val cacheKey = pluginName + "::" + voices.joinToString("|") { it.voiceId + "#" + it.voiceName }
+
+    if (aiGenerateVoiceGroupCacheKey == cacheKey && aiGenerateVoiceGroupCache.isNotEmpty()) {
+        return aiGenerateVoiceGroupCache
+    }
+
+    val local = mutableMapOf<String, String>()
+    val unclassified = mutableListOf<AiPluginVoicePreview>()
+
+    voices.forEach { voice ->
+        val group = classifyAiVoiceGroup("${voice.voiceName} ${voice.voiceId}")
+        if (group != null) {
+            local[voice.voiceId] = group
+        } else {
+            unclassified += voice
+        }
+    }
+
+    if (unclassified.isEmpty()) {
+        aiGenerateVoiceGroupCacheKey = cacheKey
+        aiGenerateVoiceGroupCache = local
+        return local
+    }
+
+    val aiGroups = callAiClassifyVoiceGroupsApiBatched(
+        context = context,
+        pluginName = pluginName,
+        voices = unclassified,
+        batchSize = 15
+    )
+
+    val merged = local + aiGroups
+
+    aiGenerateVoiceGroupCacheKey = cacheKey
+    aiGenerateVoiceGroupCache = merged
+
+    return merged
+}
+
+private fun buildAiGenerateConfigMatchesWithVoiceGroupMap(
+    rule: SpeechRule?,
+    voices: List<AiPluginVoicePreview>,
+    voiceGroupMap: Map<String, String>,
+): List<AiGenerateConfigMatch> {
+    if (rule == null || voices.isEmpty()) return emptyList()
+
+    val groupOrder = listOf(
+        "女童",
+        "男童",
+        "少女",
+        "少年",
+        "女青年",
+        "男青年",
+        "女中年",
+        "男中年",
+        "女老年",
+        "男老年"
+    )
+
+    val roleGrouped = parseAiRuleRoleTags(rule).groupBy { it.groupName }
+
+    val voiceGrouped = voices
+        .mapNotNull { voice ->
+            val group = voiceGroupMap[voice.voiceId] ?: return@mapNotNull null
+            group to voice
+        }
+        .groupBy({ it.first }, { it.second })
+
+    val result = mutableListOf<AiGenerateConfigMatch>()
+
+    groupOrder.forEach { group ->
+        val roles = roleGrouped[group]
+            .orEmpty()
+            .sortedWith(
+                compareBy<AiRuleRoleTag> { it.index }
+                    .thenBy { it.displayName }
+            )
+
+        val candidates = voiceGrouped[group].orEmpty()
+        if (roles.isEmpty() || candidates.isEmpty()) return@forEach
+
+        val count = minOf(roles.size, candidates.size)
+
+        for (i in 0 until count) {
+            result += AiGenerateConfigMatch(
+                role = roles[i],
+                voice = candidates[i]
+            )
+        }
+    }
+
+    return result
+}
+
+private fun buildAiGenerateConfigMatchesWithAi(
+    context: Context,
+    rule: SpeechRule?,
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+): List<AiGenerateConfigMatch> {
+    if (rule == null || voices.isEmpty()) {
+        return emptyList()
+    }
+
+    val voiceGroupMap = buildAiVoiceGroupMapWithAi(
+        context = context,
+        pluginName = pluginName,
+        voices = voices
+    )
+
+    val semanticResult = buildAiGenerateConfigMatchesWithVoiceGroupMap(
+        rule = rule,
+        voices = voices,
+        voiceGroupMap = voiceGroupMap
+    )
+
+    return if (semanticResult.isNotEmpty()) {
+        aiGenerateMatchLastError = ""
+        semanticResult
+    } else {
+        buildAiGenerateConfigMatches(rule, voices)
+    }
+}
+
+private fun generateAiConfigListFromPreview(
+    context: Context,
+    rule: SpeechRule?,
+    plugin: Plugin?,
+    voices: List<AiPluginVoicePreview>,
+): Int {
+    if (rule == null || plugin == null || voices.isEmpty()) return 0
+
+    val matches = buildAiGenerateConfigMatchesWithAi(
+        context = context,
+        rule = rule,
+        pluginName = plugin.name,
+        voices = voices
+    ).filter { it.voice != null }
+
+    if (matches.isEmpty()) return 0
+
+    val pluginShort = aiPluginShortName(plugin.name)
+    val rootGroupName = "${pluginShort}声音组"
+
+    deleteAiGenerateGroupTreeByName(rootGroupName)
+
+    val creatableMatches = matches
+    if (creatableMatches.isEmpty()) return 0
+
+    val rootGroup = findOrCreateAiGenerateGroup(
+        name = rootGroupName,
+        parentGroupId = 0L,
+        order = dbm.systemTtsV2.allGroup.size + 1
+    )
+
+    val groupOrder = listOf(
+        "女童",
+        "男童",
+        "少女",
+        "少年",
+        "女青年",
+        "男青年",
+        "女中年",
+        "男中年",
+        "女老年",
+        "男老年"
+    )
+
+    val childGroups = groupOrder.mapIndexed { index, groupName ->
+        groupName to findOrCreateAiGenerateGroup(
+            name = "$pluginShort$groupName",
+            parentGroupId = rootGroup.id,
+            order = index
+        )
+    }.toMap()
+
+    val fallbackAiSampleRate = resolvePluginSampleRate(plugin)
+    val fallbackAiNeedDecode = resolvePluginNeedDecode(plugin)
+
+    val aiPluginEngine = runCatching {
+        TtsPluginUiEngineV2(context, plugin).apply {
+            eval()
+        }
+    }.getOrNull()
+
+    var created = 0
+    val now = System.currentTimeMillis()
+
+    val groupCurrentOrder = mutableMapOf<Long, Int>()
+
+    creatableMatches.forEachIndexed { idx, match ->
+        val role = match.role
+        val voice = match.voice ?: return@forEachIndexed
+        val group = childGroups[role.groupName] ?: return@forEachIndexed
+
+        val order = groupCurrentOrder[group.id] ?: dbm.systemTtsV2.getTtsListByGroupId(group.id).size
+        groupCurrentOrder[group.id] = order + 1
+
+        val display = voice.voiceName
+
+        val aiLocale = if (plugin.pluginId.startsWith("maoxiang.tts.gj.normalemotion.emobridge")) {
+            "emotion"
+        } else {
+            "zh-CN"
+        }
+        val aiVoiceId = voice.voiceId
+        val aiVoiceIcon = voice.icon
+
+        val aiAvatarUrl = resolveVoiceAvatarUri(
+            packageName = context.packageName,
+            voiceName = display,
+            voiceId = aiVoiceId,
+            pluginIcon = aiVoiceIcon
+        )
+
+        val aiVoiceData = mapOf(
+            "voiceName" to display,
+            "avatarUrl" to aiAvatarUrl,
+            "icon" to aiAvatarUrl
+        )
+
+        val realAiSampleRate = runCatching {
+            aiPluginEngine?.getSampleRate(aiLocale, aiVoiceId)
+        }.getOrNull() ?: fallbackAiSampleRate
+
+        val realAiNeedDecode = runCatching {
+            aiPluginEngine?.isNeedDecode(aiLocale, aiVoiceId)
+        }.getOrNull() ?: fallbackAiNeedDecode
+
+        val item = SystemTtsV2(
+            id = now + idx,
+            displayName = display,
+            groupId = group.id,
+            isEnabled = true,
+            order = order,
+            config = TtsConfigurationDTO(
+                speechRule = SpeechRuleInfo(
+                    tag = role.tag,
+                    tagRuleId = rule.ruleId,
+                    tagName = role.tagName
+                ),
+                audioFormat = BasicAudioFormat(
+                    sampleRate = realAiSampleRate,
+                    isNeedDecode = realAiNeedDecode
+                ),
+                source = PluginTtsSource(
+                    locale = aiLocale,
+                    voice = aiVoiceId,
+                    pluginId = plugin.pluginId
+                )
+            )
+        )
+
+        dbm.systemTtsV2.insert(item)
+        created++
+    }
+
+    return created
+}
+
+private var aiGenerateMatchLastError: String = ""
+private var aiGenerateVoiceGroupCacheKey: String = ""
+private var aiGenerateVoiceGroupCache: Map<String, String> = emptyMap()
+
+private data class AiGenerateApiConfig(
+    val endpoint: String,
+    val model: String,
+    val key: String,
+)
+
+private fun parseAiGenerateApiConfig(context: Context): AiGenerateApiConfig? {
+    val text = readAiGenerateConfigApiText(context).trim()
+    if (text.isBlank()) return null
+
+    val parts = text.split("@@")
+    if (parts.size >= 3) {
+        var endpoint = parts[0].trim()
+        if (!endpoint.endsWith("/chat/completions")) {
+            endpoint = endpoint.trimEnd('/') + "/chat/completions"
+        }
+
+        return AiGenerateApiConfig(
+            endpoint = endpoint,
+            model = parts[1].trim(),
+            key = parts[2].trim()
+        )
+    }
+
+    return null
+}
+
+private fun buildAiGenerateMatchPrompt(
+    rule: SpeechRule?,
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+): String {
+    if (rule == null) return ""
+
+    val roleTags = parseAiRuleRoleTags(rule)
+    if (roleTags.isEmpty() || voices.isEmpty()) return ""
+
+    val roleText = roleTags
+        .joinToString("\n") { role ->
+            "${role.displayName} | group=${role.groupName} | tag=${role.tag}"
+        }
+
+    val voiceText = voices
+        .take(500)
+        .joinToString("\n") { voice ->
+            "${voice.voiceId} | ${voice.voiceName}"
+        }
+
+    return """
+你是中文有声书 TTS 声音匹配助手。
+
+你的任务分两步：
+第一步：根据 voiceName 的语义判断每个声音属于什么角色类型。
+第二步：把朗读规则角色标签匹配到最合适的 voiceId。
+
+允许的角色类型只有：
+女童、男童、少女、少年、女青年、男青年、女中年、男中年、女老年、男老年。
+
+角色类型语义参考：
+- 女童：女童、幼女、小女孩、儿童女声、稚嫩女声、萝莉、童声女。
+- 男童：男童、男孩、正太、儿童男声、稚嫩男声、童声男。
+- 少女：少女、女少年、青春少女、灵动少女、元气少女、甜美少女、清脆少女。
+- 少年：少年、男少年、青涩少年、清亮少年、热血少年、阳光少年、清爽少年。
+- 女青年：女青年、青年女声、御姐、少御、女主、女配、年轻女性、清冷女声、甜美女声、成熟女声但未到中年。
+- 男青年：男青年、青年男声、男主、公子、书生、年轻男性、磁性男声、清朗男声、阳光男声、青叔偏年轻。
+- 女中年：女中年、熟女、母亲、夫人、中年女性、端庄女声、成熟女性、慈爱女声。
+- 男中年：男中年、大叔、青叔、成熟男性、父亲、将军、老板、稳重男声、厚重男声。
+- 女老年：女老年、老妇、奶奶、老妪、慈祥老人女声、苍老女声。
+- 男老年：男老年、老者、爷爷、老头、长者、苍老男声、老年男性。
+
+规则：
+1. 不要为旁白、narration、duihua、localSound、音效、括号发音人匹配声音。
+2. 每个角色标签必须选择一个 voiceId。
+3. 优先匹配性别和年龄段。
+4. 同一分组内尽量按顺序分配不同声音。
+5. 如果同组声音不够，可以复用最相近的同组声音。
+6. 如果声音名没有明确性别年龄，也要根据语义尽量判断，不要留空。
+7. 必须只输出 JSON，不要解释，不要 Markdown。
+8. JSON key 必须使用角色 displayName 原文。
+9. voiceId 必须来自"可用声音"列表，不能编造。
+
+插件名称：
+$pluginName
+
+角色标签：
+$roleText
+
+可用声音：
+$voiceText
+
+输出格式：
+{
+  "女/女童01": {"voiceId": "xxx", "group": "女童", "reason": "小女孩/童声语义匹配"},
+  "男/男青年01": {"voiceId": "yyy", "group": "男青年", "reason": "男青年/男主语义匹配"}
+}
+""".trimIndent()
+}
+
+private fun callAiGenerateMatchApi(
+    context: Context,
+    rule: SpeechRule?,
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+): Map<String, String> {
+    val cfg = parseAiGenerateApiConfig(context)
+        ?: run {
+            aiGenerateMatchLastError = "未设置 AI生成配置模型。请点击模型设置，填写：接口地址@@模型名@@API_KEY"
+            return emptyMap()
+        }
+    val prompt = buildAiGenerateMatchPrompt(rule, pluginName, voices)
+    if (prompt.isBlank()) {
+        aiGenerateMatchLastError = "构建 AI 匹配提示词失败：规则为空或声音列表为空"
+        return emptyMap()
+    }
+
+    return runCatching {
+        val body = JSONObject()
+            .put("model", cfg.model)
+            .put(
+                "messages",
+                JSONArray()
+                    .put(
+                        JSONObject()
+                            .put("role", "system")
+                            .put("content", "你只输出合法 JSON。")
+                    )
+                    .put(
+                        JSONObject()
+                            .put("role", "user")
+                            .put("content", prompt)
+                    )
+            )
+            .put("temperature", 0.1)
+
+        val conn = URL(cfg.endpoint).openConnection() as java.net.HttpURLConnection
+        conn.requestMethod = "POST"
+        conn.connectTimeout = 15000
+        conn.readTimeout = 30000
+        conn.doOutput = true
+        conn.setRequestProperty("Content-Type", "application/json")
+        conn.setRequestProperty("Authorization", "Bearer ${cfg.key}")
+
+        OutputStreamWriter(conn.outputStream, Charsets.UTF_8).use {
+            it.write(body.toString())
+        }
+
+        val responseText = if (conn.responseCode in 200..299) {
+            conn.inputStream.bufferedReader().use { it.readText() }
+        } else {
+            conn.errorStream?.bufferedReader()?.use { it.readText() }.orEmpty()
+        }
+
+        if (conn.responseCode !in 200..299) {
+            aiGenerateMatchLastError = "HTTP ${conn.responseCode}: " + responseText.take(300)
+            return@runCatching emptyMap<String, String>()
+        }
+
+        val root = JSONObject(responseText)
+        val content = root
+            .getJSONArray("choices")
+            .getJSONObject(0)
+            .getJSONObject("message")
+            .getString("content")
+
+        val jsonStart = content.indexOf("{")
+        val jsonEnd = content.lastIndexOf("}")
+        if (jsonStart < 0 || jsonEnd <= jsonStart) {
+            aiGenerateMatchLastError = "AI 返回内容不是 JSON：" + content.take(300)
+            return@runCatching emptyMap<String, String>()
+        }
+
+        val obj = JSONObject(content.substring(jsonStart, jsonEnd + 1))
+        val result = mutableMapOf<String, String>()
+
+        obj.keys().forEach { key ->
+            val item = obj.optJSONObject(key)
+            val voiceId = item?.optString("voiceId").orEmpty()
+            if (voiceId.isNotBlank()) {
+                result[key] = voiceId
+            }
+        }
+
+        aiGenerateMatchLastError = ""
+        result
+    }.getOrElse {
+        aiGenerateMatchLastError = it.message ?: "AI 匹配异常"
+        emptyMap()
+    }
+}
+
+private fun buildAiGenerateConfigMatchPreviewTextWithAi(
+    context: Context,
+    rule: SpeechRule?,
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+): String {
+    if (rule == null) {
+        return "未找到已启用的完整朗读规则。"
+    }
+
+    if (pluginName.isBlank()) {
+        return "请先选择 TTS 插件。"
+    }
+
+    if (voices.isEmpty()) {
+        return "当前插件还没有可用声音列表。请先点击📡 动态获取声音列表，或换一个可解析声音列表的插件。"
+    }
+
+    val localVoiceGroupMap = voices.mapNotNull { voice ->
+        val group = classifyAiVoiceGroup("${voice.voiceName} ${voice.voiceId}") ?: return@mapNotNull null
+        voice.voiceId to group
+    }.toMap()
+
+    val localCount = localVoiceGroupMap.size
+
+    val voiceGroupMap = buildAiVoiceGroupMapWithAi(
+        context = context,
+        pluginName = pluginName,
+        voices = voices
+    )
+
+    val aiAddedCount = (voiceGroupMap.size - localCount).coerceAtLeast(0)
+
+    val matches = buildAiGenerateConfigMatchesWithVoiceGroupMap(
+        rule = rule,
+        voices = voices,
+        voiceGroupMap = voiceGroupMap
+    )
+
+    if (matches.isEmpty()) {
+        return buildAiGenerateConfigMatchPreviewText(
+            rule = rule,
+            pluginName = pluginName,
+            voices = voices
+        ) + "\n\n⚠️ AI 分类未生成有效匹配，已回退本地规则匹配。\n原因：$aiGenerateMatchLastError"
+    }
+
+    val pluginShortName = aiPluginShortName(pluginName)
+
+    val groupOrder = listOf(
+        "女童",
+        "男童",
+        "少女",
+        "少年",
+        "女青年",
+        "男青年",
+        "女中年",
+        "男中年",
+        "女老年",
+        "男老年"
+    )
+
+    val roleTags = parseAiRuleRoleTags(rule)
+
+    val sb = StringBuilder()
+
+    sb.append(pluginShortName).append("声音组").append("\n")
+    sb.append("规则角色池：").append(roleTags.size).append(" 条").append("\n")
+    sb.append("声音总数：").append(voices.size).append(" 个").append("\n")
+    sb.append("本地可识别：").append(localCount).append(" 个").append("\n")
+    if (aiAddedCount > 0) {
+        sb.append("AI 补充归类：").append(aiAddedCount).append(" 个").append("\n")
+    }
+    sb.append("本次将生成：").append(matches.size).append(" 条标准 TTS 配置").append("\n")
+    sb.append("说明：每个分组从 01 开始，只按插件候选声音数量生成。").append("\n\n")
+
+    val grouped = matches.groupBy { it.role.groupName }
+
+    groupOrder.forEach { group ->
+        val items = grouped[group].orEmpty()
+        if (items.isEmpty()) return@forEach
+
+        sb.append("  ").append(pluginShortName).append(group).append("\n")
+
+        items.take(12).forEach { item ->
+            sb.append("    ")
+                .append(item.role.displayName)
+                .append(" → ")
+                .append(item.voice?.voiceName ?: "未匹配到候选声音")
+                .append("\n")
+        }
+
+        if (items.size > 12) {
+            sb.append("    ... 还有 ").append(items.size - 12).append(" 条").append("\n")
+        }
+
+        sb.append("\n")
+    }
+
+    sb.append("说明：这是预览，还没有写入配置列表。确认后会创建插件声音组和各角色分组。")
+    return sb.toString()
+}
+
+private fun buildAiGenerateConfigMatchPreviewText(
+    rule: SpeechRule?,
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+): String {
+    if (rule == null) {
+        return "未找到已启用的完整朗读规则。"
+    }
+
+    val roleTags = parseAiRuleRoleTags(rule)
+    if (roleTags.isEmpty()) {
+        return "当前朗读规则没有可生成的角色标签。"
+    }
+
+    if (pluginName.isBlank()) {
+        return "请先选择 TTS 插件。"
+    }
+
+    if (voices.isEmpty()) {
+        return "当前插件还没有可用声音列表。请先点击📡 动态获取声音列表，或换一个可解析声音列表的插件。"
+    }
+
+    val matches = buildAiGenerateConfigMatches(rule, voices)
+
+    if (matches.isEmpty()) {
+        return "没有匹配到可生成的角色配置。请检查插件声音名称是否包含女童、男童、女青年等类型。"
+    }
+
+    val pluginShortName = aiPluginShortName(pluginName)
+
+    val groupOrder = listOf(
+        "女童",
+        "男童",
+        "少女",
+        "少年",
+        "女青年",
+        "男青年",
+        "女中年",
+        "男中年",
+        "女老年",
+        "男老年"
+    )
+
+    val grouped = matches.groupBy { it.role.groupName }
+
+    val sb = StringBuilder()
+
+    sb.append(pluginShortName).append("声音组").append("\n")
+    sb.append("规则角色池：").append(roleTags.size).append(" 条").append("\n")
+    sb.append("本次将生成：").append(matches.size).append(" 条标准 TTS 配置").append("\n")
+    sb.append("说明：每个分组从 01 开始，只按插件候选声音数量生成。").append("\n\n")
+
+    groupOrder.forEach { group ->
+        val items = grouped[group].orEmpty()
+        if (items.isEmpty()) return@forEach
+
+        sb.append("  ").append(pluginShortName).append(group).append("\n")
+
+        items.take(12).forEach { item ->
+            sb.append("    ")
+                .append(item.role.displayName)
+                .append(" → ")
+                .append(item.voice?.voiceName ?: "未匹配到候选声音")
+                .append("\n")
+        }
+
+        if (items.size > 12) {
+            sb.append("    ... 还有 ").append(items.size - 12).append(" 条").append("\n")
+        }
+
+        sb.append("\n")
+    }
+
+    sb.append("说明：这是预览，还没有写入配置列表。确认后会创建插件声音组和各角色分组。")
+    return sb.toString()
+}
+
+private fun buildAiPluginVoiceGroupPreviewText(
+    pluginName: String,
+    voices: List<AiPluginVoicePreview>,
+): String {
+    if (pluginName.isBlank()) {
+        return "未选择 TTS 插件。"
+    }
+
+    if (voices.isEmpty()) {
+        return "已选择插件：$pluginName\n未能从插件代码中预览到声音列表。动态插件后续会通过插件接口获取声音。"
+    }
+
+    val groupOrder = listOf(
+        "女童",
+        "男童",
+        "少女",
+        "少年",
+        "女青年",
+        "男青年",
+        "女中年",
+        "男中年",
+        "女老年",
+        "男老年"
+    )
+
+    val grouped = voices
+        .mapNotNull { voice ->
+            val group = classifyAiVoiceGroup("${voice.voiceName} ${voice.voiceId}") ?: return@mapNotNull null
+            group to voice
+        }
+        .groupBy({ it.first }, { it.second })
+
+    val unmatchedCount = voices.count { voice ->
+        classifyAiVoiceGroup("${voice.voiceName} ${voice.voiceId}") == null
+    }
+
+    val sb = StringBuilder()
+    sb.append("已选择插件：").append(pluginName).append("\n")
+    sb.append("声音总数：").append(voices.size).append(" 个\n")
+    sb.append("可识别角色候选：").append(grouped.values.sumOf { it.size }).append(" 个\n")
+    if (unmatchedCount > 0) {
+        sb.append("未归类声音：").append(unmatchedCount).append(" 个\n")
+    }
+    sb.append("\n")
+
+    groupOrder.forEach { group ->
+        val items = grouped[group].orEmpty()
+        if (items.isEmpty()) return@forEach
+
+        sb.append(group).append("：").append(items.size).append(" 个候选\n")
+        items.take(5).forEach { voice ->
+            sb.append("  ").append(voice.voiceName).append("\n")
+        }
+        if (items.size > 5) {
+            sb.append("  ... 还有 ").append(items.size - 5).append(" 个\n")
+        }
+        sb.append("\n")
+    }
+
+    if (grouped.isEmpty()) {
+        sb.append("没有识别到女童、男童、女青年等角色候选声音。")
+    }
+
+    return sb.toString()
+}
+
+private fun buildAiRuleRolePreviewText(rule: SpeechRule?): String {
+    if (rule == null) {
+        return "未找到已启用的完整朗读规则。"
+    }
+
+    val tags = parseAiRuleRoleTags(rule)
+    if (tags.isEmpty()) {
+        return "当前朗读规则没有解析到可生成的角色标签。\n\n旁白、音效、括号标签会被跳过。"
+    }
+
+    val groupOrder = listOf(
+        "女童",
+        "男童",
+        "少女",
+        "少年",
+        "女青年",
+        "男青年",
+        "女中年",
+        "男中年",
+        "女老年",
+        "男老年"
+    )
+
+    val grouped = tags.groupBy { it.groupName }
+
+    val sb = StringBuilder()
+    sb.append("当前规则：").append(rule.name).append("\n")
+    sb.append("可生成角色配置：").append(tags.size).append(" 条").append("\n\n")
+    sb.append("预览只显示每组前 5 条。").append("\n\n")
+
+    groupOrder.forEach { group ->
+        val items = grouped[group].orEmpty()
+        if (items.isEmpty()) return@forEach
+
+        sb.append(group).append("：共 ").append(items.size).append(" 条").append("\n")
+
+        items.take(5).forEach { item ->
+            sb.append("  ").append(item.displayName).append("\n")
+        }
+
+        if (items.size > 5) {
+            sb.append("  ... 还有 ").append(items.size - 5).append(" 条").append("\n")
+        }
+
+        sb.append("\n")
+    }
+
+    sb.append("旁白、音效、括号标签不会生成。")
+    return sb.toString()
 }

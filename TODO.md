@@ -2,6 +2,24 @@
 
 ## 版本变更记录
 
+### v1.26.060109-patch（AI 生成配置）
+
+#### 新增功能：AI 生成配置
+- **来源**：从 `My-bd-tts-server-AndroidProject` 拉取仓库移植
+- **入口**：系统 TTS 列表 AppBar 右侧新增「🤖 AI生成配置」按钮
+- **功能**：
+  - 选择已启用的 TTS 插件，支持静态解析插件代码中的声音列表，或动态调用插件接口获取声音
+  - 自动识别朗读规则中的角色标签（女童/男童/少女/少年/女青年/男青年/女中年/男中年/女老年/男老年）
+  - 支持 AI 大模型自动分类声音到角色类型（本地无法识别时调用 AI 接口补充）
+  - 生成匹配预览：显示每个角色将匹配到的声音
+  - 确认生成：自动创建插件声音组 + 各角色子分组，并写入对应的 TTS 配置
+- **模型设置**：支持自定义 AI 接口（格式：`接口地址@@模型名@@API_KEY`），独立配置不影响主规则
+- **适配修改**：
+  - `SpeechRule` 当前版本无 `isModule`/`projectMode` 字段，筛选逻辑简化为 `allEnabled.firstOrNull()`
+  - `resolveVoiceAvatarUri` 简化为只返回插件自带 icon（当前项目无 avatar drawable 资源）
+
+---
+
 ### v1.26.060110（批量编辑 + 数据库 parentGroupId）
 
 #### 数据库架构升级
@@ -139,7 +157,20 @@
 
 ## 会话摘要
 
-### 2026-06-01 本次会话（v1.26.060109 - JDK 21 配置固定）
+### 2026-06-01 本次会话（v1.26.060109-patch - AI 生成配置移植）
+- **当前版本**：v1.26.060109-patch（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. **移植 AI 生成配置功能**：
+     - 从 `My-bd-tts-server-AndroidProject-clone` 拉取仓库完整移植 AI 生成配置到 `ListManagerScreen.kt`
+     - 包含：模型设置对话框、AI 生成配置对话框、插件选择、动态获取声音、AI 声音分类、本地规则匹配、配置生成写入
+     - TopAppBar 新增 🤖 按钮作为入口
+  2. **编译通过**：`./gradlew :app:compileAppReleaseKotlin` BUILD SUCCESSFUL
+- **注意事项**：
+  - `allowMainThreadQueries` 暂时保留
+  - `SystemTtsService` 的 `runBlocking` **已恢复**
+  - 编译环境需使用 Android Studio 自带 JDK 21
+
+### 2026-06-01 上次会话（v1.26.060109 - JDK 21 配置固定）
 - **当前版本**：v1.26.060109（基于 `hhh4` 分支）
 - **已完成事项**：
   1. **固定 Gradle 使用 Android Studio 自带 JDK 21**：
