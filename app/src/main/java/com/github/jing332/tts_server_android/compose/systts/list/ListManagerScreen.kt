@@ -918,65 +918,112 @@ internal fun ListManagerScreen(
                             )
                         
                         ShadowedDraggableItem(reorderableState = reorderState, key = key) {
-                            Group(modifier = groupDragModifier,
-                                name = g.name,
-                                group = g,
-                                isExpanded = g.isExpanded,
-                                toggleableState = checkState,
-                                onToggleableStateChange = {
-                                    vm.updateGroupEnable(groupWithSystemTts, it)
-                                },
-                                onClick = {
-                                    dbm.systemTtsV2.updateGroup(g.copy(isExpanded = !g.isExpanded))
-                                },
-                                onDelete = {
-                                    dbm.systemTtsV2.delete(*groupWithSystemTts.list.toTypedArray())
-                                    dbm.systemTtsV2.deleteGroup(g)
-                                },
-                                onRename = {
-                                    dbm.systemTtsV2.updateGroup(g.copy(name = it))
-                                },
-                                onCopy = {
-                                    scope.launch {
-                                        val group = g.copy(id = System.currentTimeMillis(),
-                                            name = it.ifBlank { context.getString(R.string.unnamed) })
-                                        dbm.systemTtsV2.insertGroup(group)
-                                        dbm.systemTtsV2.getByGroup(g.id)
-                                            .forEachIndexed { index, tts ->
-                                                dbm.systemTtsV2.insert(
-                                                    tts.copy(
-                                                        id = System.currentTimeMillis() + index,
-                                                        groupId = group.id
-                                                    )
-                                                )
-                                            }
-                                    }
-                                },
-                                onEditAudioParams = {
-                                    groupAudioParamsDialog = g
-                                },
-                                onExport = {
-                                    showGroupExportSheet = listOf(groupWithSystemTts)
-                                },
-                                onSort = {
-                                    showSortDialog = groupWithSystemTts.list to null
-                                },
-                                onCreateSubGroup = {
-                                    showCreateSubGroup = g.id
-                                },
-                                onBatchAssignTags = {
-                                    showBatchTagDialog = groupWithSystemTts.list
-                                },
-                                onReleaseSubGroup = {
-                                    showReleaseSubGroup = g
-                                },
-                                onConvertToSubGroup = {
-                                    showConvertToSubGroup = g
-                                },
-                                onExtractSubGroup = {
-                                    showExtractSubGroup = g
+                            if (isBatchEditMode) {
+                                val groupTtsIds = groupWithSystemTts.list.map { it.id }.toSet()
+                                val selectedInGroup = groupTtsIds.count { selectedTtsIds.contains(it) }
+                                val groupCheckedState = when {
+                                    selectedInGroup == 0 -> androidx.compose.ui.state.ToggleableState.Off
+                                    selectedInGroup == groupTtsIds.size -> androidx.compose.ui.state.ToggleableState.On
+                                    else -> androidx.compose.ui.state.ToggleableState.Indeterminate
                                 }
-                            )
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    modifier = Modifier.fillMaxWidth()
+                                ) {
+                                    androidx.compose.material3.TriStateCheckbox(
+                                        state = groupCheckedState,
+                                        onClick = {
+                                            selectedTtsIds = if (groupCheckedState == androidx.compose.ui.state.ToggleableState.On) {
+                                                selectedTtsIds - groupTtsIds
+                                            } else {
+                                                selectedTtsIds + groupTtsIds
+                                            }
+                                        }
+                                    )
+                                    Group(
+                                        modifier = Modifier.weight(1f),
+                                        name = g.name,
+                                        group = g,
+                                        isExpanded = g.isExpanded,
+                                        toggleableState = checkState,
+                                        onToggleableStateChange = {},
+                                        onClick = {
+                                            dbm.systemTtsV2.updateGroup(g.copy(isExpanded = !g.isExpanded))
+                                        },
+                                        onDelete = {},
+                                        onRename = {},
+                                        onCopy = {},
+                                        onEditAudioParams = {},
+                                        onExport = {},
+                                        onSort = {},
+                                        onCreateSubGroup = {},
+                                        onBatchAssignTags = {},
+                                        onReleaseSubGroup = {},
+                                        onConvertToSubGroup = {},
+                                        onExtractSubGroup = {}
+                                    )
+                                }
+                            } else {
+                                Group(modifier = groupDragModifier,
+                                    name = g.name,
+                                    group = g,
+                                    isExpanded = g.isExpanded,
+                                    toggleableState = checkState,
+                                    onToggleableStateChange = {
+                                        vm.updateGroupEnable(groupWithSystemTts, it)
+                                    },
+                                    onClick = {
+                                        dbm.systemTtsV2.updateGroup(g.copy(isExpanded = !g.isExpanded))
+                                    },
+                                    onDelete = {
+                                        dbm.systemTtsV2.delete(*groupWithSystemTts.list.toTypedArray())
+                                        dbm.systemTtsV2.deleteGroup(g)
+                                    },
+                                    onRename = {
+                                        dbm.systemTtsV2.updateGroup(g.copy(name = it))
+                                    },
+                                    onCopy = {
+                                        scope.launch {
+                                            val group = g.copy(id = System.currentTimeMillis(),
+                                                name = it.ifBlank { context.getString(R.string.unnamed) })
+                                            dbm.systemTtsV2.insertGroup(group)
+                                            dbm.systemTtsV2.getByGroup(g.id)
+                                                .forEachIndexed { index, tts ->
+                                                    dbm.systemTtsV2.insert(
+                                                        tts.copy(
+                                                            id = System.currentTimeMillis() + index,
+                                                            groupId = group.id
+                                                        )
+                                                    )
+                                                }
+                                        }
+                                    },
+                                    onEditAudioParams = {
+                                        groupAudioParamsDialog = g
+                                    },
+                                    onExport = {
+                                        showGroupExportSheet = listOf(groupWithSystemTts)
+                                    },
+                                    onSort = {
+                                        showSortDialog = groupWithSystemTts.list to null
+                                    },
+                                    onCreateSubGroup = {
+                                        showCreateSubGroup = g.id
+                                    },
+                                    onBatchAssignTags = {
+                                        showBatchTagDialog = groupWithSystemTts.list
+                                    },
+                                    onReleaseSubGroup = {
+                                        showReleaseSubGroup = g
+                                    },
+                                    onConvertToSubGroup = {
+                                        showConvertToSubGroup = g
+                                    },
+                                    onExtractSubGroup = {
+                                        showExtractSubGroup = g
+                                    }
+                                )
+                            }
                         }
                     }
 
