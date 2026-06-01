@@ -2,7 +2,16 @@
 
 ## 版本变更记录
 
-### v1.26.053014（批量切换标签 + JobCancellationException 修复）
+### v1.26.053014（批量切换标签 + JobCancellationException 修复 + 批量替换插件）
+
+#### 新增功能：批量替换插件
+- **位置**：插件管理界面（`PluginManagerScreen`）→ 每个插件项的「更多」菜单 →「批量替换插件」
+- **功能**：一键将系统 TTS 列表中所有使用了当前插件的音色，批量替换为另一个插件
+- **实现文件**：
+  - 新建 `BatchReplacePluginDialog.kt`：对话框显示当前有多少个音色正在使用该插件，下拉框选择目标插件
+  - 修改 `PluginManagerScreen.kt`：在 `Item` 的 `DropdownMenu` 中新增「批量替换插件」入口
+  - 替换逻辑：查询所有 `SystemTtsV2`，筛选出 `config.source.pluginId == 旧插件` 的条目，将 `pluginId` 改为目标插件，同时清空 `locale` 和 `voice`（不同插件支持的语言/发音人不同）
+  - 更新后自动调用 `SystemTtsService.notifyUpdateConfig()` 使配置立即生效
 
 #### 问题现象
 - 系统 TTS 使用过程中偶现「加载配置失败：kotlinx.coroutines.JobCancellationException: Parent job is Cancelling」
@@ -119,20 +128,24 @@
 
 ## 会话摘要
 
-### 2026-05-30 本次会话（v1.26.053012 - JobCancellationException 修复）
+### 2026-06-01 本次会话（v1.26.053014 - 批量替换插件）
 - **当前版本**：v1.26.053014（基于 `hhh4` 分支）
 - **已完成事项**：
-  1. **新增「批量切换标签」功能**：
+  1. **新增「批量替换插件」功能**：
+     - `PluginManagerScreen.kt` 每个插件项的「更多」菜单中新增「批量替换插件」入口
+     - 新建 `BatchReplacePluginDialog.kt`：显示当前插件被多少音色使用，下拉框选择目标插件后一键批量替换
+     - 替换后自动清空 `locale` 和 `voice`，并通知服务更新配置
+  2. **新增「批量切换标签」功能**：
      - `ListManagerScreen.kt` AppBar 右侧新增切换标签按钮（`Icons.Default.SwapHoriz`）
      - 新建 `BatchSwitchTagDialog.kt`：复选列表选择音色，点击「切换」批量将每个条目标签切换到下一个
      - **按分组显示**：对话框内按 Group 分组展示条目，保留分组结构
      - **只切换插件音色**：仅对 `PluginTtsSource` 类型的条目生效，本地 TTS 自动过滤
      - 切换逻辑：ALL→第一个标签→下一个标签…最后一个标签循环回第一个标签
      - BGM 类型条目自动排除
-  2. **修复「加载配置失败：JobCancellationException」**：
+  3. **修复「加载配置失败：JobCancellationException」**：
      - `SystemTtsService.kt`：`mScope` 从普通 `Job` 改为 `SupervisorJob()`
      - 根因：普通 `Job` fail-fast，单个子协程异常会导致整个 Scope 被取消，后续任务全部抛出 `JobCancellationException`
-  3. **生成正式版 APK**：`newapk/TTS-Server-v1.26.053014.apk`
+  4. **生成正式版 APK**：`newapk/TTS-Server-v1.26.060109.apk`
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留
   - `SystemTtsService` 的 `runBlocking` **已恢复**

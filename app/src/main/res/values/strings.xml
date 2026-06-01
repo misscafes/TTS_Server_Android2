@@ -368,6 +368,11 @@
     <string name="plugin_audio_params">音频参数</string>
     <string name="plugin_audio_params_desc">统一调节该插件下所有发音人的语速、音量、音调。最终参数 = 插件参数 × 单独参数 × 分组参数 × 全局参数</string>
     <string name="plugin_audio_params_saved">音频参数已保存</string>
+    <string name="batch_replace_plugin">Batch Replace Plugin</string>
+    <string name="target_plugin">Target Plugin</string>
+    <string name="no_other_plugins">No other plugins available</string>
+    <string name="replace">Replace</string>
+    <string name="batch_replace_plugin_desc">%2$d voice(s) are using "%1$s", please select a target plugin</string>
     <string name="config_list">配置列表</string>
     <string name="plugin">插件</string>
     <string name="replace_rule">替换规则</string>
