@@ -11,7 +11,11 @@ data class SubCategoryNode(
     val level: Int,
     val items: List<SystemTtsV2> = emptyList(),
     val children: List<SubCategoryNode> = emptyList()
-)
+) {
+    fun allItems(): List<SystemTtsV2> {
+        return items + children.flatMap { it.allItems() }
+    }
+}
 
 /**
  * 扁平化的渲染项

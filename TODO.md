@@ -2,6 +2,31 @@
 
 ## 版本变更记录
 
+### v1.26.060211（批量编辑修复 + 降级为子目录候选列表修复）
+
+#### Bug 修复：批量编辑无法识别子分组条目
+- **问题**：批量编辑模式下选中包含子分组的主分组后，批量删除/批量切换插件无法识别子分组中的条目
+- **根因**：`models.flatMap { it.list }` 只遍历分组的直接条目，未递归遍历子分组（`children`）
+- **修复**：改为 `models.flatMap { it.allTts() }`，两处批量操作（删除、切换插件）均已修复
+
+#### Bug 修复：子分组批量选择 Checkbox 缺失
+- **问题**：批量编辑模式下，子分组（`SubGroupHeader`）没有显示批量选择 Checkbox，仍显示普通模式的"启用/禁用" Checkbox
+- **修复**：在 `FlattenedCategoryItem.SubGroupHeader` 渲染处增加 `isBatchEditMode` 分支
+  - 批量编辑模式：显示 **TriStateCheckbox（三态复选框）** + 展开图标 + 名称
+  - 全选 ✅ / 部分选中横线（Indeterminate）/ 未选空框
+  - 点击可全选/取消全选该子分组下所有条目
+  - 普通模式：保持原有 `SubGroupHeader` 组件不变
+
+#### Bug 修复：新增分组无法被选为"降级为子目录"目标
+- **问题**：新增分组后，其他分组"降级为子目录"/"转为子分组"时，候选目标列表中没有新分组
+- **根因**：`addGroupDialog` 取消时未重置 `addGroupParentId`，导致后续通过"添加分组"按钮创建的分组被误设为子分组（`parentGroupId != 0`），不在 `models` 中
+- **修复**：
+  1. `addGroupDialog` 的 `onDismissRequest` 中增加 `addGroupParentId = 0L` 重置
+  2. `moveGroupDialog` 使用 `LaunchedEffect(models, targetGroup.id)` 监听 `models` 变化并强制刷新候选列表
+  3. `showConvertToSubGroup` 候选列表计算移入 `AlertDialog` 的 `text` lambda 内部
+
+---
+
 ### v1.26.060118（无限子分组树形模式）
 
 #### 系统 TTS 列表：无限子分组树形模式
@@ -180,6 +205,28 @@
 ---
 
 ## 会话摘要
+
+### 2026-06-02 本次会话（v1.26.060210 - 批量编辑 Bug 修复）
+- **当前版本**：v1.26.060211（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. **修复批量操作无法遍历子分组条目**：
+     - `ListManagerScreen.kt`：批量删除和批量切换插件对话框中，`models.flatMap { it.list }` → `models.flatMap { it.allTts() }`
+     - 修复后批量操作可正确遍历树形分组中的所有子分组条目
+  2. **修复子分组批量选择 Checkbox 缺失**：
+     - `ListManagerScreen.kt`：`FlattenedCategoryItem.SubGroupHeader` 渲染处增加 `isBatchEditMode` 分支
+     - 批量编辑模式下显示 TriStateCheckbox（三态复选框），支持全选/部分选中（横线）/未选
+     - 普通模式下保持原有 `SubGroupHeader` 组件不变
+  3. **修复新增分组无法被选为降级目标**：
+     - `ListManagerScreen.kt`：`addGroupDialog` 取消时重置 `addGroupParentId = 0L`
+     - `moveGroupDialog` 使用 `LaunchedEffect` 强制刷新候选列表
+     - `showConvertToSubGroup` 候选列表移入 `text` lambda
+  4. **修复分组导出功能**：
+     - `ListManagerScreen.kt`：`Group` 组件 `onExport` 从 `{}` 改为 `showGroupExportSheet = listOf(node)`
+  5. **构建 Release APK**：`newapk/TTS-Server-v1.26.060211.apk`
+- **注意事项**：
+  - `allowMainThreadQueries` 暂时保留
+  - `SystemTtsService` 的 `runBlocking` **已恢复**
+  - 编译环境需使用 Android Studio 自带 JDK 21
 
 ### 2026-06-01 本次会话（v1.26.060118 - 无限子分组树形模式）
 - **当前版本**：v1.26.060118（基于 `hhh4` 分支）

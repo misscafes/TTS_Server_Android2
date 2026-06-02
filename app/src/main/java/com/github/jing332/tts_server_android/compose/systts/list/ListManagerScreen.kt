@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -25,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EditNote
+import androidx.compose.material.icons.filled.ExpandCircleDown
 import androidx.compose.material.icons.filled.Extension
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
@@ -55,6 +57,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -714,9 +718,6 @@ internal fun ListManagerScreen(
         val targetGroup = showConvertToSubGroup!!
         val currentGroupWithTts = models.find { it.group.id == targetGroup.id }
         val hasSubGroups = currentGroupWithTts?.list?.any { it.categoryPath.isNotBlank() } == true
-        val otherGroups = remember(models, targetGroup.id) {
-            models.filter { it.group.id != targetGroup.id }.map { it.group }
-        }
 
         if (hasSubGroups) {
             AlertDialog(
@@ -734,6 +735,7 @@ internal fun ListManagerScreen(
                 onDismissRequest = { showConvertToSubGroup = null },
                 title = { Text("转为子分组") },
                 text = {
+                    val otherGroups = models.filter { it.group.id != targetGroup.id }.map { it.group }
                     Column {
                         Text("选择目标分组，当前分组将作为其子分组：", modifier = Modifier.padding(bottom = 8.dp))
                         otherGroups.forEach { otherGroup ->
@@ -859,11 +861,10 @@ internal fun ListManagerScreen(
 
     if (moveGroupDialog != null) {
         val targetGroup = moveGroupDialog!!
-        val candidateParents = remember(models) {
-            models
-                .filter { it.group.id != targetGroup.id }
-                .map { it.group }
-        }
+        val candidateParents = models
+            .map { it.group }
+            .filter { it.id != targetGroup.id }
+
         AlertDialog(
             onDismissRequest = { moveGroupDialog = null },
             title = { Text("选择目标父分组") },
@@ -1009,7 +1010,10 @@ internal fun ListManagerScreen(
         TextFieldDialog(title = stringResource(id = R.string.add_group),
             text = name,
             onTextChange = { name = it },
-            onDismissRequest = { addGroupDialog = false }) {
+            onDismissRequest = {
+                addGroupDialog = false
+                addGroupParentId = 0L
+            }) {
             addGroupDialog = false
             val parentId = addGroupParentId
             addGroupParentId = 0L
@@ -1060,7 +1064,7 @@ internal fun ListManagerScreen(
     // ===== 批量删除对话框 =====
     var showBatchDeleteDialog by remember { mutableStateOf(false) }
     if (showBatchDeleteDialog) {
-        val selectedItems = models.flatMap { it.list }.filter { selectedTtsIds.contains(it.id) }
+        val selectedItems = models.flatMap { it.allTts() }.filter { selectedTtsIds.contains(it.id) }
         AlertDialog(
             onDismissRequest = { showBatchDeleteDialog = false },
             title = { Text(stringResource(R.string.batch_delete)) },
@@ -1097,7 +1101,7 @@ internal fun ListManagerScreen(
     var showBatchSwitchPluginDialog by remember { mutableStateOf(false) }
     if (showBatchSwitchPluginDialog) {
         val pluginList = remember { dbm.pluginDao.all }
-        val selectedItems = models.flatMap { it.list }.filter { selectedTtsIds.contains(it.id) }
+        val selectedItems = models.flatMap { it.allTts() }.filter { selectedTtsIds.contains(it.id) }
         var targetPluginId by remember { mutableStateOf<String>("") }
 
         AlertDialog(
@@ -1433,7 +1437,9 @@ internal fun ListManagerScreen(
                                                     moveGroupDialog = g
                                                 }
                                             } else null,
-                                            onExport = {}
+                                            onExport = {
+                                                showGroupExportSheet = listOf(node)
+                                            }
                                         )
                                     }
                                 }
@@ -1608,58 +1614,121 @@ internal fun ListManagerScreen(
                                                 key = subKey
                                             ) { _ ->
                                                 val subItems = fItem.node.items
-                                                val subEnabled = subItems.isNotEmpty() && subItems.all { it.isEnabled }
-                                                SubGroupHeader(
-                                                    modifier = subDragModifier,
-                                                    name = fItem.node.name,
-                                                    level = fItem.node.level,
-                                                    isExpanded = expandedSubGroups.contains(fItem.node.fullPath),
-                                                    enabled = subEnabled,
-                                                    onEnabledChange = { enabled ->
-                                                        scope.launch {
-                                                            subItems.forEach { item ->
-                                                                if (item.isEnabled != enabled) {
-                                                                    dbm.systemTtsV2.update(
-                                                                        item.copy(isEnabled = enabled)
-                                                                    )
+                                                if (isBatchEditMode) {
+                                                    val subTtsIds = fItem.node.allItems().map { it.id }.toSet()
+                                                    val selectedInSub = subTtsIds.count { selectedTtsIds.contains(it) }
+                                                    val subCheckedState = when {
+                                                        selectedInSub == 0 -> androidx.compose.ui.state.ToggleableState.Off
+                                                        selectedInSub == subTtsIds.size -> androidx.compose.ui.state.ToggleableState.On
+                                                        else -> androidx.compose.ui.state.ToggleableState.Indeterminate
+                                                    }
+                                                    Row(
+                                                        verticalAlignment = Alignment.CenterVertically,
+                                                        modifier = Modifier
+                                                            .fillMaxWidth()
+                                                            .background(
+                                                                if (fItem.node.level == 0) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+                                                                else MaterialTheme.colorScheme.surface
+                                                            )
+                                                            .clickable {
+                                                                expandedSubGroups = if (expandedSubGroups.contains(fItem.node.fullPath)) {
+                                                                    expandedSubGroups - fItem.node.fullPath
+                                                                } else {
+                                                                    expandedSubGroups + fItem.node.fullPath
                                                                 }
                                                             }
-                                                            if (enabled) SystemTtsService.notifyUpdateConfig()
-                                                        }
-                                                    },
-                                                    onClick = {
-                                                        expandedSubGroups = if (expandedSubGroups.contains(fItem.node.fullPath)) {
-                                                            expandedSubGroups - fItem.node.fullPath
-                                                        } else {
-                                                            expandedSubGroups + fItem.node.fullPath
-                                                        }
-                                                    },
-                                                    onRename = {
-                                                        showSubGroupRename = subItems to fItem.node.fullPath
-                                                    },
-                                                    onEditAudioParams = {
-                                                        showSubGroupAudioParams = g to fItem.node.fullPath
-                                                    },
-                                                    onSort = {
-                                                        showSortDialog = subItems to node.list
-                                                    },
-                                                    onBatchAssignTags = {
-                                                        showSubGroupBatchTag = subItems
-                                                    },
-                                                    onDelete = {
-                                                        scope.launch {
-                                                            dbm.systemTtsV2.delete(*subItems.toTypedArray())
-                                                        }
-                                                    },
-                                                    onExport = {
-                                                        showExportSheet = subItems.map {
-                                                            it.copy(groupId = AbstractListGroup.DEFAULT_GROUP_ID)
-                                                        }
-                                                    },
-                                                    onExtractToGroup = {
-                                                        showSubGroupExtractToGroup = g to fItem.node.fullPath
+                                                            .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
+                                                    ) {
+                                                        androidx.compose.material3.TriStateCheckbox(
+                                                            state = subCheckedState,
+                                                            onClick = {
+                                                                selectedTtsIds = if (subCheckedState == androidx.compose.ui.state.ToggleableState.On) {
+                                                                    selectedTtsIds - subTtsIds
+                                                                } else {
+                                                                    selectedTtsIds + subTtsIds
+                                                                }
+                                                            }
+                                                        )
+                                                        val rotationAngle by androidx.compose.animation.core.animateFloatAsState(
+                                                            targetValue = if (expandedSubGroups.contains(fItem.node.fullPath)) 0f else -45f,
+                                                            label = ""
+                                                        )
+                                                        Icon(
+                                                            imageVector = Icons.Default.ExpandCircleDown,
+                                                            contentDescription = if (expandedSubGroups.contains(fItem.node.fullPath)) "收起" else "展开",
+                                                            modifier = Modifier
+                                                                .size(20.dp)
+                                                                .rotate(rotationAngle)
+                                                                .graphicsLayer { rotationZ = rotationAngle },
+                                                            tint = MaterialTheme.colorScheme.primary
+                                                        )
+                                                        Text(
+                                                            text = fItem.node.name,
+                                                            style = when (fItem.node.level) {
+                                                                0 -> MaterialTheme.typography.titleMedium
+                                                                1 -> MaterialTheme.typography.bodyLarge
+                                                                else -> MaterialTheme.typography.bodyMedium
+                                                            },
+                                                            color = MaterialTheme.colorScheme.onSurface,
+                                                            modifier = Modifier
+                                                                .padding(start = 8.dp)
+                                                                .weight(1f)
+                                                        )
                                                     }
-                                                )
+                                                } else {
+                                                    val subEnabled = subItems.isNotEmpty() && subItems.all { it.isEnabled }
+                                                    SubGroupHeader(
+                                                        modifier = subDragModifier,
+                                                        name = fItem.node.name,
+                                                        level = fItem.node.level,
+                                                        isExpanded = expandedSubGroups.contains(fItem.node.fullPath),
+                                                        enabled = subEnabled,
+                                                        onEnabledChange = { enabled ->
+                                                            scope.launch {
+                                                                subItems.forEach { item ->
+                                                                    if (item.isEnabled != enabled) {
+                                                                        dbm.systemTtsV2.update(
+                                                                            item.copy(isEnabled = enabled)
+                                                                        )
+                                                                    }
+                                                                }
+                                                                if (enabled) SystemTtsService.notifyUpdateConfig()
+                                                            }
+                                                        },
+                                                        onClick = {
+                                                            expandedSubGroups = if (expandedSubGroups.contains(fItem.node.fullPath)) {
+                                                                expandedSubGroups - fItem.node.fullPath
+                                                            } else {
+                                                                expandedSubGroups + fItem.node.fullPath
+                                                            }
+                                                        },
+                                                        onRename = {
+                                                            showSubGroupRename = subItems to fItem.node.fullPath
+                                                        },
+                                                        onEditAudioParams = {
+                                                            showSubGroupAudioParams = g to fItem.node.fullPath
+                                                        },
+                                                        onSort = {
+                                                            showSortDialog = subItems to node.list
+                                                        },
+                                                        onBatchAssignTags = {
+                                                            showSubGroupBatchTag = subItems
+                                                        },
+                                                        onDelete = {
+                                                            scope.launch {
+                                                                dbm.systemTtsV2.delete(*subItems.toTypedArray())
+                                                            }
+                                                        },
+                                                        onExport = {
+                                                            showExportSheet = subItems.map {
+                                                                it.copy(groupId = AbstractListGroup.DEFAULT_GROUP_ID)
+                                                            }
+                                                        },
+                                                        onExtractToGroup = {
+                                                            showSubGroupExtractToGroup = g to fItem.node.fullPath
+                                                        }
+                                                    )
+                                                }
                                             }
                                         }
                                         is FlattenedCategoryItem.TtsItem -> {
@@ -1828,6 +1897,7 @@ internal fun ListManagerScreen(
                     addPluginDialog = true
                 },
                 addGroup = {
+                    addGroupParentId = 0L
                     addGroupDialog = true
                 }
             )
