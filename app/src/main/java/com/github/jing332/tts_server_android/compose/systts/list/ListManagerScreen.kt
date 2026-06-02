@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EditNote
 import androidx.compose.material.icons.filled.ExpandCircleDown
 import androidx.compose.material.icons.filled.Extension
+import androidx.compose.material.icons.filled.Label
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Search
@@ -655,10 +656,15 @@ internal fun ListManagerScreen(
     }
 
     var showBatchTagDialog by remember { mutableStateOf<List<SystemTtsV2>?>(null) }
+    var batchTagPreselected by remember { mutableStateOf<Set<SystemTtsV2>>(emptySet()) }
     if (showBatchTagDialog != null) {
         BatchTagDialog(
             groupItems = showBatchTagDialog!!,
-            onDismissRequest = { showBatchTagDialog = null }
+            preselectedItems = batchTagPreselected,
+            onDismissRequest = { 
+                showBatchTagDialog = null
+                batchTagPreselected = emptySet()
+            }
         )
     }
 
@@ -1225,6 +1231,18 @@ internal fun ListManagerScreen(
                             onClick = { showBatchDeleteDialog = true }
                         ) {
                             Icon(Icons.Default.Delete, stringResource(id = R.string.batch_delete))
+                        }
+                        IconButton(
+                            enabled = selectedCount > 0,
+                            onClick = { 
+                                val selectedItems = models.flatMap { it.allTts() }.filter { selectedTtsIds.contains(it.id) }
+                                if (selectedItems.isNotEmpty()) {
+                                    batchTagPreselected = selectedItems.toSet()
+                                    showBatchTagDialog = selectedItems
+                                }
+                            }
+                        ) {
+                            Icon(Icons.Default.Label, stringResource(id = R.string.batch_assign_tags))
                         }
                         IconButton(
                             enabled = selectedCount > 0,

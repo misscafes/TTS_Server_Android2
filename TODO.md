@@ -2,6 +2,18 @@
 
 ## 版本变更记录
 
+### v1.26.060212（批量分配标签集成到批量编辑模式）
+
+#### 功能优化：批量分配标签支持预选中 + 批量编辑入口
+- **问题**：批量编辑模式下选中了条目后，需要到分组菜单中再选"批量分配标签"，操作冗余
+- **优化**：
+  1. `BatchTagDialog` 新增 `preselectedIds: Set<Long>` 参数，支持传入预选中条目 ID 集合，对话框打开时自动勾选
+  2. 批量编辑模式顶部 AppBar 新增"批量分配标签"按钮（`Icons.AutoMirrored.Filled.Label`），选中条目后直接打开标签分配对话框
+  3. 分组/子分组菜单的"批量分配标签"入口保持可用，传入当前分组全部条目作为预选中
+- **图标修复**：`Icons.Default.Label` → `Icons.AutoMirrored.Filled.Label`（AutoMirrored 版本兼容性更好）
+
+---
+
 ### v1.26.060211（批量编辑修复 + 降级为子目录候选列表修复）
 
 #### Bug 修复：批量编辑无法识别子分组条目
@@ -206,23 +218,24 @@
 
 ## 会话摘要
 
-### 2026-06-02 本次会话（v1.26.060210 - 批量编辑 Bug 修复）
-- **当前版本**：v1.26.060211（基于 `hhh4` 分支）
+### 2026-06-02 本次会话（v1.26.060212 - 批量分配标签集成 + 批量编辑 Bug 修复）
+- **当前版本**：v1.26.060212（基于 `hhh4` 分支）
 - **已完成事项**：
-  1. **修复批量操作无法遍历子分组条目**：
+  1. **批量分配标签集成到批量编辑模式**：
+     - `BatchTagDialog`：新增 `preselectedIds: Set<Long>` 参数，支持传入预选中条目 ID 集合
+     - `ListManagerScreen.kt`：批量编辑模式顶部 AppBar 新增"批量分配标签"按钮（`Icons.AutoMirrored.Filled.Label`）
+     - 选中条目后点击按钮，自动将选中条目传入 `BatchTagDialog` 作为预选中
+     - 分组/子分组菜单的"批量分配标签"入口保持可用，传入当前分组全部条目作为预选中
+  2. **修复批量操作无法遍历子分组条目**：
      - `ListManagerScreen.kt`：批量删除和批量切换插件对话框中，`models.flatMap { it.list }` → `models.flatMap { it.allTts() }`
-     - 修复后批量操作可正确遍历树形分组中的所有子分组条目
-  2. **修复子分组批量选择 Checkbox 缺失**：
-     - `ListManagerScreen.kt`：`FlattenedCategoryItem.SubGroupHeader` 渲染处增加 `isBatchEditMode` 分支
-     - 批量编辑模式下显示 TriStateCheckbox（三态复选框），支持全选/部分选中（横线）/未选
-     - 普通模式下保持原有 `SubGroupHeader` 组件不变
-  3. **修复新增分组无法被选为降级目标**：
+  3. **修复子分组批量选择 Checkbox 缺失**：
+     - `ListManagerScreen.kt`：`FlattenedCategoryItem.SubGroupHeader` 渲染处增加 `isBatchEditMode` 分支，显示 TriStateCheckbox
+  4. **修复新增分组无法被选为降级目标**：
      - `ListManagerScreen.kt`：`addGroupDialog` 取消时重置 `addGroupParentId = 0L`
-     - `moveGroupDialog` 使用 `LaunchedEffect` 强制刷新候选列表
-     - `showConvertToSubGroup` 候选列表移入 `text` lambda
-  4. **修复分组导出功能**：
+     - `moveGroupDialog` 候选列表直接基于 `models` 计算（不用 remember/LaunchedEffect）
+  5. **修复分组导出功能**：
      - `ListManagerScreen.kt`：`Group` 组件 `onExport` 从 `{}` 改为 `showGroupExportSheet = listOf(node)`
-  5. **构建 Release APK**：`newapk/TTS-Server-v1.26.060211.apk`
+  6. **构建 Release APK**：`newapk/TTS-Server-v1.26.060212.apk`
 - **注意事项**：
   - `allowMainThreadQueries` 暂时保留
   - `SystemTtsService` 的 `runBlocking` **已恢复**

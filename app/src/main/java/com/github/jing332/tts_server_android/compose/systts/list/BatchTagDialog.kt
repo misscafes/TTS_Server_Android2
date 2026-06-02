@@ -30,12 +30,13 @@ import kotlinx.coroutines.withContext
 @Composable
 fun BatchTagDialog(
     groupItems: List<SystemTtsV2>,
+    preselectedItems: Set<SystemTtsV2> = emptySet(),
     onDismissRequest: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val context = androidx.compose.ui.platform.LocalContext.current
 
-    var selectedItems by remember { mutableStateOf<Set<SystemTtsV2>>(emptySet()) }
+    var selectedItems by remember { mutableStateOf<Set<SystemTtsV2>>(preselectedItems) }
     var selectedTagKey by remember { mutableStateOf<String>("") }
 
     // 按当前顺序排列，并只保留有 TtsConfigurationDTO 的项
