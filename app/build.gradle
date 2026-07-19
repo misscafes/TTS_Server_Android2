@@ -17,6 +17,10 @@ static def releaseTime() {
     return new Date().format("yy.MMddHH", TimeZone.getTimeZone("GMT+8"))
 }
 
+static def buildTimestampSuffix() {
+    return new Date().format("mmss", TimeZone.getTimeZone("GMT+8"))
+}
+
 def version = "1." + releaseTime()
 def gitCommits = Integer.parseInt('git rev-list HEAD --count'.execute().text.trim())
 
@@ -138,10 +142,36 @@ android {
             def suffix = ""
             if (flavor && flavor != "app") suffix += "-${flavor}"
             if (buildType && buildType != "release") suffix += "-${buildType}"
+            def timestampSuffix = buildTimestampSuffix()
             if (abiName == null)
-                output.outputFileName = "TTS-Server-v${variant.versionName}${suffix}.apk"
+                output.outputFileName = "TTS-Server-v${variant.versionName}${suffix}-${timestampSuffix}.apk"
             else
-                output.outputFileName = "TTS-Server-v${variant.versionName}${suffix}_${abiName}.apk"
+                output.outputFileName = "TTS-Server-v${variant.versionName}${suffix}-${timestampSuffix}_${abiName}.apk"
+        }
+    }
+
+    // 每次 release 构建后额外生成一份 TTS-Server-latest*.apk 副本，方便快速识别最新包
+    android.applicationVariants.configureEach { variant ->
+        if (variant.buildType.name == "release") {
+            def flavor = variant.flavorName ?: ""
+            def suffix = (flavor && flavor != "app") ? "-${flavor}" : ""
+            def latestName = "TTS-Server-latest${suffix}.apk"
+            def taskName = "copyLatestApk${variant.name.capitalize()}"
+            def copyTask = project.tasks.register(taskName) {
+                doLast {
+                    variant.outputs.all { out ->
+                        def apkFile = file("${project.buildDir}/outputs/apk/${flavor}/${variant.buildType.name}/${out.outputFileName}")
+                        if (apkFile.exists()) {
+                            copy {
+                                from apkFile
+                                into "${project.rootDir}/newapk"
+                                rename { latestName }
+                            }
+                        }
+                    }
+                }
+            }
+            variant.assembleProvider.get().finalizedBy(copyTask)
         }
     }
 

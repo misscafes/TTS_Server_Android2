@@ -2,6 +2,23 @@
 
 ## 版本变更记录
 
+### v1.26.071909-patch2（APK 命名优化 + 批量编辑模式合并分组）
+
+#### 优化：APK 文件名加入构建时间戳并生成 latest 副本
+- **需求来源**：`newapk/` 目录中多个版本号连续的 APK 难以分辨哪个是最新生成的
+- **涉及文件**：
+  - `app/build.gradle`
+- **实现内容**：
+  1. APK 文件名新增分钟秒时间戳后缀，例如 `TTS-Server-v1.26.071910-1500.apk`，每次构建文件名唯一
+  2. 每次 `release` 构建完成后自动在 `newapk/` 目录生成 `TTS-Server-latest.apk` 副本（dev 版本为 `TTS-Server-latest-dev.apk`）
+  3. 以后只需要找 `newapk/TTS-Server-latest.apk` 即为最新正式包
+- **验证**：
+  - `./gradlew :app:assembleAppRelease` 构建成功
+  - 生成 `app/build/outputs/apk/app/release/TTS-Server-v1.26.071910-1500.apk`
+  - 同时生成 `newapk/TTS-Server-latest.apk`
+
+---
+
 ### v1.26.071909-patch（批量编辑模式合并分组）
 
 #### 新增功能：批量编辑模式下合并多个分组
@@ -314,21 +331,24 @@
 
 ## 会话摘要
 
-### 2026-07-19 本次会话（v1.26.071909-patch - 批量编辑模式合并分组）
-- **当前版本**：v1.26.071909-patch（基于 `hhh4` 分支）
+### 2026-07-19 本次会话（v1.26.071909-patch2 - APK 命名优化 + 批量编辑模式合并分组）
+- **当前版本**：v1.26.071909-patch2（基于 `hhh4` 分支）
 - **已完成事项**：
   1. 将「合并」入口从右上角 `⋮` 更多选项菜单迁移到批量编辑模式 AppBar
   2. 批量编辑模式下新增「合并分组」按钮，点击后识别被完整选中的分组
   3. 多选至少两个同层级分组后，弹出目标分组选择对话框
   4. 将非目标分组的所有条目移动到目标分组，清空 `categoryPath`，保持 `order` 不变
   5. 删除被合并的空分组（含子分组）
-  6. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
-  7. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071909.apk`
+  6. APK 文件名新增构建时间戳后缀，每次构建文件名唯一
+  7. 每次 Release 构建后自动生成 `newapk/TTS-Server-latest.apk` 副本，方便识别最新包
+  8. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  9. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-latest.apk`
 - **注意事项**：
-  - 入口：系统 TTS 列表 → 右上角批量编辑按钮 → 选择至少两个分组 → 点击合并分组按钮
+  - 合并分组入口：系统 TTS 列表 → 右上角批量编辑按钮 → 选择至少两个分组 → 点击合并分组按钮
   - 必须完整选中分组（分组 Header 的 Checkbox 全选该分组下所有条目）
   - 选中的分组必须在同一层级
   - 合并后条目的 `order` 不变，列表排序保持不变
+  - 最新 APK 直接看 `newapk/TTS-Server-latest.apk`
   - 之前的 JRead 导入、分组修复、导入点击无响应等问题已在 v1.26.071909 中修复
 
 ### 2026-07-19 本次会话（v1.26.071908 - 新增 JRead 插件包/音色配置包导入支持 + 导入问题修复）
