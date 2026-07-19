@@ -477,4 +477,8 @@
     <string name="switch_tag">Switch tag</string>
     <string name="get_tag_name_failed">Failed to get tag name</string>
     <string name="text_processor_init_failed">文本处理器在初始化阶段出现错误，无法继续执行。可能的原因：开启多语音但未指定配置、朗读规则</string>
+    <string name="merge_voice_list">Merge Voice List</string>
+    <string name="merge_voice_list_desc">Deduplicate by display name and voice, keep the first occurrence, and do not change the existing order.\nWill delete %1$d duplicate voice(s), continue?</string>
+    <string name="merge_voice_list_done">Merged %1$d duplicate voice(s)</string>
+    <string name="merge_voice_list_none">No duplicate voices</string>
 </resources>

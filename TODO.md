@@ -2,6 +2,31 @@
 
 ## 版本变更记录
 
+### v1.26.071909-patch（合并发音人列表）
+
+#### 新增功能：系统 TTS 列表支持合并重复发音人
+- **需求来源**：用户导入大量音色配置后存在重复发音人，需要一键去重合并，且合并后不能修改排序
+- **涉及文件**：
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerViewModel.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerScreen.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/MenuMoreOptions.kt`
+  - `app/src/main/res/values/strings.xml`
+  - `app/src/main/res/values-en/strings.xml`
+- **实现内容**：
+  1. 在系统 TTS 列表右上角 `⋮` 更多选项菜单中新增「合并发音人列表」入口
+  2. `ListManagerViewModel` 新增 `mergeDuplicateVoices()`：按 `displayName + 音色指纹` 去重
+     - 插件 TTS 指纹：`pluginId + voice + locale`
+     - 本地 TTS 指纹：`engine + voice + locale`
+     - BGM 指纹：`musicList`
+  3. 重复判断保留 `order` 最小（列表中最靠前）的条目，删除其余重复项
+  4. **不修改排序**：仅删除重复条目，保留条目的 `order` 字段原封不动
+  5. 点击后先计算重复数量并弹出确认对话框，确认后执行合并，操作完成后 Toast 提示结果
+- **验证**：
+  - `./gradlew :app:compileAppDebugKotlin` 编译通过
+  - `./gradlew :app:assembleAppRelease` 构建成功，APK：`newapk/TTS-Server-v1.26.071909.apk`
+
+---
+
 ### v1.26.071908（新增 JRead 插件包/音色配置包导入支持）
 
 #### 新增功能：支持导入 JRead 阅读器导出的插件与音色配置
@@ -284,6 +309,21 @@
 ---
 
 ## 会话摘要
+
+### 2026-07-19 本次会话（v1.26.071909-patch - 合并发音人列表）
+- **当前版本**：v1.26.071909-patch（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. 系统 TTS 列表右上角 `⋮` 更多选项菜单新增「合并发音人列表」功能
+  2. 按显示名称 + 音色指纹（pluginId/voice/locale 或 engine/voice/locale）去重
+  3. 保留列表中最靠前的重复项，删除其余重复发音人
+  4. 合并操作仅删除条目，不修改保留条目的 `order`，列表排序保持不变
+  5. 先计算重复数量并弹出确认对话框，确认后执行合并
+  6. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  7. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071909.apk`
+- **注意事项**：
+  - 入口位于系统 TTS 列表右上角 `⋮` 更多选项菜单最下方
+  - 合并规则基于「显示名称 + 音色指纹」，相同名称但不同插件/音色的条目不会被误删
+  - 之前的 JRead 导入、分组修复、导入点击无响应等问题已在 v1.26.071909 中修复
 
 ### 2026-07-19 本次会话（v1.26.071908 - 新增 JRead 插件包/音色配置包导入支持 + 导入问题修复）
 - **当前版本**：v1.26.071908（基于 `hhh4` 分支）

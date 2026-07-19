@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.AbstractListGroup.Companion.DEFAULT_GROUP_ID
 import com.github.jing332.database.entities.systts.GroupWithSystemTts
+import com.github.jing332.database.entities.systts.BgmConfiguration
 import com.github.jing332.database.entities.systts.SystemTtsGroup
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.database.entities.systts.TtsConfigurationDTO
@@ -494,5 +495,65 @@ class ListManagerViewModel : ViewModel() {
                 )
             )
         }
+    }
+
+    /**
+     * 计算可合并的重复发音人数量（按显示名称与音色指纹去重）。
+     */
+    fun calculateDuplicateVoiceCount(): Int {
+        return computeDuplicateVoices().second.size
+    }
+
+    /**
+     * 合并重复发音人：按显示名称与音色指纹去重，保留 order 最小（最靠前）的条目。
+     * 删除重复项时不修改保留条目的 order，从而保持列表排序不变。
+     * @return 删除的重复条数
+     */
+    fun mergeDuplicateVoices(): Int {
+        val (seen, toDelete) = computeDuplicateVoices()
+        if (toDelete.isNotEmpty()) {
+            dbm.systemTtsV2.delete(*toDelete.toTypedArray())
+        }
+        return toDelete.size
+    }
+
+    private fun computeDuplicateVoices(): Pair<Map<String, SystemTtsV2>, List<SystemTtsV2>> {
+        val all = dbm.systemTtsV2.all
+        val seen = linkedMapOf<String, SystemTtsV2>()
+        val toDelete = mutableListOf<SystemTtsV2>()
+
+        all.forEach { item ->
+            val key = item.voiceFingerprint()
+            val existing = seen[key]
+            if (existing == null) {
+                seen[key] = item
+            } else {
+                // 保留 order 更小者；order 相同时保留 id 更小者（更先创建）
+                if (item.order < existing.order ||
+                    (item.order == existing.order && item.id < existing.id)
+                ) {
+                    toDelete.add(existing)
+                    seen[key] = item
+                } else {
+                    toDelete.add(item)
+                }
+            }
+        }
+
+        return seen to toDelete
+    }
+
+    private fun SystemTtsV2.voiceFingerprint(): String {
+        val sourceKey = when (val cfg = config) {
+            is TtsConfigurationDTO -> when (val source = cfg.source) {
+                is PluginTtsSource -> "plugin|${source.pluginId}|${source.voice}|${source.locale}"
+                is LocalTtsSource -> "local|${source.engine}|${source.voice}|${source.locale}"
+                else -> "other|${source.javaClass.simpleName}|${source.voice}|${source.locale}"
+            }
+
+            is BgmConfiguration -> "bgm|${cfg.musicList.joinToString(",")}"
+            else -> "unknown|$displayName"
+        }
+        return "$displayName|$sourceKey"
     }
 }

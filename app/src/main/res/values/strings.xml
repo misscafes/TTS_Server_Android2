@@ -614,4 +614,8 @@
     <string name="pixel_keep_alive_started">Pixel keep alive started</string>
     <string name="pixel_keep_alive_stopped">Pixel keep alive stopped</string>
     <string name="ai_generate_config">AI Generate Config</string>
+    <string name="merge_voice_list">合并发音人列表</string>
+    <string name="merge_voice_list_desc">按显示名称与音色去重，保留最先出现的条目，合并后不会修改现有排序。\n将删除 %1$d 条重复发音人，是否继续？</string>
+    <string name="merge_voice_list_done">已合并 %1$d 条重复发音人</string>
+    <string name="merge_voice_list_none">没有重复发音人</string>
 </resources>

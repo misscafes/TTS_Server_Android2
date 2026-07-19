@@ -1174,6 +1174,39 @@ internal fun ListManagerScreen(
     }
 
     var showOptions by rememberSaveable { mutableStateOf(false) }
+
+    // ===== 合并发音人列表对话框 =====
+    var showMergeVoiceListDialog by remember { mutableStateOf(false) }
+    var mergeVoiceListDuplicateCount by remember { mutableStateOf(0) }
+    if (showMergeVoiceListDialog) {
+        AlertDialog(
+            onDismissRequest = { showMergeVoiceListDialog = false },
+            title = { Text(stringResource(R.string.merge_voice_list)) },
+            text = { Text(stringResource(R.string.merge_voice_list_desc, mergeVoiceListDuplicateCount)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showMergeVoiceListDialog = false
+                    scope.launch {
+                        val deletedCount = withIO { vm.mergeDuplicateVoices() }
+                        context.longToast(
+                            if (deletedCount > 0)
+                                context.getString(R.string.merge_voice_list_done, deletedCount)
+                            else
+                                context.getString(R.string.merge_voice_list_none)
+                        )
+                    }
+                }) {
+                    Text(stringResource(R.string.confirm))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showMergeVoiceListDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
+
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -1292,7 +1325,14 @@ internal fun ListManagerScreen(
                             MenuMoreOptions(
                                 expanded = showOptions,
                                 onDismissRequest = { showOptions = false },
-                                onExportAll = { showGroupExportSheet = models }
+                                onExportAll = { showGroupExportSheet = models },
+                                onMergeVoiceList = {
+                                    scope.launch {
+                                        val count = withIO { vm.calculateDuplicateVoiceCount() }
+                                        mergeVoiceListDuplicateCount = count
+                                        showMergeVoiceListDialog = true
+                                    }
+                                }
                             )
                         }
                     }

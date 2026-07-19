@@ -7,6 +7,7 @@ import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Audiotrack
 import androidx.compose.material.icons.filled.ContentCut
 import androidx.compose.material.icons.filled.Group
+import androidx.compose.material.icons.filled.MergeType
 import androidx.compose.material.icons.filled.Output
 import androidx.compose.material.icons.filled.Speed
 
@@ -38,6 +39,7 @@ internal fun MenuMoreOptions(
     expanded: Boolean,
     onDismissRequest: () -> Unit,
     onExportAll: () -> Unit,
+    onMergeVoiceList: () -> Unit,
 ) {
     var showBgmSettingsDialog  by remember { mutableStateOf(false) }
     if (showBgmSettingsDialog)
@@ -159,6 +161,16 @@ internal fun MenuMoreOptions(
             onExportAll()
         }, leadingIcon = {
             Icon(Icons.Default.Output, null)
+        })
+
+        HorizontalDivider()
+        DropdownMenuItem(text = {
+            Text(stringResource(id = R.string.merge_voice_list))
+        }, onClick = {
+            onDismissRequest()
+            onMergeVoiceList()
+        }, leadingIcon = {
+            Icon(Icons.Default.MergeType, null)
         })
     }
 }
