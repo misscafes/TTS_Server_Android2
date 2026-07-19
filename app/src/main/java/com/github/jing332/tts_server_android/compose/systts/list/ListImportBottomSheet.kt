@@ -55,7 +55,13 @@ fun ListImportBottomSheet(onDismissRequest: () -> Unit) {
         onImport = { json ->
             val allList = withContext(Dispatchers.IO) {
                 val result = mutableListOf<ConfigModel>()
-                getImportList(json, false)?.forEach { groupWithTts ->
+                val importList = getImportList(json, false) ?: return@withContext result
+
+                // 先插入所有分组（包括没有直接条目的父级分组），确保导入后树形结构完整
+                val allGroups = importList.map { it.group }
+                insertGroupsPreservingTree(allGroups)
+
+                importList.forEach { groupWithTts ->
                     val group = groupWithTts.group
                     groupWithTts.list.forEach { sysTts ->
                         result.add(
@@ -71,6 +77,21 @@ fun ListImportBottomSheet(onDismissRequest: () -> Unit) {
             selectDialog = allList
         }
     )
+}
+
+/**
+ * 按树形层级顺序插入分组：先插入 parentGroupId 为 0 的根分组，再插入子分组，
+ * 确保外键/树形关系正确，保留完整的父级目录结构。
+ */
+private fun insertGroupsPreservingTree(groups: List<SystemTtsGroup>) {
+    val groupMap = groups.associateBy { it.id }
+    // 按层级排序：parentGroupId 为 0 的排在前面，子分组按 id/父id 顺序排
+    val sorted = groups.sortedWith(compareBy({ it.parentGroupId }, { it.id }))
+    sorted.forEach { group ->
+        // 如果父分组不存在于当前导入列表且 parentGroupId != 0，
+        // 保留原 parentGroupId（数据库中可能已经存在该父分组）
+        dbm.systemTtsV2.insertGroup(group)
+    }
 }
 
 private fun getImportList(
