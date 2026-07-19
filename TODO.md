@@ -487,6 +487,7 @@
      - 5. 游音
   4. 调整各顶级分组的 `order` 字段为 0~4，确保显示顺序与数组顺序一致
   5. 生成文件：`参考/jread_voice_五组排序.json`（共 52 个分组，约 2.1 MB）
+  6. 推送到 `origin/hhh4` 成功；`github/hhh4` 因网络连接失败未能推送，可稍后手动重试 `git push github hhh4`
 - **涉及文件**：
   - `参考/jread_voice_五组排序.json`
   - `参考/分组拆分/jread_voice_千问全家桶2852_2次元.json`（已替换为新 731 条版本）
