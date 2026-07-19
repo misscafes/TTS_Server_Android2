@@ -1085,6 +1085,11 @@ internal fun ListManagerScreen(
                             if (selectedItems.isNotEmpty()) {
                                 dbm.systemTtsV2.delete(*selectedItems.toTypedArray())
                             }
+                            // 若某些分组被完整选中，删除这些空分组（含子分组）
+                            val fullySelectedGroups = vm.findFullySelectedGroups(selectedTtsIds)
+                            fullySelectedGroups.forEach { node ->
+                                vm.deleteGroupTree(node)
+                            }
                         }
                         if (selectedItems.any { it.isEnabled }) {
                             SystemTtsService.notifyUpdateConfig()

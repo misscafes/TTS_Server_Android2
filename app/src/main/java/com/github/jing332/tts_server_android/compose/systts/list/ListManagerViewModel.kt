@@ -465,6 +465,22 @@ class ListManagerViewModel : ViewModel() {
         }
     }
 
+    /**
+     * 找出被完整选中的分组（分组下所有 TTS 条目都在 selectedTtsIds 中）。
+     * 只返回最顶层的被全选分组，避免父子分组重复删除。
+     */
+    fun findFullySelectedGroups(selectedTtsIds: Set<Long>): List<GroupTreeNode> {
+        val allNodes = flattenNodes()
+        val fullySelected = allNodes.filter { node ->
+            val ids = node.allTts().map { it.id }
+            ids.isNotEmpty() && ids.all { it in selectedTtsIds }
+        }
+        val fullySelectedIds = fullySelected.map { it.group.id }.toSet()
+        return fullySelected.filter { node ->
+            node.group.parentGroupId !in fullySelectedIds
+        }
+    }
+
     private fun findNodeByGroupId(
         groupId: Long,
         nodes: List<GroupTreeNode> = list.value,
@@ -541,7 +557,7 @@ class ListManagerViewModel : ViewModel() {
         return movedCount
     }
 
-    private fun deleteGroupTree(node: GroupTreeNode) {
+    internal fun deleteGroupTree(node: GroupTreeNode) {
         node.children.forEach { deleteGroupTree(it) }
         dbm.systemTtsV2.deleteGroup(node.group)
     }

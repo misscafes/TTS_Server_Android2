@@ -2,19 +2,34 @@
 
 ## 版本变更记录
 
-### v1.26.071909-patch2（APK 命名优化 + 批量编辑模式合并分组）
+### v1.26.071909-patch3（批量删除自动删除空分组 + APK 命名优化 + 批量编辑模式合并分组）
 
-#### 优化：APK 文件名加入构建时间戳并生成 latest 副本
-- **需求来源**：`newapk/` 目录中多个版本号连续的 APK 难以分辨哪个是最新生成的
+#### Bug 修复：批量删除完整分组时自动删除空分组
+- **需求来源**：批量编辑模式下全选某个分组并删除后，该分组变成空分组仍残留在列表中，需要一并删除
+- **涉及文件**：
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerViewModel.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerScreen.kt`
+- **实现内容**：
+  1. `ListManagerViewModel` 新增 `findFullySelectedGroups(selectedTtsIds)`：识别被完整选中的分组（分组下所有 TTS 条目均被选中），并过滤掉父子重复项
+  2. `deleteGroupTree(node)` 访问级别从 `private` 改为 `internal`，供 UI 层调用
+  3. 批量删除确认后，先删除选中的 TTS 条目，再递归删除被完整选中的分组（含其子分组）
+  4. 仅删除被完整选中的分组；部分选中的分组即使变空也不会被自动删除
+- **验证**：
+  - `./gradlew :app:compileAppDebugKotlin` 编译通过
+  - `./gradlew :app:assembleAppRelease` 构建成功，生成 `newapk/TTS-Server-latest.apk`
+
+#### 优化：APK 文件名加入构建时间戳，构建后自动拷贝到 newapk 并生成 latest 副本
+- **需求来源**：`newapk/` 目录中多个版本号连续的 APK 难以分辨哪个是最新生成的；希望构建后的 APK 自动放到 `newapk/`
 - **涉及文件**：
   - `app/build.gradle`
 - **实现内容**：
-  1. APK 文件名新增分钟秒时间戳后缀，例如 `TTS-Server-v1.26.071910-1500.apk`，每次构建文件名唯一
-  2. 每次 `release` 构建完成后自动在 `newapk/` 目录生成 `TTS-Server-latest.apk` 副本（dev 版本为 `TTS-Server-latest-dev.apk`）
-  3. 以后只需要找 `newapk/TTS-Server-latest.apk` 即为最新正式包
+  1. APK 文件名新增分钟秒时间戳后缀，例如 `TTS-Server-v1.26.071910-3628.apk`，每次构建文件名唯一
+  2. 每次 `release` 构建完成后自动将原始 APK 拷贝到 `newapk/` 目录
+  3. 同时额外生成 `newapk/TTS-Server-latest.apk` 副本（dev 版本为 `TTS-Server-latest-dev.apk`），方便快速识别最新包
 - **验证**：
   - `./gradlew :app:assembleAppRelease` 构建成功
-  - 生成 `app/build/outputs/apk/app/release/TTS-Server-v1.26.071910-1500.apk`
+  - 生成 `app/build/outputs/apk/app/release/TTS-Server-v1.26.071910-3628.apk`
+  - 同时拷贝到 `newapk/TTS-Server-v1.26.071910-3628.apk`
   - 同时生成 `newapk/TTS-Server-latest.apk`
 
 ---
@@ -331,22 +346,26 @@
 
 ## 会话摘要
 
-### 2026-07-19 本次会话（v1.26.071909-patch2 - APK 命名优化 + 批量编辑模式合并分组）
-- **当前版本**：v1.26.071909-patch2（基于 `hhh4` 分支）
+### 2026-07-19 本次会话（v1.26.071909-patch3 - 批量删除自动删空分组 + APK 命名优化 + 批量编辑模式合并分组）
+- **当前版本**：v1.26.071909-patch3（基于 `hhh4` 分支）
 - **已完成事项**：
-  1. 将「合并」入口从右上角 `⋮` 更多选项菜单迁移到批量编辑模式 AppBar
-  2. 批量编辑模式下新增「合并分组」按钮，点击后识别被完整选中的分组
-  3. 多选至少两个同层级分组后，弹出目标分组选择对话框
-  4. 将非目标分组的所有条目移动到目标分组，清空 `categoryPath`，保持 `order` 不变
-  5. 删除被合并的空分组（含子分组）
-  6. APK 文件名新增构建时间戳后缀，每次构建文件名唯一
-  7. 每次 Release 构建后自动生成 `newapk/TTS-Server-latest.apk` 副本，方便识别最新包
-  8. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
-  9. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-latest.apk`
+  1. 批量删除时，若分组被完整选中（分组下所有条目均被勾选），删除条目后自动删除该空分组（含子分组）
+  2. 将「合并」入口从右上角 `⋮` 更多选项菜单迁移到批量编辑模式 AppBar
+  3. 批量编辑模式下新增「合并分组」按钮，点击后识别被完整选中的分组
+  4. 多选至少两个同层级分组后，弹出目标分组选择对话框
+  5. 将非目标分组的所有条目移动到目标分组，清空 `categoryPath`，保持 `order` 不变
+  6. 删除被合并的空分组（含子分组）
+  7. APK 文件名新增构建时间戳后缀，每次构建文件名唯一
+  8. 每次 Release 构建后自动将原始 APK 拷贝到 `newapk/` 目录
+  9. 每次 Release 构建后额外生成 `newapk/TTS-Server-latest.apk` 副本，方便识别最新包
+  10. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  11. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-latest.apk` 和带时间戳的原始 APK
 - **注意事项**：
+  - 批量删除入口：系统 TTS 列表 → 右上角批量编辑按钮 → 勾选分组或条目 → 点击删除按钮
+  - 仅当被完整选中的分组才会在删除后自动移除；部分选中导致变空的分组不会被删除
   - 合并分组入口：系统 TTS 列表 → 右上角批量编辑按钮 → 选择至少两个分组 → 点击合并分组按钮
-  - 必须完整选中分组（分组 Header 的 Checkbox 全选该分组下所有条目）
-  - 选中的分组必须在同一层级
+  - 合并分组必须完整选中分组（分组 Header 的 Checkbox 全选该分组下所有条目）
+  - 合并分组选中的分组必须在同一层级
   - 合并后条目的 `order` 不变，列表排序保持不变
   - 最新 APK 直接看 `newapk/TTS-Server-latest.apk`
   - 之前的 JRead 导入、分组修复、导入点击无响应等问题已在 v1.26.071909 中修复

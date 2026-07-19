@@ -150,7 +150,7 @@ android {
         }
     }
 
-    // 每次 release 构建后额外生成一份 TTS-Server-latest*.apk 副本，方便快速识别最新包
+    // 每次 release 构建后将 APK 拷贝到 newapk/，并额外生成一份 TTS-Server-latest*.apk 副本
     android.applicationVariants.configureEach { variant ->
         if (variant.buildType.name == "release") {
             def flavor = variant.flavorName ?: ""
@@ -162,6 +162,12 @@ android {
                     variant.outputs.all { out ->
                         def apkFile = file("${project.buildDir}/outputs/apk/${flavor}/${variant.buildType.name}/${out.outputFileName}")
                         if (apkFile.exists()) {
+                            // 1. 拷贝原始 APK（保留带时间戳的文件名）到 newapk/
+                            copy {
+                                from apkFile
+                                into "${project.rootDir}/newapk"
+                            }
+                            // 2. 额外生成 latest 副本，方便快速识别最新包
                             copy {
                                 from apkFile
                                 into "${project.rootDir}/newapk"
