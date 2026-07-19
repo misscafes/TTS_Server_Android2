@@ -23,6 +23,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CallMerge
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.EditNote
@@ -38,6 +39,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -1173,39 +1175,75 @@ internal fun ListManagerScreen(
         )
     }
 
-    var showOptions by rememberSaveable { mutableStateOf(false) }
-
-    // ===== 合并发音人列表对话框 =====
-    var showMergeVoiceListDialog by remember { mutableStateOf(false) }
-    var mergeVoiceListDuplicateCount by remember { mutableStateOf(0) }
-    if (showMergeVoiceListDialog) {
+    // ===== 合并分组对话框 =====
+    var showMergeGroupsDialog by remember { mutableStateOf(false) }
+    var mergeGroupsCandidates by remember { mutableStateOf<List<GroupTreeNode>>(emptyList()) }
+    if (showMergeGroupsDialog) {
+        var selectedTargetGroupId by remember { mutableStateOf<Long>(mergeGroupsCandidates.firstOrNull()?.group?.id ?: 0L) }
         AlertDialog(
-            onDismissRequest = { showMergeVoiceListDialog = false },
-            title = { Text(stringResource(R.string.merge_voice_list)) },
-            text = { Text(stringResource(R.string.merge_voice_list_desc, mergeVoiceListDuplicateCount)) },
-            confirmButton = {
-                TextButton(onClick = {
-                    showMergeVoiceListDialog = false
-                    scope.launch {
-                        val deletedCount = withIO { vm.mergeDuplicateVoices() }
-                        context.longToast(
-                            if (deletedCount > 0)
-                                context.getString(R.string.merge_voice_list_done, deletedCount)
-                            else
-                                context.getString(R.string.merge_voice_list_none)
-                        )
+            onDismissRequest = { showMergeGroupsDialog = false },
+            title = { Text(stringResource(R.string.merge_groups)) },
+            text = {
+                Column {
+                    Text("选择目标分组，其他选中分组的内容将合并到该分组：")
+                    Spacer(Modifier.height(8.dp))
+                    mergeGroupsCandidates.forEach { node ->
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    selectedTargetGroupId = node.group.id
+                                }
+                                .padding(vertical = 8.dp)
+                        ) {
+                            RadioButton(
+                                selected = selectedTargetGroupId == node.group.id,
+                                onClick = { selectedTargetGroupId = node.group.id }
+                            )
+                            Text(
+                                text = node.group.name.ifBlank { stringResource(R.string.unnamed) },
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
                     }
-                }) {
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showMergeGroupsDialog = false
+                        scope.launch {
+                            val movedCount = withIO {
+                                vm.mergeSelectedGroups(
+                                    selectedGroupNodes = mergeGroupsCandidates,
+                                    targetGroupId = selectedTargetGroupId
+                                )
+                            }
+                            context.longToast(
+                                if (movedCount > 0)
+                                    "已合并 $movedCount 条发音人到目标分组"
+                                else
+                                    "没有可合并的内容"
+                            )
+                            isBatchEditMode = false
+                            selectedTtsIds = emptySet()
+                        }
+                    },
+                    enabled = selectedTargetGroupId != 0L
+                ) {
                     Text(stringResource(R.string.confirm))
                 }
             },
             dismissButton = {
-                TextButton(onClick = { showMergeVoiceListDialog = false }) {
+                TextButton(onClick = { showMergeGroupsDialog = false }) {
                     Text(stringResource(R.string.cancel))
                 }
             }
         )
     }
+
+    var showOptions by rememberSaveable { mutableStateOf(false) }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -1283,6 +1321,24 @@ internal fun ListManagerScreen(
                         ) {
                             Icon(Icons.Default.Extension, stringResource(id = R.string.batch_switch_plugin))
                         }
+                        IconButton(
+                            enabled = selectedCount > 0,
+                            onClick = {
+                                val fullySelectedGroups = vm.getFullySelectedGroups(selectedTtsIds)
+                                when {
+                                    fullySelectedGroups.size < 2 ->
+                                        context.toast("请完整选择至少两个分组")
+                                    fullySelectedGroups.map { it.group.parentGroupId }.distinct().size != 1 ->
+                                        context.toast("选中的分组必须在同一层级")
+                                    else -> {
+                                        mergeGroupsCandidates = fullySelectedGroups
+                                        showMergeGroupsDialog = true
+                                    }
+                                }
+                            }
+                        ) {
+                            Icon(Icons.Default.CallMerge, stringResource(id = R.string.merge_groups))
+                        }
                         TextButton(onClick = {
                             isBatchEditMode = false
                             selectedTtsIds = emptySet()
@@ -1325,14 +1381,7 @@ internal fun ListManagerScreen(
                             MenuMoreOptions(
                                 expanded = showOptions,
                                 onDismissRequest = { showOptions = false },
-                                onExportAll = { showGroupExportSheet = models },
-                                onMergeVoiceList = {
-                                    scope.launch {
-                                        val count = withIO { vm.calculateDuplicateVoiceCount() }
-                                        mergeVoiceListDuplicateCount = count
-                                        showMergeVoiceListDialog = true
-                                    }
-                                }
+                                onExportAll = { showGroupExportSheet = models }
                             )
                         }
                     }

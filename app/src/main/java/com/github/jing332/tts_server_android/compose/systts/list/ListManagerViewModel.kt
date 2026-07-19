@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.AbstractListGroup.Companion.DEFAULT_GROUP_ID
 import com.github.jing332.database.entities.systts.GroupWithSystemTts
-import com.github.jing332.database.entities.systts.BgmConfiguration
 import com.github.jing332.database.entities.systts.SystemTtsGroup
 import com.github.jing332.database.entities.systts.SystemTtsV2
 import com.github.jing332.database.entities.systts.TtsConfigurationDTO
@@ -498,62 +497,52 @@ class ListManagerViewModel : ViewModel() {
     }
 
     /**
-     * 计算可合并的重复发音人数量（按显示名称与音色指纹去重）。
+     * 从当前树形列表中找出被完整选中的分组（分组下所有 TTS 条目都在 selectedTtsIds 中）。
      */
-    fun calculateDuplicateVoiceCount(): Int {
-        return computeDuplicateVoices().second.size
+    fun getFullySelectedGroups(selectedTtsIds: Set<Long>): List<GroupTreeNode> {
+        return flattenNodes().filter { node ->
+            val ids = node.allTts().map { it.id }
+            ids.isNotEmpty() && ids.all { it in selectedTtsIds }
+        }
     }
 
     /**
-     * 合并重复发音人：按显示名称与音色指纹去重，保留 order 最小（最靠前）的条目。
-     * 删除重复项时不修改保留条目的 order，从而保持列表排序不变。
-     * @return 删除的重复条数
+     * 将多个选中的分组合并到指定目标分组。
+     * - 仅移动条目，不修改条目的 order，保持原排序
+     * - 源分组（含子分组）在内容移出后被删除
+     * - 若源分组是目标分组的父/子分组，调用方需确保选中的分组在同一层级
+     *
+     * @return 移动的条目数量
      */
-    fun mergeDuplicateVoices(): Int {
-        val (seen, toDelete) = computeDuplicateVoices()
-        if (toDelete.isNotEmpty()) {
-            dbm.systemTtsV2.delete(*toDelete.toTypedArray())
-        }
-        return toDelete.size
-    }
+    fun mergeSelectedGroups(
+        selectedGroupNodes: List<GroupTreeNode>,
+        targetGroupId: Long,
+    ): Int {
+        val targetNode = selectedGroupNodes.first { it.group.id == targetGroupId }
+        var movedCount = 0
 
-    private fun computeDuplicateVoices(): Pair<Map<String, SystemTtsV2>, List<SystemTtsV2>> {
-        val all = dbm.systemTtsV2.all
-        val seen = linkedMapOf<String, SystemTtsV2>()
-        val toDelete = mutableListOf<SystemTtsV2>()
-
-        all.forEach { item ->
-            val key = item.voiceFingerprint()
-            val existing = seen[key]
-            if (existing == null) {
-                seen[key] = item
-            } else {
-                // 保留 order 更小者；order 相同时保留 id 更小者（更先创建）
-                if (item.order < existing.order ||
-                    (item.order == existing.order && item.id < existing.id)
-                ) {
-                    toDelete.add(existing)
-                    seen[key] = item
-                } else {
-                    toDelete.add(item)
+        selectedGroupNodes
+            .filter { it.group.id != targetGroupId }
+            .forEach { sourceNode ->
+                // 移动源分组下所有条目到目标分组，清空 categoryPath，保持 order 不变
+                sourceNode.allTts().forEach { tts ->
+                    dbm.systemTtsV2.update(
+                        tts.copy(
+                            groupId = targetGroupId,
+                            categoryPath = ""
+                        )
+                    )
+                    movedCount++
                 }
+                // 递归删除源分组及其子分组
+                deleteGroupTree(sourceNode)
             }
-        }
 
-        return seen to toDelete
+        return movedCount
     }
 
-    private fun SystemTtsV2.voiceFingerprint(): String {
-        val sourceKey = when (val cfg = config) {
-            is TtsConfigurationDTO -> when (val source = cfg.source) {
-                is PluginTtsSource -> "plugin|${source.pluginId}|${source.voice}|${source.locale}"
-                is LocalTtsSource -> "local|${source.engine}|${source.voice}|${source.locale}"
-                else -> "other|${source.javaClass.simpleName}|${source.voice}|${source.locale}"
-            }
-
-            is BgmConfiguration -> "bgm|${cfg.musicList.joinToString(",")}"
-            else -> "unknown|$displayName"
-        }
-        return "$displayName|$sourceKey"
+    private fun deleteGroupTree(node: GroupTreeNode) {
+        node.children.forEach { deleteGroupTree(it) }
+        dbm.systemTtsV2.deleteGroup(node.group)
     }
 }
