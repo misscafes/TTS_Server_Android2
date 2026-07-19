@@ -56,6 +56,7 @@ fun BatchTagDialog(
 
     // 获取可用标签列表：优先从数据库读取朗读规则；若规则不存在或 tags 为空，
     // 则从当前选中项已有的 tag/tagName 集合中提取，保证批量分配标签可用。
+    // 即使 tagRuleId 不一致，也允许从所有选中项中提取标签进行分配。
     var speechRule by remember { mutableStateOf<SpeechRule?>(null) }
     val derivedTags by remember(selectedItems) {
         derivedStateOf {
@@ -68,7 +69,10 @@ fun BatchTagDialog(
         }
     }
     val effectiveTags = remember(speechRule, derivedTags) {
-        if (!speechRule?.tags.isNullOrEmpty()) speechRule!!.tags else derivedTags
+        val map = mutableMapOf<String, String>()
+        speechRule?.tags?.let { map.putAll(it) }
+        map.putAll(derivedTags)
+        map
     }
     val tagKeys = remember(effectiveTags) { effectiveTags.keys.toList() }
     LaunchedEffect(commonTagRuleId, selectedItems) {
@@ -79,6 +83,10 @@ fun BatchTagDialog(
             selectedTagKey = keys.first()
         }
     }
+
+    // 当没有任何现成标签时，允许用户自由输入一个标签 key
+    var customTagKey by remember { mutableStateOf("") }
+    var customTagName by remember { mutableStateOf("") }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -180,19 +188,27 @@ fun BatchTagDialog(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
-                } else if (commonTagRuleId == null) {
-                    Text(
-                        text = stringResource(R.string.tag_rule_inconsistent),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
                 } else if (tagKeys.isEmpty()) {
+                    // 没有任何现成标签时，允许自由输入
                     Text(
-                        text = stringResource(R.string.no_tags_in_rule),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        text = stringResource(R.string.start_tag),
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                    OutlinedTextField(
+                        value = customTagKey,
+                        onValueChange = { customTagKey = it },
+                        label = { Text(stringResource(R.string.tag)) },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    OutlinedTextField(
+                        value = customTagName,
+                        onValueChange = { customTagName = it },
+                        label = { Text(stringResource(R.string.tag_name)) },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true
                     )
                 } else {
                     Text(
@@ -224,11 +240,19 @@ fun BatchTagDialog(
                             sortedSelected.forEachIndexed { idx, item ->
                                 val config = item.config as TtsConfigurationDTO
                                 val ruleData = config.speechRule.copy()
-                                val tagKey = keys.getOrNull((startIndex + idx) % keys.size) ?: return@forEachIndexed
+                                val tagKey = if (keys.isNotEmpty()) {
+                                    keys.getOrNull((startIndex + idx) % keys.size) ?: return@forEachIndexed
+                                } else {
+                                    customTagKey
+                                }
+                                val tagName = effectiveTags[tagKey]
+                                    ?: customTagName.takeIf { it.isNotBlank() }
+                                    ?: tagKey
                                 ruleData.target = com.github.jing332.tts_server_android.constant.SpeechTarget.TAG
                                 ruleData.tag = tagKey
-                                ruleData.tagRuleId = commonTagRuleId ?: ""
-                                ruleData.tagName = effectiveTags[tagKey] ?: tagKey
+                                // tagRuleId 不一致时保持原值，一致时更新为公共 ruleId
+                                ruleData.tagRuleId = commonTagRuleId ?: config.speechRule.tagRuleId
+                                ruleData.tagName = tagName
                                 runCatching {
                                     speechRule?.let { sr ->
                                         ruleData.tagName = SpeechRuleEngine.getTagName(context, sr, ruleData)
@@ -245,7 +269,7 @@ fun BatchTagDialog(
                         onDismissRequest()
                     }
                 },
-                enabled = selectedItems.isNotEmpty() && commonTagRuleId != null && tagKeys.isNotEmpty()
+                enabled = selectedItems.isNotEmpty() && (tagKeys.isNotEmpty() || customTagKey.isNotBlank())
             ) {
                 Text(stringResource(R.string.assign_in_order))
             }
