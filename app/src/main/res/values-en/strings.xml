@@ -17,6 +17,8 @@
     <string name="custom">Customize</string>
     <string name="app_down_again_to_exit">Press again to exit application</string>
     <string name="cannot_empty">Not nullable！</string>
+    <string name="assign_category_hint">Tap to assign a category for this voice:</string>
+    <string name="no_tag_for_category">No tag found for category [%s]</string>
     <string name="open_web">Open Web</string>
     <string name="check_update">Check for updates</string>
     <string name="wake_lock">Wake lock</string>

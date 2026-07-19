@@ -45,6 +45,28 @@
   - **修复**：改用 `parseToJsonElement` 解析后读取 `format` 字段，再决定转换路径
 - **验证**：单元测试覆盖 defVars 映射、树形分组 `parentGroupId`、无 groups 字段兜底逻辑
 
+#### 新增功能：快捷分配角色分类
+- **需求来源**：参考 APK `I·TTS Server [1.26.071808]` 在试听对话框中提供了"点击为该发音人分配分类"提示，用户希望在快捷编辑面板中实现类似功能
+- **涉及文件**：
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ui/widgets/SpeechRuleEditScreen.kt`
+  - `app/src/main/res/values/strings.xml`
+  - `app/src/main/res/values-en/strings.xml`
+- **实现内容**：
+  1. 在 `SpeechRuleEditScreen` 的朗读目标选择区域下方，当 `target != TAG` 时显示提示"点击为该发音人分配分类："
+  2. 使用 `FilterChip` 横向排列常用角色分类：女童、男童、少女、少年、女青年、男青年、女中年、男中年、女老年、男老年、旁白
+  3. 点击分类后自动查找已启用朗读规则中匹配的 tag，并切换 `target = TAG`，同时设置 `tagRuleId`、`tag`、`tagName`
+  4. 新增 `findTagForCategory()` 辅助函数，按分类名匹配规则 tag（支持 "旁白" 等特殊处理）
+- **验证**：`./gradlew :app:compileAppDebugKotlin` 编译通过
+
+#### Bug 修复：`String.toJsonListString()` 处理带前导空白的 JSON 失败
+- **问题**：`startsWith("[")` / `endsWith("]")` 直接在当前字符串上调用，而非 trim 后的字符串，导致带前导空白或后缀逗号的 JSON 被错误包装
+- **修复**：`lib-common/src/main/java/com/github/jing332/common/utils/StringUtils.kt` 中改为对 `s` 调用 `startsWith` / `endsWith`
+- **影响**：修复后插件/配置导入点击无反应的问题（旧格式 JSON 导入路径被错误包装导致解析失败）
+
+#### 测试补充
+- `JReadImportTest.kt` 新增 `realPluginBundle_parseAndConvert`：读取 `参考/` 目录下的真实 JRead 插件包文件，验证完整解析与转换链路
+- **验证**：`./gradlew :lib-database:testDebugUnitTest --tests "com.github.jing332.database.jread.JReadImportTest"` 通过
+
 ---
 
 ### v1.26.060212（批量分配标签集成到批量编辑模式）
@@ -277,6 +299,9 @@
   9. **修复插件导入后无法识别**：补全 `defVars`、`userVars`、`enabled` 字段映射
   10. **修复列表导入分组不准确**：按 `groups` 字段构建主/子/孙分组树形结构，正确设置 `parentGroupId`
   11. **修复插件导入点击无响应**：改用 `parseToJsonElement` 读取 `format` 字段，避免字符串匹配失败
+  12. **修复 `toJsonListString()` bug**：带前导空白的 JSON 被错误包装导致解析失败
+  13. **新增快捷分配角色分类**：在 `SpeechRuleEditScreen` 中提供分类 Chip，一键设置朗读规则标签
+  14. **反编译参考 APK**：分析 `I·TTS Server [1.26.071808]`，提取可借鉴功能（混元太极代理、超时看门狗、重试追加字符、分类分配提示）
 - **注意事项**：
   - JRead 插件代码（`code` 字段）理论上与 TTS Server 插件引擎兼容，但实际运行时仍需用户自行验证网络/鉴权等逻辑
   - 音色配置包导入后按 `groupName/subGroupName/thirdGroupName` 自动分组，`categoryPath` 保留子分组路径

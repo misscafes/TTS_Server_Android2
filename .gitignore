@@ -33,3 +33,6 @@ build-logic/build
 .DS_Store
 *.log
 build.log
+
+# Local tools / analysis outputs
+tools/

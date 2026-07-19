@@ -8,6 +8,7 @@ import com.github.jing332.database.entities.systts.source.PluginTtsSource
 import kotlinx.serialization.json.Json
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Test
 
 class JReadImportTest {
@@ -169,5 +170,24 @@ class JReadImportTest {
         assertEquals("默认组", groups.first().group.name)
         assertEquals(0L, groups.first().group.parentGroupId)
         assertEquals("", groups.first().list.first().categoryPath)
+    }
+
+    @Test
+    fun realPluginBundle_parseAndConvert() {
+        val file = java.io.File("../参考/千问全家桶2852音色_精简低内存_呱呱加油包1+火山豆包98_流式版_高风险参考重做版..json")
+        assumeTrue("参考插件包文件存在", file.exists())
+        val content = file.readText()
+        val bundle = json.decodeFromString(JReadPluginBundle.serializer(), content)
+        assertTrue(bundle.plugins.isNotEmpty())
+        val plugins = JReadPluginConverter.convert(bundle)
+        assertTrue(plugins.isNotEmpty())
+        val plugin = plugins.first()
+        assertTrue(plugin.pluginId.isNotBlank())
+        assertTrue(plugin.code.isNotBlank())
+        // 确认 defVars 已正确映射
+        assertTrue(plugin.defVars.isNotEmpty())
+        plugin.defVars.values.forEach {
+            assertTrue(it.containsKey("label"))
+        }
     }
 }

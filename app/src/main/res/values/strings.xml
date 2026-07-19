@@ -19,6 +19,8 @@
     <string name="custom">自定义</string>
     <string name="app_down_again_to_exit">再按一次退出程序</string>
     <string name="cannot_empty">不可为空！</string>
+    <string name="assign_category_hint">点击为该发音人分配分类：</string>
+    <string name="no_tag_for_category">未找到分类 [%s] 对应的标签</string>
 
     <string name="open_web">打开网页版</string>
     <string name="check_update">检查更新</string>

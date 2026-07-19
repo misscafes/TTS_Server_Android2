@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -350,6 +351,62 @@ fun SpeechRuleEditScreen(
                 }
             }
 
+            // 快捷分配角色分类：当未指定标签时，给出一排常用分类按钮
+            AnimatedVisibility(visible = config.speechRule.target != SpeechTarget.TAG) {
+                val categories = listOf(
+                    "女童", "男童", "少女", "少年",
+                    "女青年", "男青年", "女中年", "男中年",
+                    "女老年", "男老年", "旁白"
+                )
+                Column(Modifier.padding(horizontal = 4.dp, vertical = 4.dp)) {
+                    Text(
+                        text = stringResource(R.string.assign_category_hint),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
+                    Row(
+                        modifier = Modifier
+                            .horizontalScroll(rememberScrollState())
+                            .padding(vertical = 2.dp)
+                    ) {
+                        categories.forEach { category ->
+                            val matched = remember(category, speechRules) {
+                                findTagForCategory(category, speechRules)
+                            }
+                            FilterChip(
+                                selected = false,
+                                onClick = {
+                                    if (matched != null) {
+                                        onSysttsChange(
+                                            systts.copy(
+                                                config = config.copy(
+                                                    speechRule = config.speechRule.copy(
+                                                        target = SpeechTarget.TAG,
+                                                        tagRuleId = matched.first,
+                                                        tag = matched.second,
+                                                        tagName = category
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    } else {
+                                        context.toast(
+                                            context.getString(
+                                                R.string.no_tag_for_category,
+                                                category
+                                            )
+                                        )
+                                    }
+                                },
+                                label = { Text(category) },
+                                modifier = Modifier.padding(end = 6.dp)
+                            )
+                        }
+                    }
+                }
+            }
+
             AnimatedVisibility(visible = config.speechRule.target == SpeechTarget.TAG) {
                 Row(Modifier) {
                     AppSpinner(
@@ -500,4 +557,28 @@ private fun CustomTagScreen(
 
         }
     }
+}
+
+/**
+ * 根据常见角色分类名（如 "女青年"、"旁白"），在已启用的朗读规则中查找匹配的 tag。
+ * 返回 (ruleId, tagKey)，找不到返回 null。
+ */
+private fun findTagForCategory(category: String, speechRules: List<SpeechRule>): Pair<String, String>? {
+    val categoryNorm = category.replace(" ", "").lowercase()
+    for (rule in speechRules) {
+        for ((tagKey, tagNameRaw) in rule.tags) {
+            val tagName = tagNameRaw.replace(" ", "").lowercase()
+            val lowerKey = tagKey.lowercase()
+            val matched = when {
+                category == "旁白" ->
+                    lowerKey == "narration" || lowerKey == "narrator" || tagName.contains("旁白")
+                tagName.contains(categoryNorm) -> true
+                categoryNorm == "少女" && tagName.contains("女少年") -> true
+                categoryNorm == "少年" && (tagName.contains("男少年") || tagName.contains("少年")) -> true
+                else -> false
+            }
+            if (matched) return rule.ruleId to tagKey
+        }
+    }
+    return null
 }
