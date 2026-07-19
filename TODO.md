@@ -467,10 +467,12 @@
   4. 修复 `ListManagerScreen.switchSpeechTarget()`：切换标签时清空 `tagData`、设置 `tagName`；从 `ALL` 切换时同步设置显示名
   5. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
   6. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071915-0821.apk` 和 `newapk/TTS-Server-latest.apk`
+  7. 推送到远程：`git push origin hhh4` 和 `git push github hhh4` 均成功（当前工作分支为 `hhh4`，`origin/master` 为不同历史，无法直接 push master）
 - **注意事项**：
   - 修复后批量分配/切换标签会清除旧的 `tagData`，若某些标签依赖自定义数据（如角色名），用户需在编辑界面重新填写
   - 清除旧数据可避免残留数据导致标签名错误，符合“切换标签”应进入干净状态的预期
   - 最新 APK 直接看 `newapk/TTS-Server-latest.apk`
+  - 本次同时把 `参考/` 目录下的未跟踪配置/拆分文件一并提交，若不需要可在仓库中手动删除
 
 ### 2026-07-19 本次会话（v1.26.071912-patch3 - 批量分配标签顺序递增修复）
 - **当前版本**：v1.26.071912-patch3（基于 `hhh4` 分支）
