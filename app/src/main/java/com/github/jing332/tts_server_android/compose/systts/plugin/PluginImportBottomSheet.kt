@@ -16,6 +16,8 @@ import com.github.jing332.database.entities.plugin.jread.JReadPluginBundle
 import com.github.jing332.database.entities.plugin.jread.JReadPluginConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 @Composable
 fun PluginImportBottomSheet(onDismissRequest: () -> Unit) {
@@ -46,8 +48,15 @@ fun PluginImportBottomSheet(onDismissRequest: () -> Unit) {
         onImport = { json ->
             val decoded = withContext(Dispatchers.IO) {
                 val trimmed = json.trim()
-                if (trimmed.startsWith("{") && trimmed.contains("\"format\":\"jread_voice_plugin_bundle\"")) {
-                    val bundle = AppConst.jsonBuilder.decodeFromString<JReadPluginBundle>(trimmed)
+                val element = runCatching {
+                    AppConst.jsonBuilder.parseToJsonElement(trimmed)
+                }.getOrNull()
+                val format = element?.jsonObject?.get("format")?.jsonPrimitive?.content
+                if (format == JReadPluginBundle.FORMAT) {
+                    val bundle = AppConst.jsonBuilder.decodeFromJsonElement(
+                        JReadPluginBundle.serializer(),
+                        element
+                    )
                     JReadPluginConverter.convert(bundle)
                 } else {
                     AppConst.jsonBuilder.decodeFromString<List<Plugin>>(trimmed.toJsonListString())

@@ -33,4 +33,23 @@ data class JReadPlugin(
     val streaming: Map<String, String> = emptyMap(),
     val iconUrl: String = "",
     val code: String = "",
+    /**
+     * JRead 变量声明，结构为 { key: { name: "显示名", hint: "提示", binding: "..." } }。
+     * 导入 TTS Server 时需把 name 映射为 label。
+     */
+    val defVars: Map<String, JReadPluginVar> = emptyMap(),
+    val userVars: Map<String, String> = emptyMap(),
+    val enabled: Boolean = false,
+    val method: String = "GET",
+    val urlTemplate: String = "",
+    val headersText: String = "",
+    val bodyTemplate: String = "",
+    val responseAudioPath: String = "",
+)
+
+@Serializable
+data class JReadPluginVar(
+    val name: String = "",
+    val hint: String = "",
+    val binding: String = "",
 )

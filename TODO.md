@@ -27,7 +27,23 @@
 - **验证**：
   - `./gradlew :app:compileAppDebugKotlin` 编译通过
   - `./gradlew :lib-database:testDebugUnitTest --tests "com.github.jing332.database.jread.JReadImportTest"` 单元测试通过
-  - `./gradlew :app:assembleAppRelease` 构建成功，APK：`newapk/TTS-Server-v1.26.071908.apk`
+  - `./gradlew :app:assembleAppRelease` 构建成功，APK：`newapk/TTS-Server-v1.26.071909.apk`
+
+#### Bug 修复：JRead 插件导入后无法识别、列表导入分组不准确
+- **问题 1**：插件导入后 TTS Server 无法识别变量与启用状态
+  - **根因**：`JReadPlugin` 数据类遗漏了 `defVars`、`userVars`、`enabled` 等字段，导致导入后的插件缺少变量声明和启用状态
+  - **修复**：
+    - `JReadPluginBundle.kt`：新增 `defVars`、`userVars`、`enabled` 等字段及 `JReadPluginVar` 数据类
+    - `JReadPluginConverter.kt`：把 JRead 的 `defVars.{name,hint}` 映射为 TTS Server 的 `defVars.{label,hint}`，并保留 `userVars` 和 `enabled`
+- **问题 2**：音色配置导入后分组不准确
+  - **根因**：旧实现按 `(groupName, subGroupName, thirdGroupName)` 平面组合创建分组，未使用 `parentGroupId` 构建树形层级，且主分组因无直接配置被过滤掉
+  - **修复**：
+    - `JReadVoiceConfigConverter.kt`：优先使用 `groups` 字段构建分组结构，按 `groupName → subGroupName → thirdGroupName` 创建主/子/孙分组并正确设置 `parentGroupId`
+    - 导入结果保留空主分组，确保 UI 能显示完整树形结构
+- **问题 3**：插件导入点击后无法打开选择列表
+  - **根因**：`PluginImportBottomSheet` / `ListImportBottomSheet` 使用字符串 `contains` 判断 `format` 字段，对带空格/换行的 JSON 不健壮
+  - **修复**：改用 `parseToJsonElement` 解析后读取 `format` 字段，再决定转换路径
+- **验证**：单元测试覆盖 defVars 映射、树形分组 `parentGroupId`、无 groups 字段兜底逻辑
 
 ---
 
@@ -247,7 +263,7 @@
 
 ## 会话摘要
 
-### 2026-07-19 本次会话（v1.26.071908 - 新增 JRead 插件包/音色配置包导入支持）
+### 2026-07-19 本次会话（v1.26.071908 - 新增 JRead 插件包/音色配置包导入支持 + 导入问题修复）
 - **当前版本**：v1.26.071908（基于 `hhh4` 分支）
 - **已完成事项**：
   1. 新增 JRead 格式数据模型（`JReadPluginBundle`、`JReadVoiceConfigBundle`）与转换器
@@ -257,7 +273,10 @@
   5. 新增单元测试 `JReadImportTest`，覆盖插件包和配置包转换逻辑
   6. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
   7. 单元测试验证：`./gradlew :lib-database:testDebugUnitTest --tests "com.github.jing332.database.jread.JReadImportTest"` 通过
-  8. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071908.apk`
+  8. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071909.apk`
+  9. **修复插件导入后无法识别**：补全 `defVars`、`userVars`、`enabled` 字段映射
+  10. **修复列表导入分组不准确**：按 `groups` 字段构建主/子/孙分组树形结构，正确设置 `parentGroupId`
+  11. **修复插件导入点击无响应**：改用 `parseToJsonElement` 读取 `format` 字段，避免字符串匹配失败
 - **注意事项**：
   - JRead 插件代码（`code` 字段）理论上与 TTS Server 插件引擎兼容，但实际运行时仍需用户自行验证网络/鉴权等逻辑
   - 音色配置包导入后按 `groupName/subGroupName/thirdGroupName` 自动分组，`categoryPath` 保留子分组路径

@@ -16,6 +16,14 @@ object JReadPluginConverter {
             iconUrl = plugin.iconUrl,
             code = plugin.code,
             version = parseVersion(plugin.version),
+            isEnabled = plugin.enabled,
+            defVars = plugin.defVars.mapValues { (_, varDef) ->
+                buildMap {
+                    put("label", varDef.name)
+                    if (varDef.hint.isNotBlank()) put("hint", varDef.hint)
+                }
+            },
+            userVars = plugin.userVars.toMutableMap(),
         )
     }
 
