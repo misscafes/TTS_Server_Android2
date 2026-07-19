@@ -27,6 +27,16 @@
   4. 同一音色若属于多个 tag，会分别出现在对应分类下
 - **生成结果**：`参考/jread_voice_千问全家桶2852_四大组_快导配置列表.json`（74 个分组，3597 条配置项）
 
+#### 资源更新：单独提取 TTSOnline官方导入文件
+- **需求来源**：用户需要将 `TTSOnline官方` 音色单独导入，不和其他来源混在一起
+- **涉及文件**：
+  - `参考/jread_voice_TTSOnline官方_分类导入版.json`
+- **实现内容**：
+  1. 从 `jread_voice_千问全家桶2852_四大组_快导配置列表.json` 中提取 `TTSOnline官方` 顶级分组及其所有分类子分组
+  2. 重新映射分组 ID 和音色条目 ID，以 `1783900000000` 为基准，避免与完整版配置冲突
+  3. 保留 17 个分类子分组结构，共 1178 条配置项
+- **生成结果**：`参考/jread_voice_TTSOnline官方_分类导入版.json`（18 个分组，1178 条配置项）
+
 ---
 
 ### v1.26.071909-patch4（JRead 导入保留父级分组 + 批量删除自动删除空分组 + APK 命名优化 + 批量编辑模式合并分组）
@@ -394,10 +404,12 @@
   3. 重新生成 2852 配置列表：`TTSOnline官方` 改为按 `tags` 分类，生成 17 个独立子分组
   4. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
   5. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071911-1815.apk` 和 `newapk/TTS-Server-latest.apk`
+  6. 单独提取 `TTSOnline官方` 为独立导入文件：`参考/jread_voice_TTSOnline官方_分类导入版.json`
 - **注意事项**：
   - 崩溃根因：生成的 2852 配置列表是 JSON 数组 `[{group,list},...]`，而 JRead 检测代码假设输入一定是 JsonObject
   - 修复后 JSON 数组配置列表可正常进入普通 TTS 配置导入路径
   - `TTSOnline官方` 按 tags 分类后，同一音色若属于多个 tag 会出现在多个分类下，导入后配置项总数会大于实际音色数
+  - 单独提取文件重新映射了 ID，避免与完整版 2852 配置冲突
 
 ### 2026-07-19 本次会话（生成 2852 音色快导配置列表）
 - **当前版本**：v1.26.071909-patch4（基于 `hhh4` 分支）
