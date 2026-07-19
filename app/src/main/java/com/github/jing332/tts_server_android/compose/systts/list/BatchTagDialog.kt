@@ -54,17 +54,31 @@ fun BatchTagDialog(
         }
     }
 
-    // 获取可用标签列表
+    // 获取可用标签列表：优先从数据库读取朗读规则；若规则不存在或 tags 为空，
+    // 则从当前选中项已有的 tag/tagName 集合中提取，保证批量分配标签可用。
     var speechRule by remember { mutableStateOf<SpeechRule?>(null) }
-    LaunchedEffect(commonTagRuleId) {
-        speechRule = commonTagRuleId?.let { dbm.speechRuleDao.getByRuleId(it) }
-        val keys = speechRule?.tags?.keys?.toList()
-        if (!keys.isNullOrEmpty() && (selectedTagKey.isBlank() || !keys.contains(selectedTagKey))) {
+    val derivedTags by remember(selectedItems) {
+        derivedStateOf {
+            selectedItems.map {
+                val sr = (it.config as TtsConfigurationDTO).speechRule
+                sr.tag to sr.tagName
+            }.filter { it.first.isNotBlank() }
+                .distinctBy { it.first }
+                .toMap()
+        }
+    }
+    val effectiveTags = remember(speechRule, derivedTags) {
+        if (!speechRule?.tags.isNullOrEmpty()) speechRule!!.tags else derivedTags
+    }
+    val tagKeys = remember(effectiveTags) { effectiveTags.keys.toList() }
+    LaunchedEffect(commonTagRuleId, selectedItems) {
+        val dbRule = commonTagRuleId?.let { dbm.speechRuleDao.getByRuleId(it) }
+        speechRule = if (!dbRule?.tags.isNullOrEmpty()) dbRule else null
+        val keys = effectiveTags.keys.toList()
+        if (keys.isNotEmpty() && (selectedTagKey.isBlank() || !keys.contains(selectedTagKey))) {
             selectedTagKey = keys.first()
         }
     }
-
-    val tagKeys = remember(speechRule) { speechRule?.tags?.keys?.toList() ?: emptyList() }
 
     AlertDialog(
         onDismissRequest = onDismissRequest,
@@ -191,7 +205,7 @@ fun BatchTagDialog(
                         labelText = stringResource(R.string.tag),
                         value = selectedTagKey,
                         values = tagKeys,
-                        entries = tagKeys.map { speechRule?.tags?.get(it) ?: it },
+                        entries = tagKeys.map { effectiveTags[it] ?: it },
                         onSelectedChange = { key, _ ->
                             selectedTagKey = key as String
                         }
@@ -214,6 +228,7 @@ fun BatchTagDialog(
                                 ruleData.target = com.github.jing332.tts_server_android.constant.SpeechTarget.TAG
                                 ruleData.tag = tagKey
                                 ruleData.tagRuleId = commonTagRuleId ?: ""
+                                ruleData.tagName = effectiveTags[tagKey] ?: tagKey
                                 runCatching {
                                     speechRule?.let { sr ->
                                         ruleData.tagName = SpeechRuleEngine.getTagName(context, sr, ruleData)

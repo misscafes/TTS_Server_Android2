@@ -2,6 +2,23 @@
 
 ## 版本变更记录
 
+### v1.26.071912-patch（修复批量分配标签时提示无可用的标签）
+
+#### Bug 修复：批量分配标签时提示"该朗读规则无可用的标签"
+- **需求来源**：批量分配标签时，选中音色后对话框提示"该朗读规则无可用的标签"，无法分配
+- **涉及文件**：
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/BatchTagDialog.kt`
+- **实现内容**：
+  1. 原逻辑只从数据库 `speechRuleDao.getByRuleId(tagRuleId)` 读取朗读规则标签；若导入的配置列表使用了新的 `tagRuleId`（如 `qianwen_unified_4pool_2852`）而数据库中无对应规则，则标签列表为空
+  2. 新增 `derivedTags`：当数据库中不存在对应朗读规则，或规则 `tags` 为空时，从当前选中项已有的 `speechRule.tag` / `tagName` 中提取标签集合
+  3. `effectiveTags` 优先使用数据库朗读规则标签，否则使用提取出的标签集合
+  4. 标签下拉框、按顺序分配、清除标签等逻辑统一使用 `effectiveTags`
+- **验证**：
+  - `./gradlew :app:compileAppDebugKotlin` 编译通过
+  - `./gradlew :app:assembleAppRelease` 构建成功，生成 `newapk/TTS-Server-v1.26.071912-1928.apk` 和 `newapk/TTS-Server-latest.apk`
+
+---
+
 ### v1.26.071911-patch（修复配置列表 JSON 数组导入崩溃 + TTSOnline官方按分类分组）
 
 #### Bug 修复：普通 TTS 配置列表（JSON 数组）导入时崩溃
@@ -389,16 +406,19 @@
 
 ## 会话摘要
 
-### 2026-07-19 本次会话（v1.26.071911-patch - 修复配置列表数组导入崩溃 + TTSOnline官方按分类分组）
-- **当前版本**：v1.26.071911-patch（基于 `hhh4` 分支）
+### 2026-07-19 本次会话（v1.26.071912-patch - 修复批量分配标签无可用标签 + 配置列表导入崩溃 + TTSOnline官方按分类分组）
+- **当前版本**：v1.26.071912-patch（基于 `hhh4` 分支）
 - **已完成事项**：
-  1. 修复导入普通 TTS 配置列表（JSON 数组格式）时崩溃：`ListImportBottomSheet` 的 JRead 格式检测直接对数组调用 `jsonObject` 导致 `IllegalArgumentException`
-  2. 在检测 `format` 字段前先判断 `element is JsonObject`，数组格式直接跳过 JRead 检测流程
-  3. 重新生成 2852 配置列表：完整版 `TTSOnline官方` 保持为男/女两个子分组
-  4. 单独提取 `TTSOnline官方` 为独立导入文件并按 `tags` 分为 17 个分类子分组：`参考/jread_voice_TTSOnline官方_分类导入版.json`
-  5. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
-  6. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071911-1815.apk` 和 `newapk/TTS-Server-latest.apk`
+  1. 修复批量分配标签时提示"该朗读规则无可用的标签"：`BatchTagDialog` 在数据库无对应朗读规则时，从选中项已有的 tag/tagName 中提取可用标签
+  2. 修复导入普通 TTS 配置列表（JSON 数组格式）时崩溃：`ListImportBottomSheet` 的 JRead 格式检测直接对数组调用 `jsonObject` 导致 `IllegalArgumentException`
+  3. 在检测 `format` 字段前先判断 `element is JsonObject`，数组格式直接跳过 JRead 检测流程
+  4. 重新生成 2852 配置列表：完整版 `TTSOnline官方` 保持为男/女两个子分组
+  5. 单独提取 `TTSOnline官方` 为独立导入文件并按 `tags` 分为 17 个分类子分组：`参考/jread_voice_TTSOnline官方_分类导入版.json`
+  6. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  7. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071912-1928.apk` 和 `newapk/TTS-Server-latest.apk`
 - **注意事项**：
+  - 批量分配标签无标签根因：配置列表使用 `tagRuleId = qianwen_unified_4pool_2852`，数据库中可能无对应朗读规则
+  - 修复后即使数据库无对应规则，也能从已导入音色的 tag/tagName 中提取标签进行分配
   - 崩溃根因：生成的 2852 配置列表是 JSON 数组 `[{group,list},...]`，而 JRead 检测代码假设输入一定是 JsonObject
   - 修复后 JSON 数组配置列表可正常进入普通 TTS 配置导入路径
   - 完整版 `TTSOnline官方` 为 `女性青年通用` / `男性青年通用` 两组；分类细分仅在单独提取文件中
