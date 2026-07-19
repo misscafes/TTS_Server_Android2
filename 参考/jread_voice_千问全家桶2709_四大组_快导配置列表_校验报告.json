@@ -1,0 +1,87 @@
+{
+  "pluginPath": "/Users/wujing/Downloads/千问全家桶2709音色_精简低内存_MiniMax试听修复v8 (1).json",
+  "pluginId": "qianwen.tts.guagua_taozi",
+  "outputPath": "/Users/wujing/Downloads/jread_voice_千问全家桶2709_四大组_快导配置列表.json",
+  "format": "vivi-structure-fast-import-array",
+  "sources": {
+    "呱呱": {
+      "total": 921,
+      "groups": {
+        "女性儿童通用": 4,
+        "女性少年通用": 21,
+        "女性青年通用": 328,
+        "女性中年通用": 103,
+        "女性老年通用": 25,
+        "男性儿童通用": 2,
+        "男性少年通用": 13,
+        "男性青年通用": 277,
+        "男性中年通用": 122,
+        "男性老年通用": 26
+      }
+    },
+    "鹿": {
+      "total": 78,
+      "groups": {
+        "女性儿童通用": 1,
+        "女性少年通用": 5,
+        "女性青年通用": 11,
+        "女性中年通用": 7,
+        "女性老年通用": 4,
+        "男性儿童通用": 2,
+        "男性少年通用": 6,
+        "男性青年通用": 18,
+        "男性中年通用": 18,
+        "男性老年通用": 6
+      }
+    },
+    "游音": {
+      "total": 581,
+      "groups": {
+        "女性儿童通用": 37,
+        "女性少年通用": 104,
+        "女性青年通用": 171,
+        "女性中年通用": 75,
+        "女性老年通用": 7,
+        "男性儿童通用": 9,
+        "男性少年通用": 21,
+        "男性青年通用": 80,
+        "男性中年通用": 60,
+        "男性老年通用": 17
+      }
+    },
+    "2次元": {
+      "total": 650,
+      "groups": {
+        "女性儿童通用": 35,
+        "女性少年通用": 76,
+        "女性青年通用": 198,
+        "女性中年通用": 30,
+        "女性老年通用": 4,
+        "男性儿童通用": 12,
+        "男性少年通用": 19,
+        "男性青年通用": 192,
+        "男性中年通用": 53,
+        "男性老年通用": 31
+      }
+    }
+  },
+  "acgnGroupMethod": {
+    "oldVoice": 414,
+    "heuristic": 47,
+    "oldName": 189
+  },
+  "validation": {
+    "totalItems": 2230,
+    "totalGroups": 44,
+    "invalidVoiceCount": 0,
+    "invalidVoiceSample": [],
+    "localeMismatchCount": 0,
+    "localeMismatchSample": [],
+    "cloneVoiceCount": 1580,
+    "acgnVoiceCount": 650,
+    "oldCloneMissingInNew": [],
+    "oldAcgnMappedCount": 414,
+    "oldAcgnNameMappedCount": 189,
+    "acgnHeuristicCount": 47
+  }
+}

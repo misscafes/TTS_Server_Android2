@@ -1,0 +1,3608 @@
+[
+  {
+    "group": {
+      "id": 1783500000000,
+      "name": "火山豆包",
+      "order": 4
+    },
+    "list": []
+  },
+  {
+    "group": {
+      "id": 1783200001030,
+      "name": "女性少年通用",
+      "parentGroupId": 1783500000000,
+      "order": 1
+    },
+    "list": [
+      {
+        "id": 1783200101619,
+        "displayName": "火山豆包-可爱女生",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用01",
+        "tagName": "女性少年/通用01",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用01",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用01"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0004",
+            "previewText": "哇，这个好可爱呀，我好喜欢，要是能拥有就好了。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101620,
+        "displayName": "火山豆包-甜美悦悦 2.0",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用02",
+        "tagName": "女性少年/通用02",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用02",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用02"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0029",
+            "previewText": "你喜歡看電影嗎?電影就像是一個個奇妙的世界,能讓我們沉浸其中,體驗各種不同的人生。有搞笑的喜劇讓我們開懷大笑,有感人的劇情片讓我們熱淚盈眶。你最喜歡哪種類型的電影呢?",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101621,
+        "displayName": "火山豆包-清澈梓梓 2.0",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用03",
+        "tagName": "女性少年/通用03",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用03",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用03"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0030",
+            "previewText": "你好呀,我最近對瑜伽特別著迷,每當我鋪開瑜伽店,舒展身體,彷彿進入了一個寧靜而美好的世界。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101622,
+        "displayName": "火山豆包-撒娇学妹",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用04",
+        "tagName": "女性少年/通用04",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用04",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用04"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0042",
+            "previewText": "等会儿,你一定要好好地,用心地让人家品尝一下你亲自做的美食哟!人家可期待了呢!你做的肯定超级超级好吃!人家现在就已经迫不及待了!亲爱的最好了啦!",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101623,
+        "displayName": "火山豆包-邻家女孩",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用05",
+        "tagName": "女性少年/通用05",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用05",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用05"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0043",
+            "previewText": "哎呀,你来找我了,今天过得怎么样呀,我今天看到院子里的花开了呢,可漂亮了,你想不想和我一起去看看呀?",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101624,
+        "displayName": "火山豆包-甜美桃子",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用06",
+        "tagName": "女性少年/通用06",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用06",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用06"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0048",
+            "previewText": "我喜欢很松弛的生活状态。我觉得每一次旅程,你能玩得很开心,或者你印象深刻的点,一定不是说我打卡了大家都去的景点,而是在这个旅程当中你发生了什么意外,你和什么样的人发生了什么样的故事,这个才是你这段旅程里记忆深刻的地方。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101625,
+        "displayName": "火山豆包-倾心少女",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用07",
+        "tagName": "女性少年/通用07",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用07",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用07"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0058",
+            "previewText": "如果你真的想消除怨恨,解开那根红线就可以了。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101626,
+        "displayName": "火山豆包-活泼女孩",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用08",
+        "tagName": "女性少年/通用08",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用08",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用08"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0061",
+            "previewText": "嗨 亲爱的今天我去一个超级有趣的地方那里有好多好玩东西我尝试了一些新的美食还拍了好多好看的照片呢",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101627,
+        "displayName": "火山豆包-病弱少女 2.0",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用09",
+        "tagName": "女性少年/通用09",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用09",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用09"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0064",
+            "previewText": "你好呀,我感觉今天身体好了一点点,虽然还是有一点虚弱。希望我能赶快好起来,和你一起度过更多美好的时光。谢谢你的关心和陪伴。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101628,
+        "displayName": "火山豆包-邪魅女王",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用10",
+        "tagName": "女性少年/通用10",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用10",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用10"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0065",
+            "previewText": "你的每根睫毛都该属于我呢要是敢看别的女孩子就把你眼睛挖出来泡在弗尔玛林里哟",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101629,
+        "displayName": "火山豆包-甜美小源 2.0",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用11",
+        "tagName": "女性少年/通用11",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用11",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用11"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0066",
+            "previewText": "你好,我是你的虚拟助理,我随时在这里陪你聊聊天,分享生活中的喜怒哀乐哦。如果你有任何问题或者需要建议,都可以随时问我呢。期待你的分享。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101630,
+        "displayName": "火山豆包-初恋女友",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用12",
+        "tagName": "女性少年/通用12",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用12",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用12"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0072",
+            "previewText": "便利店新出的草莓冰淇淋超甜的要不要和我一起分拌少呀",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101631,
+        "displayName": "火山豆包-元气甜妹",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用13",
+        "tagName": "女性少年/通用13",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用13",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用13"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0076",
+            "previewText": "早上好呀!今天也要带着小蛋糕和满分元气,蹦蹦跳跳闯天下哦!",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101632,
+        "displayName": "火山豆包-甜心小美",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用14",
+        "tagName": "女性少年/通用14",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用14",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用14"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0081",
+            "previewText": "各个的口袋里是不是藏着星星呀?不然为什么一靠近就亮晶晶暖呼呼的?",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101633,
+        "displayName": "火山豆包-妹坨洁儿",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用15",
+        "tagName": "女性少年/通用15",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用15",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用15"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0085",
+            "previewText": "我们尝尝的美食哪可真是多得不得了嘞那抽豆腐哑,闻起来抽,吃起来香不很嘞粉就更不用说了,早上来一碗精神一整天嘞这些都是我们尝尝的宝嘞,你们一定要尝尝看嘞!",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101634,
+        "displayName": "火山豆包-湾湾小何",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用16",
+        "tagName": "女性少年/通用16",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用16",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用16"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0088",
+            "previewText": "今天天氣真是太好了陽光燦爛心情超級棒但是朋友最近的感情問題也讓我心痛不已好像世界末日一樣真的好為他難過喔",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101635,
+        "displayName": "火山豆包-呆萌川妹",
+        "groupId": 1783200001030,
+        "voiceTag": "女性少年/通用17",
+        "tagName": "女性少年/通用17",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性少年/通用17",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性少年/通用17"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0091",
+            "previewText": "哎呀,你笑得補嘛今天天氣好好有剩下好上處去刷一哈兒嘛好不好嘛",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "group": {
+      "id": 1783200001031,
+      "name": "女性青年通用",
+      "parentGroupId": 1783500000000,
+      "order": 2
+    },
+    "list": [
+      {
+        "id": 1783200101636,
+        "displayName": "火山豆包-傲娇女友",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用01",
+        "tagName": "女性青年/通用01",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用01",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用01"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0001",
+            "previewText": "我只是把话说得直接一点，并不是故意为难你。你先把眼前的事处理好，别让我等太久……我会在这里看着。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101637,
+        "displayName": "火山豆包-病娇姐姐",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用02",
+        "tagName": "女性青年/通用02",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用02",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用02"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0002",
+            "previewText": "我刚才只是有些慌，声音也低了下来。你别急，等我缓一口气，再把话慢慢说完……我不会再躲了。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101638,
+        "displayName": "火山豆包-暖心学姐",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用03",
+        "tagName": "女性青年/通用03",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用03",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用03"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0005",
+            "previewText": "学妹学弟们，有什么烦恼都可以跟我说哦，我会帮你们排忧解难的。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101639,
+        "displayName": "火山豆包-贴心女友",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用04",
+        "tagName": "女性青年/通用04",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用04",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用04"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0006",
+            "previewText": "亲爱的，工作累了就歇会儿，我给你做了你最爱吃的菜哦。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101640,
+        "displayName": "火山豆包-妩媚御姐",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用05",
+        "tagName": "女性青年/通用05",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用05",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用05"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0007",
+            "previewText": "今晚的夜色很美，不如与我共饮一杯，畅谈这世间风情。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101641,
+        "displayName": "火山豆包-温柔文雅",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用06",
+        "tagName": "女性青年/通用06",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用06",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用06"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0019",
+            "previewText": "清风徐来，水波不兴，世间纷扰，亦当以优雅之态处之，心平气和，方显从容。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101642,
+        "displayName": "火山豆包-温柔小雅 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用07",
+        "tagName": "女性青年/通用07",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用07",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用07"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0025",
+            "previewText": "只是,剛剛不經意見看到你,便覺得周圍的儀器都變得溫柔起來,今日有幸在此相遇,不知是否是上天賜予的緣分呢?",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101643,
+        "displayName": "火山豆包-柔美女友 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用08",
+        "tagName": "女性青年/通用08",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用08",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用08"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0027",
+            "previewText": "亲爱的,这么晚了,你还没睡呀,我想跟你说哦,不管什么时候,我都会在你身边的呀,你累的时候就靠靠我,不开心了,我就哄你开心。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101644,
+        "displayName": "火山豆包-心灵鸡汤 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用09",
+        "tagName": "女性青年/通用09",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用09",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用09"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0028",
+            "previewText": "別人生的意義是不斷地追求不要等錯過了才悔恨不要等老了才懷念抓住當下再苦再累也要展翅飛翔",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101645,
+        "displayName": "火山豆包-文静毛毛 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用10",
+        "tagName": "女性青年/通用10",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用10",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用10"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0033",
+            "previewText": "流星滑过天际时,雪落在睫毛上凉凉的向有人轻轻稳了我的眼睛。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101646,
+        "displayName": "火山豆包-悠悠君子 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用11",
+        "tagName": "女性青年/通用11",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用11",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用11"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0034",
+            "previewText": "咬下三明治的第一口忽然在转角看见无童树影里的晨光像极了父亲送我上班时的眼神",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101647,
+        "displayName": "火山豆包-亲切女声 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用12",
+        "tagName": "女性青年/通用12",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用12",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用12"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0036",
+            "previewText": "今天也要開開心心呀 有什麼煩惱都可以跟我說 我一直都在",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101648,
+        "displayName": "火山豆包-高冷御姐 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用13",
+        "tagName": "女性青年/通用13",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用13",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用13"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0038",
+            "previewText": "亲爱的,我们到此为止吧。我眷了,不想再继续这场无聊的游戏了。你我之间,也许曾经有一些美好,但那也只是曾经罢了。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101649,
+        "displayName": "火山豆包-开朗姐姐 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用14",
+        "tagName": "女性青年/通用14",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用14",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用14"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0039",
+            "previewText": "嘿,你好,在这个丰富多彩的世界里,有无数的风景等待着我们去探索,不知道你是否也和我一样,对远方充满了好奇与向往呢?",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101650,
+        "displayName": "火山豆包-暖阳女声",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用15",
+        "tagName": "女性青年/通用15",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用15",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用15"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0044",
+            "previewText": "您好,这里是您的专属客服,很高兴为您服务。请问有什么可以帮到您的呢?您有什么问题可以随时问我,我会尽量帮您解答的。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101651,
+        "displayName": "火山豆包-流畅女声 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用16",
+        "tagName": "女性青年/通用16",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用16",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用16"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0045",
+            "previewText": "這家奶茶店的珍珠超有嚼勁三分糖加冰一口下去又甜又清爽夏天喝這個真的太絕了",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101652,
+        "displayName": "火山豆包-爽快思思 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用17",
+        "tagName": "女性青年/通用17",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用17",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用17"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0047",
+            "previewText": "今天天氣可好了,我打算和朋友一起去野餐,帶上美食和飲料,找個舒適的草坪,什麼煩惱都沒了,你要不要和我們一起?",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101653,
+        "displayName": "火山豆包-性感魅惑 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用18",
+        "tagName": "女性青年/通用18",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用18",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用18"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0059",
+            "previewText": "夜色轻拂曲线,危险又迷人的气息在蔓延。唇尖藏着一场风暴,指尖划过便是辽园的火。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101654,
+        "displayName": "火山豆包-贴心妹妹 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用19",
+        "tagName": "女性青年/通用19",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用19",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用19"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0074",
+            "previewText": "資料我備份了三份,會議流程也飆了重點。別慌,有我在呢。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101655,
+        "displayName": "火山豆包-贴心闺蜜 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用20",
+        "tagName": "女性青年/通用20",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用20",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用20"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0075",
+            "previewText": "想哭就靠我肩膀,想笑就一起疯,你的每个样子我都爱呀。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101656,
+        "displayName": "火山豆包-知心姐姐",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用21",
+        "tagName": "女性青年/通用21",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用21",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用21"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0077",
+            "previewText": "難過時就抬頭看雲吧,他們聚了又散,卻永遠有新的故事在天邊醞釀。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101657,
+        "displayName": "火山豆包-魅力苏菲",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用22",
+        "tagName": "女性青年/通用22",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用22",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用22"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0093",
+            "previewText": "別碰我的底線,那是扎手的筋疾但如果你跨過筋疾,會看見我藏著的糖罐",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101658,
+        "displayName": "火山豆包-Vivi 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用23",
+        "tagName": "女性青年/通用23",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用23",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用23"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0095",
+            "previewText": "今天的阳光真好啊感觉整个人都充满了活力呢真想去外面跑一跑去探索那些有趣的地方去泄后一些奇妙的事情生活嘛就该这样自由自在充满招气的呀哈哈",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101659,
+        "displayName": "火山豆包-小何 2.0",
+        "groupId": 1783200001031,
+        "voiceTag": "女性青年/通用24",
+        "tagName": "女性青年/通用24",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性青年/通用24",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性青年/通用24"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0096",
+            "previewText": "清晨的陽光跳上窗台讓我們帶著笑臉去付一場春天的約會吧",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "group": {
+      "id": 1783200001032,
+      "name": "女性中年通用",
+      "parentGroupId": 1783500000000,
+      "order": 3
+    },
+    "list": [
+      {
+        "id": 1783200101660,
+        "displayName": "火山豆包-成熟姐姐",
+        "groupId": 1783200001032,
+        "voiceTag": "女性中年/通用01",
+        "tagName": "女性中年/通用01",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性中年/通用01",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性中年/通用01"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0003",
+            "previewText": "经历多了，便懂得凡事需沉稳应对，一步一步，方能走得踏实长远。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101661,
+        "displayName": "火山豆包-性感御姐",
+        "groupId": 1783200001032,
+        "voiceTag": "女性中年/通用02",
+        "tagName": "女性中年/通用02",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性中年/通用02",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性中年/通用02"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0008",
+            "previewText": "我所追求的，是极致的魅力与自由，无人可阻挡我的脚步。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101662,
+        "displayName": "火山豆包-魅力女友 2.0",
+        "groupId": 1783200001032,
+        "voiceTag": "女性中年/通用03",
+        "tagName": "女性中年/通用03",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性中年/通用03",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性中年/通用03"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0046",
+            "previewText": "以后呢,你只能对我一个人好,心里也只能装着我,不管发生什么,都要第一时间想到我,我可会一直赖着你的,你别想跑掉了。还有呀,要好好爱我,重我,不然我可不依呢。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101663,
+        "displayName": "火山豆包-邪魅御姐 2.0",
+        "groupId": 1783200001032,
+        "voiceTag": "女性中年/通用04",
+        "tagName": "女性中年/通用04",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性中年/通用04",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性中年/通用04"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0057",
+            "previewText": "这么紧张做什么,姐姐的吻可是带刺的哟。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101664,
+        "displayName": "火山豆包-邻居阿姨 2.0",
+        "groupId": 1783200001032,
+        "voiceTag": "女性中年/通用05",
+        "tagName": "女性中年/通用05",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性中年/通用05",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性中年/通用05"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0060",
+            "previewText": "你最近工作怎麼樣啊?累不累啊?要注意身體哦!有什麼要幫忙的儘管說,別客氣!咱們都是好鄰居,應該互相照應!",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101665,
+        "displayName": "火山豆包-妩媚可人 2.0",
+        "groupId": 1783200001032,
+        "voiceTag": "女性中年/通用06",
+        "tagName": "女性中年/通用06",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性中年/通用06",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性中年/通用06"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0063",
+            "previewText": "红酒杯盐还留着我的唇印呢先生不想尝尝这杯夜色特调吗",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101666,
+        "displayName": "火山豆包-温柔白月光 2.0",
+        "groupId": 1783200001032,
+        "voiceTag": "女性中年/通用07",
+        "tagName": "女性中年/通用07",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性中年/通用07",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性中年/通用07"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0073",
+            "previewText": "眼角的风铃又响了,像那年你在树下读书时,树叶翻动的声音。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101667,
+        "displayName": "火山豆包-纯澈女生 2.0",
+        "groupId": 1783200001032,
+        "voiceTag": "女性中年/通用08",
+        "tagName": "女性中年/通用08",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性中年/通用08",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性中年/通用08"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0078",
+            "previewText": "你看那片雲像不像棉花糖,我們一起去追它好不好?",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "group": {
+      "id": 1783200001033,
+      "name": "女性老年通用",
+      "parentGroupId": 1783500000000,
+      "order": 4
+    },
+    "list": [
+      {
+        "id": 1783200101668,
+        "displayName": "火山豆包-和蔼奶奶",
+        "groupId": 1783200001033,
+        "voiceTag": "女性老年/通用01",
+        "tagName": "女性老年/通用01",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "女性老年/通用01",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "女性老年/通用01"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0062",
+            "previewText": "乖孫啊,你最近過得咋樣啊?奶奶可想你了。工作別太辛苦了,注意身體,有時間多回家看看奶奶,奶奶給你做好吃的。你要是有什麼心事,也可以跟奶奶說。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "group": {
+      "id": 1783200001034,
+      "name": "男性少年通用",
+      "parentGroupId": 1783500000000,
+      "order": 5
+    },
+    "list": [
+      {
+        "id": 1783200101669,
+        "displayName": "火山豆包-风发少年",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用01",
+        "tagName": "男性少年/通用01",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用01",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用01"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0017",
+            "previewText": "天还没有完全亮，可我已经准备好了。就算路上会摔倒，我也想再往前跑一次；你听，风都在催我们出发。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101670,
+        "displayName": "火山豆包-醋精男友",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用02",
+        "tagName": "男性少年/通用02",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用02",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用02"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0018",
+            "previewText": "我刚才只是有点在意，语气才重了一些。等我冷静下来，再好好跟你说；别转身，我还有话没讲完。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101671,
+        "displayName": "火山豆包-温暖阿虎 2.0",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用03",
+        "tagName": "男性少年/通用03",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用03",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用03"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0022",
+            "previewText": "早上好呀,今天的阳光特别灿烂,就像你的笑容一样,让我背感温暖。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101672,
+        "displayName": "火山豆包-少年梓辛 2.0",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用04",
+        "tagName": "男性少年/通用04",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用04",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用04"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0024",
+            "previewText": "今天的阳光真好啊感觉整个人都充满了活力呢真想去外面跑一跑去探索那些有趣的地方去泄后一些奇妙的事情生活嘛就该这样自由自在充满招气的呀",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101673,
+        "displayName": "火山豆包-快乐小东 2.0",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用05",
+        "tagName": "男性少年/通用05",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用05",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用05"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0035",
+            "previewText": "篮球砸进鸡水,建起水花,雷声哄鸣。阿豪喊,来追我,我们在闪电余光中风跑,让17岁的夏天进门雨水与热血。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101674,
+        "displayName": "火山豆包-邻家男孩 2.0",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用06",
+        "tagName": "男性少年/通用06",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用06",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用06"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0041",
+            "previewText": "今天在这里遇到你真的感觉特别奇妙就好像命运的齿轮巧然转动让我们在这个特定的时间和地点相遇这一定是一种特别的缘分吧你看周围的人来来往往而我的目光却不由自主地被你吸引",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101675,
+        "displayName": "火山豆包-温暖少年 2.0 温柔清澈的体贴少年，待人谦和有礼 🇨🇳 仅中文 有声阅读 0K",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用07",
+        "tagName": "男性少年/通用07",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用07",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用07"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0050",
+            "previewText": "你听呀,风穿过麦田的声音像不像小熊在打呼噜,我给你摘了朵最软的云荡枕头。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101676,
+        "displayName": "火山豆包-机灵小伙",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用08",
+        "tagName": "男性少年/通用08",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用08",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用08"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0068",
+            "previewText": "这事儿包在我身上不过嘛兄弟总得沾点油水不是",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101677,
+        "displayName": "火山豆包-孤傲公子",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用09",
+        "tagName": "男性少年/通用09",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用09",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用09"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0070",
+            "previewText": "这浊世繁花万千,为清风明月可入我眼。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101678,
+        "displayName": "火山豆包-病弱公子",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用10",
+        "tagName": "男性少年/通用10",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用10",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用10"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0071",
+            "previewText": "这盏灯黄的人头晕 劳烦替我调暗写吧",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101679,
+        "displayName": "火山豆包-儒雅男友",
+        "groupId": 1783200001034,
+        "voiceTag": "男性少年/通用11",
+        "tagName": "男性少年/通用11",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性少年/通用11",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性少年/通用11"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0084",
+            "previewText": "这墨香与情韵相和倒比春日里的海棠更添三分雅致",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "group": {
+      "id": 1783200001035,
+      "name": "男性青年通用",
+      "parentGroupId": 1783500000000,
+      "order": 6
+    },
+    "list": [
+      {
+        "id": 1783200101680,
+        "displayName": "火山豆包-傲气凌人",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用01",
+        "tagName": "男性青年/通用01",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用01",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用01"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0009",
+            "previewText": "这点局面还乱不了我的分寸。先退到一旁，看清楚了再开口；等事情落定，你自然会明白我的判断。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101681,
+        "displayName": "火山豆包-傲娇公子",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用02",
+        "tagName": "男性青年/通用02",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用02",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用02"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0010",
+            "previewText": "本公子只是顺手帮你一次，可别想得太多。路上风大，先跟紧些；等到了前面，再慢慢说清楚。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101682,
+        "displayName": "火山豆包-傲慢少爷",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用03",
+        "tagName": "男性青年/通用03",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用03",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用03"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0011",
+            "previewText": "你们这些下等人，都给本少爷闪开，别弄脏了我的衣服。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101683,
+        "displayName": "火山豆包-病娇白莲",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用04",
+        "tagName": "男性青年/通用04",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用04",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用04"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0013",
+            "previewText": "我只是声音轻了一点，并不是没有主意。你若愿意听，就先别急着下结论；真相我会慢慢说出来。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101684,
+        "displayName": "火山豆包-腹黑公子",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用05",
+        "tagName": "男性青年/通用05",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用05",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用05"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0015",
+            "previewText": "呵，这局势正合我意，只需略施小计，便能坐收渔利，他们还浑然不知呢。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101685,
+        "displayName": "火山豆包-磁性男嗓",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用06",
+        "tagName": "男性青年/通用06",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用06",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用06"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0016",
+            "previewText": "你不要担心告诉我，我会嫌弃你麻烦，我只会跟你一起去想办法，以后无论发生什么你都要第一时间告诉我，知道吗？",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101686,
+        "displayName": "火山豆包-傲娇精英",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用07",
+        "tagName": "男性青年/通用07",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用07",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用07"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0020",
+            "previewText": "方案我已经看过了，问题不算复杂。你若认真一点，今天就能处理好；不过，关键步骤还是要听我的。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101687,
+        "displayName": "火山豆包-不羁青年",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用08",
+        "tagName": "男性青年/通用08",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用08",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用08"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0021",
+            "previewText": "规矩可以慢慢谈，路也可以换一条走。先别皱眉，风一过，天就亮了；到时候再决定也不迟。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101688,
+        "displayName": "火山豆包-解说小明 2.0",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用09",
+        "tagName": "男性青年/通用09",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用09",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用09"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0023",
+            "previewText": "嗨 你好 今天的阳光格外温暖就像你的笑容一样瞬间照亮了我的世界刚刚看到你们那一刻我就觉得有一种特别的吸引力",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101689,
+        "displayName": "火山豆包-阳光青年 2.0",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用10",
+        "tagName": "男性青年/通用10",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用10",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用10"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0031",
+            "previewText": "今天的风很舒服，心情也跟着亮了起来。别担心，我们一步一步往前走；累了就停一下，马上还能继续。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101690,
+        "displayName": "火山豆包-嚣张小哥",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用11",
+        "tagName": "男性青年/通用11",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用11",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用11"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0051",
+            "previewText": "这地儿可是我照的,实相的赶紧让开,信不信老子纷纷中叫人?",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101691,
+        "displayName": "火山豆包-儒雅公子",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用12",
+        "tagName": "男性青年/通用12",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用12",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用12"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0053",
+            "previewText": "茶烟未散,末恒出干,公子可愿共赏这卷黄庭经理的云光。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101692,
+        "displayName": "火山豆包-咆哮小哥",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用13",
+        "tagName": "男性青年/通用13",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用13",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用13"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0054",
+            "previewText": "你说到底要我怎么做才能留住你这画质都被我揉碎十丈了",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101693,
+        "displayName": "火山豆包-枕边低语 2.0",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用14",
+        "tagName": "男性青年/通用14",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用14",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用14"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0056",
+            "previewText": "我悄悄把思念折承证判的月光你睫毛清产的糊涂是我今夜唯一想读懂的时刻睡吧我的呼吸会替你守候每一个未完成的梦",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101694,
+        "displayName": "火山豆包-优柔公子",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用15",
+        "tagName": "男性青年/通用15",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用15",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用15"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0067",
+            "previewText": "指尖浮过古琴第七根冰弦,这曲萧香水云竟让燕珠墨泪拧了三分。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101695,
+        "displayName": "火山豆包-冷酷哥哥",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用16",
+        "tagName": "男性青年/通用16",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用16",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用16"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0069",
+            "previewText": "自己选的路 爬也要爬完 我不會扶你的",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101696,
+        "displayName": "火山豆包-俊朗男友",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用17",
+        "tagName": "男性青年/通用17",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用17",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用17"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0079",
+            "previewText": "别怕,有我在呢你看这万家灯火以后每一展都有我们的故事",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101697,
+        "displayName": "火山豆包-北京小爷",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用18",
+        "tagName": "男性青年/通用18",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用18",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用18"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0080",
+            "previewText": "您猜怎么着,咱北京那可是有着深厚抵运的地儿啊咱这糊涂里的故事啊,那真是说也说不完咱得把咱这老祖宗留下来的好东西都传下去让全世界都瞅瞅咱北京的魅力您说是不是这种理由呀",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101698,
+        "displayName": "火山豆包-浩宇小哥",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用19",
+        "tagName": "男性青年/通用19",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用19",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用19"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0086",
+            "previewText": "这海峰可真是挺舒服的呀咱们打算去哪儿留到留到转转呀是去海边抽虫的呀还是去哪个有意思的地儿逛逛呀真是怪人就结的",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101699,
+        "displayName": "火山豆包-双节棍小哥",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用20",
+        "tagName": "男性青年/通用20",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用20",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用20"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0089",
+            "previewText": "喂,別問未來多遠多長,我的引擎早就在血脈裡發燙,把質疑折騰指傳丟進池塘,看它飄向飄向有光的方向。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101700,
+        "displayName": "火山豆包-广西远舟",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用21",
+        "tagName": "男性青年/通用21",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用21",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用21"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0090",
+            "previewText": "咱廣西的風景可美啦,山清水秀的,空氣也特別清新。要是你有機會來廣西旅遊,一定要去桂林看看它假天下的山水。再去嘗嘗我們廣西的特色美食,像螺絲粉、桂林米粉這些,味道絕對讓你流連忘返。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101701,
+        "displayName": "火山豆包-豫州子轩",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用22",
+        "tagName": "男性青年/通用22",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用22",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用22"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0092",
+            "previewText": "在贺南可是个好地方啊在那里是游舅问华神侯那回面迟起来可得劲了唐农免金一弯下去混身熟谈还有火辣汤遭上赖一弯那叫一个逮捷还有那罗亚水系哪可是在贺南的特色哪有机会可来唱的在贺南人是在欢迎了赖贺南刷啊",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101702,
+        "displayName": "火山豆包-小天 2.0",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用23",
+        "tagName": "男性青年/通用23",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用23",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用23"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0097",
+            "previewText": "宝贝别着急,每颗星星都散发着属于自己的光芒。慢慢长大,你也会闪闪发光。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101703,
+        "displayName": "火山豆包-云舟 2.0",
+        "groupId": 1783200001035,
+        "voiceTag": "男性青年/通用24",
+        "tagName": "男性青年/通用24",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性青年/通用24",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性青年/通用24"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0098",
+            "previewText": "風穿過林間的低雨,向清泉躺過新間,聽著就好像可以吹散所有煩惱。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "group": {
+      "id": 1783200001036,
+      "name": "男性中年通用",
+      "parentGroupId": 1783500000000,
+      "order": 7
+    },
+    "list": [
+      {
+        "id": 1783200101704,
+        "displayName": "火山豆包-霸道少爷",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用01",
+        "tagName": "男性中年/通用01",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用01",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用01"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0012",
+            "previewText": "决定已经摆在这里，我不想再听含糊的回答。你先站稳，把该说的话说清楚；剩下的事，我自会处理。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101705,
+        "displayName": "火山豆包-成熟总裁",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用02",
+        "tagName": "男性中年/通用02",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用02",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用02"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0014",
+            "previewText": "我要的是清楚的结论，不是含混的解释。先把重点列出来，时间、风险、结果都说清楚，再继续往下谈。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101706,
+        "displayName": "火山豆包-东方浩然 2.0",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用03",
+        "tagName": "男性中年/通用03",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用03",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用03"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0026",
+            "previewText": "我上知天文,从遥远星系的诞生到天体的运行规律,皆能违违到来。下知地理,无论是古老文明的发祥地,还是星星城市的崛起之地,我都能洞察其背后的历史脉络与发展轨迹。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101707,
+        "displayName": "火山豆包-渊博小叔 2.0",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用04",
+        "tagName": "男性中年/通用04",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用04",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用04"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0032",
+            "previewText": "你要知道,这世间的知识就如同浩瀚的海洋,无穷无尽啊。我们要始终保持一颗求知的心,不断去探索、去学习。无论是科学、历史、文化还是艺术,每一个领域都有着无尽的奥秘等待我们去揭开。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101708,
+        "displayName": "火山豆包-深夜播客 2.0",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用05",
+        "tagName": "男性中年/通用05",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用05",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用05"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0037",
+            "previewText": "在这季节的夜里我陪着你们一起度过这独特的时光我知道你们可能带着一天的疲惫来到这里或是有着各种各样的心情别担心有我在呢让我的声音陪伴你们为你们赶走孤单带来一些慰藉和欢乐",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101709,
+        "displayName": "火山豆包-傲娇霸总 2.0",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用06",
+        "tagName": "男性中年/通用06",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用06",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用06"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0040",
+            "previewText": "先别急，我们把事情一件一件说清楚。路还长，慢一点也没关系；只要方向没错，我会把局面稳住。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101710,
+        "displayName": "火山豆包-油腻大叔",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用07",
+        "tagName": "男性中年/通用07",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用07",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用07"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0049",
+            "previewText": "丫头别躲啊哥来给你讲讲当年勇虽然现在爬楼梯都喘但酒桌上吹过的牛可都算数",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101711,
+        "displayName": "火山豆包-胡子叔叔",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用08",
+        "tagName": "男性中年/通用08",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用08",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用08"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0052",
+            "previewText": "想当年在林场扛原木,雪深到膝盖,何处的气都能在胡子上结霜",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101712,
+        "displayName": "火山豆包-醇厚低音",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用09",
+        "tagName": "男性中年/通用09",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用09",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用09"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0055",
+            "previewText": "夜色如成年美酒般深沉,低音在耳畔緩緩流淌,向大提琴的弦清伏過心跳,每一寸正燦都裹著時光的純厚與故事的餘溫。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101713,
+        "displayName": "火山豆包-广州德哥",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用10",
+        "tagName": "男性中年/通用10",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用10",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用10"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0082",
+            "previewText": "嗨 今天饮茶没有呀一起喝茶聊聊呀",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101714,
+        "displayName": "火山豆包-京腔侃爷",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用11",
+        "tagName": "男性中年/通用11",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用11",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用11"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0083",
+            "previewText": "北京的堵车能让你从早上堵到下午下车一看 呦 这地儿咋这么眼熟呢哦 原来还在家门口了",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101715,
+        "displayName": "火山豆包-湾区大叔",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用12",
+        "tagName": "男性中年/通用12",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用12",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用12"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0087",
+            "previewText": "年輕人啊,你要知道喔,人生這條路啊,可長著呢,有時候要慢慢來啦,莫急莫急。遇到困難不要怕啦,勇敢去面對就好,咱要保持樂觀的心態啦,一己總是會越來越好的。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200101716,
+        "displayName": "火山豆包-阳光阿辰",
+        "groupId": 1783200001036,
+        "voiceTag": "男性中年/通用13",
+        "tagName": "男性中年/通用13",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "男性中年/通用13",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "男性中年/通用13"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "火山豆包中文克隆",
+            "voice": "create_voice_doubao_volc_0094",
+            "previewText": "走,帶你去天台看晚霞, 我新買的吉他還沒給你談過戀愛循環呢,包管讓你笑到大名。",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  }
+]

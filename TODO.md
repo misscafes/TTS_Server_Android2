@@ -2,6 +2,26 @@
 
 ## 版本变更记录
 
+### v1.26.071915（修复批量切换/分配标签后显示为旁白且未生效）
+
+#### Bug 修复：批量分配标签或切换标签后，点开发音人显示为“旁白”，实际未切换成功
+- **需求来源**：用户批量切换/分配标签后，列表显示标签正常，但点开发音人详情后目标变为“旁白”，实际未按预期切换
+- **涉及文件**：
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/BatchTagDialog.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerScreen.kt`
+- **根因分析**：
+  1. `BatchTagDialog` 分配新标签时直接 `copy()` 旧的 `SpeechRuleInfo`，保留了原标签的 `tagData`；随后调用 `SpeechRuleEngine.getTagName()` 时，残留数据导致脚本计算错误，返回“旁白”等错误标签名
+  2. `ListManagerScreen.switchSpeechTarget()` 从 `ALL` 切换到 `TAG` 时只设置了 `tag`，未设置 `tagName`，导致列表标签名为空；切换下一个标签时也未清理旧 `tagData`，同样可能算出错误名称
+- **实现内容**：
+  1. `BatchTagDialog` 分配标签前清空 `ruleData.tagData = emptyMap()`，再基于干净的 tagData 调用 `getTagName()`；若计算结果为空则保留从规则/已选标签解析出的 `tagName`
+  2. `switchSpeechTarget()` 切换标签时同步清空 `tagData`，并从规则 `tags` 映射中设置 `tagName`
+  3. `switchSpeechTarget()` 从 `ALL` 切到 `TAG` 时，同步设置 `tagName = speechRule.tags[firstTag]`，避免列表项标签名为空
+- **验证**：
+  - `./gradlew :app:compileAppDebugKotlin` 编译通过
+  - `./gradlew :app:assembleAppRelease` 构建成功，生成 `newapk/TTS-Server-v1.26.071915-0821.apk` 和 `newapk/TTS-Server-latest.apk`
+
+---
+
 ### v1.26.071912-patch3（修复批量分配标签不按顺序递增）
 
 #### Bug 修复：批量分配标签时起始标签后续顺序错乱
@@ -437,6 +457,20 @@
 ---
 
 ## 会话摘要
+
+### 2026-07-19 本次会话（v1.26.071915 - 修复批量切换/分配标签后显示为旁白且未生效）
+- **当前版本**：v1.26.071915（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. 定位批量分配标签与单条切换标签代码：`BatchTagDialog.kt`、`ListManagerScreen.switchSpeechTarget()`
+  2. 分析根因：旧标签的 `tagData` 残留导致 `SpeechRuleEngine.getTagName()` 计算错误，返回“旁白”；从 `ALL` 切到 `TAG` 时未设置 `tagName`
+  3. 修复 `BatchTagDialog`：分配新标签前清空 `tagData`，并基于干净数据重新计算 `tagName`
+  4. 修复 `ListManagerScreen.switchSpeechTarget()`：切换标签时清空 `tagData`、设置 `tagName`；从 `ALL` 切换时同步设置显示名
+  5. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  6. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071915-0821.apk` 和 `newapk/TTS-Server-latest.apk`
+- **注意事项**：
+  - 修复后批量分配/切换标签会清除旧的 `tagData`，若某些标签依赖自定义数据（如角色名），用户需在编辑界面重新填写
+  - 清除旧数据可避免残留数据导致标签名错误，符合“切换标签”应进入干净状态的预期
+  - 最新 APK 直接看 `newapk/TTS-Server-latest.apk`
 
 ### 2026-07-19 本次会话（v1.26.071912-patch3 - 批量分配标签顺序递增修复）
 - **当前版本**：v1.26.071912-patch3（基于 `hhh4` 分支）

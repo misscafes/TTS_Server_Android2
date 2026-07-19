@@ -960,11 +960,13 @@ internal fun ListManagerScreen(
                 }
             } else {
                 ruleData.tag = newTag
+                // 切换标签时清除旧的 tagData，避免残留数据导致 getTagName 返回错误名称（如旁白）
+                ruleData.tagData = emptyMap()
+                ruleData.tagName = speechRule.tags[newTag] ?: ""
                 runCatching {
-                    ruleData.tagName =
-                        SpeechRuleEngine.getTagName(context, speechRule, info = ruleData)
+                    val computed = SpeechRuleEngine.getTagName(context, speechRule, info = ruleData)
+                    if (computed.isNotBlank()) ruleData.tagName = computed
                 }.onFailure {
-                    ruleData.tagName = ""
                     context.displayErrorDialog(it)
                 }
 
@@ -972,8 +974,12 @@ internal fun ListManagerScreen(
         }
         else {
             dbm.speechRuleDao.getByRuleId(ruleData.tagRuleId)?.let {
+                val firstTag = it.tags.keys.first()
                 ruleData.target = SpeechTarget.TAG
-                ruleData.tag = it.tags.keys.first()
+                ruleData.tag = firstTag
+                // 从 ALL 切换到 TAG 时同步设置 tagName，避免列表标签名为空
+                ruleData.tagName = it.tags[firstTag] ?: ""
+                ruleData.tagData = emptyMap()
             }
         }
 

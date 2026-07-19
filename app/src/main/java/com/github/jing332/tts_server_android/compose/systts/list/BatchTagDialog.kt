@@ -253,10 +253,13 @@ fun BatchTagDialog(
                                 ruleData.tag = tagKey
                                 // tagRuleId 不一致时保持原值，一致时更新为公共 ruleId
                                 ruleData.tagRuleId = commonTagRuleId ?: config.speechRule.tagRuleId
+                                // 清除旧的 tagData，避免旧标签的残留数据导致 getTagName 计算错误（如显示为旁白）
+                                ruleData.tagData = emptyMap()
                                 ruleData.tagName = tagName
                                 runCatching {
                                     speechRule?.let { sr ->
-                                        ruleData.tagName = SpeechRuleEngine.getTagName(context, sr, ruleData)
+                                        val computed = SpeechRuleEngine.getTagName(context, sr, ruleData)
+                                        if (computed.isNotBlank()) ruleData.tagName = computed
                                     }
                                 }
                                 dbm.systemTtsV2.update(

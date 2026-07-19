@@ -1,0 +1,1912 @@
+[
+  {
+    "group": {
+      "id": 1783700000000,
+      "name": "官方音色",
+      "order": 6
+    },
+    "list": []
+  },
+  {
+    "group": {
+      "id": 1783200001047,
+      "name": "女性少年通用",
+      "parentGroupId": 1783700000000,
+      "order": 1
+    },
+    "list": [
+      {
+        "id": 1783200102367,
+        "displayName": "中文｜纯真少年",
+        "groupId": 1783200001047,
+        "voiceTag": "【女/少女01】",
+        "tagName": "【女/少女01】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/少女01】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/少女01】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Pure-hearted_Boy",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102368,
+        "displayName": "中文｜直率少年",
+        "groupId": 1783200001047,
+        "voiceTag": "【女/少女02】",
+        "tagName": "【女/少女02】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/少女02】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/少女02】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Straightforward_Boy",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "group": {
+      "id": 1783200001048,
+      "name": "女性青年通用",
+      "parentGroupId": 1783700000000,
+      "order": 2
+    },
+    "list": [
+      {
+        "id": 1783200102369,
+        "displayName": "中文｜傲娇小姐",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年01】",
+        "tagName": "【女/女青年01】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年01】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年01】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Arrogant_Miss",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102370,
+        "displayName": "中文｜害羞少女",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年02】",
+        "tagName": "【女/女青年02】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年02】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年02】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_BashfulGirl",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102371,
+        "displayName": "中文｜清脆少女",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年03】",
+        "tagName": "【女/女青年03】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年03】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年03】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Crisp_Girl",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102372,
+        "displayName": "中文｜可爱精灵",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年04】",
+        "tagName": "【女/女青年04】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年04】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年04】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Cute_Spirit",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102373,
+        "displayName": "中文｜探索少女",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年05】",
+        "tagName": "【女/女青年05】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年05】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年05】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_ExplorativeGirl",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102374,
+        "displayName": "中文｜温和前辈",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年06】",
+        "tagName": "【女/女青年06】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年06】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年06】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Gentle_Senior",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102375,
+        "displayName": "中文｜温柔青年",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年07】",
+        "tagName": "【女/女青年07】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年07】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年07】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Gentle_Youth",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102376,
+        "displayName": "中文｜绅士男声",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年08】",
+        "tagName": "【女/女青年08】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年08】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年08】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Gentleman",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102377,
+        "displayName": "中文｜港式空姐",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年09】",
+        "tagName": "【女/女青年09】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年09】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年09】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_HK_Flight_Attendant",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102378,
+        "displayName": "中文｜幽默长者",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年10】",
+        "tagName": "【女/女青年10】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年10】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年10】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Humorous_Elder",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102379,
+        "displayName": "中文｜知性少女",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年11】",
+        "tagName": "【女/女青年11】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年11】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年11】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_IntellectualGirl",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102380,
+        "displayName": "中文｜热心阿姨",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年12】",
+        "tagName": "【女/女青年12】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年12】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年12】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Kind-hearted_Antie",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102381,
+        "displayName": "中文｜慈祥长者",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年13】",
+        "tagName": "【女/女青年13】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年13】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年13】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Kind-hearted_Elder",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102382,
+        "displayName": "中文｜慵懒少女",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年14】",
+        "tagName": "【女/女青年14】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年14】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年14】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Laid_BackGirl",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102383,
+        "displayName": "中文｜抒情声线",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年15】",
+        "tagName": "【女/女青年15】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年15】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年15】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Lyrical_Voice",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102384,
+        "displayName": "中文｜男播音员",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年16】",
+        "tagName": "【女/女青年16】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年16】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年16】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Male_Announcer",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102385,
+        "displayName": "中文｜成熟女性",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年17】",
+        "tagName": "【女/女青年17】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年17】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年17】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Mature_Woman",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102386,
+        "displayName": "中文｜新闻主播",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年18】",
+        "tagName": "【女/女青年18】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年18】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年18】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_News_Anchor",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102387,
+        "displayName": "中文｜电台主持",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年19】",
+        "tagName": "【女/女青年19】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年19】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年19】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Radio_Host",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102388,
+        "displayName": "中文｜可靠总裁",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年20】",
+        "tagName": "【女/女青年20】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年20】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年20】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Reliable_Executive",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102389,
+        "displayName": "中文｜真诚成人",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年21】",
+        "tagName": "【女/女青年21】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年21】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年21】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Sincere_Adult",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102390,
+        "displayName": "中文｜柔软少女",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年22】",
+        "tagName": "【女/女青年22】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年22】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年22】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Soft_Girl",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102391,
+        "displayName": "中文｜南方青年",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年23】",
+        "tagName": "【女/女青年23】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年23】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年23】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Southern_Young_Man",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102392,
+        "displayName": "中文｜固执朋友",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年24】",
+        "tagName": "【女/女青年24】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年24】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年24】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Stubborn_Friend",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102393,
+        "displayName": "中文｜甜美女士",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年25】",
+        "tagName": "【女/女青年25】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年25】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年25】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Sweet_Lady",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102394,
+        "displayName": "中文｜洒脱青年",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年26】",
+        "tagName": "【女/女青年26】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年26】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年26】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Unrestrained_Young_Man",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102395,
+        "displayName": "中文｜暖心阿姨",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年27】",
+        "tagName": "【女/女青年27】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年27】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年27】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Warm-HeartedAunt",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102396,
+        "displayName": "中文｜温暖闺蜜",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年28】",
+        "tagName": "【女/女青年28】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年28】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年28】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Warm_Bestie",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102397,
+        "displayName": "中文｜温暖少女",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年29】",
+        "tagName": "【女/女青年29】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年29】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年29】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Warm_Girl",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102398,
+        "displayName": "中文｜暖心少女",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年30】",
+        "tagName": "【女/女青年30】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年30】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年30】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Warm_HeartedGirl",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102399,
+        "displayName": "中文｜睿智女性",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年31】",
+        "tagName": "【女/女青年31】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年31】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年31】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Chinese (Mandarin)_Wise_Women",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102400,
+        "displayName": "中文｜机甲声",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年32】",
+        "tagName": "【女/女青年32】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年32】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年32】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "MiniMax中文官方",
+            "voice": "MM::Robot_Armor",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102401,
+        "displayName": "浅吻雾梨",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年33】",
+        "tagName": "【女/女青年33】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年33】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年33】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::longqiang",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102402,
+        "displayName": "午夜甜茶",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年34】",
+        "tagName": "【女/女青年34】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年34】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年34】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::longyan",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102403,
+        "displayName": "沐阳",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年35】",
+        "tagName": "【女/女青年35】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年35】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年35】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quarkF531S0_ptts",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102404,
+        "displayName": "苏荷姐姐",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年36】",
+        "tagName": "【女/女青年36】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年36】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年36】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_ajiao",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102405,
+        "displayName": "彩虹甜豆",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年37】",
+        "tagName": "【女/女青年37】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年37】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年37】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_f29",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102406,
+        "displayName": "活力嘉蓓",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年38】",
+        "tagName": "【女/女青年38】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年38】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年38】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_jiabei",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102407,
+        "displayName": "若初",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年39】",
+        "tagName": "【女/女青年39】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年39】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年39】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_lulu",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102408,
+        "displayName": "元气草莓",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年40】",
+        "tagName": "【女/女青年40】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年40】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年40】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_luoying",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102409,
+        "displayName": "姜来",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年41】",
+        "tagName": "【女/女青年41】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年41】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年41】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_murong",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102410,
+        "displayName": "电台华姐",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年42】",
+        "tagName": "【女/女青年42】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年42】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年42】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_xiaoning",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102411,
+        "displayName": "念念",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年43】",
+        "tagName": "【女/女青年43】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年43】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年43】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_xiaoxiao",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102412,
+        "displayName": "起司妹妹",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年44】",
+        "tagName": "【女/女青年44】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年44】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年44】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_xinshen",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102413,
+        "displayName": "方晴师姐",
+        "groupId": 1783200001048,
+        "voiceTag": "【女/女青年45】",
+        "tagName": "【女/女青年45】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【女/女青年45】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【女/女青年45】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_female_quark_zheque",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  },
+  {
+    "group": {
+      "id": 1783200001049,
+      "name": "男性青年通用",
+      "parentGroupId": 1783700000000,
+      "order": 3
+    },
+    "list": [
+      {
+        "id": 1783200102414,
+        "displayName": "阿辉",
+        "groupId": 1783200001049,
+        "voiceTag": "【男/男青年01】",
+        "tagName": "【男/男青年01】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【男/男青年01】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【男/男青年01】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_male_chengfeng_ICL",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102415,
+        "displayName": "皓东",
+        "groupId": 1783200001049,
+        "voiceTag": "【男/男青年02】",
+        "tagName": "【男/男青年02】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【男/男青年02】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【男/男青年02】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_male_quark_bb01",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102416,
+        "displayName": "温屿哥哥",
+        "groupId": 1783200001049,
+        "voiceTag": "【男/男青年03】",
+        "tagName": "【男/男青年03】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【男/男青年03】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【男/男青年03】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_male_quark_m24",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102417,
+        "displayName": "温柔阿琛",
+        "groupId": 1783200001049,
+        "voiceTag": "【男/男青年04】",
+        "tagName": "【男/男青年04】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【男/男青年04】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【男/男青年04】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_male_quark_shaou_freetalk",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      },
+      {
+        "id": 1783200102418,
+        "displayName": "健康哥哥",
+        "groupId": 1783200001049,
+        "voiceTag": "【男/男青年05】",
+        "tagName": "【男/男青年05】",
+        "enabled": true,
+        "config": {
+          "#type": "tts",
+          "speechRule": {
+            "target": 4,
+            "tag": "【男/男青年05】",
+            "tagRuleId": "qianwen_unified_4pool_2852",
+            "tagName": "【男/男青年05】"
+          },
+          "audioFormat": {
+            "sampleRate": 24000
+          },
+          "source": {
+            "#type": "plugin",
+            "pluginId": "qianwen.tts.guagua_taozi",
+            "locale": "夸克官方",
+            "voice": "QK::zh_male_quark_yangchen",
+            "previewText": "",
+            "data": {},
+            "speed": 1.1999998,
+            "volume": 1,
+            "pitch": 1,
+            "method": "GET",
+            "urlTemplate": "",
+            "headersText": "",
+            "bodyTemplate": "",
+            "responseAudioPath": ""
+          }
+        }
+      }
+    ]
+  }
+]
