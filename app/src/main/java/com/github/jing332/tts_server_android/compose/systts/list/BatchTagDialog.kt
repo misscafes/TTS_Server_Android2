@@ -74,11 +74,12 @@ fun BatchTagDialog(
         map.putAll(derivedTags)
         map
     }
-    val tagKeys = remember(effectiveTags) { effectiveTags.keys.toList() }
+    // 按自然顺序排序，保证"按顺序分配"时标签递增（如 条目001 -> 条目002）
+    val tagKeys = remember(effectiveTags) { effectiveTags.keys.sorted() }
     LaunchedEffect(commonTagRuleId, selectedItems) {
         val dbRule = commonTagRuleId?.let { dbm.speechRuleDao.getByRuleId(it) }
         speechRule = if (!dbRule?.tags.isNullOrEmpty()) dbRule else null
-        val keys = effectiveTags.keys.toList()
+        val keys = tagKeys
         if (keys.isNotEmpty() && (selectedTagKey.isBlank() || !keys.contains(selectedTagKey))) {
             selectedTagKey = keys.first()
         }

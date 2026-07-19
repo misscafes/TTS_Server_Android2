@@ -2,6 +2,20 @@
 
 ## 版本变更记录
 
+### v1.26.071912-patch3（修复批量分配标签不按顺序递增）
+
+#### Bug 修复：批量分配标签时起始标签后续顺序错乱
+- **需求来源**：用户选择某个起始标签后点击「按顺序分配」，期望后续选中项自动依次分配下一个标签（如 条目001 → 条目002 → ...），但实际没有按顺序往下分配
+- **涉及文件**：
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/BatchTagDialog.kt`
+- **实现内容**：
+  1. `tagKeys` 由 `effectiveTags.keys.toList()` 改为 `effectiveTags.keys.sorted()`，确保标签按自然顺序排列
+  2. `LaunchedEffect` 中也统一使用排序后的 `tagKeys`
+  3. 选择起始标签后，后续选中项按 `tagKeys` 顺序依次取下一个标签，不会再因 HashMap/LinkedHashMap 无序导致乱序
+- **验证**：
+  - `./gradlew :app:compileAppDebugKotlin` 编译通过
+  - `./gradlew :app:assembleAppRelease` 构建成功，生成 `newapk/TTS-Server-v1.26.071912-4028.apk` 和 `newapk/TTS-Server-latest.apk`
+
 ### v1.26.071912-patch2（批量分配标签支持跨规则与自由输入）
 
 #### Bug 修复：批量分配标签时朗读规则不一致或无标签无法分配
@@ -424,25 +438,17 @@
 
 ## 会话摘要
 
-### 2026-07-19 本次会话（v1.26.071912-patch2 - 批量分配标签支持跨规则与自由输入 + 配置列表导入崩溃 + TTSOnline官方按分类分组）
-- **当前版本**：v1.26.071912-patch2（基于 `hhh4` 分支）
+### 2026-07-19 本次会话（v1.26.071912-patch3 - 批量分配标签顺序递增修复）
+- **当前版本**：v1.26.071912-patch3（基于 `hhh4` 分支）
 - **已完成事项**：
-  1. 修复批量分配标签跨 `tagRuleId` 无法分配：`BatchTagDialog` 不再要求选中项使用同一个朗读规则，不一致时仍可分配标签
-  2. 修复批量分配标签无现成标签无法分配：当没有可用标签时，提供自由输入框输入 `标签` 和 `标签名`，强制分配
-  3. 修复导入普通 TTS 配置列表（JSON 数组格式）时崩溃：`ListImportBottomSheet` 的 JRead 格式检测直接对数组调用 `jsonObject` 导致 `IllegalArgumentException`
-  4. 在检测 `format` 字段前先判断 `element is JsonObject`，数组格式直接跳过 JRead 检测流程
-  5. 重新生成 2852 配置列表：完整版 `TTSOnline官方` 保持为男/女两个子分组
-  6. 单独提取 `TTSOnline官方` 为独立导入文件并按 `tags` 分为 17 个分类子分组：`参考/jread_voice_TTSOnline官方_分类导入版.json`
-  7. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
-  8. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071912-3113.apk` 和 `newapk/TTS-Server-latest.apk`
+  1. 修复批量分配标签不按顺序递增：`BatchTagDialog` 中 `tagKeys` 改为 `effectiveTags.keys.sorted()`，确保标签按自然顺序排列
+  2. `LaunchedEffect` 中统一使用排序后的 `tagKeys`，避免 HashMap/LinkedHashMap 无序导致起始标签后顺序错乱
+  3. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  4. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071912-4028.apk` 和 `newapk/TTS-Server-latest.apk`
 - **注意事项**：
-  - 批量分配标签无标签根因：配置列表使用 `tagRuleId = qianwen_unified_4pool_2852`，数据库中可能无对应朗读规则
-  - 修复后即使数据库无对应规则、tagRuleId 不一致或无现成标签，也能分配标签
-  - 崩溃根因：生成的 2852 配置列表是 JSON 数组 `[{group,list},...]`，而 JRead 检测代码假设输入一定是 JsonObject
-  - 修复后 JSON 数组配置列表可正常进入普通 TTS 配置导入路径
-  - 完整版 `TTSOnline官方` 为 `女性青年通用` / `男性青年通用` 两组；分类细分仅在单独提取文件中
-  - 单独提取文件中同一音色若属于多个 tag 会出现在多个分类下，配置项总数会大于实际音色数
-  - 单独提取文件重新映射了 ID，避免与完整版 2852 配置冲突
+  - 本次修复只影响标签排序，其他批量分配标签逻辑（跨规则、自由输入、强制分配）保持 v1.26.071912-patch2 行为不变
+  - 排序规则为字符串自然顺序，标签名如 `条目001`、`条目002` 会按预期递增
+  - 最新 APK 直接看 `newapk/TTS-Server-latest.apk`
 
 ### 2026-07-19 本次会话（生成 2852 音色快导配置列表）
 - **当前版本**：v1.26.071909-patch4（基于 `hhh4` 分支）
