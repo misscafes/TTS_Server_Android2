@@ -27,6 +27,7 @@
 - **验证**：
   - `./gradlew :app:compileAppDebugKotlin` 编译通过
   - `./gradlew :lib-database:testDebugUnitTest --tests "com.github.jing332.database.jread.JReadImportTest"` 单元测试通过
+  - `./gradlew :app:assembleAppRelease` 构建成功，APK：`newapk/TTS-Server-v1.26.071908.apk`
 
 ---
 
@@ -256,6 +257,7 @@
   5. 新增单元测试 `JReadImportTest`，覆盖插件包和配置包转换逻辑
   6. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
   7. 单元测试验证：`./gradlew :lib-database:testDebugUnitTest --tests "com.github.jing332.database.jread.JReadImportTest"` 通过
+  8. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071908.apk`
 - **注意事项**：
   - JRead 插件代码（`code` 字段）理论上与 TTS Server 插件引擎兼容，但实际运行时仍需用户自行验证网络/鉴权等逻辑
   - 音色配置包导入后按 `groupName/subGroupName/thirdGroupName` 自动分组，`categoryPath` 保留子分组路径
