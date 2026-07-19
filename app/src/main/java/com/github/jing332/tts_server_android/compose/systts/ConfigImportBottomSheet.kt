@@ -83,6 +83,11 @@ fun ConfigImportBottomSheet(
     content: @Composable ColumnScope.() -> Unit = {},
     onDismissRequest: () -> Unit,
     onImport: suspend (json: String) -> Unit,
+    /**
+     * 是否在回调前自动对非数组 JSON 头尾补 `[ ]`。
+     * 关闭以支持导入对象格式的 JSON（如 JRead 插件包/配置包）。
+     */
+    autoWrapJsonList: Boolean = true,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -245,7 +250,9 @@ fun ConfigImportBottomSheet(
                             runCatching {
                                 val jsonStr =
                                     getConfig(src = source, url = url, uri = Uri.parse(path))
-                                onImport(jsonStr.toJsonListString())
+                                onImport(
+                                    if (autoWrapJsonList) jsonStr.toJsonListString() else jsonStr
+                                )
                             }.onFailure {
                                 context.displayErrorDialog(it)
                             }

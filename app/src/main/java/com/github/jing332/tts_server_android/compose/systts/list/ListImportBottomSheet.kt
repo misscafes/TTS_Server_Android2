@@ -6,11 +6,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.github.jing332.common.utils.StringUtils
+import com.github.jing332.common.utils.toJsonListString
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.systts.GroupWithSystemTts
 import com.github.jing332.database.entities.systts.SystemTtsGroup
 import com.github.jing332.database.entities.systts.SystemTtsMigration
 import com.github.jing332.database.entities.systts.SystemTtsV2
+import com.github.jing332.database.entities.systts.jread.JReadVoiceConfigBundle
+import com.github.jing332.database.entities.systts.jread.JReadVoiceConfigConverter
 import com.github.jing332.database.entities.systts.v1.GroupWithV1TTS
 import com.github.jing332.tts_server_android.compose.systts.ConfigImportBottomSheet
 import com.github.jing332.tts_server_android.compose.systts.ConfigModel
@@ -44,7 +47,9 @@ fun ListImportBottomSheet(onDismissRequest: () -> Unit) {
         )
     }
 
-    ConfigImportBottomSheet(onDismissRequest = onDismissRequest,
+    ConfigImportBottomSheet(
+        onDismissRequest = onDismissRequest,
+        autoWrapJsonList = false,
         onImport = { json ->
             val allList = withContext(Dispatchers.IO) {
                 val result = mutableListOf<ConfigModel>()
@@ -73,6 +78,16 @@ private fun getImportList(
     val groupName = StringUtils.formattedDate()
     val groupId = System.currentTimeMillis()
     val groupCount = dbm.systemTtsV2.groupCount
+
+    // JRead 音色配置包
+    val trimmed = json.trim()
+    if (trimmed.startsWith("{") && trimmed.contains("\"format\":\"jread_voice_config_bundle\"")) {
+        val bundle = AppConst.jsonBuilder.decodeFromString<JReadVoiceConfigBundle>(trimmed)
+        return JReadVoiceConfigConverter.convert(bundle)
+    }
+
+    val normalizedJson = if (trimmed.startsWith("[")) trimmed else trimmed.toJsonListString()
+
     if (fromLegado) {
         /*AppConst.jsonBuilder.decodeFromString<List<LegadoHttpTts>>(json).ifEmpty { return null }
             .let { list ->
@@ -99,11 +114,11 @@ private fun getImportList(
             }*/
         return null
     } else {
-        return if (json.contains("\"group\"")) { // 新版数据结构
-            if (json.contains("\"config\"") && json.contains("\"source\"")) {
-                AppConst.jsonBuilder.decodeFromString<List<GroupWithSystemTts>>(json)
+        return if (normalizedJson.contains("\"group\"")) { // 新版数据结构
+            if (normalizedJson.contains("\"config\"") && normalizedJson.contains("\"source\"")) {
+                AppConst.jsonBuilder.decodeFromString<List<GroupWithSystemTts>>(normalizedJson)
             } else {
-                val old = AppConst.jsonBuilder.decodeFromString<List<GroupWithV1TTS>>(json)
+                val old = AppConst.jsonBuilder.decodeFromString<List<GroupWithV1TTS>>(normalizedJson)
                 old.map {
                     GroupWithSystemTts(
                         it.group,

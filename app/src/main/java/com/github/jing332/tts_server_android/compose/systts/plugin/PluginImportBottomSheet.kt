@@ -8,9 +8,12 @@ import androidx.compose.runtime.setValue
 import com.github.jing332.tts_server_android.compose.systts.ConfigImportBottomSheet
 import com.github.jing332.tts_server_android.compose.systts.ConfigModel
 import com.github.jing332.tts_server_android.compose.systts.SelectImportConfigDialog
+import com.github.jing332.common.utils.toJsonListString
 import com.github.jing332.tts_server_android.constant.AppConst
 import com.github.jing332.database.dbm
 import com.github.jing332.database.entities.plugin.Plugin
+import com.github.jing332.database.entities.plugin.jread.JReadPluginBundle
+import com.github.jing332.database.entities.plugin.jread.JReadPluginConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -37,10 +40,20 @@ fun PluginImportBottomSheet(onDismissRequest: () -> Unit) {
         )
     }
 
-    ConfigImportBottomSheet(onDismissRequest = onDismissRequest, onImport = {
-        val decoded = withContext(Dispatchers.IO) {
-            AppConst.jsonBuilder.decodeFromString<List<Plugin>>(it)
+    ConfigImportBottomSheet(
+        onDismissRequest = onDismissRequest,
+        autoWrapJsonList = false,
+        onImport = { json ->
+            val decoded = withContext(Dispatchers.IO) {
+                val trimmed = json.trim()
+                if (trimmed.startsWith("{") && trimmed.contains("\"format\":\"jread_voice_plugin_bundle\"")) {
+                    val bundle = AppConst.jsonBuilder.decodeFromString<JReadPluginBundle>(trimmed)
+                    JReadPluginConverter.convert(bundle)
+                } else {
+                    AppConst.jsonBuilder.decodeFromString<List<Plugin>>(trimmed.toJsonListString())
+                }
+            }
+            list = decoded
         }
-        list = decoded
-    })
+    )
 }

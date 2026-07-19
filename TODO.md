@@ -2,6 +2,34 @@
 
 ## 版本变更记录
 
+### v1.26.071908（新增 JRead 插件包/音色配置包导入支持）
+
+#### 新增功能：支持导入 JRead 阅读器导出的插件与音色配置
+- **需求来源**：用户提供了 `参考/` 目录下的两个 JRead 格式 JSON 文件，需要 TTS Server 能识别并导入
+- **涉及文件**：
+  - `lib-database/src/main/java/com/github/jing332/database/entities/plugin/jread/JReadPluginBundle.kt`
+  - `lib-database/src/main/java/com/github/jing332/database/entities/plugin/jread/JReadPluginConverter.kt`
+  - `lib-database/src/main/java/com/github/jing332/database/entities/systts/jread/JReadVoiceConfigBundle.kt`
+  - `lib-database/src/main/java/com/github/jing332/database/entities/systts/jread/JReadVoiceConfigConverter.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/ConfigImportBottomSheet.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/plugin/PluginImportBottomSheet.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListImportBottomSheet.kt`
+  - `lib-database/src/test/java/com/github/jing332/database/jread/JReadImportTest.kt`
+- **实现内容**：
+  1. 新增 `jread_voice_plugin_bundle` 数据模型与转换器，将 JRead 插件包转换为 TTS Server 的 `Plugin` 实体
+     - `Plugin.version` 与 JRead 字符串版本兼容：优先取数字前缀，无法解析时使用字符串 `hashCode` 绝对值
+  2. 新增 `jread_voice_config_bundle` 数据模型与转换器，将 JRead 音色配置包转换为 `GroupWithSystemTts` 列表
+     - 按 `groupName/subGroupName/thirdGroupName` 自动分组，`categoryPath` 保留子分组路径
+     - 每个配置生成 `PluginTtsSource`，关联到对应 `pluginId`
+  3. `ConfigImportBottomSheet` 新增 `autoWrapJsonList` 参数，允许关闭自动 `[ ]` 包装，以支持对象格式 JSON 导入
+  4. `PluginImportBottomSheet` 检测 `jread_voice_plugin_bundle` 格式并自动转换导入
+  5. `ListImportBottomSheet` 检测 `jread_voice_config_bundle` 格式并自动转换导入，同时保留原有 TTS Server 配置导入兼容性
+- **验证**：
+  - `./gradlew :app:compileAppDebugKotlin` 编译通过
+  - `./gradlew :lib-database:testDebugUnitTest --tests "com.github.jing332.database.jread.JReadImportTest"` 单元测试通过
+
+---
+
 ### v1.26.060212（批量分配标签集成到批量编辑模式）
 
 #### 功能优化：批量分配标签支持预选中 + 批量编辑入口
@@ -217,6 +245,23 @@
 ---
 
 ## 会话摘要
+
+### 2026-07-19 本次会话（v1.26.071908 - 新增 JRead 插件包/音色配置包导入支持）
+- **当前版本**：v1.26.071908（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. 新增 JRead 格式数据模型（`JReadPluginBundle`、`JReadVoiceConfigBundle`）与转换器
+  2. `PluginImportBottomSheet` 支持导入 `jread_voice_plugin_bundle`（插件代码包）
+  3. `ListImportBottomSheet` 支持导入 `jread_voice_config_bundle`（音色配置包）
+  4. `ConfigImportBottomSheet` 新增 `autoWrapJsonList` 参数，关闭自动 `[ ]` 包装以兼容对象格式 JSON
+  5. 新增单元测试 `JReadImportTest`，覆盖插件包和配置包转换逻辑
+  6. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  7. 单元测试验证：`./gradlew :lib-database:testDebugUnitTest --tests "com.github.jing332.database.jread.JReadImportTest"` 通过
+- **注意事项**：
+  - JRead 插件代码（`code` 字段）理论上与 TTS Server 插件引擎兼容，但实际运行时仍需用户自行验证网络/鉴权等逻辑
+  - 音色配置包导入后按 `groupName/subGroupName/thirdGroupName` 自动分组，`categoryPath` 保留子分组路径
+  - `allowMainThreadQueries` 暂时保留
+  - `SystemTtsService` 的 `runBlocking` **已恢复**
+  - 编译环境需使用 Android Studio 自带 JDK 21
 
 ### 2026-06-02 本次会话（v1.26.060212 - 批量分配标签集成 + 批量编辑 Bug 修复）
 - **当前版本**：v1.26.060212（基于 `hhh4` 分支）
