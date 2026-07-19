@@ -2,7 +2,7 @@
 
 ## 版本变更记录
 
-### v1.26.071911-patch（修复配置列表 JSON 数组导入崩溃）
+### v1.26.071911-patch（修复配置列表 JSON 数组导入崩溃 + TTSOnline官方按分类分组）
 
 #### Bug 修复：普通 TTS 配置列表（JSON 数组）导入时崩溃
 - **需求来源**：导入生成的 `jread_voice_千问全家桶2852_四大组_快导配置列表.json` 时抛出 `IllegalArgumentException: JsonArray is not a JsonObject`
@@ -15,6 +15,17 @@
 - **验证**：
   - `./gradlew :app:compileAppDebugKotlin` 编译通过
   - `./gradlew :app:assembleAppRelease` 构建成功，生成 `newapk/TTS-Server-v1.26.071911-1815.apk` 和 `newapk/TTS-Server-latest.apk`
+
+#### 资源更新：TTSOnline官方音色按分类标签独立分组
+- **需求来源**：用户要求 `TTSOnline官方` 不再按性别/年龄分组，而是按插件内的 `tags` 分类，每个分类一个子分组
+- **涉及文件**：
+  - `参考/jread_voice_千问全家桶2852_四大组_快导配置列表.json`
+- **实现内容**：
+  1. 保留呱呱/游音/鹿/火山豆包/2次元/官方音色的原有分组结构
+  2. `TTSOnline官方` 改为按 `tags` 字段分类，每个非"全部" tag 生成一个子分组
+  3. 17 个分类子分组：openai、上新、二次元、动画鬼畜、多情感、广告解说、微软、推荐、方言、旧版、有声书、模仿、热门、女生、男生、童声、通用
+  4. 同一音色若属于多个 tag，会分别出现在对应分类下
+- **生成结果**：`参考/jread_voice_千问全家桶2852_四大组_快导配置列表.json`（74 个分组，3597 条配置项）
 
 ---
 
@@ -375,16 +386,18 @@
 
 ## 会话摘要
 
-### 2026-07-19 本次会话（v1.26.071911-patch - 修复配置列表数组导入崩溃）
+### 2026-07-19 本次会话（v1.26.071911-patch - 修复配置列表数组导入崩溃 + TTSOnline官方按分类分组）
 - **当前版本**：v1.26.071911-patch（基于 `hhh4` 分支）
 - **已完成事项**：
   1. 修复导入普通 TTS 配置列表（JSON 数组格式）时崩溃：`ListImportBottomSheet` 的 JRead 格式检测直接对数组调用 `jsonObject` 导致 `IllegalArgumentException`
   2. 在检测 `format` 字段前先判断 `element is JsonObject`，数组格式直接跳过 JRead 检测流程
-  3. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
-  4. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071911-1815.apk` 和 `newapk/TTS-Server-latest.apk`
+  3. 重新生成 2852 配置列表：`TTSOnline官方` 改为按 `tags` 分类，生成 17 个独立子分组
+  4. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  5. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071911-1815.apk` 和 `newapk/TTS-Server-latest.apk`
 - **注意事项**：
   - 崩溃根因：生成的 2852 配置列表是 JSON 数组 `[{group,list},...]`，而 JRead 检测代码假设输入一定是 JsonObject
   - 修复后 JSON 数组配置列表可正常进入普通 TTS 配置导入路径
+  - `TTSOnline官方` 按 tags 分类后，同一音色若属于多个 tag 会出现在多个分类下，导入后配置项总数会大于实际音色数
 
 ### 2026-07-19 本次会话（生成 2852 音色快导配置列表）
 - **当前版本**：v1.26.071909-patch4（基于 `hhh4` 分支）
