@@ -21,6 +21,7 @@ import com.github.jing332.tts_server_android.compose.systts.SelectImportConfigDi
 import com.github.jing332.tts_server_android.constant.AppConst
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 
@@ -105,11 +106,13 @@ private fun getImportList(
     // JRead 音色配置包
     val trimmed = json.trim()
     val element = runCatching { AppConst.jsonBuilder.parseToJsonElement(trimmed) }.getOrNull()
-    val format = element?.jsonObject?.get("format")?.jsonPrimitive?.content
+    val format = if (element is JsonObject) {
+        element.jsonObject["format"]?.jsonPrimitive?.content
+    } else null
     if (format == JReadVoiceConfigBundle.FORMAT) {
         val bundle = AppConst.jsonBuilder.decodeFromJsonElement(
             JReadVoiceConfigBundle.serializer(),
-            element
+            element!!
         )
         return JReadVoiceConfigConverter.convert(bundle)
     }

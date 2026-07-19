@@ -2,6 +2,22 @@
 
 ## 版本变更记录
 
+### v1.26.071911-patch（修复配置列表 JSON 数组导入崩溃）
+
+#### Bug 修复：普通 TTS 配置列表（JSON 数组）导入时崩溃
+- **需求来源**：导入生成的 `jread_voice_千问全家桶2852_四大组_快导配置列表.json` 时抛出 `IllegalArgumentException: JsonArray is not a JsonObject`
+- **涉及文件**：
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListImportBottomSheet.kt`
+- **实现内容**：
+  1. 在 JRead 格式检测阶段，先判断解析出的 JSON 元素是否为 `JsonObject`
+  2. 只有对象类型才读取 `format` 字段进行 JRead 格式匹配
+  3. JSON 数组类型直接跳过 JRead 检测，进入普通 TTS 配置列表解析路径
+- **验证**：
+  - `./gradlew :app:compileAppDebugKotlin` 编译通过
+  - `./gradlew :app:assembleAppRelease` 构建成功，生成 `newapk/TTS-Server-v1.26.071911-1815.apk` 和 `newapk/TTS-Server-latest.apk`
+
+---
+
 ### v1.26.071909-patch4（JRead 导入保留父级分组 + 批量删除自动删除空分组 + APK 命名优化 + 批量编辑模式合并分组）
 
 #### Bug 修复：JRead 音色配置导入保留完整树形父级分组
@@ -358,6 +374,17 @@
 ---
 
 ## 会话摘要
+
+### 2026-07-19 本次会话（v1.26.071911-patch - 修复配置列表数组导入崩溃）
+- **当前版本**：v1.26.071911-patch（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. 修复导入普通 TTS 配置列表（JSON 数组格式）时崩溃：`ListImportBottomSheet` 的 JRead 格式检测直接对数组调用 `jsonObject` 导致 `IllegalArgumentException`
+  2. 在检测 `format` 字段前先判断 `element is JsonObject`，数组格式直接跳过 JRead 检测流程
+  3. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  4. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.071911-1815.apk` 和 `newapk/TTS-Server-latest.apk`
+- **注意事项**：
+  - 崩溃根因：生成的 2852 配置列表是 JSON 数组 `[{group,list},...]`，而 JRead 检测代码假设输入一定是 JsonObject
+  - 修复后 JSON 数组配置列表可正常进入普通 TTS 配置导入路径
 
 ### 2026-07-19 本次会话（生成 2852 音色快导配置列表）
 - **当前版本**：v1.26.071909-patch4（基于 `hhh4` 分支）
