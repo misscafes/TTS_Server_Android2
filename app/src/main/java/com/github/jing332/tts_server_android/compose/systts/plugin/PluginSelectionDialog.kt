@@ -31,7 +31,7 @@ fun PluginSelectionDialog(onDismissRequest: () -> Unit, onSelect: (Plugin) -> Un
     AlertDialog(onDismissRequest = onDismissRequest,
         title = { Text(stringResource(id = R.string.select_plugin)) },
         text = {
-            val plugins = dbm.pluginDao.allEnabled
+            val plugins = dbm.pluginDao.allEnabledLite
             if (plugins.isEmpty())
                 Text(
                     stringResource(id = R.string.no_plugins),

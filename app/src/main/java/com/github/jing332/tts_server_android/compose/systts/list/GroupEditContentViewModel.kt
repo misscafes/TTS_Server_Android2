@@ -42,8 +42,8 @@ class GroupEditContentViewModel : ViewModel() {
                     .distinct()
                     .sorted()
 
-                // 缓存所有插件名称
-                val plugins = dbm.pluginDao.all
+                // 缓存所有插件名称（轻量查询，避免大 code 字段导致 CursorWindow 溢出）
+                val plugins = dbm.pluginDao.allLite
                 _pluginNameCache.value = plugins.associate { it.pluginId to it.name }
             }
         }

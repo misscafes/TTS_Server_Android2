@@ -2,6 +2,39 @@
 
 ## 版本变更记录
 
+### v1.26.072513（修复导入大插件后插件列表闪退）
+
+#### Bug 修复：导入大于 2MB 的插件后，打开插件列表闪退
+- **需求来源**：用户导入大于 2MB 的插件后，点击打开插件管理列表时应用闪退，无法查看/操作插件
+- **涉及文件**：
+  - `lib-database/src/main/java/com/github/jing332/database/dao/PluginDao.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/plugin/PluginManagerScreen.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/plugin/PluginSelectionDialog.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ui/PluginTtsViewModel.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerScreen.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerViewModel.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/GroupEditContentViewModel.kt`
+- **根因分析**：
+  1. `PluginManagerScreen` 使用 `pluginDao.flowAll()` 加载插件列表，该查询会读取 `plugin` 表的 `code` 字段
+  2. 插件 `code` 字段通常很大（大于 2MB 时尤为明显），一次性读取所有插件的 `code` 会触发 `SQLiteBlobTooBigException` 或导致主线程阻塞，从而闪退
+  3. 与此前 `SpeechRule` 大 `code` 字段导致列表闪退的问题同根
+- **实现内容**：
+  1. `PluginDao` 新增轻量查询：`allLite`、`allEnabledLite`、`flowAllLite()`，查询时排除 `code` 字段，避免 CursorWindow 溢出
+  2. `PluginDao` 新增 `getById(id: Long): Plugin?`，用于编辑/设置变量/音频参数/导出时按需加载完整插件数据（含 `code`）
+  3. `PluginDao` 新增字段级更新：`updateEnabled(id, isEnabled)`、`updateOrder(id, order)`，避免用轻量实体 `update()` 覆盖 `code`
+  4. `PluginManagerScreen`：
+     - 列表改用 `flowAllLite()`
+     - 启用/禁用改用 `updateEnabled()`
+     - 排序拖拽结束改用 `updateOrder()`
+     - 编辑、设置变量、音频参数、导出单个插件前通过 `getById()` 加载完整数据
+  5. `PluginSelectionDialog`、`ListManagerScreen` 批量切换插件、`ListManagerViewModel`、`GroupEditContentViewModel` 等只需展示插件名称/ID 的场景，统一改用轻量查询
+  6. `PluginTtsViewModel.loadPluginList()` 加载 TTS 编辑界面的插件下拉列表时改用 `allEnabledLite`；实际运行插件时仍按需从数据库加载完整数据
+- **验证**：
+  - `./gradlew :app:compileAppDebugKotlin` 编译通过
+  - `./gradlew :app:assembleAppRelease` 构建成功，生成 `newapk/TTS-Server-v1.26.072513-1929.apk` 和 `newapk/TTS-Server-latest.apk`
+
+---
+
 ### v1.26.071915（修复批量切换/分配标签后显示为旁白且未生效）
 
 #### Bug 修复：批量分配标签或切换标签后，点开发音人显示为“旁白”，实际未切换成功
@@ -457,6 +490,29 @@
 ---
 
 ## 会话摘要
+
+### 2026-07-25 本次会话（v1.26.072513 - 修复导入大插件后插件列表闪退）
+- **当前版本**：v1.26.072513（基于 `hhh4` 分支）
+- **已完成事项**：
+  1. 复现并定位问题：`PluginManagerScreen` 使用 `pluginDao.flowAll()` 一次性读取所有插件的 `code` 字段，大插件触发 `SQLiteBlobTooBigException` / 主线程阻塞导致闪退
+  2. 在 `PluginDao` 中新增轻量查询 `allLite` / `allEnabledLite` / `flowAllLite()`，排除 `code` 字段
+  3. 在 `PluginDao` 中新增 `getById()` 和字段级更新 `updateEnabled()` / `updateOrder()`
+  4. 修改 `PluginManagerScreen`：列表用轻量查询，启用/禁用/排序用字段级更新，编辑/变量/音频参数/导出前按需加载完整数据
+  5. 修改 `PluginSelectionDialog`、`ListManagerScreen`、`ListManagerViewModel`、`GroupEditContentViewModel`、`PluginTtsViewModel` 中仅用于展示的插件查询为轻量查询
+  6. 编译验证：`./gradlew :app:compileAppDebugKotlin` 通过
+  7. Release APK 构建：`./gradlew :app:assembleAppRelease` 生成 `newapk/TTS-Server-v1.26.072513-1929.apk` 和 `newapk/TTS-Server-latest.apk`
+- **涉及文件**：
+  - `lib-database/src/main/java/com/github/jing332/database/dao/PluginDao.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/plugin/PluginManagerScreen.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/plugin/PluginSelectionDialog.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ui/PluginTtsViewModel.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerScreen.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/ListManagerViewModel.kt`
+  - `app/src/main/java/com/github/jing332/tts_server_android/compose/systts/list/GroupEditContentViewModel.kt`
+- **注意事项**：
+  - 保留 `all` / `allEnabled` / `flowAll()` / `getByPluginId()` / `getEnabled()` 等完整查询，供备份恢复、TTS 引擎运行、AI 生成配置等需要 `code` 的场景使用
+  - 列表类展示统一走轻量查询，按需再通过 `getById()` 取完整数据
+  - 最新 APK 直接看 `newapk/TTS-Server-latest.apk`
 
 ### 2026-07-19 本次会话（参考/五组排序重新整理）
 - **当前版本**：v1.26.071915（基于 `hhh4` 分支）

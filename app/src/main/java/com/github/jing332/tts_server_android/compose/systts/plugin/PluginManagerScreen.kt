@@ -221,7 +221,7 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
                 }
             )
         }) { paddingValues ->
-        val flowAll = remember { dbm.pluginDao.flowAll().conflate() }
+        val flowAll = remember { dbm.pluginDao.flowAllLite().conflate() }
         val list by flowAll.collectAsStateWithLifecycle(emptyList())
 
         val cache = rememberLazyListReorderCache(list)
@@ -231,7 +231,7 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
         }, onDragEnd = { from, to ->
             cache.list.forEachIndexed { index, plugin ->
                 if (index != plugin.order)
-                    dbm.pluginDao.update(plugin.copy(order = index))
+                    dbm.pluginDao.updateOrder(plugin.id, index)
             }
         })
 
@@ -261,17 +261,17 @@ fun PluginManagerScreen(sharedVM: SharedViewModel, onFinishActivity: () -> Unit)
                         iconUrl = item.iconUrl,
                         isEnabled = item.isEnabled,
                         onEnabledChange = {
-                            dbm.pluginDao.update(item.copy(isEnabled = it))
+                            dbm.pluginDao.updateEnabled(item.id, it)
                         },
-                        onEdit = { onEdit(item) },
-                        onSetVars = { showVarsSettings = item },
-                        onAudioParams = { showAudioParamsDialog = item },
+                        onEdit = { dbm.pluginDao.getById(item.id)?.let { onEdit(it) } },
+                        onSetVars = { dbm.pluginDao.getById(item.id)?.let { showVarsSettings = it } },
+                        onAudioParams = { dbm.pluginDao.getById(item.id)?.let { showAudioParamsDialog = it } },
                         onDelete = { showDeleteDialog = item },
                         onClear = {
                             PluginManager(item).clearCache()
                             context.longToast(R.string.clear_cache_ok)
                         },
-                        onExport = { showExportConfig = listOf(item) }
+                        onExport = { dbm.pluginDao.getById(item.id)?.let { showExportConfig = listOf(it) } }
                     )
                 }
             }

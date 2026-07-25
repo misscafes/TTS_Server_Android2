@@ -53,8 +53,8 @@ class ListManagerViewModel : ViewModel() {
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            // 加载插件名称缓存
-            val plugins = dbm.pluginDao.all
+            // 加载插件名称缓存（轻量查询，避免大 code 字段导致 CursorWindow 溢出）
+            val plugins = dbm.pluginDao.allLite
             pluginNameCache.value = plugins.associate { it.pluginId to it.name }
 
             dbm.systemTtsV2.updateAllOrder()

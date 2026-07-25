@@ -1119,7 +1119,7 @@ internal fun ListManagerScreen(
     // ===== 批量切换插件对话框 =====
     var showBatchSwitchPluginDialog by remember { mutableStateOf(false) }
     if (showBatchSwitchPluginDialog) {
-        val pluginList = remember { dbm.pluginDao.all }
+        val pluginList = remember { dbm.pluginDao.allLite }
         val selectedItems = models.flatMap { it.allTts() }.filter { selectedTtsIds.contains(it.id) }
         var targetPluginId by remember { mutableStateOf<String>("") }
 

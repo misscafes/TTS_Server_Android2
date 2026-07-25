@@ -35,7 +35,8 @@ class PluginTtsViewModel(app: Application) : AndroidViewModel(app) {
 
     fun loadPluginList() {
         viewModelScope.launch(Dispatchers.IO) {
-            val plugins = dbm.pluginDao.allEnabled
+            // 轻量查询，避免大 code 字段导致 CursorWindow 溢出；运行插件时会按需重新加载完整数据
+            val plugins = dbm.pluginDao.allEnabledLite
             withMain {
                 pluginList.clear()
                 pluginList.addAll(plugins)
